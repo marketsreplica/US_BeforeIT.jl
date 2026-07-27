@@ -1,6 +1,6 @@
 name = "BeforeIT"
 uuid = "ca9fcad7-41d0-4f76-b1e5-366c28bce52e"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["Aldo Glielmo <aldo.glielmo@bancaditalia.it>", "Mitja Devetak <m888itja@gmail.com>", "Adriano Meligrana <adrianomeligrana@proton.me>"]
 
 [deps]

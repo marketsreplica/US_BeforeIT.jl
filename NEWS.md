@@ -1,6 +1,27 @@
 BeforeIT Release Notes
 ======================
 
+
+0.6.0 (July 2026) - first release with license Apache 2.0
+------------------
+
+* Fix transformation to vector to include also matrix fields by @ameligrana in https://github.com/bancaditalia/BeforeIT.jl/pull/136
+* Fix division by zero in P_bar_CF_h calculation by @ameligrana in https://github.com/bancaditalia/BeforeIT.jl/pull/137
+* Bump julia-actions/cache from 2 to 3 by @dependabot[bot] in https://github.com/bancaditalia/BeforeIT.jl/pull/138
+* Function for downloading zenodo calibration by @zauster in https://github.com/bancaditalia/BeforeIT.jl/pull/135
+* Add performance benchmarking for differentiation methods by @ameligrana in https://github.com/bancaditalia/BeforeIT.jl/pull/142
+* Refactor code for FloatType and improve formatting by @ameligrana in https://github.com/bancaditalia/BeforeIT.jl/pull/143
+* feat: add GrowthRate AR(1) model extension (ModelGR) by @SGHoekstra in https://github.com/bancaditalia/BeforeIT.jl/pull/139
+* Bump julia-actions/setup-julia from 2 to 3 by @dependabot[bot] in https://github.com/bancaditalia/BeforeIT.jl/pull/145
+* feat: add HP filter, cross-correlation and autocorrelation utilities by @SGHoekstra in https://github.com/bancaditalia/BeforeIT.jl/pull/140
+* feat: add multi-country forecast evaluation pipeline by @SGHoekstra in https://github.com/bancaditalia/BeforeIT.jl/pull/141
+* Add script running the autodiff optimization and add Mooncake extension by @ameligrana in https://github.com/bancaditalia/BeforeIT.jl/pull/149
+* Update get_params_and_initial_conditions by @zauster in https://github.com/bancaditalia/BeforeIT.jl/pull/144
+* chore: update license from AGPLv3 to Apache License 2.0 by @aldoglielmo in https://github.com/bancaditalia/BeforeIT.jl/pull/154
+
+
+**Full Changelog**: https://github.com/bancaditalia/BeforeIT.jl/compare/v0.5.0...v0.6.0
+
 0.5.0 (Feb 2026)
 ------------------
 
