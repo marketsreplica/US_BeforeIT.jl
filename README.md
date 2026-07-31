@@ -133,8 +133,8 @@ julia --proj format.jl
 <table>
   <tr>
   <td align="center">
-      <a href="https://github.com/Tortar">
-        <img src="https://avatars.githubusercontent.com/Tortar" width="100px;" alt="Adriano Meligrana"/><br />
+      <a href="https://github.com/ameligrana">
+        <img src="https://avatars.githubusercontent.com/ameligrana" width="100px;" alt="Adriano Meligrana"/><br />
         <sub><b>Adriano Meligrana</b></sub>
       </a><br />
       <p>University of Turin</p>
