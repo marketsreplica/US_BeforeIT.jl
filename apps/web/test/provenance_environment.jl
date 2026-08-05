@@ -130,36 +130,36 @@ end
         app_path =
             normpath(joinpath(@__DIR__, "..", "public", "app.js"))
         script = raw"""
-const assert = require("node:assert/strict");
-const app = require(process.argv[1]);
-const trace = {
-  profile: "standard",
-  realization_indices: [3],
-  phase_detail: "none",
-  checkpoints: false,
-};
-const spec = {
-  run_id: "source-run",
-  parent_run_id: "older-parent",
-  trace,
-};
-const inherited = app.cloneInheritanceFromRunSpec(
-  spec,
-  { run_id: "directory-fallback" },
-);
-assert.equal(inherited.parentRunId, "source-run");
-assert.notEqual(inherited.parentRunId, spec.parent_run_id);
-assert.deepEqual(inherited.trace, trace);
-assert.notEqual(inherited.trace, trace);
-const submission = app.cloneSubmissionFields({
-  cloneParentRunId: inherited.parentRunId,
-  cloneTrace: inherited.trace,
-});
-assert.equal(submission.parent_run_id, "source-run");
-assert.deepEqual(submission.trace, trace);
-inherited.trace.realization_indices.push(4);
-assert.deepEqual(spec.trace.realization_indices, [3]);
-"""
+        const assert = require("node:assert/strict");
+        const app = require(process.argv[1]);
+        const trace = {
+          profile: "standard",
+          realization_indices: [3],
+          phase_detail: "none",
+          checkpoints: false,
+        };
+        const spec = {
+          run_id: "source-run",
+          parent_run_id: "older-parent",
+          trace,
+        };
+        const inherited = app.cloneInheritanceFromRunSpec(
+          spec,
+          { run_id: "directory-fallback" },
+        );
+        assert.equal(inherited.parentRunId, "source-run");
+        assert.notEqual(inherited.parentRunId, spec.parent_run_id);
+        assert.deepEqual(inherited.trace, trace);
+        assert.notEqual(inherited.trace, trace);
+        const submission = app.cloneSubmissionFields({
+          cloneParentRunId: inherited.parentRunId,
+          cloneTrace: inherited.trace,
+        });
+        assert.equal(submission.parent_run_id, "source-run");
+        assert.deepEqual(submission.trace, trace);
+        inherited.trace.realization_indices.push(4);
+        assert.deepEqual(spec.trace.realization_indices, [3]);
+        """
         @test success(Cmd([node, "-e", script, app_path]))
     end
 end

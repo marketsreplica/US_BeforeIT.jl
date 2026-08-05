@@ -101,8 +101,10 @@ end
         transaction_logger,
         transaction_markets = (:business_goods, :final_demand),
         opening_state_logger =
-            model -> (opening_snapshot[] =
-                BeforeITWeb._cashflow_snapshot(model)),
+            model -> (
+            opening_snapshot[] =
+                BeforeITWeb._cashflow_snapshot(model)
+        ),
     )
     Bit.collect_data!(traced_model)
 
@@ -124,21 +126,21 @@ end
     parallel_run = _economic_validation_run(true)
     serial_payloads = [
         BeforeITWeb._cashflow_api_payload(
-            serial_run;
-            quarter,
-            level = "firm",
-            detail = "firm",
-            page_size = 5000,
-        ) for quarter in 1:2
+                serial_run;
+                quarter,
+                level = "firm",
+                detail = "firm",
+                page_size = 5000,
+            ) for quarter in 1:2
     ]
     parallel_payloads = [
         BeforeITWeb._cashflow_api_payload(
-            parallel_run;
-            quarter,
-            level = "firm",
-            detail = "firm",
-            page_size = 5000,
-        ) for quarter in 1:2
+                parallel_run;
+                quarter,
+                level = "firm",
+                detail = "firm",
+                page_size = 5000,
+            ) for quarter in 1:2
     ]
     declared_tolerance = maximum(
         Float64(payload["diagnostics"]["tolerance"]) for
@@ -276,11 +278,11 @@ end
         @test length(first_values) == length(repeated_values)
         @test all(
             BeforeITWeb._experiment_values_close(
-                first_values[index],
-                repeated_values[index];
-                atol = 1.0e-9,
-                rtol = 1.0e-10,
-            ) for index in eachindex(first_values)
+                    first_values[index],
+                    repeated_values[index];
+                    atol = 1.0e-9,
+                    rtol = 1.0e-10,
+                ) for index in eachindex(first_values)
         )
     end
 
@@ -324,13 +326,13 @@ end
     )
     first_signed_values = Dict(
         String(edge["id"]) => Float64(
-            get(edge, "signed_value", edge["amount"]),
-        ) for edge in first_edges
+                get(edge, "signed_value", edge["amount"]),
+            ) for edge in first_edges
     )
     repeated_signed_values = Dict(
         String(edge["id"]) => Float64(
-            get(edge, "signed_value", edge["amount"]),
-        ) for edge in repeated_edges
+                get(edge, "signed_value", edge["amount"]),
+            ) for edge in repeated_edges
     )
     @test length(first_signed_values) == length(first_edges)
     @test length(repeated_signed_values) == length(repeated_edges)
@@ -338,11 +340,11 @@ end
         Set(keys(repeated_signed_values))
     @test all(
         BeforeITWeb._experiment_values_close(
-            first_signed_values[id],
-            repeated_signed_values[id];
-            atol = 1.0e-9,
-            rtol = 1.0e-10,
-        ) for id in keys(first_signed_values)
+                first_signed_values[id],
+                repeated_signed_values[id];
+                atol = 1.0e-9,
+                rtol = 1.0e-10,
+            ) for id in keys(first_signed_values)
     )
     signed_values_exact =
         first_signed_values == repeated_signed_values

@@ -103,8 +103,10 @@ _experiment_digest(value) =
 
 function _experiment_dict(value)
     value === nothing && return Dict{String, Any}()
-    (value isa AbstractDict || value isa JSON3.Object ||
-        value isa NamedTuple) ||
+    (
+        value isa AbstractDict || value isa JSON3.Object ||
+            value isa NamedTuple
+    ) ||
         throw(ApiError(400, "Expected a JSON object"))
     return _normalize_dict(value)
 end
@@ -189,7 +191,7 @@ function list_experiments(; directory::AbstractString = EXPERIMENTS_DIR)
     sort!(
         experiments;
         by = experiment ->
-            String(get(experiment, "created_at", "")),
+        String(get(experiment, "created_at", "")),
         rev = true,
     )
     return experiments
@@ -239,20 +241,20 @@ function _experiment_sim_spec(
         throw(ApiError(400, "T out of bounds", (T = horizon,)))
     1 <= ensemble_size <= 64 ||
         throw(
-            ApiError(
-                400,
-                "n_sims out of bounds",
-                (n_sims = ensemble_size,),
-            ),
-        )
+        ApiError(
+            400,
+            "n_sims out of bounds",
+            (n_sims = ensemble_size,),
+        ),
+    )
     scenario != "unconditional" && horizon > 23 &&
         throw(
-            ApiError(
-                400,
-                "Conditional scenario horizon exceeds 2031 Q4",
-                (T = horizon, maximum = 23),
-            ),
-        )
+        ApiError(
+            400,
+            "Conditional scenario horizon exceeds 2031 Q4",
+            (T = horizon, maximum = 23),
+        ),
+    )
     return Dict{String, Any}(
         "T" => horizon,
         "n_sims" => ensemble_size,
@@ -316,12 +318,12 @@ function _experiment_normalize_intervention(
     unknown = sort!(collect(setdiff(Set(keys(diff)), allowed)))
     isempty(unknown) ||
         throw(
-            ApiError(
-                400,
-                "Intervention may change only shock or overrides",
-                (unknown_fields = unknown,),
-            ),
-        )
+        ApiError(
+            400,
+            "Intervention may change only shock or overrides",
+            (unknown_fields = unknown,),
+        ),
+    )
 
     result = Dict{String, Any}()
     if haskey(diff, "shock")
@@ -334,21 +336,21 @@ function _experiment_normalize_intervention(
             sector_count = length(sector_metadata(dataset_id)["sectors"])
             1 <= sector <= sector_count ||
                 throw(
-                    ApiError(
-                        400,
-                        "Sector is outside this dataset classification",
-                        (sector = sector, sector_count = sector_count),
-                    ),
-                )
+                ApiError(
+                    400,
+                    "Sector is outside this dataset classification",
+                    (sector = sector, sector_count = sector_count),
+                ),
+            )
             multiplier = _shock_number(shock, "multiplier", 1.0)
             0.0 < multiplier <= 10.0 ||
                 throw(
-                    ApiError(
-                        400,
-                        "Productivity multiplier must be greater than 0 and at most 10",
-                        (multiplier = multiplier,),
-                    ),
-                )
+                ApiError(
+                    400,
+                    "Productivity multiplier must be greater than 0 and at most 10",
+                    (multiplier = multiplier,),
+                ),
+            )
             onset = try
                 Int(get(shock, "onset_quarter", 1))
             catch
@@ -361,20 +363,20 @@ function _experiment_normalize_intervention(
             end
             onset == 1 ||
                 throw(
-                    ApiError(
-                        400,
-                        "Sector productivity starts in the first simulated quarter",
-                    ),
-                )
+                ApiError(
+                    400,
+                    "Sector productivity starts in the first simulated quarter",
+                ),
+            )
             persistence =
                 lowercase(String(get(shock, "persistence", "permanent")))
             persistence == "permanent" ||
                 throw(
-                    ApiError(
-                        400,
-                        "Sector productivity is permanent in this release",
-                    ),
-                )
+                ApiError(
+                    400,
+                    "Sector productivity is permanent in this release",
+                ),
+            )
             result["shock"] = Dict{String, Any}(
                 "type" => "sector_productivity",
                 "sector" => sector,
@@ -431,29 +433,29 @@ function _experiment_base_request(raw)
     trace_indices = Int.(collect(trace["realization_indices"]))
     isempty(trace_indices) &&
         throw(
-            ApiError(
-                400,
-                "Paired cash-flow experiments require one representative trace",
-            ),
-        )
+        ApiError(
+            400,
+            "Paired cash-flow experiments require one representative trace",
+        ),
+    )
     all(index -> index <= sim["n_sims"], trace_indices) ||
         throw(
-            ApiError(
-                400,
-                "A traced realization exceeds n_sims",
-                (
-                    realization_indices = trace_indices,
-                    n_sims = sim["n_sims"],
-                ),
+        ApiError(
+            400,
+            "A traced realization exceeds n_sims",
+            (
+                realization_indices = trace_indices,
+                n_sims = sim["n_sims"],
             ),
-        )
+        ),
+    )
     length(trace_indices) <= 1 ||
         throw(
-            ApiError(
-                400,
-                "Paired experiments currently support one representative trace",
-            ),
-        )
+        ApiError(
+            400,
+            "Paired experiments currently support one representative trace",
+        ),
+    )
     overrides = _experiment_validate_overrides(
         dataset_id,
         get(base, "overrides", nothing),
@@ -514,12 +516,12 @@ function _experiment_effective_spec(raw)
         for (key, value) in values
             value isa Real ||
                 throw(
-                    ApiError(
-                        400,
-                        "Stored override must be numeric",
-                        (group = group, key = key),
-                    ),
-                )
+                ApiError(
+                    400,
+                    "Stored override must be numeric",
+                    (group = group, key = key),
+                ),
+            )
             values[key] = Float64(value)
         end
         overrides[group] = values
@@ -601,9 +603,9 @@ function _experiment_seed_schedule(sim::AbstractDict)
         "base_seed" => base_seed,
         "realizations" => [
             Dict(
-                "realization_index" => index,
-                "seed" => base_seed + index,
-            ) for index in 1:ensemble_size
+                    "realization_index" => index,
+                    "seed" => base_seed + index,
+                ) for index in 1:ensemble_size
         ],
     )
 end
@@ -660,13 +662,13 @@ function _experiment_spec_evidence(
             non_intervention_fields_identical,
         "seed_schedule_identical" =>
             _experiment_canonical(
-                baseline_effective["sim"],
-            ) ==
+            baseline_effective["sim"],
+        ) ==
             _experiment_canonical(treatment_effective["sim"]),
         "trace_request_identical" =>
             _experiment_canonical(
-                baseline_effective["trace"],
-            ) ==
+            baseline_effective["trace"],
+        ) ==
             _experiment_canonical(treatment_effective["trace"]),
     )
 end
@@ -702,19 +704,19 @@ function create_experiment(
     baseline_run_id = get(body, "baseline_run_id", nothing)
     baseline_run_id !== nothing && haskey(body, "base_spec") &&
         throw(
-            ApiError(
-                400,
-                "Provide baseline_run_id or base_spec, not both",
-            ),
-        )
+        ApiError(
+            400,
+            "Provide baseline_run_id or base_spec, not both",
+        ),
+    )
     base_request = if baseline_run_id === nothing
         haskey(body, "base_spec") ||
             throw(
-                ApiError(
-                    400,
-                    "base_spec is required when baseline_run_id is absent",
-                ),
-            )
+            ApiError(
+                400,
+                "base_spec is required when baseline_run_id is absent",
+            ),
+        )
         _experiment_base_request(body["base_spec"])
     else
         canonical_run_id =
@@ -783,11 +785,11 @@ function create_experiment(
     )
     String(base_id) != String(treatment_id) ||
         throw(
-            ApiError(
-                500,
-                "Run creator returned the same ID for both experiment roles",
-            ),
-        )
+        ApiError(
+            500,
+            "Run creator returned the same ID for both experiment roles",
+        ),
+    )
 
     base_disk = _normalize_dict(
         _read_json_file(joinpath(_run_dir(base_id), "spec.json")),
@@ -903,14 +905,16 @@ function _experiment_truthy_capability(value)
     value isa Bool && return value
     value isa Number && return value != 0
     text = lowercase(strip(String(value)))
-    return !(text in (
-        "",
-        "false",
-        "none",
-        "unavailable",
-        "unsupported",
-        "legacy_aggregate_only",
-    ))
+    return !(
+        text in (
+            "",
+            "false",
+            "none",
+            "unavailable",
+            "unsupported",
+            "legacy_aggregate_only",
+        )
+    )
 end
 
 function _experiment_required_capabilities(
@@ -949,7 +953,7 @@ function _experiment_manifest_version(manifest, key)
             manifest,
             key,
             key == "trace_schema_version" ?
-            get(manifest, "schema_version", "") : "",
+                get(manifest, "schema_version", "") : "",
         ),
     )
 end
@@ -963,19 +967,19 @@ function _experiment_role_digests(
     )
     experiment === nothing &&
         return Dict{String, Any}(
-            "passed" => false,
-            "reason" =>
-                "No first-class experiment links these two runs.",
-        )
+        "passed" => false,
+        "reason" =>
+            "No first-class experiment links these two runs.",
+    )
     run_ids = _experiment_dict(experiment["run_ids"])
     base_id = String(run_ids["baseline"])
     treatment_id = String(run_ids["treatment"])
     base_id != treatment_id ||
         return Dict{String, Any}(
-            "passed" => false,
-            "reason" =>
-                "An experiment must have distinct baseline and treatment runs.",
-        )
+        "passed" => false,
+        "reason" =>
+            "An experiment must have distinct baseline and treatment runs.",
+    )
     if Set([run_a, run_b]) != Set([base_id, treatment_id])
         return Dict{String, Any}(
             "passed" => false,
@@ -1073,8 +1077,10 @@ function _experiment_provenance_presence(provenance)
         value = normalized[field]
         if value === nothing ||
                 (value isa AbstractString && isempty(strip(String(value)))) ||
-                (field in ("rng_policy", "execution_environment") &&
-                    (!(value isa AbstractDict) || isempty(value)))
+                (
+                field in ("rng_policy", "execution_environment") &&
+                    (!(value isa AbstractDict) || isempty(value))
+            )
             push!(missing, field)
         end
     end
@@ -1136,10 +1142,10 @@ function _experiment_provenance_checks(
                 copy(_EXPERIMENT_REQUIRED_PROVENANCE_FIELDS),
             "sources" => Dict(
                 name => Dict(
-                    "present" => source["present"],
-                    "missing_fields" => source["missing_fields"],
-                    "invalid_fields" => source["invalid_fields"],
-                ) for (name, source) in sources
+                        "present" => source["present"],
+                        "missing_fields" => source["missing_fields"],
+                        "invalid_fields" => source["invalid_fields"],
+                    ) for (name, source) in sources
             ),
         ),
     )
@@ -1599,12 +1605,12 @@ function _experiment_run_complete(run_path::AbstractString)
     state = lowercase(String(get(status, :state, "unknown")))
     state in ("done", "complete", "completed") ||
         throw(
-            ApiError(
-                409,
-                "Cash-flow comparison requires completed runs",
-                (run_id = basename(run_path), state = state),
-            ),
-        )
+        ApiError(
+            409,
+            "Cash-flow comparison requires completed runs",
+            (run_id = basename(run_path), state = state),
+        ),
+    )
     return _normalize_dict(status)
 end
 
@@ -1648,12 +1654,12 @@ function _experiment_index_edges(edges, run_id::AbstractString)
         edge_id = String(get(edge, "id", ""))
         isempty(edge_id) &&
             throw(
-                ApiError(
-                    409,
-                    "Cash-flow edge lacks a stable semantic ID",
-                    (run_id = run_id,),
-                ),
-            )
+            ApiError(
+                409,
+                "Cash-flow edge lacks a stable semantic ID",
+                (run_id = run_id,),
+            ),
+        )
         if haskey(index, edge_id)
             existing = _normalize_dict(index[edge_id])
             edge = _normalize_dict(edge)
@@ -1661,12 +1667,12 @@ function _experiment_index_edges(edges, run_id::AbstractString)
                 _experiment_canonical(get(existing, field, nothing)) ==
                     _experiment_canonical(get(edge, field, nothing)) ||
                     throw(
-                        ApiError(
-                            409,
-                            "Stable edge ID has conflicting semantics",
-                            (run_id = run_id, edge_id = edge_id, field = field),
-                        ),
-                    )
+                    ApiError(
+                        409,
+                        "Stable edge ID has conflicting semantics",
+                        (run_id = run_id, edge_id = edge_id, field = field),
+                    ),
+                )
             end
             existing["signed_value"] =
                 _cashflow_edge_value(existing) +
@@ -1846,11 +1852,11 @@ function _experiment_cached_join(
         end
         _EXPERIMENT_JOIN_CACHE[cache_key] =
             (;
-                edge_ids,
-                semantic_count = length(edge_ids),
-                comparison_row_count,
-                access,
-            )
+            edge_ids,
+            semantic_count = length(edge_ids),
+            comparison_row_count,
+            access,
+        )
         _experiment_evict_lru!(
             _EXPERIMENT_JOIN_CACHE,
             EXPERIMENT_JOIN_CACHE_MAX_ENTRIES,
@@ -1881,12 +1887,12 @@ function _experiment_validate_cross_edge_identity!(
             _experiment_canonical(get(edge_a, field, nothing)) ==
                 _experiment_canonical(get(edge_b, field, nothing)) ||
                 throw(
-                    ApiError(
-                        409,
-                        "Stable edge ID changed economic semantics between runs",
-                        (edge_id = edge_id, field = field),
-                    ),
-                )
+                ApiError(
+                    409,
+                    "Stable edge ID changed economic semantics between runs",
+                    (edge_id = edge_id, field = field),
+                ),
+            )
         end
     end
     return nothing
@@ -2269,17 +2275,25 @@ function _experiment_delta_coverage(
     by_domain = Dict{String, Any}()
     for domain in domains
         domain_joined =
-            [edge for edge in joined if
-                _experiment_delta_domain(edge) == domain]
+            [
+            edge for edge in joined if
+                _experiment_delta_domain(edge) == domain
+        ]
         domain_matching =
-            [edge for edge in matching if
-                _experiment_delta_domain(edge) == domain]
+            [
+            edge for edge in matching if
+                _experiment_delta_domain(edge) == domain
+        ]
         domain_selected =
-            [edge for edge in selected if
-                _experiment_delta_domain(edge) == domain]
+            [
+            edge for edge in selected if
+                _experiment_delta_domain(edge) == domain
+        ]
         domain_returned =
-            [edge for edge in returned if
-                _experiment_delta_domain(edge) == domain]
+            [
+            edge for edge in returned if
+                _experiment_delta_domain(edge) == domain
+        ]
         total_delta = sum(
             Float64(get(edge, "abs_delta", 0.0)) for
                 edge in domain_matching
@@ -2455,11 +2469,11 @@ function compare_cashflows(
     end
     level == "all" &&
         throw(
-            ApiError(
-                400,
-                "Comparison level must be macro, sector, or firm",
-            ),
-        )
+        ApiError(
+            400,
+            "Comparison level must be macro, sector, or firm",
+        ),
+    )
     1 <= limit <= 10000 ||
         throw(ApiError(400, "limit must be between 1 and 10000"))
     0 < coverage <= 1 ||
@@ -2542,16 +2556,24 @@ function compare_cashflows(
     scope_cache_key = pair_cache_key * "|" * _experiment_digest(
         Dict{String, Any}(
             "level" => level,
-            "layers" => sort!(collect(something(
-                prepared_layer_filter,
-                Set{String}(),
-            ))),
+            "layers" => sort!(
+                collect(
+                    something(
+                        prepared_layer_filter,
+                        Set{String}(),
+                    )
+                )
+            ),
             "focus" => something(prepared_focus_node, ""),
             "direction" => something(direction, ""),
-            "recognition" => sort!(collect(something(
-                prepared_recognition_filter,
-                Set{String}(),
-            ))),
+            "recognition" => sort!(
+                collect(
+                    something(
+                        prepared_recognition_filter,
+                        Set{String}(),
+                    )
+                )
+            ),
             "min_amount" => Float64(min_amount),
             "include_counterfactual" => include_counterfactual,
         ),
@@ -2567,59 +2589,59 @@ function compare_cashflows(
         end
     end
     joined = cached_scope === nothing ? try
-        scoped = Any[]
-        for edge_id in edge_ids
-            edge_a = get(index_a, edge_id, nothing)
-            edge_b = get(index_b, edge_id, nothing)
-            template = edge_b === nothing ? edge_a : edge_b
-            value_a = edge_a === nothing ? 0.0 : _cashflow_edge_value(edge_a)
-            value_b = edge_b === nothing ? 0.0 : _cashflow_edge_value(edge_b)
-            zero_a = _experiment_values_close(value_a, 0.0; atol, rtol)
-            zero_b = _experiment_values_close(value_b, 0.0; atol, rtol)
-            # The full outer union above is the join. Apply coarse semantic
-            # scope only after that union, before allocating one or two delta
-            # dictionaries for the relationship. Direction is checked on each
-            # resulting row because a sign reversal has two display directions.
-            _cashflow_edge_in_level(template, level) || continue
-            _cashflow_edge_matches(
-                template;
-                focus,
-                layers,
-                recognition,
-                direction = nothing,
-                min_amount = 0.0,
-                include_counterfactual,
-                prepared_layer_filter,
-                prepared_recognition_filter,
-                prepared_focus_node,
-            ) || continue
-            max(abs(value_a), abs(value_b)) >= Float64(min_amount) || continue
-            rows = _experiment_delta_edges(
-                edge_id,
-                edge_a,
-                edge_b;
-                atol,
-                rtol,
-                paired,
-            )
-            for row in rows
+            scoped = Any[]
+            for edge_id in edge_ids
+                edge_a = get(index_a, edge_id, nothing)
+                edge_b = get(index_b, edge_id, nothing)
+                template = edge_b === nothing ? edge_a : edge_b
+                value_a = edge_a === nothing ? 0.0 : _cashflow_edge_value(edge_a)
+                value_b = edge_b === nothing ? 0.0 : _cashflow_edge_value(edge_b)
+                zero_a = _experiment_values_close(value_a, 0.0; atol, rtol)
+                zero_b = _experiment_values_close(value_b, 0.0; atol, rtol)
+                # The full outer union above is the join. Apply coarse semantic
+                # scope only after that union, before allocating one or two delta
+                # dictionaries for the relationship. Direction is checked on each
+                # resulting row because a sign reversal has two display directions.
+                _cashflow_edge_in_level(template, level) || continue
                 _cashflow_edge_matches(
-                    row;
+                    template;
                     focus,
-                    direction,
+                    layers,
+                    recognition,
+                    direction = nothing,
                     min_amount = 0.0,
                     include_counterfactual,
-                    prepared_layer_filter = nothing,
-                    prepared_recognition_filter = nothing,
+                    prepared_layer_filter,
+                    prepared_recognition_filter,
                     prepared_focus_node,
                 ) || continue
-                push!(scoped, row)
+                max(abs(value_a), abs(value_b)) >= Float64(min_amount) || continue
+                rows = _experiment_delta_edges(
+                    edge_id,
+                    edge_a,
+                    edge_b;
+                    atol,
+                    rtol,
+                    paired,
+                )
+                for row in rows
+                    _cashflow_edge_matches(
+                        row;
+                        focus,
+                        direction,
+                        min_amount = 0.0,
+                        include_counterfactual,
+                        prepared_layer_filter = nothing,
+                        prepared_recognition_filter = nothing,
+                        prepared_focus_node,
+                    ) || continue
+                    push!(scoped, row)
             end
         end
-        scoped
+            scoped
     catch error
-        error isa ArgumentError || rethrow()
-        throw(ApiError(400, error.msg))
+            error isa ArgumentError || rethrow()
+            throw(ApiError(400, error.msg))
     end : cached_scope
     if cached_scope === nothing
         lock(_EXPERIMENT_CACHE_LOCK) do
@@ -2634,16 +2656,16 @@ function compare_cashflows(
     end
     class_counts = Dict(
         class => count(
-            edge -> String(edge["change"]) == class,
-            joined,
-        ) for class in
+                edge -> String(edge["change"]) == class,
+                joined,
+            ) for class in
             ("added", "removed", "increased", "decreased", "unchanged")
     )
     matching = [
         edge for edge in joined if
             (
                 include_unchanged ||
-                    String(edge["change"]) != "unchanged"
+                String(edge["change"]) != "unchanged"
             ) &&
             Float64(edge["abs_delta"]) >= Float64(min_delta)
     ]
@@ -2663,14 +2685,14 @@ function compare_cashflows(
     )
     exact_zero =
         all(
-            edge -> _experiment_values_close(
-                Float64(edge["delta"]),
-                0.0;
-                atol,
-                rtol,
-            ),
-            joined,
-        )
+        edge -> _experiment_values_close(
+            Float64(edge["delta"]),
+            0.0;
+            atol,
+            rtol,
+        ),
+        joined,
+    )
     run_spec_diff = experiment === nothing ? Any[] :
         collect(
             get(
@@ -2711,10 +2733,14 @@ function compare_cashflows(
         "period_b" => _experiment_period(manifest_b, quarter_index),
         "level" => level,
         "layers" =>
-            sort!(collect(something(
-                _cashflow_layer_filter_values(layers),
-                Set{String}(),
-            ))),
+            sort!(
+            collect(
+                something(
+                    _cashflow_layer_filter_values(layers),
+                    Set{String}(),
+                )
+            )
+        ),
         "comparison_direction" => "run_a_to_run_b",
         "comparison_orientation" => comparison_orientation,
         "run_roles" => run_roles,
@@ -2784,9 +2810,9 @@ _create_experiment_response(request) =
 
 _get_experiment_response(experiment_id::AbstractString) =
     _json_response(
-        200,
-        _sanitize_for_json(get_experiment(experiment_id)),
-    )
+    200,
+    _sanitize_for_json(get_experiment(experiment_id)),
+)
 
 function _compare_cashflows_response(; run_a, run_b, kwargs...)
     return _json_response(
