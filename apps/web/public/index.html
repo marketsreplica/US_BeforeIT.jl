@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Interactive dashboard for exploring and running BeforeIT economic simulations."
+    />
+    <title>BeforeIT Simulation Lab</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="BeforeIT Simulation Lab home">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+          <span class="brand-copy">
+            <strong>BeforeIT</strong>
+            <small>Simulation Lab</small>
+          </span>
+        </a>
+        <div class="topbar-context">
+          <span class="context-label">Economy model</span>
+          <span id="datasetContext" class="context-value">Loading dataset…</span>
+        </div>
+        <div class="topbar-actions">
+          <a class="prototype-toplink" href="/prototypes/">
+            <span aria-hidden="true">✦</span>
+            Digital twin
+            <small>5 views</small>
+          </a>
+          <div class="engine-pill" id="enginePill">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>Julia engine connected</span>
+          </div>
+        </div>
+      </header>
+
+      <nav class="primary-tabs" role="tablist" aria-label="Simulation workspace">
+        <button
+          id="resultsTab"
+          class="tab-button is-active"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-controls="resultsPanel"
+          data-tab="results"
+        >
+          <span class="tab-icon" aria-hidden="true">⌁</span>
+          Results
+        </button>
+        <button
+          id="inputsTab"
+          class="tab-button"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          aria-controls="inputsPanel"
+          data-tab="inputs"
+          tabindex="-1"
+        >
+          <span class="tab-icon" aria-hidden="true">⌘</span>
+          Inputs &amp; parameters
+          <span id="overrideBadge" class="tab-badge" hidden>0</span>
+        </button>
+      </nav>
+
+      <main class="workspace">
+        <section
+          id="resultsPanel"
+          class="tab-panel"
+          role="tabpanel"
+          aria-labelledby="resultsTab"
+        >
+          <section class="run-deck" aria-labelledby="runSetupTitle">
+            <div class="run-deck-heading">
+              <div>
+                <span class="eyebrow">Scenario setup</span>
+                <h1 id="runSetupTitle">Run the economy forward</h1>
+              </div>
+              <button id="simulateBtn" class="simulate-button" type="button">
+                <span class="play-icon" aria-hidden="true">▶</span>
+                <span id="simulateBtnText">Run simulation</span>
+              </button>
+            </div>
+
+            <div class="compact-controls">
+              <label class="control-field dataset-field" for="datasetSelect">
+                <span class="field-label">
+                  Dataset
+                  <button
+                    class="info-tip"
+                    type="button"
+                    aria-label="About dataset"
+                    data-tooltip="The calibrated national-economy dataset used to initialize model agents, balance sheets, sectors, and behavioral parameters."
+                  >i</button>
+                </span>
+                <select id="datasetSelect"></select>
+              </label>
+
+              <label class="control-field scenario-field" for="scenarioSelect">
+                <span class="field-label">
+                  Forecast path
+                  <button
+                    class="info-tip"
+                    type="button"
+                    aria-label="About forecast path"
+                    data-tooltip="Published baseline, upside, and downside assumptions condition government demand, exports, and imports. GDP and inflation remain model outcomes."
+                  >i</button>
+                </span>
+                <select id="scenarioSelect"></select>
+              </label>
+
+              <label class="control-field" for="TInput">
+                <span class="field-label">
+                  Horizon
+                  <button
+                    class="info-tip"
+                    type="button"
+                    aria-label="About horizon"
+                    data-tooltip="The number of future quarters simulated. Output includes the initial state plus one observation for each quarter."
+                  >i</button>
+                </span>
+                <span class="input-with-suffix">
+                  <input id="TInput" type="number" min="1" max="80" value="20" />
+                  <small>quarters</small>
+                </span>
+              </label>
+
+              <label class="control-field" for="nSimsInput">
+                <span class="field-label">
+                  Ensemble
+                  <button
+                    class="info-tip"
+                    type="button"
+                    aria-label="About ensemble"
+                    data-tooltip="The number of independent stochastic simulation paths. Charts show their mean and a ±1 standard-deviation band."
+                  >i</button>
+                </span>
+                <span class="input-with-suffix">
+                  <input id="nSimsInput" type="number" min="1" max="64" value="16" />
+                  <small>runs</small>
+                </span>
+              </label>
+
+              <label class="control-field seed-field" for="seedInput">
+                <span class="field-label">
+                  Base seed
+                  <button
+                    class="info-tip"
+                    type="button"
+                    aria-label="About base seed"
+                    data-tooltip="The starting random-number seed. Reusing the same seed and settings makes stochastic results reproducible."
+                  >i</button>
+                </span>
+                <input id="seedInput" type="number" value="1234" />
+              </label>
+
+              <label class="switch-field" for="mtInput">
+                <span class="switch-copy">
+                  <span class="field-label">
+                    Parallel steps
+                    <button
+                      class="info-tip"
+                      type="button"
+                      aria-label="About parallel steps"
+                      data-tooltip="Allows the Julia model to use multiple threads inside each simulation epoch for faster execution."
+                    >i</button>
+                  </span>
+                  <small>Use available CPU threads</small>
+                </span>
+                <input id="mtInput" type="checkbox" checked />
+                <span class="switch" aria-hidden="true"></span>
+              </label>
+            </div>
+
+            <div id="cloneContext" class="clone-context" aria-live="polite" hidden>
+              <div>
+                <strong id="cloneContextName">Cloned run settings</strong>
+                <span id="cloneContextDetail"></span>
+              </div>
+              <button id="clearInheritedShock" class="secondary-button" type="button" hidden>Remove inherited shock</button>
+            </div>
+
+            <div id="datasetProvenance" class="provenance-strip" aria-live="polite">
+              <div class="provenance-placeholder">Loading data vintage…</div>
+            </div>
+
+            <details id="scenarioEvidence" class="scenario-evidence">
+              <summary>
+                <span>
+                  <strong>Published annual anchors</strong>
+                  <small id="scenarioEvidenceSummary">Select a conditional forecast path to inspect its assumptions.</small>
+                </span>
+                <span class="details-action">View assumptions</span>
+              </summary>
+              <div id="scenarioAssumptions" class="scenario-table-wrap"></div>
+            </details>
+
+            <div id="runProgressWrap" class="run-progress" hidden>
+              <div class="progress-track" aria-hidden="true">
+                <span id="progressBar"></span>
+              </div>
+              <div class="progress-copy">
+                <span id="statusText" role="status" aria-live="polite"></span>
+                <strong id="progressPercent">0%</strong>
+              </div>
+            </div>
+          </section>
+
+          <div class="results-layout">
+            <section class="results-content" aria-labelledby="resultsTitle">
+              <div class="section-heading">
+                <div>
+                  <span class="eyebrow">Model output</span>
+                  <h2 id="resultsTitle">Economic outlook</h2>
+                  <p id="resultsSubtitle">Run a simulation or choose a recent run to inspect its output.</p>
+                </div>
+                <div class="download-actions">
+                  <a id="exploreRun" class="icon-button explore-button" href="#" hidden>Explore network →</a>
+                  <a id="downloadCsv" class="icon-button" href="#" hidden>CSV</a>
+                  <a id="downloadJld2" class="icon-button" href="#" hidden>JLD2</a>
+                </div>
+              </div>
+
+              <div id="metricsGrid" class="metrics-grid" aria-live="polite">
+                <article class="metric-card metric-placeholder">
+                  <span>Real GDP</span><strong>—</strong><small>Awaiting output</small>
+                </article>
+                <article class="metric-card metric-placeholder">
+                  <span>Consumption</span><strong>—</strong><small>Awaiting output</small>
+                </article>
+                <article class="metric-card metric-placeholder">
+                  <span>Policy rate</span><strong>—</strong><small>Awaiting output</small>
+                </article>
+                <article class="metric-card metric-placeholder">
+                  <span>Ensemble</span><strong>—</strong><small>Awaiting output</small>
+                </article>
+              </div>
+
+              <div id="outputEmpty" class="output-empty">
+                <div class="empty-visual" aria-hidden="true">
+                  <span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <h3>Your model output will appear here</h3>
+                <p>Use the calibrated defaults or refine parameters in the Inputs tab, then run the simulation.</p>
+              </div>
+              <div id="outputPlots" class="output-grid"></div>
+            </section>
+
+            <aside class="history-card" aria-labelledby="historyTitle">
+              <div class="history-heading">
+                <div>
+                  <span class="eyebrow">Saved locally</span>
+                  <h2 id="historyTitle">Recent runs</h2>
+                </div>
+                <button id="refreshRunsBtn" class="quiet-button" type="button" aria-label="Refresh run history">↻</button>
+              </div>
+              <div id="runsList" class="runs-list">
+                <div class="history-empty">No simulation runs yet.</div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section
+          id="inputsPanel"
+          class="tab-panel"
+          role="tabpanel"
+          aria-labelledby="inputsTab"
+          hidden
+        >
+          <div class="inputs-intro">
+            <div>
+              <span class="eyebrow">Model configuration</span>
+              <h1>Inputs &amp; parameters</h1>
+              <p>Review the calibrated evidence, adjust the exposed assumptions, and understand what enters the model.</p>
+            </div>
+            <div class="inputs-actions">
+              <button id="resetKnobsBtn" class="secondary-button" type="button">Reset defaults</button>
+              <button id="reviewResultsBtn" class="primary-button" type="button">Review results →</button>
+            </div>
+          </div>
+
+          <section class="parameter-workspace card" aria-labelledby="editableTitle">
+            <div class="card-heading">
+              <div>
+                <span class="eyebrow">Scenario assumptions</span>
+                <h2 id="editableTitle">Editable parameters</h2>
+                <p>Values shown are calibrated defaults for the selected dataset.</p>
+              </div>
+              <label class="search-box" for="knobSearch">
+                <span aria-hidden="true">⌕</span>
+                <input id="knobSearch" type="search" placeholder="Find a parameter…" autocomplete="off" />
+              </label>
+            </div>
+            <div id="knobFilters" class="filter-chips" aria-label="Parameter categories"></div>
+            <div id="knobsForm" class="parameter-groups"></div>
+            <details class="overrides-details">
+              <summary>
+                <span>Current overrides</span>
+                <span id="overrideSummary">No changes from calibrated defaults</span>
+              </summary>
+              <pre id="overridesPreview">{}</pre>
+            </details>
+          </section>
+
+          <section class="data-workspace card" aria-labelledby="dataExplorerTitle">
+            <div class="card-heading">
+              <div>
+                <span class="eyebrow">Calibrated evidence</span>
+                <h2 id="dataExplorerTitle">Input data explorer</h2>
+                <p>Browse every scalar, time series, sector vector, and matrix passed into the Julia model.</p>
+              </div>
+              <label class="search-box" for="inputSearch">
+                <span aria-hidden="true">⌕</span>
+                <input id="inputSearch" type="search" placeholder="Search model inputs…" autocomplete="off" />
+              </label>
+            </div>
+            <div id="inputGroupTabs" class="filter-chips" role="tablist" aria-label="Input data groups">
+              <button class="filter-chip is-active" type="button" data-group="parameters" role="tab" aria-selected="true">
+                Parameters <span id="parametersCount">0</span>
+              </button>
+              <button class="filter-chip" type="button" data-group="initial_conditions" role="tab" aria-selected="false">
+                Initial conditions <span id="initialConditionsCount">0</span>
+              </button>
+            </div>
+            <div class="data-explorer">
+              <div id="inputCatalog" class="input-catalog" aria-label="Available model inputs"></div>
+              <div class="input-preview">
+                <div id="inputMeta" class="preview-heading">
+                  <span class="eyebrow">Select an input</span>
+                  <h3>Data preview</h3>
+                  <p>Choose an item from the catalog to inspect its value and dimensions.</p>
+                </div>
+                <div id="inputPlot" class="input-plot"></div>
+              </div>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <script src="/app.js"></script>
+  </body>
+</html>

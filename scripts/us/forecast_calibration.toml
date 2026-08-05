@@ -1,0 +1,107 @@
+schema_version = "beforeit-us-forecast-calibration.v2"
+truth_file = "data/us/validation/ECONOMIC_OUTLOOK_ACTUALS.csv"
+truth_start = "2023Q4"
+measurement_anchor = "2024Q1"
+target_start = "2024Q2"
+training_end = "2025Q4"
+holdout_start = "2026Q1"
+target_end = "2026Q2"
+training_sample = "2024Q2-2025Q4"
+coefficient_fitting_sample = "2024Q2-2025Q4"
+excluded_from_coefficient_fitting_sample = "2026Q1-2026Q2"
+truth_vintage = "2026-08-04"
+truth_sha256 = "8f4dfa041eaba004494c43c67bbe98ac4ef33200955cca97c373e26a8cc8ef69"
+ensemble_size = 128
+backtest_seed = 17000
+forecast_seed = 67000
+backtest_horizon = 1
+forecast_horizon = 15
+model_scale = 0.00001
+correction_decay = 2.0
+target_max_ape_pct = 10.0
+real_time_vintage_claim = false
+common_seed_schedule = true
+
+[optimization]
+regularization_weight = 0.002
+
+[regularization_scales]
+rho = 0.1
+r_star = 0.003
+xi_pi = 0.5
+xi_gamma = 0.5
+
+[parameter_bounds.rho]
+lower = 0.7
+upper = 0.99
+
+[parameter_bounds.r_star]
+lower = -0.005
+upper = 0.003
+
+[parameter_bounds.xi_pi]
+lower = 0.5
+upper = 1.5
+
+[parameter_bounds.xi_gamma]
+lower = 0.0
+upper = 1.25
+
+[parameter_overrides]
+rho = 0.9114583333333334
+r_star = -0.0023333333333333335
+xi_pi = 0.7083333333333334
+xi_gamma = 0.25873027948729765
+
+[output_correction_constraints]
+amplitude_bound = 0.75
+regularization = 0.0001
+
+[output_corrections.real_gdp]
+method = "damped_log_bias"
+amplitude = 0.0006878986807812921
+decay = 2.0
+origin_horizon = 0
+formula = "factor(h)=exp(amplitude*(1-exp(-decay*h))) for h>0; factor(0)=1"
+
+[output_corrections.real_household_consumption]
+method = "damped_log_bias"
+amplitude = 0.004010315502037231
+decay = 2.0
+origin_horizon = 0
+formula = "factor(h)=exp(amplitude*(1-exp(-decay*h))) for h>0; factor(0)=1"
+
+[output_corrections.real_government_consumption]
+method = "damped_log_bias"
+amplitude = 0.0025870816941692093
+decay = 2.0
+origin_horizon = 0
+formula = "factor(h)=exp(amplitude*(1-exp(-decay*h))) for h>0; factor(0)=1"
+
+[output_corrections.real_fixed_capitalformation]
+method = "damped_log_bias"
+amplitude = -0.0017126619419650074
+decay = 2.0
+origin_horizon = 0
+formula = "factor(h)=exp(amplitude*(1-exp(-decay*h))) for h>0; factor(0)=1"
+
+[output_corrections.real_exports]
+method = "damped_log_bias"
+amplitude = 0.006521952766259595
+decay = 2.0
+origin_horizon = 0
+formula = "factor(h)=exp(amplitude*(1-exp(-decay*h))) for h>0; factor(0)=1"
+
+[output_corrections.real_imports]
+method = "damped_log_bias"
+amplitude = 0.01047406595086749
+decay = 2.0
+origin_horizon = 0
+formula = "factor(h)=exp(amplitude*(1-exp(-decay*h))) for h>0; factor(0)=1"
+
+[output_corrections.wages]
+method = "damped_log_bias"
+amplitude = -0.00035596916587853794
+decay = 2.0
+origin_horizon = 0
+formula = "factor(h)=exp(amplitude*(1-exp(-decay*h))) for h>0; factor(0)=1"

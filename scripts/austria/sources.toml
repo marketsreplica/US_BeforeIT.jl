@@ -1,0 +1,69 @@
+schema_version = 1
+country = "AT"
+retrieved_at = "2026-07-29"
+
+[calibration_code]
+name = "ViennaInstitute/CalibrateBeforeIT.jl"
+url = "https://github.com/ViennaInstitute/CalibrateBeforeIT.jl.git"
+revision = "0da98a4e8382042dc666bce51cbedad93888236c"
+
+[eurostat_snapshot]
+name = "Eurostat tables for BeforeIT calibration"
+record = "https://zenodo.org/records/18610477"
+url = "https://zenodo.org/api/records/18610477/files/data_eurostat_2026_02_11.zip/content"
+filename = "data_eurostat_2026_02_11.zip"
+published_snapshot = "2026-02-11"
+bytes = 1025923434
+md5 = "ac6467f8b00924a5a918257d98582a71"
+sha256 = "5adf593e9e9265e97e251d7afce132038181814c83c3a7d0e828d0e4ca0ba39b"
+license = "Eurostat reuse policy"
+
+[figaro_2024]
+name = "FIGARO 2026 edition, 2024 inter-country use table"
+information = "https://ec.europa.eu/eurostat/web/esa-supply-use-input-tables/information-data"
+url = "https://circabc.europa.eu/service/api/node/workspace/SpacesStore/1cbc0651-730a-4735-90e8-e419961c37e5/content?guest=true"
+filename = "flatfile_eu-ic-use_26ed_2024.zip"
+csv_filename = "flatfile_eu-ic-use_26ed_2024.csv"
+edition = 2026
+reference_year = 2024
+bytes = 75721446
+sha256 = "e8d2159bdc7ee6e23d4211383c4b65f64a1607d7b7a0bdd183fadd1708378419"
+license = "Eurostat reuse policy"
+
+[published_austria_object]
+name = "BeforeIT Austria calibration object (comparison/reference vintage)"
+record = "https://zenodo.org/records/18698434"
+url = "https://zenodo.org/records/18698434/files/AT_calibration_object.jld2"
+filename = "AT_calibration_object.jld2"
+bytes = 931374
+sha256 = "dfebc01f2b3e3e63eaf94f71ea088bc3f4146cfb1b2e309a1592e31cc4026c9d"
+
+[live_nowcast]
+name = "Eurostat dissemination API"
+url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data"
+vintage = "2026-07-29"
+last_observed_quarter = "2026-Q1"
+note = "Dynamic API responses are recorded with their exact query URL and publisher update timestamp in each artifact."
+
+[oenb_forecast]
+name = "OeNB Report 2026/17: Economic Outlook for Austria"
+url = "https://www.oenb.at/dam/jcr%3A8e3ee5e4-bd2e-4d5a-afb9-b75a3dff3058/oenb-report-2026-17-economic-outlook-june-2026.pdf"
+published = "2026-06-12"
+horizon = "2026-2028"
+use = "Baseline, mild/upside and adverse/downside assumptions"
+
+[wifo_forecast]
+name = "Medium-term Forecast of the Austrian Economy 2026 to 2031"
+url = "https://www.wifo.ac.at/wp-content/uploads/upload-1511/mb_2026_04_02_mittelfristige_prognose.pdf"
+published = "2026-05-05"
+horizon = "2026-2031"
+use = "Demand components and medium-term extension through 2031"
+
+[population_projection]
+name = "Statistics Austria population projection 2025"
+url = "https://www.statistik.at/en/statistics/population-and-society/population/demographische-prognosen/population-projections-for-austria-and-federal-states"
+horizon = "2025-2080"
+
+[classification]
+name = "NACE Rev. 2 / CPA 2.1 A64 bridge"
+note = "The structural baseline remains in the 62-sector BeforeIT/FIGARO Rev. 2 convention. NACE Rev. 2.1 observations introduced from 2025 must be bridged before sectoral replacement."

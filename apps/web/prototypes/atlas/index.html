@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flow Atlas — BeforeIT Economy Map</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Error banner (hidden unless the API is unreachable) -->
+<div id="error-banner" class="hidden">
+  <span id="error-text">API unreachable.</span>
+  <button id="error-retry">Retry</button>
+</div>
+
+<!-- Header -->
+<header id="topbar">
+  <div class="brand">
+    <span class="brand-mark"></span>
+    <span class="brand-name">FLOW&nbsp;ATLAS</span>
+    <span class="brand-sub">BeforeIT agent-based economy</span>
+  </div>
+  <div class="topbar-controls">
+    <label class="run-select-label">Run
+      <select id="run-select" title="Pick a completed simulation run"></select>
+    </label>
+    <button id="btn-new-run" class="accent-btn">Run new simulation</button>
+    <button id="run-progress-chip" class="hidden" title="Simulation in progress — click for details"></button>
+  </div>
+</header>
+
+<!-- Main canvas (full viewport, behind overlays) -->
+<canvas id="atlas-canvas"></canvas>
+
+<!-- Big quarter + KPI block, top-right -->
+<div id="kpi-block">
+  <div id="kpi-quarter">—</div>
+  <div id="kpi-scenario" class="kpi-sub">loading run…</div>
+  <div class="kpi-grid">
+    <div class="kpi"><span class="kpi-label">GDP (nominal)</span><span class="kpi-value" id="kpi-gdp">—</span></div>
+    <div class="kpi"><span class="kpi-label">Inflation YoY</span><span class="kpi-value" id="kpi-infl">—</span></div>
+    <div class="kpi"><span class="kpi-label">Policy rate</span><span class="kpi-value" id="kpi-rate">—</span></div>
+    <div class="kpi"><span class="kpi-label">Trade balance</span><span class="kpi-value" id="kpi-trade">—</span></div>
+  </div>
+</div>
+
+<!-- Flow color legend, bottom-left above timeline -->
+<div id="legend">
+  <div class="legend-title">Money flows <span class="derived-badge" title="All flows are estimates derived from aggregate output — hover any flow for its formula">derived</span></div>
+  <div id="legend-items"></div>
+</div>
+
+<!-- Hover tooltip -->
+<div id="tooltip" class="hidden"></div>
+
+<!-- Right side inspector panel -->
+<aside id="panel" class="hidden">
+  <button id="panel-close" title="Close">&times;</button>
+  <div id="panel-content"></div>
+</aside>
+
+<!-- Cinematic timeline -->
+<div id="timeline">
+  <button id="btn-play" class="tl-btn" title="Play / pause">&#10074;&#10074;</button>
+  <div class="speed-group">
+    <button class="tl-btn speed-btn" data-speed="0.5">0.5&times;</button>
+    <button class="tl-btn speed-btn active" data-speed="1">1&times;</button>
+    <button class="tl-btn speed-btn" data-speed="2">2&times;</button>
+  </div>
+  <div id="scrub-wrap">
+    <input id="scrubber" type="range" min="0" max="23" step="0.001" value="0">
+    <div id="tl-ticks"></div>
+  </div>
+  <div id="tl-period">—</div>
+</div>
+
+<!-- Run-new-simulation drawer -->
+<div id="drawer-veil" class="hidden"></div>
+<aside id="drawer" class="hidden">
+  <h2>Run new simulation</h2>
+  <p class="drawer-note">12 quarters &middot; 4 Monte-Carlo paths. Only knobs you move are sent.</p>
+
+  <label class="drawer-field">Dataset
+    <select id="drawer-dataset"></select>
+  </label>
+  <label class="drawer-field">Scenario
+    <select id="drawer-scenario"></select>
+  </label>
+
+  <div id="drawer-knobs"></div>
+
+  <label class="drawer-field">Shock
+    <select id="drawer-shock">
+      <option value="none">None</option>
+      <option value="interest_rate">Interest-rate shock</option>
+      <option value="productivity">Productivity shock</option>
+      <option value="consumption">Consumption shock</option>
+    </select>
+  </label>
+  <div id="drawer-shock-params"></div>
+
+  <div id="drawer-status" class="hidden">
+    <div class="progress-track"><div id="drawer-progress" class="progress-fill"></div></div>
+    <div id="drawer-status-text"></div>
+  </div>
+
+  <div class="drawer-actions">
+    <button id="drawer-cancel" class="tl-btn">Close</button>
+    <button id="drawer-launch" class="accent-btn">Launch run</button>
+  </div>
+</aside>
+
+<script src="data.js"></script>
+<script src="render.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

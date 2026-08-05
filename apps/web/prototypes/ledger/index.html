@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07110f">
+  <title>Ledger Map — BeforeIT Economy Explorer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <a class="back-link" href="../" aria-label="Back to prototype gallery">←</a>
+      <span class="brand-sigil" aria-hidden="true">€</span>
+      <div>
+        <strong>LEDGER MAP</strong>
+        <span id="dataset-label">Exact quarterly cash flows</span>
+      </div>
+    </div>
+    <div class="run-controls">
+      <label for="run-select">Traced run</label>
+      <select id="run-select" aria-describedby="run-note"></select>
+      <span id="accounting-badge" class="status-badge neutral">Checking ledger</span>
+    </div>
+  </header>
+
+  <main id="workspace">
+    <section class="canvas-shell" aria-label="Interactive cash-flow map">
+      <canvas id="ledger-canvas" aria-hidden="true"></canvas>
+
+      <div class="canvas-tools" aria-label="Map tools">
+        <div class="mode-switch" role="group" aria-label="Network detail">
+          <button data-mode="macro" aria-pressed="true">Macro</button>
+          <button data-mode="sector" aria-pressed="false">Sectors</button>
+          <button data-mode="firm" aria-pressed="false">Firms</button>
+        </div>
+        <div class="tool-cluster" role="group" aria-label="View controls">
+          <button id="zoom-out" title="Zoom out" aria-label="Zoom out">−</button>
+          <span id="zoom-label" aria-live="polite">100%</span>
+          <button id="zoom-in" title="Zoom in" aria-label="Zoom in">+</button>
+          <button id="fit-view">Fit</button>
+          <button id="reflow">Reflow</button>
+          <button id="reset-view">Reset</button>
+          <button id="show-all-firms" class="return-action" hidden>Show all firms</button>
+        </div>
+        <form id="firm-search" class="search" role="search">
+          <label class="sr-only" for="firm-query">Find a firm by ID</label>
+          <input id="firm-query" list="firm-options" placeholder="Find a firm" inputmode="numeric" autocomplete="off">
+          <datalist id="firm-options"></datalist>
+          <button type="submit">Focus</button>
+        </form>
+      </div>
+
+      <div id="flow-filters" class="flow-filters" aria-label="Flow categories"></div>
+
+      <div id="query-status" class="query-status" role="status" aria-live="polite" aria-atomic="true">
+        <b id="query-summary">Preparing ledger…</b>
+        <span id="coverage-note"></span>
+        <span id="scale-note"></span>
+      </div>
+
+      <div class="map-key" aria-hidden="true">
+        <span><i class="line-sample thin"></i> smaller payment</span>
+        <span><i class="line-sample thick"></i> larger payment</span>
+        <span><i class="line-sample capacity"></i> potential supply response (non-cash)</span>
+        <span><i class="line-sample noncash"></i> stock / other non-cash</span>
+        <b>Arrows follow money: buyer → seller</b>
+      </div>
+
+      <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+
+      <section id="empty-state" class="empty-state" hidden>
+        <span class="empty-mark" aria-hidden="true">◎</span>
+        <h1>No exact transaction trace yet</h1>
+        <p>Run a new simulation to collect exact quarterly cash transactions. Historical runs created before ledger tracing cannot be reconstructed honestly.</p>
+        <a href="../../">Run a new simulation</a>
+      </section>
+
+      <aside id="inspector" class="inspector" aria-label="Selection inspector" hidden>
+        <button id="close-inspector" class="close" aria-label="Close inspector">×</button>
+        <p id="inspect-kicker" class="eyebrow">Selected</p>
+        <h2 id="inspect-title">—</h2>
+        <p id="inspect-subtitle" class="inspect-subtitle"></p>
+        <dl id="inspect-metrics"></dl>
+        <p id="inspect-copy" class="inspect-copy"></p>
+        <button id="inspect-focus" class="primary-action" hidden>Isolate this firm’s relationships</button>
+      </aside>
+
+      <details id="accessible-ledger" class="accessible-ledger">
+        <summary>Accessible transaction table</summary>
+        <div class="table-wrap">
+          <table>
+            <caption id="table-caption">Largest visible ledger entries</caption>
+            <thead>
+              <tr><th>Ledger entry</th><th>From</th><th>To</th><th>Value</th><th>Evidence</th></tr>
+            </thead>
+            <tbody id="flow-table"></tbody>
+          </table>
+        </div>
+      </details>
+
+      <div id="loading" class="loading" aria-live="polite">Reading exact ledger…</div>
+      <p id="live-status" class="sr-only"></p>
+    </section>
+  </main>
+
+  <footer class="timeline">
+    <button id="play" class="play" aria-label="Play quarters">▶</button>
+    <div class="timeline-copy">
+      <b id="period-label">—</b>
+      <span id="realization-label">Representative realization</span>
+    </div>
+    <input id="quarter-range" type="range" min="1" max="1" value="1" step="1" aria-label="Quarter">
+    <span id="quarter-count">Q — / —</span>
+    <span id="units-label">€m / quarter</span>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

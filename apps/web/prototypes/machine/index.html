@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE MACHINE — BeforeIT economy</title>
+<link rel="stylesheet" href="style.css">
+<script defer src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3"></script>
+<script defer src="util.js"></script>
+<script defer src="knobs.js"></script>
+<script defer src="sankey.js"></script>
+<script defer src="gauges.js"></script>
+<script defer src="phases.js"></script>
+<script defer src="main.js"></script>
+</head>
+<body>
+
+<div id="error-banner" hidden></div>
+
+<header id="topbar">
+  <div class="brand">
+    <span class="brand-mark">⚙</span>
+    <span class="brand-name">THE&nbsp;MACHINE</span>
+    <span class="brand-sub">BeforeIT agent-based economy · 652 firms · 9,215 households · 1 bank · 1 central bank</span>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="machine">CONTROL ROOM</button>
+    <button class="tab" data-tab="phases">ONE QUARTER, STEP BY STEP</button>
+  </nav>
+  <div class="run-meta mono" id="run-meta">loading…</div>
+</header>
+
+<!-- ===================== TAB 1 : THE MACHINE ===================== -->
+<main id="tab-machine" class="tabpane active">
+
+  <!-- LEFT : knob rail -->
+  <aside id="knob-rail">
+    <div class="rail-head">
+      <span>PARAMETER RAIL</span>
+      <span class="rail-hint">drag dial · dblclick = default</span>
+    </div>
+    <div id="knob-groups"><!-- knob groups injected --></div>
+    <div id="rail-footer">
+      <div class="row">
+        <label class="mono" for="scenario-pick">SCENARIO</label>
+        <select id="scenario-pick" class="mono">
+          <option value="baseline">baseline</option>
+          <option value="upside">upside</option>
+          <option value="downside">downside</option>
+          <option value="unconditional">unconditional</option>
+        </select>
+      </div>
+      <div id="psi-warn" class="warn mono" hidden>psi + psi_H must stay ≤ 1</div>
+      <div class="row btns">
+        <button id="btn-reset" class="btn ghost">RESET</button>
+        <button id="btn-run" class="btn run">RUN THE MACHINE</button>
+      </div>
+      <div id="run-progress" hidden>
+        <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+        <div class="prog-label mono" id="prog-label">spinning up…</div>
+      </div>
+      <div class="rail-note mono">new runs: AUSTRIA2026Q1 · T=12 · 4 sims</div>
+    </div>
+  </aside>
+
+  <!-- CENTER : the monetary circuit -->
+  <section id="center">
+    <div id="sankey-head">
+      <div class="panel-title">
+        MONETARY CIRCUIT <span class="qtr mono" id="qtr-label">—</span>
+        <span class="badge-derived" title="Agent-to-agent flows are derived estimates: run aggregates × current knob settings (see recipes in tooltips). They are not direct model output.">derived</span>
+      </div>
+      <div class="legend mono">
+        <span class="lg spend">spending</span>
+        <span class="lg tax">taxes</span>
+        <span class="lg transfer">transfers</span>
+        <span class="lg trade">trade</span>
+        <span class="lg invest">investment</span>
+      </div>
+    </div>
+    <div id="sankey-wrap">
+      <svg id="sankey" viewBox="0 0 940 520" preserveAspectRatio="xMidYMid meet"></svg>
+      <div id="credit-chip" class="chip mono" title="Credit market: the bank lends to firms at policy rate + risk premium mu, limited by its capital requirement zeta. Derived indicator.">
+        <span class="chip-dot"></span><span id="credit-chip-text">CREDIT</span>
+      </div>
+      <div id="flow-tip" class="tip mono" hidden></div>
+    </div>
+    <div id="sector-strip-wrap">
+      <div class="strip-label mono">FIRMS output by sector group <span class="badge-derived sm" title="Share of real gross value added per sector group at the selected quarter (derived from real_sector_gva).">derived</span></div>
+      <div id="sector-strip"></div>
+    </div>
+    <div id="scrubber">
+      <button id="btn-play" class="btn play" title="play / pause">▶</button>
+      <input id="time-scrub" type="range" min="0" max="23" step="1" value="0">
+      <div class="scrub-read mono" id="scrub-read">—</div>
+    </div>
+  </section>
+
+  <!-- RIGHT : gauges -->
+  <aside id="gauge-rail">
+    <div class="rail-head"><span>OUTPUT GAUGES</span><span class="rail-hint">mean ± σ across sims</span></div>
+    <div id="gauges"><!-- gauge cards injected --></div>
+    <div class="rail-head sub"><span>LOAD EXISTING RUN</span></div>
+    <select id="run-pick" class="mono full"></select>
+    <div class="rail-note mono" id="run-note"></div>
+  </aside>
+</main>
+
+<!-- ===================== TAB 2 : PHASES ===================== -->
+<main id="tab-phases" class="tabpane">
+  <div id="phases-head">
+    <div>
+      <div class="panel-title big">ONE SIMULATED QUARTER — 15 PHASES</div>
+      <p class="phases-sub">Every quarter, the machine turns through the same fixed sequence.
+      No agent sees the future: each acts on simple rules and expectations, and the economy
+      emerges from their interaction. Watch a full turn of the crank.</p>
+    </div>
+    <div class="phase-controls">
+      <button id="phase-play" class="btn run sm">▶ AUTOPLAY</button>
+      <button id="phase-restart" class="btn ghost sm">RESTART</button>
+    </div>
+  </div>
+  <div id="phase-rail-wrap">
+    <div id="phase-pipe"><div id="phase-pipe-fill"></div></div>
+    <ol id="phase-list"><!-- phase cards injected --></ol>
+  </div>
+</main>
+
+</body>
+</html>

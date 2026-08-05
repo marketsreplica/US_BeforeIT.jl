@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Econopolis — BeforeIT city view</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="errorBanner" class="hidden"></div>
+
+<!-- ============ HUD (top bar) ============ -->
+<header id="hud">
+  <div class="hud-left">
+    <div class="logo">ECONO<span>POLIS</span></div>
+    <div class="sub">
+      <span id="datasetChip" class="chip">loading…</span>
+      <span id="timelineChip" class="chip chip-baseline">CURRENT TIMELINE</span>
+    </div>
+  </div>
+
+  <div class="hud-quarter">
+    <div id="quarterBig">—</div>
+    <div class="q-label">SIMULATED QUARTER</div>
+  </div>
+
+  <div class="hud-kpis">
+    <div class="kpi">
+      <div class="kpi-label">REAL GDP <span class="kpi-unit">/qtr</span></div>
+      <div class="kpi-value"><span id="kpiGdp">—</span></div>
+      <div class="kpi-delta" id="kpiGdpDelta"></div>
+    </div>
+    <div class="kpi kpi-gauge">
+      <div class="kpi-label">INFLATION <span class="kpi-unit">yoy</span></div>
+      <canvas id="gaugeCanvas" width="112" height="62"></canvas>
+      <div id="kpiInfl" class="gauge-num">—</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">POLICY RATE</div>
+      <div class="kpi-value" id="kpiRate">—</div>
+      <div class="kpi-delta" id="kpiRateDelta"></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">TRADE BALANCE <span class="kpi-unit">real /qtr</span></div>
+      <div class="kpi-value" id="kpiTrade">—</div>
+      <div class="kpi-delta" id="kpiTradeDelta"></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ Stage: city canvas + policy rail ============ -->
+<main id="stage">
+  <div id="cityWrap">
+    <canvas id="city"></canvas>
+    <div id="tooltip" class="hidden"></div>
+    <div id="ghostLegend" class="hidden">faint outlines&nbsp;=&nbsp;baseline skyline <span class="badge">ghost</span></div>
+  </div>
+
+  <aside id="rail">
+    <div class="rail-head">POLICY CARDS<span class="rail-sub">pick up to 3 · one shock max</span></div>
+    <div id="cards"></div>
+    <div class="rail-foot">
+      <div id="runHint">Select at least one card</div>
+      <button id="runBtn" disabled>RUN<span class="run-sub">T=12 · 4 sims · baseline</span></button>
+    </div>
+  </aside>
+</main>
+
+<!-- ============ Transport + news ticker ============ -->
+<footer id="deck">
+  <div id="transport">
+    <button id="playBtn" title="play / pause (space)">&#10074;&#10074;</button>
+    <input id="scrub" type="range" min="0" max="1000" value="0">
+    <button id="speedBtn" title="playback speed">1&times;</button>
+    <div id="scrubLabel">—</div>
+  </div>
+  <div id="ticker"><div id="tickerInner"></div></div>
+</footer>
+
+<!-- ============ Simulation progress overlay ============ -->
+<div id="progressOverlay" class="overlay hidden">
+  <div class="panel">
+    <div class="skyline-anim"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <h2>Simulating 3 years of Econopolis…</h2>
+    <div class="progress-track"><div id="progressFill"></div></div>
+    <div id="progressMsg">queued</div>
+    <div class="overlay-note">4 parallel economies · 12 quarters · 652 firms · 9,215 households · 1 central bank</div>
+    <div class="end-actions"><button id="hideProgressBtn" class="ghost-btn">HIDE (keeps running)</button></div>
+  </div>
+</div>
+
+<!-- ============ End-of-run scoreboard overlay ============ -->
+<div id="endOverlay" class="overlay hidden">
+  <div class="panel">
+    <h2 id="endTitle">FINAL LEDGER</h2>
+    <div id="endCards"></div>
+    <div id="scoreTable"></div>
+    <div id="verdict"></div>
+    <div class="overlay-note">Compared against the baseline ghost at the same quarter. Values are model units
+      (≈ € millions per quarter). Flow estimates marked <span class="badge">derived</span> use the contract recipes.</div>
+    <div class="end-actions">
+      <button id="replayBtn">REPLAY TIME-LAPSE</button>
+      <button id="backBtn" class="ghost-btn">BACK TO BASELINE TIMELINE</button>
+      <button id="closeEndBtn" class="ghost-btn">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<script src="iso.js"></script>
+<script src="data.js"></script>
+<script src="city.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

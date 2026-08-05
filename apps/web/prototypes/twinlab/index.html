@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twin Lab — BeforeIT A/B universe comparator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="err-banner" class="hidden" role="alert"></div>
+
+<!-- ══════════════ CONTROL DECK ══════════════ -->
+<header id="deck">
+  <div class="brand">
+    <div class="brand-title">TWIN&nbsp;LAB</div>
+    <div class="brand-sub">BeforeIT · parallel-universe comparator</div>
+  </div>
+
+  <div class="uni-picker">
+    <label class="uni-label a-label" for="selA"><span class="uni-dot dot-a"></span>UNIVERSE A · CONTROL</label>
+    <select id="selA" class="uni-select"></select>
+  </div>
+
+  <div class="uni-picker">
+    <label class="uni-label b-label" for="selB"><span class="uni-dot dot-b"></span>UNIVERSE B · TREATMENT</label>
+    <select id="selB" class="uni-select"></select>
+  </div>
+
+  <div id="capsule" class="capsule hidden">
+    <div class="capsule-title">UNIVERSE B — SIMULATING</div>
+    <div class="capsule-bar"><div id="capsule-fill" class="capsule-fill"></div></div>
+    <div id="capsule-msg" class="capsule-msg">queued…</div>
+  </div>
+</header>
+
+<!-- ══════════════ FORK / DELTA BOARD ══════════════ -->
+<section id="forkboard" class="hidden">
+  <div class="fb-head">
+    <span class="fb-title">Δ BOARD — FORK OF UNIVERSE A</span>
+    <span class="fb-hint">click a knob to bend this timeline · amber = changed vs A</span>
+    <span id="fb-basis" class="fb-basis"></span>
+  </div>
+  <div id="fb-chips" class="fb-chips"></div>
+
+  <div class="fb-lower">
+    <div class="fb-shock">
+      <span class="fb-shock-label">SHOCK</span>
+      <div id="shock-seg" class="seg">
+        <button data-shock="none" class="seg-btn on">NONE</button>
+        <button data-shock="interest_rate" class="seg-btn">RATE</button>
+        <button data-shock="consumption" class="seg-btn">CONSUMPTION</button>
+        <button data-shock="productivity" class="seg-btn">PRODUCTIVITY</button>
+      </div>
+      <div id="shock-params" class="shock-params"></div>
+    </div>
+
+    <div class="fb-run">
+      <div id="fb-guard" class="fb-guard hidden"></div>
+      <div id="fb-summary" class="fb-summary">no changes — B would replay A's physics with a fresh seed</div>
+      <button id="btn-run" class="btn-run">RUN UNIVERSE B ⟶</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ TIMELINE / KPI BAR ══════════════ -->
+<section id="timelinebar">
+  <button id="btn-play" class="btn-play" title="play / pause">▶</button>
+  <div class="tl-mid">
+    <input id="scrub" type="range" min="0" max="23" step="0.01" value="0">
+    <div id="overlap-note" class="overlap-note"></div>
+  </div>
+  <div id="period-readout" class="period-readout">—</div>
+  <div id="kpis" class="kpis">
+    <div class="kpi" id="kpi-gdp"><div class="kpi-name">REAL GDP</div><div class="kpi-vals"><span class="va">—</span><span class="vb">—</span><span class="vd">—</span></div></div>
+    <div class="kpi" id="kpi-infl"><div class="kpi-name">INFLATION <em class="derived-tag" title="derived from GDP deflator (YoY)">derived</em></div><div class="kpi-vals"><span class="va">—</span><span class="vb">—</span><span class="vd">—</span></div></div>
+    <div class="kpi" id="kpi-rate"><div class="kpi-name">POLICY RATE</div><div class="kpi-vals"><span class="va">—</span><span class="vb">—</span><span class="vd">—</span></div></div>
+  </div>
+</section>
+
+<!-- ══════════════ MAIN LAB ══════════════ -->
+<main id="lab">
+  <div id="chartcol">
+    <div id="spine" class="spine-wrap"></div>
+    <div id="rows"></div>
+  </div>
+
+  <aside id="impacts">
+    <div class="imp-head">IMPACT REPORT <span class="imp-sub">auto-computed · B vs A</span></div>
+    <div id="cards"></div>
+    <div class="wl-head">SECTOR WINNERS &amp; LOSERS <span class="imp-sub">final shared quarter · GVA Δ%</span></div>
+    <div id="wl"></div>
+  </aside>
+</main>
+
+<!-- ══════════════ SECTOR HEATMAP ══════════════ -->
+<section id="heatmap-sec">
+  <button id="hm-toggle" class="hm-toggle"><span class="hm-caret">▾</span> SECTOR DIVERGENCE HEATMAP <span class="hm-sub">62 sectors × quarters · B−A real GVA in % · blue = B below A, red = B above</span></button>
+  <div id="heatmap" class="hm-body"></div>
+</section>
+
+<div id="hm-tip" class="hm-tip hidden"></div>
+<div id="popover" class="popover hidden"></div>
+
+<script src="charts.js"></script>
+<script src="forkboard.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

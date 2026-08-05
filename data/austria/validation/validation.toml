@@ -1,0 +1,55 @@
+accounting_tolerance = 1.0e-6
+backtest = "data/austria/validation/AT_2024_backtest.csv"
+data_vintage = "2026-07-29"
+random_seed = 20260729
+schema_version = 1
+
+[conditional_scenarios_2026Q2_to_2031Q4.baseline]
+final_central_bank_residual = -3.3178366720676422e-9
+final_commercial_bank_residual = 0.0
+final_real_gdp = 130924.61116236253
+finite_outputs = true
+horizon_quarters = 23
+initial_central_bank_residual = 2.9103830456733704e-10
+initial_commercial_bank_residual = 0.0
+positive_real_gdp = true
+
+[conditional_scenarios_2026Q2_to_2031Q4.downside]
+final_central_bank_residual = -4.598405212163925e-9
+final_commercial_bank_residual = 0.0
+final_real_gdp = 129161.55941289144
+finite_outputs = true
+horizon_quarters = 23
+initial_central_bank_residual = 2.9103830456733704e-10
+initial_commercial_bank_residual = 0.0
+positive_real_gdp = true
+
+[conditional_scenarios_2026Q2_to_2031Q4.upside]
+final_central_bank_residual = 3.958120942115784e-9
+final_commercial_bank_residual = 0.0
+final_real_gdp = 149052.22485912772
+finite_outputs = true
+horizon_quarters = 23
+initial_central_bank_residual = 2.9103830456733704e-10
+initial_commercial_bank_residual = 0.0
+positive_real_gdp = true
+
+[nowcast_2026Q1_to_2031Q4]
+final_central_bank_residual = -9.66247171163559e-9
+final_commercial_bank_residual = 0.0
+final_real_gdp = 119211.03188225589
+finite_outputs = true
+horizon_quarters = 23
+initial_central_bank_residual = 3.4924596548080444e-10
+initial_commercial_bank_residual = 0.0
+positive_real_gdp = true
+
+[structural_2024Q4]
+final_central_bank_residual = -1.3387762010097504e-9
+final_commercial_bank_residual = 0.0
+final_real_gdp = 130987.36430876238
+finite_outputs = true
+horizon_quarters = 4
+initial_central_bank_residual = 2.6193447411060333e-10
+initial_commercial_bank_residual = -2.9103830456733704e-11
+positive_real_gdp = true

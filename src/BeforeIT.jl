@@ -92,6 +92,8 @@ include("utils/get_accounting_identities.jl")
 # standard parameters
 include("utils/standard_params_initial_conditions.jl")
 include("utils/standard_calibration_data.jl")
+include("utils/austria_baselines.jl")
+include("utils/us_baselines.jl")
 
 # methods for running over different dates
 include("utils/save_all_predictions.jl")

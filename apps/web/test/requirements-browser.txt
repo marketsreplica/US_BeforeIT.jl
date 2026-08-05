@@ -1,0 +1,6 @@
+# Verified browser-acceptance environment. Install with Python 3.12, then run
+# `python -m playwright install chromium` once on the test machine.
+playwright==1.49.1
+greenlet==3.1.1
+pyee==12.0.0
+typing-extensions==4.12.2

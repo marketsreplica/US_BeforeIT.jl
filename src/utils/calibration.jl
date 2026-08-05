@@ -29,6 +29,293 @@ directly or whether the annual series must be converted via the timescale.
 has_quarterly(d, key, idx) = haskey(d, key) && length(d[key]) >= idx && !ismissing(d[key][idx])
 
 """
+    calibration_annual_value(values, idx)
+
+Return the annual observation selected by `idx`, while preserving support for
+the scalar count fields used by older calibration artifacts.
+"""
+calibration_annual_value(values::Number, idx) = values
+calibration_annual_value(values, idx) = vec(values)[idx]
+
+"""
+    calibration_boolean_marker(figaro, key)
+
+Read an opt-in calibration marker while rejecting values whose truthiness
+would otherwise depend on implicit conversion.
+"""
+function calibration_boolean_marker(figaro, key)
+    value = get(figaro, key, false)
+    value isa Bool || error("figaro[\"$key\"] must be boolean")
+    return value
+end
+
+"""
+    explicit_calibration_trade_vectors(figaro, annual_idx, sector_count)
+
+Read measured commodity imports from a FIGARO-style calibration dictionary.
+Explicit `imports` and optional `reexports` are nonnegative levels. This path
+is deliberately independent of the commodity-use/output balance: countries
+without an explicit `use_explicit_trade = true` marker retain the legacy residual calculation in
+`get_params_and_initial_conditions`.
+"""
+function explicit_calibration_trade_vectors(figaro, annual_idx, sector_count)
+    haskey(figaro, "imports") ||
+        error("Explicit trade calibration requested without figaro[\"imports\"]")
+    imports = vec(figaro["imports"][:, annual_idx])
+    length(imports) == sector_count ||
+        error("Explicit import vector has $(length(imports)) sectors; expected $sector_count")
+    all(isfinite, imports) || error("Explicit import vector contains nonfinite values")
+    imports = Bit.pos(imports)
+
+    reexports = if haskey(figaro, "reexports")
+        values = vec(figaro["reexports"][:, annual_idx])
+        length(values) == sector_count ||
+            error("Explicit re-export vector has $(length(values)) sectors; expected $sector_count")
+        all(isfinite, values) ||
+            error("Explicit re-export vector contains nonfinite values")
+        Bit.pos(values)
+    else
+        zeros(eltype(imports), sector_count)
+    end
+    return imports, reexports
+end
+
+"""
+    calibration_trade_vectors(residual_builder, figaro, annual_idx, sector_count)
+
+Select explicit measured trade only when the artifact opts in. Merely having
+an `imports` field is not sufficient because legacy country artifacts contain
+that field while intentionally calibrating trade from the goods-balance
+residual. `residual_builder` is evaluated for every non-opted-in artifact.
+"""
+function calibration_trade_vectors(
+        residual_builder::Function,
+        figaro,
+        annual_idx,
+        sector_count,
+    )
+    use_explicit_trade =
+        calibration_boolean_marker(figaro, "use_explicit_trade")
+    if use_explicit_trade
+        return explicit_calibration_trade_vectors(figaro, annual_idx, sector_count)
+    end
+    net_imports = residual_builder()
+    length(net_imports) == sector_count ||
+        error("Legacy trade residual has $(length(net_imports)) sectors; expected $sector_count")
+    return Bit.pos(net_imports), Bit.neg(net_imports)
+end
+
+"""
+    net_product_tax_targets(gross, net_product_taxes, label)
+
+Subtract allocated net product taxes from purchasers-price controls. Taxes
+may be signed (subsidies increase the basic-price target), but every resulting
+target must be finite and nonnegative.
+"""
+function net_product_tax_targets(gross, net_product_taxes, label)
+    gross_values = vec(gross)
+    tax_values = vec(net_product_taxes)
+    length(gross_values) == length(tax_values) ||
+        error("$label controls and product taxes have different lengths")
+    all(isfinite, gross_values) ||
+        error("$label purchasers-price controls contain nonfinite values")
+    all(gross_values .>= zero(eltype(gross_values))) ||
+        error("$label purchasers-price controls contain negative values")
+    all(isfinite, tax_values) ||
+        error("$label net product taxes contain nonfinite values")
+    targets = gross_values .- tax_values
+    all(isfinite, targets) ||
+        error("$label basic-price targets contain nonfinite values")
+    all(targets .>= zero(eltype(targets))) ||
+        error("$label net product taxes exceed purchasers-price controls")
+    return targets
+end
+
+function net_product_tax_targets(gross::Number, net_product_taxes::Number, label)
+    target = only(
+        net_product_tax_targets(
+            [gross],
+            [net_product_taxes],
+            label,
+        ),
+    )
+    return target
+end
+
+"""
+    nonnegative_calibration_share(values, label)
+
+Convert sector levels to a finite, nonnegative share vector. Small or
+pathological negative sector residuals are excluded from the allocation, and
+an empty aggregate is rejected rather than allowed to produce NaNs.
+"""
+function nonnegative_calibration_share(values, label)
+    weights = Bit.pos(vec(values))
+    total = sum(weights)
+    isfinite(total) && total > zero(total) ||
+        error("$label has no finite positive aggregate")
+    shares = weights ./ total
+    all(isfinite, shares) || error("$label contains nonfinite shares")
+    all(shares .>= zero(eltype(shares))) ||
+        error("$label contains negative shares")
+    return shares
+end
+
+"""
+    calibration_valuation_bridge(figaro, annual_idx, sector_count)
+
+Return an optional purchasers-to-basic-price bridge from a FIGARO-style
+calibration dictionary. Countries without the bridge retain the legacy
+calibration path unchanged.
+"""
+function calibration_valuation_bridge(figaro, annual_idx, sector_count)
+    haskey(figaro, "purchasers_to_basic_price") || return nothing
+    bridge = vec(figaro["purchasers_to_basic_price"][:, annual_idx])
+    length(bridge) == sector_count ||
+        error(
+        "Purchasers-to-basic-price bridge has $(length(bridge)) sectors; " *
+            "expected $sector_count",
+    )
+    all(isfinite, bridge) ||
+        error("Purchasers-to-basic-price bridge contains nonfinite values")
+    all(>(zero(eltype(bridge))), bridge) ||
+        error("Purchasers-to-basic-price bridge must be strictly positive")
+    return bridge
+end
+
+"""
+    apply_valuation_bridge(values, bridge, label)
+
+Reweight a sector vector by a valuation bridge. The aggregate defaults to its
+original macro control and may be replaced by a validated `target_total`.
+"""
+function apply_valuation_bridge(
+        values::AbstractVector,
+        bridge::AbstractVector,
+        label;
+        target_total = sum(values),
+    )
+    length(values) == length(bridge) ||
+        error("$label and valuation bridge have different sector counts")
+    all(isfinite, values) || error("$label contains nonfinite values")
+    all(values .>= zero(eltype(values))) ||
+        error("$label contains negative values")
+    isfinite(target_total) ||
+        error("$label target control is nonfinite")
+    target_total >= zero(target_total) ||
+        error("$label target control is negative")
+    original_total = sum(values)
+    isfinite(original_total) && original_total > zero(original_total) ||
+        error("$label has no finite positive aggregate")
+    weighted = values .* bridge
+    weighted_total = sum(weighted)
+    isfinite(weighted_total) && weighted_total > zero(weighted_total) ||
+        error("$label valuation bridge has no finite positive aggregate")
+    return weighted .* (target_total / weighted_total)
+end
+
+"""
+    apply_valuation_bridge(values, bridge, label)
+
+Reweight the commodity rows of an intermediate-use matrix by a valuation
+bridge. Industry controls default to their original column totals and may be
+replaced by validated `target_totals`.
+"""
+function apply_valuation_bridge(
+        values::AbstractMatrix,
+        bridge::AbstractVector,
+        label;
+        target_totals = vec(sum(values, dims = 1)),
+    )
+    size(values, 1) == length(bridge) ||
+        error("$label and valuation bridge have different sector counts")
+    all(isfinite, values) || error("$label contains nonfinite values")
+    all(values .>= zero(eltype(values))) ||
+        error("$label contains negative values")
+    original_totals = vec(sum(values, dims = 1))
+    all(isfinite, original_totals) ||
+        error("$label column controls contain nonfinite values")
+    all(>(zero(eltype(original_totals))), original_totals) ||
+        error("$label must have strictly positive column controls")
+    length(target_totals) == length(original_totals) ||
+        error("$label target controls have the wrong column count")
+    all(isfinite, target_totals) ||
+        error("$label target controls contain nonfinite values")
+    all(target_totals .>= zero(eltype(target_totals))) ||
+        error("$label target controls contain negative values")
+    weighted = values .* reshape(bridge, :, 1)
+    weighted_totals = vec(sum(weighted, dims = 1))
+    all(isfinite, weighted_totals) ||
+        error("$label bridged column controls contain nonfinite values")
+    all(>(zero(eltype(weighted_totals))), weighted_totals) ||
+        error("$label bridge produced an empty column")
+    return weighted .* reshape(target_totals ./ weighted_totals, 1, :)
+end
+
+"""
+    commodity_balance_diagnostics(output, imports, modeled_uses)
+
+Return a signed inventory/statistical-discrepancy vector that closes the
+commodity identity `output + imports = modeled_uses + discrepancy`.
+Positive entries are inventory accumulation; negative entries are an initial
+inventory draw or other statistical supply.
+"""
+function commodity_balance_diagnostics(output, imports, modeled_uses)
+    sector_count = length(output)
+    length(imports) == sector_count ||
+        error("Commodity imports and output have different sector counts")
+    length(modeled_uses) == sector_count ||
+        error("Commodity uses and output have different sector counts")
+    all(isfinite, output) || error("Commodity output contains nonfinite values")
+    all(isfinite, imports) || error("Commodity imports contain nonfinite values")
+    all(isfinite, modeled_uses) ||
+        error("Commodity uses contain nonfinite values")
+    all(output .>= zero(eltype(output))) ||
+        error("Commodity output contains negative values")
+    all(imports .>= zero(eltype(imports))) ||
+        error("Commodity imports contain negative values")
+    all(modeled_uses .>= zero(eltype(modeled_uses))) ||
+        error("Commodity uses contain negative values")
+
+    supply = vec(output) .+ vec(imports)
+    uses = vec(modeled_uses)
+    inventory_statistical_discrepancy = supply .- uses
+    residual = supply .- uses .- inventory_statistical_discrepancy
+    all(isfinite, inventory_statistical_discrepancy) ||
+        error("Commodity inventory/statistical discrepancy is nonfinite")
+    all(iszero, residual) ||
+        error("Commodity inventory/statistical discrepancy did not close")
+    return (;
+        supply,
+        uses,
+        inventory_statistical_discrepancy,
+        residual,
+    )
+end
+
+"""
+    opening_inventory_from_discrepancy(discrepancy, timescale)
+
+Convert annual signed inventory/statistical discrepancies into quarterly
+opening inventory. Only a negative discrepancy requires stock on hand:
+positive discrepancies represent accumulation during the calibrated period.
+"""
+function opening_inventory_from_discrepancy(discrepancy, timescale)
+    isfinite(timescale) ||
+        error("Commodity-balance inventory timescale is nonfinite")
+    timescale >= zero(timescale) ||
+        error("Commodity-balance inventory timescale is negative")
+    all(isfinite, discrepancy) ||
+        error("Commodity-balance discrepancy contains nonfinite values")
+    opening_inventory = timescale .* Bit.pos(-vec(discrepancy))
+    all(isfinite, opening_inventory) ||
+        error("Opening sector inventory contains nonfinite values")
+    all(opening_inventory .>= zero(eltype(opening_inventory))) ||
+        error("Opening sector inventory contains negative values")
+    return opening_inventory
+end
+
+"""
     get_valid_calibration_quarters(calibration_object)
 
 Determine which quarters have sufficient data for calibration by checking
@@ -47,18 +334,20 @@ function get_valid_calibration_quarters(calibration_object)
     years_num = calibration_data["years_num"]
     quarters_num = calibration_data["quarters_num"]
 
-    # Determine min/max years from FIGARO
+    # Determine the structural year range. Quarterly nowcasts may extend beyond
+    # the last structural year and are deliberately capped to
+    # `max_calibration_date` when selecting annual inputs below.
     min_figaro_year = year(num2date(minimum(years_num)))
-    max_figaro_year = year(num2date(maximum(years_num)))
 
     # Get min/max quarters from quarterly data
     min_quarter_date = num2date(minimum(quarters_num))
     max_quarter_date = num2date(maximum(quarters_num))
+    max_candidate_year = year(max_quarter_date)
 
     # Also need estimation_date to have enough historical data
     min_estimation_year = year(estimation_date)
 
-    for cal_year in min_figaro_year:max_figaro_year
+    for cal_year in min_figaro_year:max_candidate_year
         for cal_quarter in 1:4
             cal_month = cal_quarter * 3
             cal_day = cal_month in [3, 12] ? 31 : 30
@@ -230,6 +519,7 @@ function get_params_and_initial_conditions(
 
     # Check for sectoral wages data (new approach) vs scalar wages (old approach)
     has_sectoral_wages = haskey(calibration_data, "wages_by_sector") &&
+        size(calibration_data["wages_by_sector"], 1) == G &&
         size(calibration_data["wages_by_sector"], 2) >= T_calibration
 
     wages_by_sector = if has_sectoral_wages
@@ -249,7 +539,16 @@ function get_params_and_initial_conditions(
     taxes_production = figaro["taxes_production"][:, T_calibration]
     taxes_products_government = figaro["taxes_products_government"][T_calibration]
     bank_equity_quarterly = calibration_data["bank_equity_quarterly"][T_calibration_quarterly]
-    taxes_products = figaro["taxes_products"][:, T_calibration]
+    use_product_tax_netting =
+        calibration_boolean_marker(figaro, "use_product_tax_netting")
+    observed_taxes_products =
+        vec(figaro["taxes_products"][:, T_calibration])
+    if use_product_tax_netting
+        length(observed_taxes_products) == G ||
+            error("Observed product taxes have the wrong sector count")
+        all(isfinite, observed_taxes_products) ||
+            error("Observed product taxes contain nonfinite values")
+    end
     # MATLAB zeros out taxes_products (set_parameters_and_initial_conditions.m:105-106)
     # This is necessary for the GDP expenditure identity (Y = C + G + I + X - M) to hold.
     # In BeforeIT's update_data!(), GDP includes sum(firms.tau_Y_i .* firms.Y_i .* firms.P_i),
@@ -279,6 +578,83 @@ function get_params_and_initial_conditions(
     # ===================== Derive accounting identities ======================
     # Ensure intermediate_consumption is non-negative (robustness)
     intermediate_consumption = max.(0, intermediate_consumption)
+    fixed_capitalformation = Bit.pos(fixed_capitalformation)
+    exports = Bit.pos(exports)
+
+    valuation_bridge =
+        calibration_valuation_bridge(figaro, T_calibration, G)
+    if use_product_tax_netting && valuation_bridge === nothing
+        error(
+            "Product-tax netting requires figaro[\"purchasers_to_basic_price\"]",
+        )
+    end
+    if valuation_bridge !== nothing
+        intermediate_target_totals = if use_product_tax_netting
+            net_product_tax_targets(
+                vec(sum(intermediate_consumption, dims = 1)),
+                observed_taxes_products,
+                "intermediate consumption",
+            )
+        else
+            vec(sum(intermediate_consumption, dims = 1))
+        end
+        household_target_total = if use_product_tax_netting
+            net_product_tax_targets(
+                sum(household_consumption),
+                taxes_products_household,
+                "household consumption",
+            )
+        else
+            sum(household_consumption)
+        end
+        fixed_capital_target_total = if use_product_tax_netting
+            net_product_tax_targets(
+                sum(fixed_capitalformation),
+                taxes_products_fixed_capitalformation,
+                "fixed capital formation",
+            )
+        else
+            sum(fixed_capitalformation)
+        end
+        government_target_total = if use_product_tax_netting
+            net_product_tax_targets(
+                sum(government_consumption),
+                taxes_products_government,
+                "government consumption",
+            )
+        else
+            sum(government_consumption)
+        end
+        intermediate_consumption = apply_valuation_bridge(
+            intermediate_consumption,
+            valuation_bridge,
+            "intermediate consumption";
+            target_totals = intermediate_target_totals,
+        )
+        household_consumption = apply_valuation_bridge(
+            household_consumption,
+            valuation_bridge,
+            "household consumption";
+            target_total = household_target_total,
+        )
+        fixed_capitalformation = apply_valuation_bridge(
+            fixed_capitalformation,
+            valuation_bridge,
+            "fixed capital formation";
+            target_total = fixed_capital_target_total,
+        )
+        government_consumption = apply_valuation_bridge(
+            government_consumption,
+            valuation_bridge,
+            "government consumption";
+            target_total = government_target_total,
+        )
+        exports = apply_valuation_bridge(
+            exports,
+            valuation_bridge,
+            "exports",
+        )
+    end
 
     # Calculate variables from production account identity:
     # Output = Intermediate Consumption + Value Added
@@ -342,7 +718,6 @@ function get_params_and_initial_conditions(
         # Then distribute proportionally to compensation_employees to create a sectoral vector
         employers_social_contributions = scalar_employers_contributions .* (compensation_employees ./ sum(compensation_employees))
     end
-    fixed_capitalformation = Bit.pos(fixed_capitalformation)
     gross_capitalformation_dwellings = calibration_data["gross_capitalformation_dwellings"][T_calibration]
     taxes_products_capitalformation_dwellings =
         gross_capitalformation_dwellings *
@@ -376,19 +751,53 @@ function get_params_and_initial_conditions(
         (gross_capitalformation_dwellings - taxes_products_capitalformation_dwellings) * fixed_capitalformation /
         sum(fixed_capitalformation)
     fixed_capital_formation_other_than_dwellings = fixed_capitalformation - capitalformation_dwellings
-    exports = Bit.pos(exports)
-    # Imports as a residual of the goods balance; positive part is imports,
-    # negative part (re-exports) is split off so the two never drift apart.
-    net_imports =
-        sum(intermediate_consumption, dims = 2) +
-        household_consumption +
-        government_consumption +
-        fixed_capital_formation_other_than_dwellings * sum(capital_consumption) /
-        sum(fixed_capital_formation_other_than_dwellings) +
-        capitalformation_dwellings +
-        exports - output
-    imports = Bit.pos(net_imports)
-    reexports = Bit.neg(net_imports)
+    firm_capital_formation =
+        fixed_capital_formation_other_than_dwellings *
+        sum(capital_consumption) /
+        sum(fixed_capital_formation_other_than_dwellings)
+    imports, reexports = calibration_trade_vectors(
+        figaro,
+        T_calibration,
+        G,
+    ) do
+        # This legacy goods-balance fallback is evaluated only for country
+        # artifacts without measured imports. Positive residuals are imports;
+        # negative residuals remain signed re-export adjustments.
+        return (
+            sum(intermediate_consumption, dims = 2) +
+                household_consumption +
+                government_consumption +
+                firm_capital_formation +
+                capitalformation_dwellings +
+                exports - output
+        )
+    end
+    domestic_exports = Bit.pos(exports - reexports)
+    use_commodity_balance_inventory =
+        calibration_boolean_marker(
+        figaro,
+        "use_commodity_balance_inventory",
+    )
+    commodity_balance = if use_commodity_balance_inventory
+        calibration_boolean_marker(figaro, "use_explicit_trade") ||
+            error(
+            "Commodity-balance inventory requires explicit measured trade",
+        )
+        modeled_commodity_uses =
+            vec(sum(intermediate_consumption, dims = 2)) +
+            household_consumption +
+            government_consumption +
+            firm_capital_formation +
+            capitalformation_dwellings +
+            domestic_exports
+        commodity_balance_diagnostics(
+            output,
+            imports,
+            modeled_commodity_uses,
+        )
+    else
+        nothing
+    end
     household_social_contributions = social_contributions - sum(employers_social_contributions)
     # Use actual per-sector D11 wages when available for more accurate w_s and pi_bar_s.
     # Fallback: apply aggregate D12/D1 ratio uniformly (assumes identical social contribution
@@ -429,13 +838,13 @@ function get_params_and_initial_conditions(
         household_social_contributions - household_income_tax - capital_taxes
     # Prefer census counts if available, otherwise calculate from rates
     unemployed = if haskey(calibration_data, "unemployed_census")
-        calibration_data["unemployed_census"]
+        calibration_annual_value(calibration_data["unemployed_census"], T_calibration)
     else
         matlab_round((unemployment_rate_quarterly * sum(employees)) / (1 - unemployment_rate_quarterly))
     end
 
     inactive = if haskey(calibration_data, "inactive_census")
-        calibration_data["inactive_census"]
+        calibration_annual_value(calibration_data["inactive_census"], T_calibration)
     else
         population - sum(max.(max.(1, firms), employees)) - unemployed - sum(max.(1, firms)) - 1
     end
@@ -477,8 +886,8 @@ function get_params_and_initial_conditions(
     a_sg = intermediate_consumption ./ sum(intermediate_consumption, dims = 1)
     replace!(a_sg, NaN => 0.0)
     c_G_g = government_consumption / sum(government_consumption)
-    c_E_g = (exports - reexports) / sum(exports - reexports)
-    c_I_g = imports / sum(imports)
+    c_E_g = nonnegative_calibration_share(domestic_exports, "c_E_g")
+    c_I_g = nonnegative_calibration_share(imports, "c_I_g")
 
 
     # Parameters
@@ -534,7 +943,7 @@ function get_params_and_initial_conditions(
     tau_VAT = taxes_products_household / sum(household_consumption)
     # tau_SIF is computed earlier (needed for the model_profit_s calculation above)
     tau_SIW = household_social_contributions / sum(wages)
-    tau_EXPORT = sum(taxes_products_export) / sum(exports - reexports)
+    tau_EXPORT = sum(taxes_products_export) / sum(domestic_exports)
     tau_CF = sum(taxes_products_capitalformation_dwellings) / sum(capitalformation_dwellings)
     tau_G = sum(taxes_products_government) / sum(government_consumption)
     psi = (sum(household_consumption) + sum(taxes_products_household)) / disposable_income
@@ -571,7 +980,7 @@ function get_params_and_initial_conditions(
         data["real_government_consumption_quarterly"][T_calibration_exo]
 
     E_est_levels =
-        timescale * sum(exports - reexports) .* data["real_exports_quarterly"][T_estimation_exo:T_calibration_exo] ./
+        timescale * sum(domestic_exports) .* data["real_exports_quarterly"][T_estimation_exo:T_calibration_exo] ./
         data["real_exports_quarterly"][T_calibration_exo]
 
     I_est_levels =
@@ -705,6 +1114,12 @@ function get_params_and_initial_conditions(
         "C" => C,
         "use_growth_rate_ar1" => use_growth_rate_ar1
     )
+    if use_product_tax_netting
+        params["use_product_tax_netting"] = true
+    end
+    if use_commodity_balance_inventory
+        params["use_commodity_balance_inventory"] = true
+    end
 
     # Sector initial conditions
     N_s = employees
@@ -742,7 +1157,7 @@ function get_params_and_initial_conditions(
     ]
     C_E = [
         timescale *
-            sum(exports - reexports) *
+            sum(domestic_exports) *
             data["real_exports_quarterly"][T_estimation_exo:min(T_calibration_exo + T, T_calibration_exo_max)] /
             data["real_exports_quarterly"][T_calibration_exo]
         fill(NaN, max(0, T_calibration_exo + T - T_calibration_exo_max), 1)
@@ -787,6 +1202,34 @@ function get_params_and_initial_conditions(
         "pi_EA_series" => pi_EA_series,
         "r_bar_series" => r_bar_series
     )
+
+    if use_product_tax_netting
+        initial_conditions["observed_intermediate_product_taxes_s"] =
+            observed_taxes_products
+        initial_conditions["basic_price_intermediate_controls_s"] =
+            vec(sum(intermediate_consumption, dims = 1))
+        initial_conditions["basic_price_household_control"] =
+            sum(household_consumption)
+        initial_conditions["basic_price_fixed_capital_control"] =
+            sum(fixed_capitalformation)
+        initial_conditions["basic_price_government_control"] =
+            sum(government_consumption)
+    end
+
+    if use_commodity_balance_inventory
+        discrepancy =
+            commodity_balance.inventory_statistical_discrepancy
+        initial_conditions["commodity_balance_supply_s"] =
+            commodity_balance.supply
+        initial_conditions["commodity_balance_modeled_uses_s"] =
+            commodity_balance.uses
+        initial_conditions["inventory_statistical_discrepancy_s"] =
+            discrepancy
+        initial_conditions["commodity_balance_residual_s"] =
+            commodity_balance.residual
+        initial_conditions["S_s"] =
+            opening_inventory_from_discrepancy(discrepancy, timescale)
+    end
 
     # Add initial growth rates for domestic variables if using growth-rate AR(1)
     # Note: EA variables (g_Y_EA) are NOT included here because we always use

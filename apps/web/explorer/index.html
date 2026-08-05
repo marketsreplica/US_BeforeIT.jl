@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07110f">
+  <meta name="description" content="Explore how firms, sectors, households, government, finance, and trade connect inside a BeforeIT simulation.">
+  <title>Economy Complexity Explorer — BeforeIT</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='12' cy='16' r='9' fill='%2306100e' stroke='%2383e6b4'/%3E%3Ccircle cx='22' cy='10' r='6' fill='%2383e6b4'/%3E%3Ccircle cx='23' cy='23' r='4' fill='%23f3c66f'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#relationship-table">Skip to relationship table</a>
+
+  <header class="topbar">
+    <div class="brand-block">
+      <a class="back-link" href="/" aria-label="Back to simulation workspace">←</a>
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div>
+        <strong>ECONOMY COMPLEXITY EXPLORER</strong>
+        <span id="dataset-label">One simulated economy · many connected scales</span>
+      </div>
+    </div>
+
+    <div class="run-bar">
+      <label for="run-select">Saved run</label>
+      <select id="run-select" aria-describedby="run-context"></select>
+      <select id="compare-select" aria-label="Compare with another traced run">
+        <option value="">Compare…</option>
+      </select>
+      <button id="clear-comparison" class="quiet-button" type="button" hidden>Exit comparison</button>
+      <button id="clone-run" class="quiet-button" type="button" title="Open this run's parameters in the simulation workspace">Clone / parameters</button>
+      <span id="ledger-status" class="status-pill neutral" role="status">Loading run</span>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <aside class="left-rail" aria-label="Explorer controls">
+      <section class="rail-section orientation-card" aria-labelledby="orientation-title">
+        <p class="eyebrow">Start with a question</p>
+        <h1 id="orientation-title">What do you want to understand?</h1>
+        <div id="question-shelf" class="question-shelf">
+          <button type="button" data-question="government-purchases">
+            <span>Public demand</span>
+            Where did government purchases go?
+          </button>
+          <button type="button" data-question="sector-suppliers">
+            <span>Supply network</span>
+            Who supplies this sector?
+          </button>
+          <button type="button" data-question="firm-institutions">
+            <span>Firm ledger</span>
+            What does this firm pay institutions?
+          </button>
+          <button type="button" data-question="capacity-response">
+            <span>Unused capacity</span>
+            Where could supply have responded?
+          </button>
+        </div>
+        <p id="question-note" class="question-note">Choose a question or explore freely. Every claim is tied to the selected run and quarter.</p>
+      </section>
+
+      <section class="rail-section" aria-labelledby="altitude-title">
+        <div class="section-label-row">
+          <h2 id="altitude-title">Scale</h2>
+          <span id="altitude-help">Semantic zoom</span>
+        </div>
+        <div id="altitude-switch" class="altitude-switch" role="group" aria-label="Economic scale">
+          <button type="button" data-altitude="economy" aria-pressed="true"><i>01</i> Economy</button>
+          <button type="button" data-altitude="sectors" aria-pressed="false"><i>02</i> Sectors</button>
+          <button type="button" data-altitude="firms" aria-pressed="false"><i>03</i> Firms</button>
+        </div>
+      </section>
+
+      <section class="rail-section" aria-labelledby="layers-title">
+        <div class="section-label-row">
+          <h2 id="layers-title">Economic layers</h2>
+          <button id="layers-all" class="text-button" type="button">All</button>
+        </div>
+        <div id="layer-filters" class="layer-filters"></div>
+      </section>
+
+      <section class="rail-section search-section" aria-labelledby="find-title">
+        <h2 id="find-title">Find an actor</h2>
+        <form id="actor-search" role="search">
+          <label class="sr-only" for="actor-query">Find a sector or synthetic firm</label>
+          <input id="actor-query" list="actor-options" placeholder="Sector code, name, or firm ID" autocomplete="off">
+          <datalist id="actor-options"></datalist>
+          <button type="submit">Find</button>
+        </form>
+      </section>
+
+      <section class="rail-section coverage-section" aria-labelledby="coverage-title">
+        <div class="section-label-row">
+          <h2 id="coverage-title">Value coverage</h2>
+          <output id="coverage-value" for="coverage-range">85%</output>
+        </div>
+        <input id="coverage-range" type="range" min="50" max="100" step="5" value="85" aria-labelledby="coverage-title coverage-value">
+        <p id="coverage-copy">Loading matching and returned value coverage…</p>
+      </section>
+
+      <details class="rail-section experiment-builder">
+        <summary>Run a paired experiment</summary>
+        <form id="experiment-form">
+          <p>Reuse this traced run as the baseline and launch one matched treatment. The intervention begins in the first simulated quarter.</p>
+          <label for="experiment-shock">Intervention</label>
+          <select id="experiment-shock">
+            <option value="interest_rate">Interest-rate change</option>
+            <option value="productivity">Aggregate productivity</option>
+            <option value="consumption">Household consumption</option>
+            <option value="sector_productivity">Sector productivity</option>
+          </select>
+          <label for="experiment-magnitude" id="experiment-magnitude-label">Annual rate change (percentage points)</label>
+          <input id="experiment-magnitude" type="number" min="-89.75" max="100" step="0.25" value="1" required>
+          <label for="experiment-duration" id="experiment-duration-label">Last affected quarter</label>
+          <input id="experiment-duration" type="number" min="1" step="1" value="4">
+          <label for="experiment-sector" id="experiment-sector-label" hidden>Target sector</label>
+          <select id="experiment-sector" hidden></select>
+          <button type="submit">Launch matched treatment</button>
+          <p id="experiment-status" role="status" aria-live="polite"></p>
+          <a id="experiment-open" href="#" hidden>Open synchronized comparison →</a>
+        </form>
+      </details>
+    </aside>
+
+    <section class="stage" aria-label="Interactive economy map">
+      <canvas id="economy-canvas" tabindex="0" aria-describedby="canvas-summary"></canvas>
+
+      <div class="stage-head">
+        <nav id="breadcrumbs" aria-label="Current economic scale"></nav>
+        <div class="stage-actions" role="group" aria-label="Map controls">
+          <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
+          <output id="zoom-value">100%</output>
+          <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
+          <button id="fit-view" type="button">Fit</button>
+          <button id="clear-focus" type="button" hidden>Show context</button>
+        </div>
+      </div>
+
+      <div id="scale-badge" class="scale-badge">Loading scale domain…</div>
+      <div id="direction-key" class="direction-key">
+        <button id="direction-toggle" type="button" aria-pressed="false"><i class="arrow-swatch"></i><span>Money direction</span></button>
+        <span><i class="dash-swatch"></i> Non-cash capacity response</span>
+        <span><i class="stock-swatch"></i> Balance-sheet stock</span>
+      </div>
+
+      <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+      <div id="stage-loading" class="stage-message loading" role="status">
+        <span class="loader" aria-hidden="true"></span>
+        <strong>Loading the economic graph</strong>
+        <small id="loading-detail">Finding compatible traced runs…</small>
+      </div>
+      <div id="stage-empty" class="stage-message empty" hidden>
+        <span class="empty-glyph" aria-hidden="true">◎</span>
+        <strong id="empty-title">No relationships match</strong>
+        <p id="empty-copy">Try clearing a filter or choosing another quarter.</p>
+        <button id="empty-action" type="button">Clear filters</button>
+      </div>
+
+      <p id="canvas-summary" class="sr-only" aria-live="polite"></p>
+
+      <aside id="inspector" class="inspector" aria-label="Economic evidence inspector" aria-live="polite" tabindex="-1" hidden>
+        <button id="close-inspector" class="close-button" type="button" aria-label="Close inspector">×</button>
+        <p id="inspector-kicker" class="eyebrow">Selected evidence</p>
+        <h2 id="inspector-title">—</h2>
+        <p id="inspector-subtitle" class="inspector-subtitle"></p>
+        <div id="evidence-badges" class="evidence-badges"></div>
+        <dl id="inspector-metrics"></dl>
+        <section id="node-reconciliation" class="node-reconciliation" aria-label="Selected node stock-flow reconciliation" hidden></section>
+        <div id="edge-history" class="edge-history" aria-live="polite"></div>
+        <p id="inspector-explanation" class="inspector-explanation"></p>
+        <div id="aggregation-path" class="aggregation-path"></div>
+        <div class="inspector-actions">
+          <button id="drill-down" type="button" hidden>Drill down</button>
+          <button id="roll-up" type="button" hidden>Reconcile upward</button>
+        </div>
+      </aside>
+
+      <section id="comparison-panel" class="comparison-panel" aria-labelledby="comparison-title" hidden></section>
+
+      <details id="accounting-drawer" class="accounting-drawer">
+        <summary><span id="accounting-dot"></span> Do the books close?</summary>
+        <div id="accounting-content"></div>
+      </details>
+
+      <details id="table-drawer" class="table-drawer">
+        <summary>Relationship table <span id="table-count"></span></summary>
+        <div class="table-tools">
+          <label for="table-filter">Filter rows</label>
+          <input id="table-filter" type="search" placeholder="Actor, purpose, evidence…">
+          <a id="export-link" href="#" download>Export all matching</a>
+          <button id="table-prev" type="button">Previous</button>
+          <output id="table-page" aria-live="polite">Page 1 / 1</output>
+          <button id="table-next" type="button">Next</button>
+        </div>
+        <div class="table-wrap">
+          <table id="relationship-table" tabindex="-1">
+            <caption id="table-caption">Relationships matching the visual query</caption>
+            <thead>
+              <tr>
+                <th scope="col">Relationship</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Evidence</th>
+              </tr>
+            </thead>
+            <tbody id="relationship-rows"></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <footer class="timeline">
+    <button id="play-toggle" class="play-button" type="button" aria-label="Play recorded quarters">▶</button>
+    <div class="period-copy">
+      <strong id="period-label">Opening</strong>
+      <span id="realization-label">Waiting for a traced realization</span>
+    </div>
+    <input id="quarter-range" type="range" min="0" max="0" value="0" step="1" aria-label="Recorded quarter">
+    <output id="quarter-count" for="quarter-range">— / —</output>
+    <span id="motion-note">Motion shows recorded quarter totals, not transaction timing.</span>
+  </footer>
+
+  <script type="module" src="shell.js"></script>
+</body>
+</html>

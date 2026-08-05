@@ -42,6 +42,7 @@ makedocs(
         "Working with Single Agents" => "examples/single_agents.md",
         "Multithreading within the model" => "examples/multithreading_speedup.md",
         "Calibration" => "examples/prediction_pipeline.md",
+        "Current Austria baselines" => "austria_current_baselines.md",
         # "Prediction Comparison" => "examples/create_tables.md",
         "API" => "api.md",
     ],

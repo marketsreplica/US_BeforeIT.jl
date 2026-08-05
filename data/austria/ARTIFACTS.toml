@@ -1,0 +1,44 @@
+schema_version = 1
+data_vintage = "2026-07-29"
+
+[structural_baseline]
+path = "data/austria/baselines/AT_2024Q4_structural.jld2"
+period = "2024-Q4"
+bytes = 72778
+sha256 = "aa70f733d0364b341412d54f6c50d28de8a616124658ce9a6a5ef581088c8088"
+
+[nowcast_baseline]
+path = "data/austria/baselines/AT_2026Q1_nowcast.jld2"
+period = "2026-Q1"
+bytes = 94042
+sha256 = "194d338dc0a18c54b9a8bea0783c52ed85964df317c6b8bb275671c94c3fb5cc"
+
+[structural_calibration]
+path = "data/austria/calibration/AT_2024_calibration_object.jld2"
+period = "2024-Q4"
+bytes = 981994
+sha256 = "5c05a5a7d28ef873b063bff6ec88bb510437d3b2c84e11e1a89cf8cc7df17612"
+
+[nowcast_calibration]
+path = "data/austria/calibration/AT_2026Q1_nowcast_object.jld2"
+period = "2026-Q1"
+bytes = 999705
+sha256 = "2edd8f2a4812d973292fd15ba062b3ed00e8aec0562e79b77211490b647883c3"
+
+[scenarios]
+path = "data/austria/scenarios/AT_2026_2031_annual.csv"
+period = "2026-2031"
+bytes = 2603
+sha256 = "0b3f960c42a830a28d4e163f1ced1d80f96396060b3502f84190d305fbaab293"
+
+[backtest]
+path = "data/austria/validation/AT_2024_backtest.csv"
+period = "2023-Q4 to 2024-Q4"
+bytes = 205
+sha256 = "417c1d36dd4393133dd4c9b67ea5b3c8477824355263e3ca950125bb6a93a1e8"
+
+[validation]
+path = "data/austria/validation/validation.toml"
+period = "2026-07-29"
+bytes = 1817
+sha256 = "12ad5d3c56d7d4712c4aa282f82aff7db1c8d8ad6cea85574a30a5dbd5643341"

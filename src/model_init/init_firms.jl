@@ -1,4 +1,46 @@
 """
+    allocate_sector_initial_inventories(Y_i, G_i, S_s, G)
+
+Allocate each sector's opening-inventory control across its firms in
+proportion to initial production. The final firm in each sector absorbs
+floating-point roundoff so that sector totals equal the supplied controls.
+"""
+function allocate_sector_initial_inventories(Y_i, G_i, S_s, G)
+    length(S_s) == G ||
+        error("Opening sector inventory has $(length(S_s)) sectors; expected $G")
+    all(isfinite, S_s) ||
+        error("Opening sector inventory contains nonfinite values")
+    all(S_s .>= zero(eltype(S_s))) ||
+        error("Opening sector inventory contains negative values")
+    all(isfinite, Y_i) ||
+        error("Initial firm production contains nonfinite values")
+    all(Y_i .>= zero(eltype(Y_i))) ||
+        error("Initial firm production contains negative values")
+
+    S_i = zeros(typeFloat, length(Y_i))
+    for g in 1:G
+        sector_firms = findall(==(g), G_i)
+        isempty(sector_firms) &&
+            error("Cannot allocate opening inventory to empty sector $g")
+        sector_target = typeFloat(S_s[g])
+        iszero(sector_target) && continue
+        sector_output = Y_i[sector_firms]
+        output_total = sum(sector_output)
+        if output_total > zero(output_total)
+            S_i[sector_firms] .=
+                sector_target .* sector_output ./ output_total
+        else
+            S_i[sector_firms] .= sector_target / length(sector_firms)
+        end
+        S_i[last(sector_firms)] +=
+            sector_target - sum(S_i[sector_firms])
+    end
+    all(S_i .>= zero(eltype(S_i))) ||
+        error("Firm opening-inventory allocation produced a negative value")
+    return S_i
+end
+
+"""
     Firms(parameters, initial_conditions)
 
 Initialize firms with given parameters and initial conditions.
@@ -69,7 +111,13 @@ function Firms(parameters, initial_conditions)
     Y_i = alpha_bar_i .* N_i
     Q_d_i = copy(Y_i)
     P_i = ones(typeFloat, I)
-    S_i = zeros(typeFloat, I)
+    S_i = if haskey(initial_conditions, "S_s")
+        S_s = Vector{typeFloat}(vec(initial_conditions["S_s"]))
+        allocate_sector_initial_inventories(Y_i, G_i, S_s, G)
+    else
+        # Preserve the exact legacy initialization path.
+        zeros(typeFloat, I)
+    end
     K_i = Y_i ./ (omega .* kappa_i)
     M_i = Y_i ./ (omega .* beta_i)
     L_i = L_I .* K_i / sum(K_i)

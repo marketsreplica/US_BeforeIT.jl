@@ -20,15 +20,38 @@ Key operations performed include:
 
 The function updates the model in-place and return the model itself.
 """
-function CommonSolve.step!(model::AbstractModel, T; parallel = false, shock! = NoShock())
+function CommonSolve.step!(
+        model::AbstractModel,
+        T;
+        parallel = false,
+        shock! = NoShock(),
+        transaction_logger = nothing,
+        transaction_markets = (:business_goods, :final_demand),
+        opening_state_logger = nothing,
+    )
     for _ in 1:T
-        step!(model; parallel, shock!)
+        step!(
+            model;
+            parallel,
+            shock!,
+            transaction_logger,
+            transaction_markets,
+            opening_state_logger,
+        )
     end
     return model
 end
-function CommonSolve.step!(model::AbstractModel; parallel = false, shock! = NoShock())
+function CommonSolve.step!(
+        model::AbstractModel;
+        parallel = false,
+        shock! = NoShock(),
+        transaction_logger = nothing,
+        transaction_markets = (:business_goods, :final_demand),
+        opening_state_logger = nothing,
+    )
 
     Bit.finance_insolvent_firms!(model)
+    opening_state_logger === nothing || opening_state_logger(model)
 
     ####### GENERAL ESTIMATIONS #######
 
@@ -92,7 +115,12 @@ function CommonSolve.step!(model::AbstractModel; parallel = false, shock! = NoSh
     Bit.set_rotw_import_export!(model)
 
     ####### GENERAL SEARCH AND MATCHING FOR ALL GOODS #######
-    Bit.search_and_matching!(model; parallel)
+    Bit.search_and_matching!(
+        model;
+        parallel,
+        transaction_logger,
+        transaction_markets,
+    )
 
     ####### FINAL GENERAL ACCOUNTING #######
 

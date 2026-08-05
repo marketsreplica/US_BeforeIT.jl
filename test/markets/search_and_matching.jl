@@ -82,15 +82,27 @@ using Test, MAT, StatsBase, Random
         rotw.Y_m .= Y_m
         rotw.P_m .= P_m
 
-        Bit.search_and_matching!(model; parallel = m)
-        return bank, w_act, w_inact, firms, gov, rotw
+        transactions = Any[]
+        if m
+            Bit.search_and_matching!(model; parallel = true)
+        else
+            Bit.search_and_matching!(
+                model;
+                parallel = false,
+                transaction_logger =
+                    transaction -> push!(transactions, transaction),
+                transaction_markets = (:business_goods,),
+            )
+        end
+        return bank, w_act, w_inact, firms, gov, rotw, transactions
     end
 
     # NOTE: as a test we use the expected values and standard deviations of the
     #       original implementation, with tolerance = 3*(standard deviation) for
     #       both single-threaded and multi-threaded execution
     for m in [true, false]
-        bank, w_act, w_inact, firms, gov, rotw = run_search_and_matching(parameters, initial_conditions, T, m)
+        bank, w_act, w_inact, firms, gov, rotw, transactions =
+            run_search_and_matching(parameters, initial_conditions, T, m)
         @test isapprox(
             mean([bank.I_h, w_act.I_h..., w_inact.I_h..., firms.I_h...]),
             0.32975, atol = 3 * 0.0025351
@@ -107,5 +119,93 @@ using Test, MAT, StatsBase, Random
         @test isapprox(rotw.C_l, 34188.1258, atol = 3 * 666.275)
         @test isapprox(mean(firms.Q_d_i), 216.2474, atol = 3 * 1.2275)
         @test isapprox(mean(rotw.Q_d_m), 535.7522, atol = 3 * 9.6082)
+        if !m
+            realized =
+                sum(
+                transaction.amount for transaction in transactions if
+                    transaction.cash_recognized
+            )
+            business_purchases =
+                sum(firms.DM_i .* firms.P_bar_i) +
+                sum(firms.I_i .* firms.P_CF_i)
+            @test !isempty(transactions)
+            @test all(
+                transaction.market == "business_goods" for
+                    transaction in transactions
+            )
+            @test isapprox(
+                realized,
+                business_purchases;
+                atol = 1.0e-8,
+                rtol = 1.0e-12,
+            )
+        end
+    end
+
+    @testset "retail capacity counterfactual preserves realized demand" begin
+        Random.seed!(4321)
+
+        # One unit can be bought from current inventory. The two sellers have a
+        # further five units of unused capacity, which is still insufficient to
+        # satisfy the household's remaining demand of nine units. Capacity-only
+        # matches must inform demand estimates without becoming cash purchases.
+        I, H, L, J = 2, 1, 1, 1
+        C_d_h = [10.0]
+        I_d_h = [0.0]
+        Q_d_i_g = zeros(I, 1)
+        Q_d_m_g = zeros(0, 1)
+        C_h = zeros(H)
+        I_h = zeros(H)
+        C_j_g = zeros(1)
+        C_l_g = zeros(1)
+        P_bar_h_g = zeros(1)
+        P_bar_CF_h_g = zeros(1)
+        P_j_g = zeros(1)
+        P_l_g = zeros(1)
+        S_fg = [1.0, 0.0]
+        S_fg_ = [2.0, 3.0]
+
+        Bit.perform_retail_market!(
+            1,
+            nothing,
+            nothing,
+            (; C_d_j = [0.0]),
+            (; C_d_l = [0.0]),
+            I,
+            H,
+            L,
+            J,
+            C_d_h,
+            I_d_h,
+            [1.0],
+            [1.0],
+            [1.0],
+            [1.0],
+            Q_d_i_g,
+            Q_d_m_g,
+            C_h,
+            I_h,
+            C_j_g,
+            C_l_g,
+            P_bar_h_g,
+            P_bar_CF_h_g,
+            P_j_g,
+            P_l_g,
+            S_fg,
+            S_fg_,
+            [1, 2],
+            [1.0, 1.0],
+            [3.0, 4.0],
+            [1, 1],
+            ReentrantLock(),
+            false,
+            String[],
+            Int[],
+            nothing,
+        )
+
+        @test S_fg_ == [0.0, 0.0]
+        @test C_h == [1.0]
+        @test I_h == [0.0]
     end
 end

@@ -1,0 +1,451 @@
+[model]
+name = "BEA summary observed-commodity model"
+year = 2024
+sector_count = 68
+codes = [
+  "111CA", "113FF", "211", "212", "213", "22", "23", "311FT",
+  "313TT", "315AL", "321", "322", "323", "324", "325", "326",
+  "327", "331", "332", "333", "334", "335", "3361MV", "3364OT",
+  "337", "339", "42", "481", "482", "483", "484", "485", "486",
+  "487OS", "493", "4A0", "511", "512", "513", "514", "521CI",
+  "523", "524", "525", "532RL", "5411", "5412OP", "5415", "55",
+  "561", "562", "61", "621", "622", "623", "624", "711AS", "713",
+  "721", "722", "81", "GFE", "GFGD", "GFGN", "GSLE", "GSLG", "HS",
+  "ORE",
+]
+note = "Table 259 has 68 observed commodities and 71 industries. Industry columns 441, 445, 452 and 4A0 are summed to model sector 4A0."
+
+[industry_to_model]
+"441" = "4A0"
+"445" = "4A0"
+"452" = "4A0"
+"4A0" = "4A0"
+
+# Each sector entry freezes three distinct mappings:
+# - qcew_2022: exact national aggregate rows in the NAICS 2022 QCEW file;
+# - susb_2017: exact national aggregate rows in the NAICS 2017 SUSB file;
+# - fixed_asset_lines: BEA FAAt301ESI/FAAt304ESI line numbers.
+# Empty lists are filled by a documented special construction.
+
+[[sector]]
+code = "111CA"
+qcew_2022 = ["111", "112"]
+susb_2017 = []
+fixed_asset_lines = [3]
+
+[[sector]]
+code = "113FF"
+qcew_2022 = ["113", "114", "115"]
+susb_2017 = ["11"]
+fixed_asset_lines = [4]
+
+[[sector]]
+code = "211"
+qcew_2022 = ["211"]
+susb_2017 = ["211"]
+fixed_asset_lines = [6]
+
+[[sector]]
+code = "212"
+qcew_2022 = ["212"]
+susb_2017 = ["212"]
+fixed_asset_lines = [7]
+
+[[sector]]
+code = "213"
+qcew_2022 = ["213"]
+susb_2017 = ["213"]
+fixed_asset_lines = [8]
+
+[[sector]]
+code = "22"
+qcew_2022 = ["22"]
+susb_2017 = ["22"]
+fixed_asset_lines = [9]
+
+[[sector]]
+code = "23"
+qcew_2022 = ["23"]
+susb_2017 = ["23"]
+fixed_asset_lines = [13]
+
+[[sector]]
+code = "311FT"
+qcew_2022 = ["311", "312"]
+susb_2017 = ["311", "312"]
+fixed_asset_lines = [30]
+
+[[sector]]
+code = "313TT"
+qcew_2022 = ["313", "314"]
+susb_2017 = ["313", "314"]
+fixed_asset_lines = [33]
+
+[[sector]]
+code = "315AL"
+qcew_2022 = ["315", "316"]
+susb_2017 = ["315", "316"]
+fixed_asset_lines = [34]
+
+[[sector]]
+code = "321"
+qcew_2022 = ["321"]
+susb_2017 = ["321"]
+fixed_asset_lines = [16]
+
+[[sector]]
+code = "322"
+qcew_2022 = ["322"]
+susb_2017 = ["322"]
+fixed_asset_lines = [35]
+
+[[sector]]
+code = "323"
+qcew_2022 = ["323"]
+susb_2017 = ["323"]
+fixed_asset_lines = [36]
+
+[[sector]]
+code = "324"
+qcew_2022 = ["324"]
+susb_2017 = ["324"]
+fixed_asset_lines = [37]
+
+[[sector]]
+code = "325"
+qcew_2022 = ["325"]
+susb_2017 = ["325"]
+fixed_asset_lines = [38]
+
+[[sector]]
+code = "326"
+qcew_2022 = ["326"]
+susb_2017 = ["326"]
+fixed_asset_lines = [39]
+
+[[sector]]
+code = "327"
+qcew_2022 = ["327"]
+susb_2017 = ["327"]
+fixed_asset_lines = [17]
+
+[[sector]]
+code = "331"
+qcew_2022 = ["331"]
+susb_2017 = ["331"]
+fixed_asset_lines = [18]
+
+[[sector]]
+code = "332"
+qcew_2022 = ["332"]
+susb_2017 = ["332"]
+fixed_asset_lines = [19]
+
+[[sector]]
+code = "333"
+qcew_2022 = ["333"]
+susb_2017 = ["333"]
+fixed_asset_lines = [20]
+
+[[sector]]
+code = "334"
+qcew_2022 = ["334"]
+susb_2017 = ["334"]
+fixed_asset_lines = [21]
+
+[[sector]]
+code = "335"
+qcew_2022 = ["335"]
+susb_2017 = ["335"]
+fixed_asset_lines = [22]
+
+[[sector]]
+code = "3361MV"
+qcew_2022 = ["3361", "3362", "3363"]
+susb_2017 = ["3361", "3362", "3363"]
+fixed_asset_lines = [23]
+
+[[sector]]
+code = "3364OT"
+qcew_2022 = ["3364", "3365", "3366", "3369"]
+susb_2017 = ["3364", "3365", "3366", "3369"]
+fixed_asset_lines = [24]
+
+[[sector]]
+code = "337"
+qcew_2022 = ["337"]
+susb_2017 = ["337"]
+fixed_asset_lines = [25]
+
+[[sector]]
+code = "339"
+qcew_2022 = ["339"]
+susb_2017 = ["339"]
+fixed_asset_lines = [26]
+
+[[sector]]
+code = "42"
+qcew_2022 = ["42"]
+susb_2017 = ["42"]
+fixed_asset_lines = [40]
+
+[[sector]]
+code = "4A0"
+qcew_2022 = ["44-45"]
+susb_2017 = ["44-45"]
+fixed_asset_lines = [43]
+
+[[sector]]
+code = "481"
+qcew_2022 = ["481"]
+susb_2017 = ["481"]
+fixed_asset_lines = [49]
+
+[[sector]]
+code = "482"
+qcew_2022 = ["482"]
+susb_2017 = ["482"]
+fixed_asset_lines = [50]
+
+[[sector]]
+code = "483"
+qcew_2022 = ["483"]
+susb_2017 = ["483"]
+fixed_asset_lines = [51]
+
+[[sector]]
+code = "484"
+qcew_2022 = ["484"]
+susb_2017 = ["484"]
+fixed_asset_lines = [52]
+
+[[sector]]
+code = "485"
+qcew_2022 = ["485"]
+susb_2017 = ["485"]
+fixed_asset_lines = [53]
+
+[[sector]]
+code = "486"
+qcew_2022 = ["486"]
+susb_2017 = ["486"]
+fixed_asset_lines = [54]
+
+[[sector]]
+code = "487OS"
+qcew_2022 = ["487", "488", "491", "492"]
+susb_2017 = ["487", "488", "491", "492"]
+fixed_asset_lines = [55]
+
+[[sector]]
+code = "493"
+qcew_2022 = ["493"]
+susb_2017 = ["493"]
+fixed_asset_lines = [56]
+
+[[sector]]
+code = "511"
+qcew_2022 = ["513"]
+susb_2017 = ["511"]
+fixed_asset_lines = [58]
+
+[[sector]]
+code = "512"
+qcew_2022 = ["512"]
+susb_2017 = ["512"]
+fixed_asset_lines = [59]
+
+[[sector]]
+code = "513"
+qcew_2022 = ["516", "517"]
+susb_2017 = ["515", "517"]
+fixed_asset_lines = [60]
+
+[[sector]]
+code = "514"
+qcew_2022 = ["518", "519"]
+susb_2017 = ["518", "519"]
+fixed_asset_lines = [61]
+
+[[sector]]
+code = "521CI"
+qcew_2022 = ["521", "522"]
+susb_2017 = ["521", "522"]
+fixed_asset_lines = [63, 64]
+
+[[sector]]
+code = "523"
+qcew_2022 = ["523"]
+susb_2017 = ["523"]
+fixed_asset_lines = [68]
+
+[[sector]]
+code = "524"
+qcew_2022 = ["524"]
+susb_2017 = ["524"]
+fixed_asset_lines = [69]
+
+[[sector]]
+code = "525"
+qcew_2022 = ["525"]
+susb_2017 = ["525"]
+fixed_asset_lines = [72]
+
+[[sector]]
+code = "532RL"
+qcew_2022 = ["532", "533"]
+susb_2017 = ["532", "533"]
+fixed_asset_lines = [75]
+
+[[sector]]
+code = "5411"
+qcew_2022 = ["5411"]
+susb_2017 = ["5411"]
+fixed_asset_lines = [77]
+
+[[sector]]
+code = "5412OP"
+qcew_2022 = ["5412", "5413", "5414", "5416", "5417", "5418", "5419"]
+susb_2017 = ["5412", "5413", "5414", "5416", "5417", "5418", "5419"]
+fixed_asset_lines = [79]
+
+[[sector]]
+code = "5415"
+qcew_2022 = ["5415"]
+susb_2017 = ["5415"]
+fixed_asset_lines = [78]
+
+[[sector]]
+code = "55"
+qcew_2022 = ["55"]
+susb_2017 = ["55"]
+fixed_asset_lines = [80]
+
+[[sector]]
+code = "561"
+qcew_2022 = ["561"]
+susb_2017 = ["561"]
+fixed_asset_lines = [82]
+
+[[sector]]
+code = "562"
+qcew_2022 = ["562"]
+susb_2017 = ["562"]
+fixed_asset_lines = [83]
+
+[[sector]]
+code = "61"
+qcew_2022 = ["61"]
+susb_2017 = ["61"]
+fixed_asset_lines = [84]
+
+[[sector]]
+code = "621"
+qcew_2022 = ["621"]
+susb_2017 = ["621"]
+fixed_asset_lines = [86]
+
+[[sector]]
+code = "622"
+qcew_2022 = ["622"]
+susb_2017 = ["622"]
+fixed_asset_lines = [87]
+
+[[sector]]
+code = "623"
+qcew_2022 = ["623"]
+susb_2017 = ["623"]
+fixed_asset_lines = [88]
+
+[[sector]]
+code = "624"
+qcew_2022 = ["624"]
+susb_2017 = ["624"]
+fixed_asset_lines = [89]
+
+[[sector]]
+code = "711AS"
+qcew_2022 = ["711", "712"]
+susb_2017 = ["711", "712"]
+fixed_asset_lines = [91]
+
+[[sector]]
+code = "713"
+qcew_2022 = ["713"]
+susb_2017 = ["713"]
+fixed_asset_lines = [92]
+
+[[sector]]
+code = "721"
+qcew_2022 = ["721"]
+susb_2017 = ["721"]
+fixed_asset_lines = [94]
+
+[[sector]]
+code = "722"
+qcew_2022 = ["722"]
+susb_2017 = ["722"]
+fixed_asset_lines = [95]
+
+[[sector]]
+code = "81"
+qcew_2022 = ["81"]
+susb_2017 = ["81"]
+fixed_asset_lines = [96]
+
+[[sector]]
+code = "GFE"
+qcew_2022 = []
+susb_2017 = []
+fixed_asset_lines = []
+
+[[sector]]
+code = "GFGD"
+qcew_2022 = []
+susb_2017 = []
+fixed_asset_lines = []
+
+[[sector]]
+code = "GFGN"
+qcew_2022 = []
+susb_2017 = []
+fixed_asset_lines = []
+
+[[sector]]
+code = "GSLE"
+qcew_2022 = []
+susb_2017 = []
+fixed_asset_lines = []
+
+[[sector]]
+code = "GSLG"
+qcew_2022 = []
+susb_2017 = []
+fixed_asset_lines = []
+
+[[sector]]
+code = "HS"
+qcew_2022 = []
+susb_2017 = []
+fixed_asset_lines = []
+
+[[sector]]
+code = "ORE"
+qcew_2022 = ["531"]
+susb_2017 = ["531"]
+fixed_asset_lines = []
+
+[special]
+farm_firms_source = "USDA 2024 national farm count"
+housing_fixed_assets = "FAAt501:11"
+housing_depreciation = "FAAt504:11"
+other_real_estate_fixed_assets = "FAAt301ESI:74 - FAAt501:11"
+other_real_estate_dwellings = "FAAt501:12"
+other_real_estate_depreciation = "FAAt304ESI:74 - FAAt504:11"
+federal_assets = "FAAt701:21"
+federal_defense_assets = "FAAt701:22"
+federal_nondefense_assets = "FAAt701:38"
+state_local_assets = "FAAt701:55"
+general_government_assets = "FAAt701:75"
+government_enterprise_assets = "FAAt701:79"
+government_allocation_status = "DUBIOUS"

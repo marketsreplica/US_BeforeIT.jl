@@ -1,0 +1,1181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta
+    name="description"
+    content="Five interactive ways to explore the BeforeIT agent-based economy."
+  >
+  <title>BeforeIT — Digital Twin Prototypes</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #060811;
+      --surface: #0d1120;
+      --surface-strong: #12182b;
+      --line: rgba(164, 180, 220, 0.15);
+      --line-strong: rgba(164, 180, 220, 0.28);
+      --text: #f4f6fc;
+      --muted: #9aa6c0;
+      --quiet: #65718c;
+      --blue: #76a8ff;
+      --cyan: #62e1e9;
+      --green: #6fe0a0;
+      --amber: #f2bc67;
+      --pink: #f078aa;
+      --mono: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+    }
+
+    html {
+      min-width: 320px;
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 13% -8%, rgba(58, 96, 190, 0.23), transparent 34rem),
+        radial-gradient(circle at 92% 18%, rgba(64, 203, 190, 0.09), transparent 31rem),
+        linear-gradient(180deg, #080b16 0%, var(--bg) 52%, #080a12 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(135, 153, 195, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(135, 153, 195, 0.035) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 78%);
+      content: "";
+      pointer-events: none;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      padding: 9px 13px;
+      transform: translateY(-160%);
+      border-radius: 7px;
+      background: var(--text);
+      color: #080a12;
+      font-weight: 750;
+      transition: transform 140ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .shell {
+      width: min(1220px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      grid-template-columns: repeat(3, 4px);
+      align-items: end;
+      justify-content: center;
+      gap: 3px;
+      padding-bottom: 10px;
+      border: 1px solid rgba(122, 166, 255, 0.42);
+      border-radius: 11px;
+      background: linear-gradient(145deg, #253b75, #121a34);
+      box-shadow: 0 10px 30px rgba(43, 88, 188, 0.24);
+    }
+
+    .brand-mark span {
+      display: block;
+      border-radius: 2px;
+      background: #b9d0ff;
+    }
+
+    .brand-mark span:nth-child(1) { height: 9px; opacity: 0.72; }
+    .brand-mark span:nth-child(2) { height: 16px; }
+    .brand-mark span:nth-child(3) { height: 12px; opacity: 0.84; }
+
+    .brand-copy strong,
+    .brand-copy span {
+      display: block;
+    }
+
+    .brand-copy strong {
+      font-size: 15px;
+      letter-spacing: 0.01em;
+    }
+
+    .brand-copy span {
+      margin-top: 2px;
+      color: var(--quiet);
+      font: 650 9px/1 var(--mono);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .engine-status {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(15, 20, 37, 0.7);
+      color: var(--muted);
+      font: 620 11px/1 var(--mono);
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 0 4px rgba(242, 188, 103, 0.1);
+      animation: breathe 1.6s ease-in-out infinite;
+    }
+
+    #engineStatusText {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .engine-status.is-online {
+      border-color: rgba(111, 224, 160, 0.3);
+      color: #a9eac4;
+    }
+
+    .engine-status.is-online .status-dot {
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(111, 224, 160, 0.1);
+      animation: none;
+    }
+
+    .engine-status.is-offline {
+      border-color: rgba(240, 120, 170, 0.3);
+      color: #f2abc8;
+    }
+
+    .engine-status.is-offline .status-dot {
+      background: var(--pink);
+      box-shadow: 0 0 0 4px rgba(240, 120, 170, 0.1);
+      animation: none;
+    }
+
+    @keyframes breathe {
+      50% { opacity: 0.45; transform: scale(0.82); }
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(350px, 0.62fr);
+      gap: clamp(42px, 8vw, 112px);
+      align-items: end;
+      padding: clamp(66px, 9vw, 118px) 0 clamp(60px, 8vw, 96px);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #8bb4ff;
+      font: 720 10px/1 var(--mono);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 28px;
+      height: 1px;
+      background: currentColor;
+      content: "";
+    }
+
+    h1 {
+      max-width: 780px;
+      margin-top: 20px;
+      font-size: clamp(42px, 6.2vw, 80px);
+      font-weight: 720;
+      letter-spacing: -0.055em;
+      line-height: 0.98;
+      text-wrap: balance;
+    }
+
+    h1 em {
+      color: #a8c4ff;
+      font-style: normal;
+    }
+
+    .hero-copy {
+      max-width: 660px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: clamp(16px, 1.65vw, 19px);
+      line-height: 1.62;
+    }
+
+    .model-card {
+      position: relative;
+      overflow: hidden;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background:
+        linear-gradient(145deg, rgba(31, 40, 70, 0.9), rgba(12, 16, 29, 0.9));
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.22);
+    }
+
+    .model-card::after {
+      position: absolute;
+      top: -70px;
+      right: -60px;
+      width: 190px;
+      height: 190px;
+      border: 1px solid rgba(118, 168, 255, 0.16);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 34px rgba(118, 168, 255, 0.035),
+        0 0 0 67px rgba(118, 168, 255, 0.025);
+      content: "";
+    }
+
+    .model-card-head {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font: 650 10px/1 var(--mono);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .live-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #99deb5;
+      letter-spacing: 0.06em;
+    }
+
+    .live-chip::before {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      content: "";
+    }
+
+    .facts {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      margin-top: 24px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--line);
+    }
+
+    .fact {
+      min-height: 82px;
+      padding: 15px;
+      background: rgba(10, 14, 27, 0.92);
+    }
+
+    .fact strong,
+    .fact span {
+      display: block;
+    }
+
+    .fact strong {
+      color: #f7f8fd;
+      font: 720 22px/1.1 var(--mono);
+    }
+
+    .fact span {
+      margin-top: 7px;
+      color: var(--quiet);
+      font: 650 9px/1.3 var(--mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .gallery-section {
+      padding-bottom: 92px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 32px;
+      margin-bottom: 25px;
+    }
+
+    .section-kicker {
+      color: var(--quiet);
+      font: 650 10px/1 var(--mono);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin-top: 9px;
+      font-size: clamp(27px, 3vw, 38px);
+      letter-spacing: -0.035em;
+    }
+
+    .section-note {
+      max-width: 430px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      text-align: right;
+    }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .concept-card {
+      --tone: var(--blue);
+      --tone-rgb: 118, 168, 255;
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background:
+        linear-gradient(160deg, rgba(var(--tone-rgb), 0.075), transparent 38%),
+        rgba(12, 16, 29, 0.84);
+      text-decoration: none;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.16);
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .concept-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(var(--tone-rgb), 0.48);
+      box-shadow:
+        0 30px 76px rgba(0, 0, 0, 0.28),
+        0 0 0 1px rgba(var(--tone-rgb), 0.08);
+    }
+
+    .concept-card:focus-visible {
+      outline: 2px solid var(--tone);
+      outline-offset: 4px;
+      border-color: rgba(var(--tone-rgb), 0.7);
+    }
+
+    .concept-card.machine {
+      --tone: var(--amber);
+      --tone-rgb: 242, 188, 103;
+    }
+
+    .concept-card.city {
+      --tone: var(--green);
+      --tone-rgb: 111, 224, 160;
+    }
+
+    .concept-card.twin {
+      --tone: var(--pink);
+      --tone-rgb: 240, 120, 170;
+    }
+
+    .concept-card.ledger {
+      --tone: var(--cyan);
+      --tone-rgb: 98, 225, 233;
+      grid-column: 1 / -1;
+    }
+
+    .concept-preview {
+      position: relative;
+      height: 196px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 50% 45%, rgba(var(--tone-rgb), 0.13), transparent 44%),
+        linear-gradient(rgba(134, 152, 196, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(134, 152, 196, 0.045) 1px, transparent 1px),
+        #090d18;
+      background-size: auto, 24px 24px, 24px 24px, auto;
+    }
+
+    .preview-label {
+      position: absolute;
+      top: 17px;
+      left: 19px;
+      z-index: 3;
+      color: var(--tone);
+      font: 700 9px/1 var(--mono);
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .atlas-orbit {
+      position: absolute;
+      top: 43px;
+      left: 50%;
+      width: 248px;
+      height: 120px;
+      transform: translateX(-50%);
+      border: 1px solid rgba(118, 168, 255, 0.2);
+      border-radius: 50%;
+    }
+
+    .atlas-node {
+      position: absolute;
+      z-index: 2;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(158, 195, 255, 0.7);
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 35%, #709cff, #203363 68%, #0b1021);
+      box-shadow: 0 0 22px rgba(91, 142, 255, 0.34);
+    }
+
+    .atlas-node.n1 { top: 79px; left: calc(50% - 18px); }
+    .atlas-node.n2 { top: 51px; left: calc(50% - 126px); transform: scale(0.75); }
+    .atlas-node.n3 { top: 108px; right: calc(50% - 126px); transform: scale(0.83); }
+    .atlas-node.n4 { top: 39px; right: calc(50% - 72px); transform: scale(0.58); }
+
+    .atlas-flow {
+      position: absolute;
+      z-index: 1;
+      height: 2px;
+      transform-origin: left center;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(118, 168, 255, 0.15), rgba(98, 225, 233, 0.9));
+      box-shadow: 0 0 8px rgba(98, 225, 233, 0.45);
+    }
+
+    .atlas-flow.f1 { top: 91px; left: calc(50% - 110px); width: 105px; transform: rotate(8deg); }
+    .atlas-flow.f2 { top: 98px; left: 50%; width: 111px; transform: rotate(17deg); }
+    .atlas-flow.f3 { top: 86px; left: calc(50% + 2px); width: 74px; transform: rotate(-30deg); }
+
+    .machine-flow {
+      position: absolute;
+      top: 48px;
+      right: 38px;
+      bottom: 28px;
+      left: 38px;
+    }
+
+    .machine-stack {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+
+    .machine-stack.left { left: 0; }
+    .machine-stack.right { right: 0; }
+
+    .machine-stack i {
+      width: 13px;
+      height: 38px;
+      border: 1px solid rgba(242, 188, 103, 0.55);
+      border-radius: 4px;
+      background: rgba(242, 188, 103, 0.12);
+      box-shadow: 0 0 14px rgba(242, 188, 103, 0.12);
+    }
+
+    .machine-core {
+      position: absolute;
+      top: 27px;
+      bottom: 27px;
+      left: calc(50% - 8px);
+      width: 16px;
+      border: 1px solid rgba(242, 188, 103, 0.65);
+      border-radius: 5px;
+      background: #252033;
+      box-shadow: 0 0 20px rgba(242, 188, 103, 0.14);
+    }
+
+    .machine-pipe {
+      position: absolute;
+      left: 13px;
+      right: 13px;
+      height: 14px;
+      transform: skewY(var(--skew, 0deg));
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(242, 188, 103, 0.24), rgba(242, 188, 103, 0.74), rgba(98, 225, 233, 0.25));
+      filter: drop-shadow(0 0 8px rgba(242, 188, 103, 0.12));
+    }
+
+    .machine-pipe.p1 { top: 15px; --skew: 8deg; }
+    .machine-pipe.p2 { top: 50px; height: 22px; --skew: -5deg; }
+    .machine-pipe.p3 { top: 92px; height: 10px; --skew: 10deg; }
+
+    .city-ground {
+      position: absolute;
+      top: 67px;
+      left: 50%;
+      width: 260px;
+      height: 108px;
+      transform: translateX(-50%) skewY(-15deg);
+      border: 1px solid rgba(111, 224, 160, 0.2);
+      background:
+        linear-gradient(rgba(111, 224, 160, 0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(111, 224, 160, 0.055) 1px, transparent 1px),
+        rgba(17, 42, 41, 0.36);
+      background-size: 22px 22px;
+    }
+
+    .building {
+      position: absolute;
+      z-index: 2;
+      bottom: 40px;
+      width: 28px;
+      height: var(--height);
+      transform: skewY(-15deg);
+      border: 1px solid rgba(152, 241, 187, 0.42);
+      border-radius: 3px 3px 0 0;
+      background:
+        repeating-linear-gradient(to bottom, rgba(222, 255, 231, 0.58) 0 3px, transparent 3px 9px),
+        linear-gradient(90deg, #214c47, #122a32);
+      box-shadow: 8px 8px 0 rgba(7, 15, 25, 0.6), 0 0 15px rgba(111, 224, 160, 0.12);
+    }
+
+    .building.b1 { --height: 66px; left: calc(50% - 94px); }
+    .building.b2 { --height: 96px; left: calc(50% - 48px); }
+    .building.b3 { --height: 52px; left: calc(50% + 4px); }
+    .building.b4 { --height: 78px; left: calc(50% + 54px); }
+
+    .twin-chart {
+      position: absolute;
+      inset: 42px 28px 24px;
+    }
+
+    .twin-chart svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .twin-chart .gridline {
+      stroke: rgba(157, 176, 220, 0.1);
+      stroke-width: 1;
+    }
+
+    .twin-chart .line-a,
+    .twin-chart .line-b {
+      fill: none;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .twin-chart .line-a {
+      stroke: var(--cyan);
+      filter: drop-shadow(0 0 4px rgba(98, 225, 233, 0.28));
+    }
+
+    .twin-chart .line-b {
+      stroke: var(--pink);
+      stroke-dasharray: 5 5;
+      filter: drop-shadow(0 0 4px rgba(240, 120, 170, 0.28));
+    }
+
+    .ledger-map {
+      position: absolute;
+      inset: 40px 32px 22px;
+      border: 1px dashed rgba(98, 225, 233, 0.18);
+      border-radius: 44% 52% 46% 48%;
+    }
+
+    .ledger-node,
+    .ledger-world {
+      position: absolute;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(98, 225, 233, 0.46);
+      background: #111d2e;
+      box-shadow: 0 0 18px rgba(98, 225, 233, 0.14);
+      color: #bdf7fa;
+      font: 680 8px/1 var(--mono);
+      letter-spacing: 0.04em;
+    }
+
+    .ledger-node {
+      width: 74px;
+      height: 31px;
+      border-radius: 8px;
+    }
+
+    .ledger-world {
+      width: 32px;
+      height: 32px;
+      border-style: dashed;
+      border-radius: 50%;
+      background: rgba(98, 225, 233, 0.05);
+    }
+
+    .ledger-node.households { top: 13px; left: 8%; }
+    .ledger-node.firms { top: 61px; left: calc(50% - 37px); width: 92px; }
+    .ledger-node.gov { top: 10px; right: 8%; }
+    .ledger-node.bank { bottom: 4px; right: 18%; }
+    .ledger-world.world-a { top: 48px; left: -16px; }
+    .ledger-world.world-b { right: -16px; bottom: 14px; }
+
+    .ledger-river {
+      position: absolute;
+      z-index: 1;
+      height: var(--width, 8px);
+      transform-origin: left center;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(98, 225, 233, 0.1), rgba(98, 225, 233, 0.72));
+      filter: drop-shadow(0 0 7px rgba(98, 225, 233, 0.26));
+    }
+
+    .ledger-river.r1 { top: 42px; left: 19%; width: 31%; transform: rotate(13deg); --width: 13px; }
+    .ledger-river.r2 { top: 43px; left: 50%; width: 28%; transform: rotate(-12deg); --width: 7px; }
+    .ledger-river.r3 { top: 88px; left: 55%; width: 25%; transform: rotate(19deg); --width: 4px; }
+    .ledger-river.r4 { top: 76px; left: 1%; width: 43%; transform: rotate(-3deg); --width: 9px; }
+
+    .concept-body {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 25px 23px;
+    }
+
+    .concept-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--quiet);
+      font: 680 9px/1 var(--mono);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .concept-number {
+      color: var(--tone);
+    }
+
+    .concept-body h3 {
+      margin-top: 14px;
+      font-size: 25px;
+      letter-spacing: -0.025em;
+    }
+
+    .concept-body p {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .concept-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 17px;
+      list-style: none;
+      padding: 0;
+    }
+
+    .concept-features li {
+      padding: 5px 8px;
+      border: 1px solid rgba(var(--tone-rgb), 0.18);
+      border-radius: 999px;
+      background: rgba(var(--tone-rgb), 0.055);
+      color: #b9c3d9;
+      font: 580 9px/1 var(--mono);
+    }
+
+    .concept-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: auto;
+      padding-top: 22px;
+      color: var(--tone);
+      font: 700 11px/1 var(--mono);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .concept-arrow {
+      width: 31px;
+      height: 31px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(var(--tone-rgb), 0.28);
+      border-radius: 50%;
+      transition: transform 180ms ease, background 180ms ease;
+    }
+
+    .concept-card:hover .concept-arrow {
+      transform: translateX(3px);
+      background: rgba(var(--tone-rgb), 0.1);
+    }
+
+    .principle {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 17px;
+      align-items: center;
+      margin-bottom: 78px;
+      padding: 20px 22px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(13, 17, 31, 0.62);
+    }
+
+    .principle-mark {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(242, 188, 103, 0.3);
+      border-radius: 10px;
+      background: rgba(242, 188, 103, 0.08);
+      color: var(--amber);
+      font: 780 18px/1 var(--mono);
+    }
+
+    .principle strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .principle p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 24px 0 34px;
+      border-top: 1px solid var(--line);
+      color: var(--quiet);
+      font: 580 10px/1.45 var(--mono);
+    }
+
+    footer span:last-child {
+      text-align: right;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 38px;
+      }
+
+      .model-card {
+        max-width: 580px;
+      }
+
+      .section-head {
+        align-items: start;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .section-note {
+        text-align: left;
+      }
+
+      .concept-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .concept-card.ledger {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .shell {
+        width: min(100% - 28px, 1220px);
+      }
+
+      .topbar {
+        min-height: 72px;
+      }
+
+      .brand-copy span {
+        display: none;
+      }
+
+      .engine-status {
+        max-width: 52%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .hero {
+        padding-top: 54px;
+      }
+
+      h1 {
+        font-size: clamp(40px, 13vw, 57px);
+      }
+
+      .facts {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .concept-card {
+        min-height: 0;
+      }
+
+      .concept-preview {
+        height: 170px;
+      }
+
+      footer {
+        flex-direction: column;
+      }
+
+      footer span:last-child {
+        text-align: left;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#concepts">Skip to concepts</a>
+
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand" aria-label="BeforeIT Prototype Lab">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        <span class="brand-copy">
+          <strong>BeforeIT</strong>
+          <span>Digital Twin Prototype Lab</span>
+        </span>
+      </div>
+
+      <div id="engineStatus" class="engine-status" role="status" aria-live="polite">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span id="engineStatusText">Connecting to simulator…</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="pageTitle">
+        <div>
+          <div class="eyebrow">Five lenses · one calibrated economy</div>
+          <h1 id="pageTitle">Step inside the <em>economic machine.</em></h1>
+          <p class="hero-copy">
+            Explore the same BeforeIT agent-based simulation as a living map,
+            a causal circuit, a playable city, parallel futures, or an exact cash ledger.
+            Every concept connects to the live local Julia model.
+          </p>
+        </div>
+
+        <aside class="model-card" aria-label="Model scale">
+          <div class="model-card-head">
+            <span>Austria digital twin</span>
+            <span class="live-chip">Model scale</span>
+          </div>
+          <div class="facts">
+            <div class="fact"><strong>652</strong><span>firm agents</span></div>
+            <div class="fact"><strong>9,215</strong><span>households</span></div>
+            <div class="fact"><strong>62</strong><span>industry sectors</span></div>
+            <div class="fact"><strong>15</strong><span>phases per quarter</span></div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="concepts" class="gallery-section" aria-labelledby="conceptTitle">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Choose your perspective</div>
+            <h2 id="conceptTitle">Open a prototype</h2>
+          </div>
+          <p class="section-note">
+            Each interface uses the same saved runs, calibrated inputs, and simulation API.
+            Start anywhere; the difference is how the economy becomes legible.
+          </p>
+        </div>
+
+        <div class="concept-grid">
+          <a class="concept-card atlas" href="atlas/" aria-labelledby="atlasTitle">
+            <div class="concept-preview" aria-hidden="true">
+              <span class="preview-label">Living network</span>
+              <span class="atlas-orbit"></span>
+              <span class="atlas-flow f1"></span>
+              <span class="atlas-flow f2"></span>
+              <span class="atlas-flow f3"></span>
+              <span class="atlas-node n1"></span>
+              <span class="atlas-node n2"></span>
+              <span class="atlas-node n3"></span>
+              <span class="atlas-node n4"></span>
+            </div>
+            <div class="concept-body">
+              <div class="concept-meta">
+                <span class="concept-number">01 · Map</span>
+                <span>Observe</span>
+              </div>
+              <h3 id="atlasTitle">Flow Atlas</h3>
+              <p>
+                Watch households, sectors, government, banks, and the world exchange money
+                as the simulated quarters advance.
+              </p>
+              <ul class="concept-features">
+                <li>Animated flows</li>
+                <li>Agent inspector</li>
+                <li>Quarter playback</li>
+              </ul>
+              <span class="concept-footer">
+                <span>Enter the atlas</span>
+                <span class="concept-arrow" aria-hidden="true">→</span>
+              </span>
+            </div>
+          </a>
+
+          <a class="concept-card machine" href="machine/" aria-labelledby="machineTitle">
+            <div class="concept-preview" aria-hidden="true">
+              <span class="preview-label">Causal control room</span>
+              <span class="machine-flow">
+                <span class="machine-stack left"><i></i><i></i><i></i></span>
+                <span class="machine-pipe p1"></span>
+                <span class="machine-pipe p2"></span>
+                <span class="machine-pipe p3"></span>
+                <span class="machine-core"></span>
+                <span class="machine-stack right"><i></i><i></i><i></i></span>
+              </span>
+            </div>
+            <div class="concept-body">
+              <div class="concept-meta">
+                <span class="concept-number">02 · Circuit</span>
+                <span>Understand</span>
+              </div>
+              <h3 id="machineTitle">The Machine</h3>
+              <p>
+                Turn policy dials, trace monetary pipes, and walk through the fifteen
+                decisions and markets inside one simulated quarter.
+              </p>
+              <ul class="concept-features">
+                <li>Parameter rail</li>
+                <li>Sankey circuit</li>
+                <li>Phase microscope</li>
+              </ul>
+              <span class="concept-footer">
+                <span>Open the control room</span>
+                <span class="concept-arrow" aria-hidden="true">→</span>
+              </span>
+            </div>
+          </a>
+
+          <a class="concept-card city" href="city/" aria-labelledby="cityTitle">
+            <div class="concept-preview" aria-hidden="true">
+              <span class="preview-label">Playable economy</span>
+              <span class="city-ground"></span>
+              <span class="building b1"></span>
+              <span class="building b2"></span>
+              <span class="building b3"></span>
+              <span class="building b4"></span>
+            </div>
+            <div class="concept-body">
+              <div class="concept-meta">
+                <span class="concept-number">03 · Game</span>
+                <span>Intervene</span>
+              </div>
+              <h3 id="cityTitle">Econopolis</h3>
+              <p>
+                Play policy cards, launch a new universe, and watch sector districts
+                grow or contract in a city-builder time-lapse.
+              </p>
+              <ul class="concept-features">
+                <li>Policy cards</li>
+                <li>Isometric city</li>
+                <li>Impact ledger</li>
+              </ul>
+              <span class="concept-footer">
+                <span>Govern Econopolis</span>
+                <span class="concept-arrow" aria-hidden="true">→</span>
+              </span>
+            </div>
+          </a>
+
+          <a class="concept-card twin" href="twinlab/" aria-labelledby="twinTitle">
+            <div class="concept-preview" aria-hidden="true">
+              <span class="preview-label">Parallel futures</span>
+              <span class="twin-chart">
+                <svg viewBox="0 0 440 126" preserveAspectRatio="none">
+                  <path class="gridline" d="M0 20H440 M0 63H440 M0 106H440"></path>
+                  <path class="line-a" d="M0 88 C42 84,64 66,98 69 S153 88,194 65 S252 51,290 59 S353 40,440 46"></path>
+                  <path class="line-b" d="M0 88 C44 85,68 77,100 72 S157 52,198 62 S247 81,291 57 S353 72,440 31"></path>
+                </svg>
+              </span>
+            </div>
+            <div class="concept-body">
+              <div class="concept-meta">
+                <span class="concept-number">04 · Compare</span>
+                <span>Decide</span>
+              </div>
+              <h3 id="twinTitle">Twin Lab</h3>
+              <p>
+                Fork a control run, synchronize two futures, and isolate economy-wide
+                and sector-level differences over time.
+              </p>
+              <ul class="concept-features">
+                <li>A/B universes</li>
+                <li>Impact report</li>
+                <li>62-sector heatmap</li>
+              </ul>
+              <span class="concept-footer">
+                <span>Compare futures</span>
+                <span class="concept-arrow" aria-hidden="true">→</span>
+              </span>
+            </div>
+          </a>
+
+          <a class="concept-card ledger" href="ledger/" aria-labelledby="ledgerTitle">
+            <div class="concept-preview" aria-hidden="true">
+              <span class="preview-label">Cash-flow consistent canvas</span>
+              <span class="ledger-map">
+                <span class="ledger-river r1"></span>
+                <span class="ledger-river r2"></span>
+                <span class="ledger-river r3"></span>
+                <span class="ledger-river r4"></span>
+                <span class="ledger-node households">HOUSEHOLDS</span>
+                <span class="ledger-node firms">FIRM NETWORK</span>
+                <span class="ledger-node gov">GOVERNMENT</span>
+                <span class="ledger-node bank">BANK</span>
+                <span class="ledger-world world-a">↗</span>
+                <span class="ledger-world world-b">↘</span>
+              </span>
+            </div>
+            <div class="concept-body">
+              <div class="concept-meta">
+                <span class="concept-number">05 · Ledger</span>
+                <span>Disentangle</span>
+              </div>
+              <h3 id="ledgerTitle">Cash Flow Canvas</h3>
+              <p>
+                Pan across an unbounded Austrian economy, move institutions and sectors,
+                and inspect exact buyer-to-seller payments whose widths scale with euros.
+              </p>
+              <ul class="concept-features">
+                <li>Infinite 2D canvas</li>
+                <li>Exact firm links</li>
+                <li>Accounting diagnostics</li>
+              </ul>
+              <span class="concept-footer">
+                <span>Open the cash ledger</span>
+                <span class="concept-arrow" aria-hidden="true">→</span>
+              </span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <aside class="principle">
+        <span class="principle-mark" aria-hidden="true">≈</span>
+        <div>
+          <strong>Transparent by design</strong>
+          <p>
+            Exact traced transactions, model-equation flows, potential demand, and derived
+            estimates are labelled separately so the canvas never implies data the model did not record.
+          </p>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <span>BeforeIT · local digital-twin prototype lab</span>
+      <span>One model · five interaction languages</span>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var status = document.getElementById('engineStatus');
+      var statusText = document.getElementById('engineStatusText');
+
+      fetch('/api/datasets', { headers: { Accept: 'application/json' } })
+        .then(function (response) {
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          return response.json();
+        })
+        .then(function (datasets) {
+          var count = Array.isArray(datasets) ? datasets.length : 0;
+          status.classList.add('is-online');
+          statusText.textContent = 'Simulator online · ' + count +
+            ' dataset' + (count === 1 ? '' : 's') + ' ready';
+        })
+        .catch(function () {
+          status.classList.add('is-offline');
+          statusText.textContent = 'Simulator offline · start Julia on :8080';
+        });
+    })();
+  </script>
+</body>
+</html>

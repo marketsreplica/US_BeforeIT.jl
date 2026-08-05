@@ -1,0 +1,55 @@
+model_stage,metric,sample,observations,mape_pct,max_ape_pct,mae,rmse,error_unit,target_met
+uncalibrated,real_gdp,all_forecasts,9,0.336031980919616,0.7027060163609676,19946.53677510615,23431.14641207125,million chained 2017 USD per quarter,true
+uncalibrated,real_household_consumption,all_forecasts,9,0.38853321776687344,0.6063149173748856,15911.471360377709,17501.446609100094,million chained 2017 USD per quarter,true
+uncalibrated,real_government_consumption,all_forecasts,9,0.7312377686317194,1.4950013542890292,7267.2587300719715,8592.727022958688,million chained 2017 USD per quarter,true
+uncalibrated,real_fixed_capitalformation,all_forecasts,9,0.6511367593778247,1.1767503641993022,7135.362027446274,8086.803663799605,million chained 2017 USD per quarter,true
+uncalibrated,real_exports,all_forecasts,9,1.129979065463126,2.715973629863911,7666.771489757462,10246.38461756024,million chained 2017 USD per quarter,true
+uncalibrated,real_imports,all_forecasts,9,3.3807225153696137,8.60498029128581,32246.112030707285,43119.18729628205,million chained 2017 USD per quarter,true
+uncalibrated,wages,all_forecasts,9,0.3795286305598941,0.7237057867577382,12323.535628469144,14221.248532721009,million current USD per quarter,true
+uncalibrated,gdp_deflator,all_forecasts,9,0.26184076478743296,0.7613007605705259,0.0034062038770938693,0.004385507320894992,nominal GDP / real GDP ratio,true
+uncalibrated,annual_policy_rate,all_forecasts,9,4.056716913960165,10.235906575810393,0.17299202837076952,0.23076786013654926,percentage points,false
+uncalibrated,real_gdp,coefficient_fitting,7,0.405123206793286,0.7027060163609676,24012.951334993886,26286.243154704694,million chained 2017 USD per quarter,true
+uncalibrated,real_household_consumption,coefficient_fitting,7,0.4079998162963304,0.6063149173748856,16619.340488063503,18382.98603766261,million chained 2017 USD per quarter,true
+uncalibrated,real_government_consumption,coefficient_fitting,7,0.7568684307573473,1.4950013542890292,7511.237881776827,8851.806167362305,million chained 2017 USD per quarter,true
+uncalibrated,real_fixed_capitalformation,coefficient_fitting,7,0.5663844097147012,1.1767503641993022,6117.199974628498,7156.372206312235,million chained 2017 USD per quarter,true
+uncalibrated,real_exports,coefficient_fitting,7,0.8876803765704331,2.4181014456621215,5948.405335313008,8617.064196762854,million chained 2017 USD per quarter,true
+uncalibrated,real_imports,coefficient_fitting,7,3.397697326410149,8.60498029128581,32421.68769476165,45875.8817991964,million chained 2017 USD per quarter,true
+uncalibrated,wages,coefficient_fitting,7,0.36555496990163006,0.7237057867577382,11774.59702744601,14174.080915139848,million current USD per quarter,true
+uncalibrated,gdp_deflator,coefficient_fitting,7,0.21313796551842976,0.41201247441491445,0.0027297065119038194,0.0031047146096042444,nominal GDP / real GDP ratio,true
+uncalibrated,annual_policy_rate,coefficient_fitting,7,4.267907033830544,10.235906575810393,0.18791783732509362,0.24629154331266187,percentage points,false
+uncalibrated,real_gdp,excluded_from_coefficient_fitting,2,0.09421269036177084,0.1670436490296695,5714.085815499071,7225.010219282043,million chained 2017 USD per quarter,true
+uncalibrated,real_household_consumption,excluded_from_coefficient_fitting,2,0.32040012291377434,0.4119754709981635,13433.929413477425,13985.107634093156,million chained 2017 USD per quarter,true
+uncalibrated,real_government_consumption,excluded_from_coefficient_fitting,2,0.6415304511920219,1.0522019400447404,6413.33169910498,7616.86655547696,million chained 2017 USD per quarter,true
+uncalibrated,real_fixed_capitalformation,excluded_from_coefficient_fitting,2,0.9477699831987568,1.0066466096045796,10698.929212308489,10725.481326836494,million chained 2017 USD per quarter,true
+uncalibrated,real_exports,excluded_from_coefficient_fitting,2,1.9780244765875514,2.715973629863911,13681.05303031305,14579.42063287924,million chained 2017 USD per quarter,true
+uncalibrated,real_imports,excluded_from_coefficient_fitting,2,3.3213106767277365,3.388357051987937,31631.597206517006,31632.286526978904,million chained 2017 USD per quarter,true
+uncalibrated,wages,excluded_from_coefficient_fitting,2,0.4284364428638178,0.49067494296692205,14244.82073205011,14385.11730821569,million current USD per quarter,true
+uncalibrated,gdp_deflator,excluded_from_coefficient_fitting,2,0.4323005622289441,0.7613007605705259,0.0057739446552590445,0.007267024855640094,nominal GDP / real GDP ratio,true
+uncalibrated,annual_policy_rate,excluded_from_coefficient_fitting,2,3.3175514944138396,6.419782007968788,0.12075169703063514,0.16532933390159202,percentage points,true
+calibrated,real_gdp,all_forecasts,9,0.3428427866353908,0.7626219761961339,20372.883704026128,23506.26529194724,million chained 2017 USD per quarter,true
+calibrated,real_household_consumption,all_forecasts,9,0.2718935864283259,0.5769793522053808,11169.387472332714,13274.70994052626,million chained 2017 USD per quarter,true
+calibrated,real_government_consumption,all_forecasts,9,0.7079924354903205,1.7222955650006886,7036.370391865985,8211.8002052096,million chained 2017 USD per quarter,true
+calibrated,real_fixed_capitalformation,all_forecasts,9,0.6337311920690395,1.1758267552910653,6966.085402045865,8477.03259981424,million chained 2017 USD per quarter,true
+calibrated,real_exports,all_forecasts,9,1.1082779702222392,2.1658097702618546,7481.551737922709,8633.301395232551,million chained 2017 USD per quarter,true
+calibrated,real_imports,all_forecasts,9,3.117518001606102,9.593034729128604,29675.341835579562,41467.30598930086,million chained 2017 USD per quarter,true
+calibrated,wages,all_forecasts,9,0.38283123873419617,0.6927084073237622,12410.58705313452,13954.172968314324,million current USD per quarter,true
+calibrated,gdp_deflator,all_forecasts,9,0.2838200402612063,0.8203105580640038,0.003697790416678738,0.004814022576076475,nominal GDP / real GDP ratio,true
+calibrated,annual_policy_rate,all_forecasts,9,4.295667617394838,5.62497977903745,0.19144232720053295,0.20617919516423763,percentage points,true
+calibrated,real_gdp,coefficient_fitting,7,0.3968645514852589,0.7626219761961339,23530.593128002383,26076.472369043862,million chained 2017 USD per quarter,true
+calibrated,real_household_consumption,coefficient_fitting,7,0.25771659285845466,0.5660152889535279,10525.196368342333,11945.279935379787,million chained 2017 USD per quarter,true
+calibrated,real_government_consumption,coefficient_fitting,7,0.7265710929632478,1.7222955650006886,7210.917586615309,8596.119903610577,million chained 2017 USD per quarter,true
+calibrated,real_fixed_capitalformation,coefficient_fitting,7,0.5021270385940128,1.1758267552910653,5427.057973207639,6973.2775345424125,million chained 2017 USD per quarter,true
+calibrated,real_exports,coefficient_fitting,7,1.0181610067415021,1.8662530493828655,6808.032784766235,7795.648161725107,million chained 2017 USD per quarter,true
+calibrated,real_imports,coefficient_fitting,7,3.310592305956613,9.593034729128604,31510.43674565968,45346.70090997286,million chained 2017 USD per quarter,true
+calibrated,wages,coefficient_fitting,7,0.3786316122094788,0.6927084073237622,12180.316365860801,14117.112895403434,million current USD per quarter,true
+calibrated,gdp_deflator,coefficient_fitting,7,0.22448119707333156,0.47122996740607487,0.0028799770650158913,0.003453782565079904,nominal GDP / real GDP ratio,true
+calibrated,annual_policy_rate,coefficient_fitting,7,4.60902957544311,5.62497977903745,0.21290263399044548,0.22536105577533294,percentage points,true
+calibrated,real_gdp,excluded_from_coefficient_fitting,2,0.15376660966085215,0.22664090119404462,9320.900720109232,10320.457675996577,million chained 2017 USD per quarter,true
+calibrated,real_household_consumption,excluded_from_coefficient_fitting,2,0.32151306392287515,0.5769793522053808,13424.05633629905,17133.787189408118,million chained 2017 USD per quarter,true
+calibrated,real_government_consumption,excluded_from_coefficient_fitting,2,0.6429671343350749,0.8306120946178185,6425.455210243352,6695.148307236161,million chained 2017 USD per quarter,true
+calibrated,real_fixed_capitalformation,excluded_from_coefficient_fitting,2,1.094345729231633,1.1531352310423437,12352.681402979651,12376.48048252295,million chained 2017 USD per quarter,true
+calibrated,real_exports,excluded_from_coefficient_fitting,2,1.4236873424048198,2.1658097702618546,9838.86807397037,11077.00602596348,million chained 2017 USD per quarter,true
+calibrated,real_imports,excluded_from_coefficient_fitting,2,2.4417579363793096,2.509414278773989,23252.50965029915,23254.82971516916,million chained 2017 USD per quarter,true
+calibrated,wages,excluded_from_coefficient_fitting,2,0.397529931570707,0.45974927798620896,13216.534458592534,13368.252570095798,million current USD per quarter,true
+calibrated,gdp_deflator,excluded_from_coefficient_fitting,2,0.49150599141876755,0.8203105580640038,0.006560137147498701,0.007908002978591257,nominal GDP / real GDP ratio,true
+calibrated,annual_policy_rate,excluded_from_coefficient_fitting,2,3.1989007642258898,3.2620314594995343,0.11633125343583905,0.11635185096496334,percentage points,true

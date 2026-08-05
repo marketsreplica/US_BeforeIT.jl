@@ -7,7 +7,12 @@ and retail market operations for each good. Finally, it updates the aggregate va
 
 This function updates the model in-place and does not return any value.
 """
-function search_and_matching!(model::AbstractModel; parallel = false)
+function search_and_matching!(
+        model::AbstractModel;
+        parallel = false,
+        transaction_logger = nothing,
+        transaction_markets = (:business_goods, :final_demand),
+    )
 
     w_act, w_inact, firms, gov = model.w_act, model.w_inact, model.firms, model.gov
     bank, rotw, agg, prop = model.bank, model.rotw, model.agg, model.prop
@@ -22,6 +27,34 @@ function search_and_matching!(model::AbstractModel; parallel = false)
         P_bar_CF_h_g, P_j_g, P_l_g = initialize_variables_retail_market(
         firms, rotw, prop, agg, w_act, w_inact, gov, bank
     )
+    business_transaction_logger =
+        :business_goods in transaction_markets ? transaction_logger : nothing
+    retail_transaction_logger =
+        :final_demand in transaction_markets ? transaction_logger : nothing
+    buyer_kinds = if retail_transaction_logger === nothing
+        String[]
+    else
+        [
+            fill("worker", length(w_act))
+            fill("inactive_household", length(w_inact))
+            fill("firm_owner", I)
+            ["bank_owner"]
+            fill("outside_buyer", L)
+            fill("government", J)
+        ]
+    end
+    buyer_ids = if retail_transaction_logger === nothing
+        Int[]
+    else
+        [
+            collect(w_act.ID)
+            collect(w_inact.ID)
+            collect(firms.ID)
+            [1]
+            collect(1:L)
+            collect(1:J)
+        ]
+    end
 
     # Create a shared lock for multithreading
     RETAIL_LOCK = ReentrantLock()
@@ -35,15 +68,17 @@ function search_and_matching!(model::AbstractModel; parallel = false)
 
         perform_firms_market!(
             g, firms, a_sg, b_CF_g, P_f, S_f, S_f_, I_i_g, DM_i_g,
-            P_bar_i_g, P_CF_i_g, F_g, S_fg, S_fg_, G_f
+            P_bar_i_g, P_CF_i_g, F_g, S_fg, S_fg_, G_f,
+            business_transaction_logger,
         )
 
         return perform_retail_market!(
-            g, agg, gov, rotw, I, H, L, J, C_d_h, I_d_h,
+            g, firms, agg, gov, rotw, I, H, L, J, C_d_h, I_d_h,
             b_HH_g, b_CFH_g, c_E_g, c_G_g, Q_d_i_g, Q_d_m_g,
             C_h, I_h, C_j_g, C_l_g, P_bar_h_g, P_bar_CF_h_g,
             P_j_g, P_l_g, S_fg, S_fg_, F_g, P_f, S_f, G_f,
-            RETAIL_LOCK, parallel
+            RETAIL_LOCK, parallel, buyer_kinds, buyer_ids,
+            retail_transaction_logger,
         )
     end
 
@@ -56,6 +91,74 @@ function search_and_matching!(model::AbstractModel; parallel = false)
         agg, w_act, w_inact, firms, bank, gov, rotw, P_CF_i_g, I_i_g,
         P_bar_i_g, DM_i_g, C_h, I_h, Q_d_i_g, Q_d_m_g, C_j_g,
         C_l_g, P_bar_h_g, P_bar_CF_h_g, P_j_g, P_l_g,
+    )
+end
+
+@inline function record_market_transaction!(
+        transaction_logger, market, buyer_kind, buyer_id, seller_kind,
+        seller_id, good, quantity, price, stage,
+    )
+    transaction_logger === nothing && return nothing
+    quantity > 0 || return nothing
+    transaction_logger(
+        (
+            market = String(market),
+            buyer_kind = String(buyer_kind),
+            buyer_id = Int(buyer_id),
+            seller_kind = String(seller_kind),
+            seller_id = Int(seller_id),
+            good = Int(good),
+            quantity = Float64(quantity),
+            unit_price = Float64(price),
+            amount = Float64(quantity * price),
+            stage = String(stage),
+            cash_recognized = stage == "realized",
+        ),
+    )
+    return nothing
+end
+
+@inline function record_supplier_transaction!(
+        transaction_logger, firms, buyer, seller, good, quantity, price,
+        stage,
+    )
+    transaction_logger === nothing && return nothing
+    seller_kind = seller <= length(firms) ? "firm" : "outside_supplier"
+    seller_id =
+        seller <= length(firms) ? firms.ID[seller] : seller - length(firms)
+    return record_market_transaction!(
+        transaction_logger,
+        "business_goods",
+        "firm",
+        firms.ID[buyer],
+        seller_kind,
+        seller_id,
+        good,
+        quantity,
+        price,
+        stage,
+    )
+end
+
+@inline function record_retail_transaction!(
+        transaction_logger, firms, buyer_kinds, buyer_ids, buyer, seller,
+        good, quantity, price, stage,
+    )
+    transaction_logger === nothing && return nothing
+    seller_kind = seller <= length(firms) ? "firm" : "outside_supplier"
+    seller_id =
+        seller <= length(firms) ? firms.ID[seller] : seller - length(firms)
+    return record_market_transaction!(
+        transaction_logger,
+        "final_demand",
+        buyer_kinds[buyer],
+        buyer_ids[buyer],
+        seller_kind,
+        seller_id,
+        good,
+        quantity,
+        price,
+        stage,
     )
 end
 
@@ -198,7 +301,7 @@ Perform the firms market exchange process
 """
 function perform_firms_market!(
         g, firms, a_sg, b_CF_g, P_f, S_f, S_f_, I_i_g, DM_i_g, P_bar_i_g, P_CF_i_g,
-        F_g, S_fg, S_fg_, G_f,
+        F_g, S_fg, S_fg_, G_f, transaction_logger = nothing,
     )
     ##############################
     ######## FIRMS MARKET ########
@@ -229,14 +332,36 @@ function perform_firms_market!(
 
             # selected firm has sufficient stock
             if S_fg[f] > DM_d_ig[i]
+                quantity = DM_d_ig[i]
                 S_fg[f] -= DM_d_ig[i]
                 DM_nominal_ig[i] += DM_d_ig[i] * P_f[f]
                 DM_d_ig[i] = 0.0
+                record_supplier_transaction!(
+                    transaction_logger,
+                    firms,
+                    i,
+                    f,
+                    g,
+                    quantity,
+                    P_f[f],
+                    "realized",
+                )
             else
+                quantity = S_fg[f]
                 DM_d_ig[i] -= S_fg[f]
                 DM_nominal_ig[i] += S_fg[f] * P_f[f]
                 S_fg[f] = 0.0
                 F_g_active[e] = 0.0
+                record_supplier_transaction!(
+                    transaction_logger,
+                    firms,
+                    i,
+                    f,
+                    g,
+                    quantity,
+                    P_f[f],
+                    "realized",
+                )
                 iszero(F_g_active) && break
             end
         end
@@ -259,14 +384,36 @@ function perform_firms_market!(
                 f = F_g_[e]
 
                 if S_fg_[f] > DM_d_ig_[i]
+                    quantity = DM_d_ig_[i]
                     S_fg[f] -= DM_d_ig_[i]
                     S_fg_[f] -= DM_d_ig_[i]
                     DM_d_ig_[i] = 0.0
+                    record_supplier_transaction!(
+                        transaction_logger,
+                        firms,
+                        i,
+                        f,
+                        g,
+                        quantity,
+                        P_f[f],
+                        "unmet_capacity",
+                    )
                 else
+                    quantity = S_fg_[f]
                     DM_d_ig_[i] -= S_fg_[f]
                     S_fg[f] -= S_fg_[f]
                     S_fg_[f] = 0.0
                     F_g_active[e] = 0.0
+                    record_supplier_transaction!(
+                        transaction_logger,
+                        firms,
+                        i,
+                        f,
+                        g,
+                        quantity,
+                        P_f[f],
+                        "unmet_capacity",
+                    )
                     iszero(F_g_active) && break
                 end
             end
@@ -291,10 +438,11 @@ end
 Perform the retail market exchange process
 """
 function perform_retail_market!(
-        g, agg, gov, rotw, I, H, L, J, C_d_h, I_d_h, b_HH_g, b_CFH_g,
+        g, firms, agg, gov, rotw, I, H, L, J, C_d_h, I_d_h, b_HH_g, b_CFH_g,
         c_E_g, c_G_g, Q_d_i_g, Q_d_m_g, C_h, I_h, C_j_g, C_l_g, P_bar_h_g,
         P_bar_CF_h_g, P_j_g, P_l_g, S_fg, S_fg_, F_g, P_f, S_f, G_f,
-        RETAIL_LOCK, parallel
+        RETAIL_LOCK, parallel, buyer_kinds, buyer_ids,
+        transaction_logger = nothing,
     )
     ###############################
     ######## RETAIL MARKET ########
@@ -321,14 +469,40 @@ function perform_retail_market!(
             f = F_g[e]
 
             if S_fg[f] > C_d_hg[h] / P_f[f]
+                quantity = C_d_hg[h] / P_f[f]
                 S_fg[f] -= C_d_hg[h] / P_f[f]
                 C_real_hg[h] += C_d_hg[h] / P_f[f]
                 C_d_hg[h] = 0.0
+                record_retail_transaction!(
+                    transaction_logger,
+                    firms,
+                    buyer_kinds,
+                    buyer_ids,
+                    h,
+                    f,
+                    g,
+                    quantity,
+                    P_f[f],
+                    "realized",
+                )
             else
+                quantity = S_fg[f]
                 C_d_hg[h] -= S_fg[f] * P_f[f]
                 C_real_hg[h] += S_fg[f]
                 S_fg[f] = 0.0
                 F_g_active[e] = 0.0
+                record_retail_transaction!(
+                    transaction_logger,
+                    firms,
+                    buyer_kinds,
+                    buyer_ids,
+                    h,
+                    f,
+                    g,
+                    quantity,
+                    P_f[f],
+                    "realized",
+                )
                 iszero(F_g_active) && break
             end
         end
@@ -351,14 +525,40 @@ function perform_retail_market!(
                 f = F_g_[e]
 
                 if S_fg_[f] > C_d_hg_[h] / P_f[f]
+                    quantity = C_d_hg_[h] / P_f[f]
                     S_fg[f] -= C_d_hg_[h] / P_f[f]
                     S_fg_[f] -= C_d_hg_[h] / P_f[f]
                     C_d_hg_[h] = 0.0
+                    record_retail_transaction!(
+                        transaction_logger,
+                        firms,
+                        buyer_kinds,
+                        buyer_ids,
+                        h,
+                        f,
+                        g,
+                        quantity,
+                        P_f[f],
+                        "unmet_capacity",
+                    )
                 else
+                    quantity = S_fg_[f]
                     C_d_hg_[h] -= S_fg_[f] * P_f[f]
                     S_fg[f] -= S_fg_[f]
                     S_fg_[f] = 0.0
                     F_g_active[e] = 0.0
+                    record_retail_transaction!(
+                        transaction_logger,
+                        firms,
+                        buyer_kinds,
+                        buyer_ids,
+                        h,
+                        f,
+                        g,
+                        quantity,
+                        P_f[f],
+                        "unmet_capacity",
+                    )
                     iszero(F_g_active) && break
                 end
             end

@@ -1,0 +1,145 @@
+[pipeline]
+country = "US"
+structural_year = 2024
+firm_source_year = 2022
+estimation_start = "1996-12-31"
+estimation_date = "1997-03-31"
+structural_date = "2024-12-31"
+nowcast_date = "2026-03-31"
+data_truth_vintage = "2026-08-04"
+economic_outlook_actual_start = "2023-12-31"
+economic_outlook_actual_end = "2026-06-30"
+scale = 0.00001
+model_sector_system = "BEA summary, 68 observed commodity sectors"
+
+[endpoints]
+bea = "https://apps.bea.gov/api/data/"
+fred_series = "https://api.stlouisfed.org/fred/series"
+fred_observations = "https://api.stlouisfed.org/fred/series/observations"
+bls = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
+qcew_2024 = "https://data.bls.gov/cew/data/api/2024/a/area/US000.csv"
+qcew_2022 = "https://data.bls.gov/cew/data/api/2022/a/area/US000.csv"
+susb_2022 = "https://www2.census.gov/programs-surveys/susb/tables/2022/us_state_6digitnaics_2022.txt"
+usda_2025_summary = "https://www.nass.usda.gov/Publications/Todays_Reports/reports/fnlo0226.pdf"
+
+[bea.input_output]
+use_table = "259"
+supply_table = "262"
+year = "2024"
+dataset = "InputOutput"
+
+[bea.nipa]
+annual_tables = ["T11000", "T20100", "T30100", "T30600", "T31200", "T51100", "T71100"]
+quarterly_tables = ["T10103", "T10105", "T10106"]
+annual_year = "2024"
+quarterly_year = "X"
+
+[bea.fixed_assets]
+tables = ["FAAt301ESI", "FAAt304ESI", "FAAt501", "FAAt504", "FAAt701", "FAAt703"]
+year = "2024"
+
+# BEA NIPA line numbers are frozen here rather than inferred from labels.
+# Returned SeriesCode and LineDescription values are retained in provenance;
+# current validation rejects missing mappings and empty official labels.
+[nipa_lines]
+compensation_employees = "T11000:2"
+wages_total = "T11000:3"
+employer_supplements = "T11000:6"
+mixed_income = "T20100:9"
+rental_income = "T20100:12"
+personal_asset_income = "T20100:13"
+social_benefits = "T20100:17"
+social_contributions_household = "T30600:20"
+personal_current_taxes = "T30100:3"
+corporate_tax = "T30100:5"
+government_interest = "T30100:27"
+government_net_lending = "T30100:43"
+federal_estate_gift_taxes = "T51100:19"
+state_local_estate_gift_taxes = "T51100:20"
+pension_benefits = "T31200:5"
+unemployment_benefits = "T31200:7"
+firm_interest_corporate = "T71100:7"
+firm_interest_noncorporate = "T71100:8"
+
+[quarterly_nipa_lines]
+nominal_gdp_quarterly = "T10105:1"
+real_gdp_quarterly = "T10106:1"
+real_household_consumption_quarterly = "T10106:2"
+real_fixed_capitalformation_quarterly = "T10106:8"
+real_exports_quarterly = "T10106:16"
+real_imports_quarterly = "T10106:19"
+real_government_consumption_quarterly = "T10106:22"
+
+[quarterly_nipa_backcasts]
+real_fixed_capitalformation_quarterly = "T10103:8"
+
+[fred_series.household_cash]
+series = ["HNOCDAQ027S"]
+operation = "sum"
+concept = "Households and nonprofit organizations; total currency and deposits; asset, level"
+frequency = "Q"
+unit = "Millions of Dollars"
+stock = true
+
+[fred_series.firm_cash]
+series = ["NCBCDTQ027S", "NNBCDAQ027S"]
+operation = "sum"
+concept = "Nonfinancial corporate and noncorporate currency and deposits; asset, level"
+frequency = "Q"
+unit = "Millions of Dollars"
+stock = true
+
+[fred_series.firm_debt]
+series = ["BOGZ1FL144104005Q"]
+operation = "identity"
+concept = "Nonfinancial business debt securities and loans; liability, level"
+frequency = "Q"
+unit = "Millions of Dollars"
+stock = true
+
+[fred_series.government_debt]
+series = ["FGTCMDODNS", "SLGTCMDODNS"]
+operation = "sum"
+concept = "Federal plus state and local debt securities and loans; liability, level"
+frequency = "Q"
+unit = "Millions of Dollars"
+stock = true
+
+[fred_series.bank_equity]
+series = ["BOGZ1FL704194005Q", "BOGZ1FL704190005Q"]
+operation = "difference"
+concept = "Private depository institutions total liabilities and equity less liabilities"
+frequency = "Q"
+unit = "Millions of Dollars"
+stock = true
+
+[fred_series.policy_rate]
+series = ["FEDFUNDS"]
+operation = "identity"
+concept = "Effective federal funds rate"
+frequency = "M"
+unit = "Percent"
+stock = false
+
+[fred_series.wages]
+series = ["A576RC1"]
+operation = "identity"
+concept = "Compensation of employees received: wage and salary disbursements"
+frequency = "M"
+unit = "Billions of Dollars"
+stock = false
+
+[bls_series]
+unemployment_rate = "LNS14000000"
+population = "LNU00000000"
+labor_force = "LNU01000000"
+employed = "LNU02000000"
+unemployed = "LNU03000000"
+inactive = "LNU05000000"
+
+[manual.usda_farms]
+year = 2024
+value = 1880000
+unit = "farms"
+status = "DUBIOUS"
+note = "USDA national farm count is used as the agriculture producer-count proxy; a farm is not identical to the model's firm concept."
