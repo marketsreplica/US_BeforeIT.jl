@@ -1,0 +1,22 @@
+US BeforeIT
+
+This product includes software developed as part of BeforeIT.jl by Banca
+d'Italia and the BeforeIT.jl contributors:
+
+    https://github.com/bancaditalia/BeforeIT.jl
+
+The initial public branch of this fork is based on upstream commit
+060a2060e99e106024ce3301c9572cfd44cd9092, which contains BeforeIT.jl v0.6.0.
+
+Original BeforeIT.jl portions:
+Copyright 2024 Banca d'Italia and the authors.
+
+MarketsReplica modifications:
+Copyright 2025-2026 Sina Shahandeh and MarketsReplica contributors.
+
+US BeforeIT is an independent fork. It is not an official Banca d'Italia
+project and is not endorsed by Banca d'Italia.
+
+Source code is distributed under the Apache License, Version 2.0. Data,
+reports, logos, and other third-party materials may be governed by separate
+source terms identified in their provenance records.

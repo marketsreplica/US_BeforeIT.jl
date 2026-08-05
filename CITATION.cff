@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: >-
+  If you use US BeforeIT, cite this repository and the original BeforeIT.jl
+  software paper.
+title: US BeforeIT
+type: software
+authors:
+  - family-names: Shahandeh
+    given-names: Sina
+repository-code: https://github.com/MarketsReplica/US_BeforeIT.jl
+license: Apache-2.0
+references:
+  - type: software
+    title: BeforeIT.jl
+    repository-code: https://github.com/bancaditalia/BeforeIT.jl
+    authors:
+      - family-names: Glielmo
+        given-names: Aldo
+      - family-names: Devetak
+        given-names: Mitja
+      - family-names: Meligrana
+        given-names: Adriano
+      - family-names: Poledna
+        given-names: Sebastian
+  - type: article
+    title: "BeforeIT.jl: High-Performance Agent-Based Macroeconomics Made Easy"
+    authors:
+      - family-names: Glielmo
+        given-names: Aldo
+      - family-names: Devetak
+        given-names: Mitja
+      - family-names: Meligrana
+        given-names: Adriano
+      - family-names: Poledna
+        given-names: Sebastian
+    year: 2025
+    url: https://arxiv.org/abs/2502.13267

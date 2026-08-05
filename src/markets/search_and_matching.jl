@@ -1,3 +1,5 @@
+# Modified by MarketsReplica contributors; see CHANGES_FROM_UPSTREAM.md.
+# SPDX-License-Identifier: Apache-2.0
 """
     search_and_matching!(model; parallel::Bool = false)
 

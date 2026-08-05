@@ -1,3 +1,5 @@
+# Modified by MarketsReplica contributors; see CHANGES_FROM_UPSTREAM.md.
+# SPDX-License-Identifier: Apache-2.0
 """
     allocate_sector_initial_inventories(Y_i, G_i, S_s, G)
 

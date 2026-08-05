@@ -1,3 +1,5 @@
+# Modified by MarketsReplica contributors; see CHANGES_FROM_UPSTREAM.md.
+# SPDX-License-Identifier: Apache-2.0
 import BeforeIT as Bit
 
 using Test, MAT, StatsBase, Random
