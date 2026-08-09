@@ -1,0 +1,532 @@
+[artifact]
+schema_version = "beforeit-us-common-origin-window-decision.v1"
+canonicalization = "sorted_typed_length_aware_v1_excluding_artifact_content_sha256"
+content_sha256 = "a28913ce7516ded9af034e6aa800d0cb29b1d528519fb79745c9c8744e994e82"
+
+[decision]
+contract_id = "us-common-origin-window-offline-decision-2026-08-07.v1"
+observed_date = "2026-08-07"
+decision_class = "OFFLINE_COMMON_ORIGIN_WINDOW_GOVERNANCE"
+inventory_sha256 = "110b4448db0b49e95cbc2fe1cf7019f6b877b3f391c6069a81c2e7c3c2a086ae"
+admitted_origin_count = 0
+promotion_passed = 0
+promotion_total = 8
+strict_all_three_intersection_count = 0
+metadata_only = true
+network_access_allowed = false
+raw_bytes_stored = false
+source_inventory_mutation_authorized = false
+empirical_results_stored = false
+production_claim_allowed = false
+
+[gates]
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+strict_intersection_admissible = false
+empirical_execution_allowed = false
+promotion_eligible = false
+production_scoring_allowed = false
+ready = false
+
+[prospective_boundary]
+freeze_date = "2026-08-07"
+public_and_inspected_through_quarter = "2026Q2"
+earliest_genuinely_prospective_quarter = "2026Q3"
+adjacent_reserve_id = "ADJACENT_2026Q2_EVALUATION_RESERVE"
+adjacent_reserve_holdout_integrity = "UNVERIFIED"
+adjacent_reserve_is_prospective = false
+prospective_reserve_registered = false
+origin_admitted = false
+empirical_execution_allowed = false
+
+[[source_windows]]
+sequence = 1
+window_id = "BEA_HMI7_RELEASE_METADATA_40"
+source_id = "BEA_HMI7_OFFICIAL_ARCHIVE"
+first_quarter = "2011Q3"
+last_quarter = "2021Q2"
+quarter_count = 40
+coverage_state = "FROZEN_METADATA_WINDOW_NOT_SOURCE_COMPLETE"
+artifact_provenance_state = "UNKNOWN_FIRST_STATE"
+concept_state = "EARLIEST_COMPLETE_GDP_AND_PERSONAL_INCOME_RELEASE"
+terms_state = "TERMS_AUTHORIZATION_NOT_PROVEN"
+artifact_capture_state = "ROUTE_EXISTS_NOT_CAPTURED"
+truth_maturity_state = "TRUTH_MATURITY_NOT_PROVEN"
+origin_admission_state = "ZERO_ORIGINS_ADMITTED"
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+
+[[source_windows]]
+sequence = 2
+window_id = "BLS_QUARTER_END_ARCHIVE_METADATA_40"
+source_id = "BLS_EMPLOYMENT_OFFICIAL_ARCHIVE"
+first_quarter = "2015Q1"
+last_quarter = "2024Q4"
+quarter_count = 40
+coverage_state = "FROZEN_METADATA_WINDOW_NOT_SOURCE_COMPLETE"
+artifact_provenance_state = "OFFICIAL_ARCHIVE_RECONSTRUCTION"
+concept_state = "EMPLOYMENT_SITUATION_QUARTER_END_RELEASE"
+terms_state = "TERMS_AUTHORIZATION_NOT_PROVEN"
+artifact_capture_state = "ROUTE_EXISTS_NOT_CAPTURED"
+truth_maturity_state = "TRUTH_MATURITY_NOT_PROVEN"
+origin_admission_state = "ZERO_ORIGINS_ADMITTED"
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+
+[[source_windows]]
+sequence = 3
+window_id = "EFFR_CLEAN_POST_BREAK_CANDIDATE_40"
+source_id = "ALFRED_EFFR_DATE_LEVEL_VINTAGE"
+first_quarter = "2016Q2"
+last_quarter = "2026Q1"
+quarter_count = 40
+coverage_state = "FROZEN_METADATA_WINDOW_NOT_SOURCE_COMPLETE"
+artifact_provenance_state = "DATE_LEVEL_VINTAGE"
+concept_state = "POST_2016_FR2420_VOLUME_WEIGHTED_MEDIAN"
+terms_state = "TERMS_LOCAL_GOVERNANCE_BLOCKED_PENDING_REVIEW"
+artifact_capture_state = "ROUTE_EXISTS_NOT_CAPTURED"
+truth_maturity_state = "TRUTH_MATURITY_NOT_PROVEN"
+origin_admission_state = "ZERO_ORIGINS_ADMITTED"
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+
+[[intersections]]
+sequence = 1
+intersection_id = "BEA_X_BLS"
+member_window_ids = ["BEA_HMI7_RELEASE_METADATA_40", "BLS_QUARTER_END_ARCHIVE_METADATA_40"]
+first_quarter = "2015Q1"
+last_quarter = "2021Q2"
+quarter_count = 26
+strict_admitted_origin_count = 0
+strict_admissible = false
+
+[[intersections]]
+sequence = 2
+intersection_id = "BEA_X_EFFR"
+member_window_ids = ["BEA_HMI7_RELEASE_METADATA_40", "EFFR_CLEAN_POST_BREAK_CANDIDATE_40"]
+first_quarter = "2016Q2"
+last_quarter = "2021Q2"
+quarter_count = 21
+strict_admitted_origin_count = 0
+strict_admissible = false
+
+[[intersections]]
+sequence = 3
+intersection_id = "BLS_X_EFFR"
+member_window_ids = ["BLS_QUARTER_END_ARCHIVE_METADATA_40", "EFFR_CLEAN_POST_BREAK_CANDIDATE_40"]
+first_quarter = "2016Q2"
+last_quarter = "2024Q4"
+quarter_count = 35
+strict_admitted_origin_count = 0
+strict_admissible = false
+
+[[intersections]]
+sequence = 4
+intersection_id = "BEA_X_BLS_X_EFFR"
+member_window_ids = ["BEA_HMI7_RELEASE_METADATA_40", "BLS_QUARTER_END_ARCHIVE_METADATA_40", "EFFR_CLEAN_POST_BREAK_CANDIDATE_40"]
+first_quarter = "2016Q2"
+last_quarter = "2021Q2"
+quarter_count = 21
+strict_admitted_origin_count = 0
+strict_admissible = false
+
+[[effr_window_roles]]
+sequence = 1
+role_id = "ROUTE_LEVEL_CANDIDATE_41"
+first_quarter = "2016Q2"
+last_quarter = "2026Q2"
+quarter_count = 41
+status = "ROUTE_LEVEL_CANDIDATE_NOT_SOURCE_COMPLETE"
+included_in_fixed_40 = false
+reserve_class = "NOT_A_RESERVE"
+holdout_integrity = "NOT_APPLICABLE"
+public_at_freeze = true
+prospective_at_freeze = false
+origin_admitted = false
+empirical_execution_allowed = false
+
+[[effr_window_roles]]
+sequence = 2
+role_id = "FROZEN_FIXED_40_RESEARCH_CANDIDATE"
+first_quarter = "2016Q2"
+last_quarter = "2026Q1"
+quarter_count = 40
+status = "FROZEN_RESEARCH_CANDIDATE_NOT_ADMITTED"
+included_in_fixed_40 = true
+reserve_class = "NOT_A_RESERVE"
+holdout_integrity = "NOT_APPLICABLE"
+public_at_freeze = true
+prospective_at_freeze = false
+origin_admitted = false
+empirical_execution_allowed = false
+
+[[effr_window_roles]]
+sequence = 3
+role_id = "ADJACENT_2026Q2_EVALUATION_RESERVE"
+first_quarter = "2026Q2"
+last_quarter = "2026Q2"
+quarter_count = 1
+status = "PUBLIC_AT_FREEZE_NOT_PROSPECTIVE"
+included_in_fixed_40 = false
+reserve_class = "ADJACENT_2026Q2_EVALUATION_RESERVE"
+holdout_integrity = "UNVERIFIED"
+public_at_freeze = true
+prospective_at_freeze = false
+origin_admitted = false
+empirical_execution_allowed = false
+
+[[tracks]]
+sequence = 1
+track_id = "STRICT_FIRST_PUBLIC_BYTES"
+allowed_conclusion = "NO_EMPIRICAL_CONCLUSION"
+blockers = ["SOURCE_COVERAGE_NOT_PROVEN", "TERMS_AUTHORIZATION_NOT_PROVEN", "ARTIFACT_CAPTURE_INCOMPLETE", "TRUTH_MATURITY_NOT_PROVEN", "ZERO_ORIGINS_ADMITTED", "FIRST_PUBLIC_BYTES_NOT_VERIFIED", "IRREGULAR_RELEASES_REQUIRE_ADJUDICATION", "PROMOTION_COVERAGE_ZERO_OF_EIGHT"]
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+empirical_execution_allowed = false
+production_eligible = false
+
+[[tracks]]
+sequence = 2
+track_id = "OFFICIAL_ARCHIVE_RECONSTRUCTION"
+allowed_conclusion = "RESEARCH_ONLY_AFTER_ALL_GATES_PASS"
+blockers = ["SOURCE_COVERAGE_NOT_PROVEN", "TERMS_AUTHORIZATION_NOT_PROVEN", "ARTIFACT_CAPTURE_INCOMPLETE", "TRUTH_MATURITY_NOT_PROVEN", "ZERO_ORIGINS_ADMITTED", "ALFRED_GOVERNANCE_BLOCKED", "IRREGULAR_RELEASES_REQUIRE_ADJUDICATION", "PROMOTION_COVERAGE_ZERO_OF_EIGHT"]
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+empirical_execution_allowed = false
+production_eligible = false
+
+[[tracks]]
+sequence = 3
+track_id = "CURRENT_REVISED_PROXY"
+allowed_conclusion = "DESCRIPTIVE_REVISED_DATA_DIAGNOSTIC_ONLY"
+blockers = ["CURRENT_STATE_NOT_VINTAGE", "ZERO_ORIGINS_ADMITTED", "PROMOTION_COVERAGE_ZERO_OF_EIGHT"]
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+empirical_execution_allowed = false
+production_eligible = false
+
+[[tracks]]
+sequence = 4
+track_id = "MIXED_CONCEPT_AND_PROVENANCE_SENSITIVITY"
+allowed_conclusion = "SENSITIVITY_ONLY_WITH_EXPLICIT_STRATIFICATION"
+blockers = ["PRE_2016_CONCEPT_BREAK", "MIXED_PROVENANCE_REQUIRES_STRATIFICATION", "TERMS_AUTHORIZATION_NOT_PROVEN", "ARTIFACT_CAPTURE_INCOMPLETE", "TRUTH_MATURITY_NOT_PROVEN", "ZERO_ORIGINS_ADMITTED", "PROMOTION_COVERAGE_ZERO_OF_EIGHT"]
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+empirical_execution_allowed = false
+production_eligible = false
+
+[[source_routes]]
+sequence = 1
+route_id = "BEA_HMI7_OFFICIAL_ARCHIVE"
+agency = "U.S. Bureau of Economic Analysis"
+artifact_provenance_state = "UNKNOWN_FIRST_STATE"
+source_role = "PRIMARY_ARTIFACT_EVIDENCE"
+concept_state = "EARLIEST_COMPLETE_GDP_AND_PERSONAL_INCOME_RELEASE"
+terms_state = "TERMS_AUTHORIZATION_NOT_PROVEN"
+coverage_state = "FROZEN_METADATA_WINDOW_NOT_SOURCE_COMPLETE"
+artifact_capture_state = "ROUTE_EXISTS_NOT_CAPTURED"
+truth_maturity_state = "TRUTH_MATURITY_NOT_PROVEN"
+origin_admission_state = "ZERO_ORIGINS_ADMITTED"
+allowed_use = "OFFLINE_ROUTE_METADATA_ONLY"
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+
+[[source_routes]]
+sequence = 2
+route_id = "BLS_EMPLOYMENT_OFFICIAL_ARCHIVE"
+agency = "U.S. Bureau of Labor Statistics"
+artifact_provenance_state = "OFFICIAL_ARCHIVE_RECONSTRUCTION"
+source_role = "PRIMARY_VALUE_SOURCE"
+concept_state = "EMPLOYMENT_SITUATION_QUARTER_END_RELEASE"
+terms_state = "TERMS_AUTHORIZATION_NOT_PROVEN"
+coverage_state = "FROZEN_METADATA_WINDOW_NOT_SOURCE_COMPLETE"
+artifact_capture_state = "ROUTE_EXISTS_NOT_CAPTURED"
+truth_maturity_state = "TRUTH_MATURITY_NOT_PROVEN"
+origin_admission_state = "ZERO_ORIGINS_ADMITTED"
+allowed_use = "FUTURE_RESEARCH_RECONSTRUCTION_AFTER_GATES"
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+
+[[source_routes]]
+sequence = 3
+route_id = "ALFRED_EFFR_DATE_LEVEL_VINTAGE"
+agency = "Federal Reserve Bank of St. Louis"
+artifact_provenance_state = "DATE_LEVEL_VINTAGE"
+source_role = "PRIMARY_VALUE_SOURCE"
+concept_state = "POST_2016_FR2420_VOLUME_WEIGHTED_MEDIAN"
+terms_state = "TERMS_LOCAL_GOVERNANCE_BLOCKED_PENDING_REVIEW"
+coverage_state = "FROZEN_METADATA_WINDOW_NOT_SOURCE_COMPLETE"
+artifact_capture_state = "ROUTE_EXISTS_NOT_CAPTURED"
+truth_maturity_state = "TRUTH_MATURITY_NOT_PROVEN"
+origin_admission_state = "ZERO_ORIGINS_ADMITTED"
+allowed_use = "BLOCKED_PENDING_PROJECT_SPECIFIC_TERMS_REVIEW"
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+
+[[source_routes]]
+sequence = 4
+route_id = "NYFED_EFFR_CURRENT_API"
+agency = "Federal Reserve Bank of New York"
+artifact_provenance_state = "CURRENT_STATE_WITH_REVISION_FLAG_NOT_VINTAGE"
+source_role = "CROSSCHECK_ONLY"
+concept_state = "POST_2016_FR2420_VOLUME_WEIGHTED_MEDIAN"
+terms_state = "TERMS_AUTHORIZATION_NOT_PROVEN"
+coverage_state = "CURRENT_STATE_CROSSCHECK_ONLY"
+artifact_capture_state = "CURRENT_RESPONSE_NOT_VINTAGE"
+truth_maturity_state = "TRUTH_MATURITY_NOT_PROVEN"
+origin_admission_state = "ZERO_ORIGINS_ADMITTED"
+allowed_use = "CURRENT_REVISED_DIAGNOSTIC_CROSSCHECK_ONLY"
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+
+[[source_routes]]
+sequence = 5
+route_id = "BOARD_H15_CURRENT_SERIES"
+agency = "Board of Governors of the Federal Reserve System"
+artifact_provenance_state = "CURRENT_STATE_WITH_REVISION_FLAG_NOT_VINTAGE"
+source_role = "CROSSCHECK_ONLY"
+concept_state = "MIXED_PRE_AND_POST_2016_CONCEPT"
+terms_state = "TERMS_AUTHORIZATION_NOT_PROVEN"
+coverage_state = "CURRENT_STATE_CROSSCHECK_ONLY"
+artifact_capture_state = "CURRENT_RESPONSE_NOT_VINTAGE"
+truth_maturity_state = "TRUTH_MATURITY_NOT_PROVEN"
+origin_admission_state = "ZERO_ORIGINS_ADMITTED"
+allowed_use = "CURRENT_REVISED_DIAGNOSTIC_CROSSCHECK_ONLY"
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+
+[[source_routes]]
+sequence = 6
+route_id = "BOARD_H15_PRE_2016_ISSUE_ARCHIVE"
+agency = "Board of Governors and FRASER"
+artifact_provenance_state = "OCR_NOT_AUTHORITATIVE"
+source_role = "QUARANTINED"
+concept_state = "CONCEPT_BREAK"
+terms_state = "TERMS_AUTHORIZATION_NOT_PROVEN"
+coverage_state = "ROUTE_LEVEL_CANDIDATE_NOT_SOURCE_COMPLETE"
+artifact_capture_state = "ROUTE_EXISTS_NOT_CAPTURED"
+truth_maturity_state = "TRUTH_MATURITY_NOT_PROVEN"
+origin_admission_state = "ZERO_ORIGINS_ADMITTED"
+allowed_use = "DISCOVERY_ONLY_UNTIL_DIRECT_ISSUE_BYTES_AND_PARSER_EXIST"
+source_coverage_proven = false
+terms_authorization_complete = false
+artifact_capture_complete = false
+truth_maturity_proven = false
+origin_admission_complete = false
+
+[[irregularities]]
+sequence = 1
+period = "2018Q4"
+agency = "BEA"
+irregularity_state = "INITIAL_REPLACES_ADVANCE_AND_SECOND"
+panel_relation = "INSIDE_FROZEN_SOURCE_WINDOW"
+treatment = "RETAIN_TYPED_INITIAL_EVENT; DO_NOT RELABEL AS ADVANCE"
+evidence_citation_id = "bea_hmi7_archive"
+admitted = false
+
+[[irregularities]]
+sequence = 2
+period = "2019Q4"
+agency = "BLS"
+irregularity_state = "REISSUED_CORRECTED"
+panel_relation = "INSIDE_FROZEN_SOURCE_WINDOW"
+treatment = "DISCLOSED RECONSTRUCTION SENSITIVITY; EXCLUDE FROM STRICT FIRST-BYTE TRACK"
+evidence_citation_id = "bls_december_2019_release"
+admitted = false
+
+[[irregularities]]
+sequence = 3
+period = "2025Q3"
+agency = "BLS"
+irregularity_state = "DELAYED_BY_FEDERAL_LAPSE"
+panel_relation = "OUTSIDE_FROZEN_SOURCE_WINDOW"
+treatment = "RETAIN ACTUAL DELAYED EVENT TIME; NEVER BACKDATE TO SCHEDULE"
+evidence_citation_id = "bls_september_2025_release"
+admitted = false
+
+[[irregularities]]
+sequence = 4
+period = "2025Q3"
+agency = "BEA"
+irregularity_state = "INITIAL_REPLACES_ADVANCE_AND_SECOND"
+panel_relation = "OUTSIDE_FROZEN_SOURCE_WINDOW"
+treatment = "RETAIN INITIAL LABEL; CANCELED ADVANCE AND SECOND ARE NOT MISSING VALUES"
+evidence_citation_id = "bea_2025q3_initial"
+admitted = false
+
+[[irregularities]]
+sequence = 5
+period = "2025-10"
+agency = "BLS"
+irregularity_state = "SKIPPED_NOT_PUBLISHED_NON_PANEL_MONTH"
+panel_relation = "NON_PANEL_MONTH"
+treatment = "PRESERVE AS STRUCTURAL MISSINGNESS; DO NOT IMPUTE OR COUNT AS PANEL EVENT"
+evidence_citation_id = "bls_2025_shutdown_method"
+admitted = false
+
+[[citations]]
+sequence = 1
+citation_id = "bea_hmi7_archive"
+citation_class = "OFFICIAL"
+title = "BEA historical GDP and Personal Income archive service"
+url = "https://apps.bea.gov/histdata/core/data/Fea_DisplayChildrenC/?HistMainId=7&getFiles=false&getDirs=true"
+supports = "BEA HMI7 metadata route and 2018Q4 Initial-family archive record"
+
+[[citations]]
+sequence = 2
+citation_id = "bls_archive"
+citation_class = "OFFICIAL"
+title = "BLS Employment Situation archive"
+url = "https://www.bls.gov/bls/news-release/empsit.htm"
+supports = "Official archive reconstruction route and warning that archived data may later be revised"
+
+[[citations]]
+sequence = 3
+citation_id = "bls_december_2019_release"
+citation_class = "OFFICIAL"
+title = "BLS December 2019 Employment Situation reissue"
+url = "https://www.bls.gov/news.release/archives/empsit_01102020.htm"
+supports = "2019Q4 REISSUED_CORRECTED classification"
+
+[[citations]]
+sequence = 4
+citation_id = "bls_2025_shutdown_method"
+citation_class = "OFFICIAL"
+title = "BLS 2025 federal shutdown impact on CPS"
+url = "https://www.bls.gov/cps/methods/2025-federal-government-shutdown-impact-cps.htm"
+supports = "October 2025 CPS noncollection and nonpublication"
+
+[[citations]]
+sequence = 5
+citation_id = "bls_september_2025_release"
+citation_class = "OFFICIAL"
+title = "BLS September 2025 Employment Situation delayed release"
+url = "https://www.bls.gov/news.release/archives/empsit_11202025.htm"
+supports = "2025Q3 BLS DELAYED_BY_FEDERAL_LAPSE classification"
+
+[[citations]]
+sequence = 6
+citation_id = "bea_2025q3_initial"
+citation_class = "OFFICIAL"
+title = "BEA GDP third-quarter 2025 Initial estimate"
+url = "https://www.bea.gov/news/2025/gross-domestic-product-3rd-quarter-2025-initial-estimate-and-corporate-profits"
+supports = "2025Q3 Initial estimate replacing canceled Advance and Second estimates"
+
+[[citations]]
+sequence = 7
+citation_id = "bea_2025_schedule_explanation"
+citation_class = "OFFICIAL"
+title = "BEA economic release schedule updates"
+url = "https://www.bea.gov/news/blog/2025-12-10/economic-release-schedule-updates"
+supports = "Official explanation of 2025 schedule disruption"
+
+[[citations]]
+sequence = 8
+citation_id = "nyfed_effr"
+citation_class = "OFFICIAL"
+title = "New York Fed effective federal funds rate"
+url = "https://www.newyorkfed.org/markets/reference-rates/effr"
+supports = "Post-2016 EFFR concept and current-state route"
+
+[[citations]]
+sequence = 9
+citation_id = "nyfed_effr_methodology"
+citation_class = "OFFICIAL"
+title = "New York Fed reference-rate methodology and revision policy"
+url = "https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates"
+supports = "Publication, revision, and concept-break distinctions"
+
+[[citations]]
+sequence = 10
+citation_id = "board_h15"
+citation_class = "OFFICIAL"
+title = "Federal Reserve Board H.15 selected interest rates"
+url = "https://www.federalreserve.gov/releases/h15/"
+supports = "Current Board H.15 cross-check route"
+
+[[citations]]
+sequence = 11
+citation_id = "fraser_h15"
+citation_class = "OFFICIAL"
+title = "FRASER H.15 issue archive"
+url = "https://fraser.stlouisfed.org/title/h15-selected-interest-rates-86"
+supports = "Pre-2016 issue discovery route; OCR is not authoritative"
+
+[[citations]]
+sequence = 12
+citation_id = "fred_terms"
+citation_class = "OFFICIAL"
+title = "FRED terms of use"
+url = "https://fred.stlouisfed.org/legal/terms/"
+supports = "ALFRED governance blocker"
+
+[[citations]]
+sequence = 13
+citation_id = "fred_api_terms"
+citation_class = "OFFICIAL"
+title = "FRED API terms of use"
+url = "https://fred.stlouisfed.org/docs/api/terms_of_use.html"
+supports = "ALFRED governance blocker"
+
+[[citations]]
+sequence = 14
+citation_id = "croushore_stark_2001"
+citation_class = "ACADEMIC"
+title = "A real-time data set for macroeconomists"
+url = "https://doi.org/10.1016/S0304-4076(01)00072-0"
+supports = "Common-information-set and vintage-data design"
+
+[[citations]]
+sequence = 15
+citation_id = "koenig_dolmas_piger_2003"
+citation_class = "ACADEMIC"
+title = "The use and abuse of real-time data in economic forecasting"
+url = "https://doi.org/10.1162/003465303322369768"
+supports = "Real-time origin and truth-vintage separation"
+
+[[citations]]
+sequence = 16
+citation_id = "fett_2015"
+citation_class = "ACADEMIC"
+title = "Comparing with the original: a look at Current Employment Statistics vintage data"
+url = "https://doi.org/10.21916/mlr.2015.12"
+supports = "BLS vintage reconstruction research practice"

@@ -1,0 +1,133 @@
+[artifact]
+schema_version = "beforeit-us-forecast-inference-calibration-protocol.v2"
+canonicalization = "sorted_typed_length_aware_v1_excluding_artifact_content_sha256"
+content_sha256 = "c291c975bac7a419eb47d46841c79ec9eaf31399694ea4296078c3e884e61463"
+
+[contract]
+contract_id = "us-forecast-inference-calibration.v2"
+master_seed_hex = "0x55534643414c4942"
+synthetic_only = true
+score_artifact_reads_allowed = false
+diagnostic_module_import_allowed = false
+full_execution_requires_geometry = true
+full_execution_requires_explicit_expensive_mode = true
+
+[rehearsal]
+horizons = [1, 2, 4, 8, 12]
+all_available_counts = [61, 60, 58, 54, 50]
+balanced_count = 50
+rolling60_counts = [41, 40, 38, 34, 30]
+rolling60_balanced_count = 30
+
+[family]
+model_count = 11
+comparison_count = 10
+target_ids = [
+  "real_gdp_growth",
+  "pce_inflation",
+  "unemployment",
+  "effr",
+]
+horizons = [1, 2, 4, 8, 12]
+hypothesis_count = 200
+loss_families = ["squared", "absolute"]
+alternative = "less"
+differential_orientation = "challenger_minus_comparator"
+
+[direct_null]
+dgp_id = "N00_DIFF_IID"
+distribution = "STANDARD_GAUSSIAN"
+column_dependence = "FULLY_INDEPENDENT"
+cross_hypothesis_correlation = 0.0
+
+[target_factor]
+factor1 = [0.70, 0.40, -0.60, 0.30]
+factor2 = [0.00, 0.40, 0.10, 0.50]
+strong_common_variance = 0.70
+
+[estimation]
+windows = ["EXPANDING", "ROLLING_40", "ROLLING_60"]
+initial_length = 40
+rolling40_length = 40
+rolling60_length = 60
+component_loading = 0.5
+forecast_error_loading = 0.35
+burn_in = 2000
+future_outcomes_disjoint = true
+
+[missingness]
+policy_ids = [
+  "COMPLETE",
+  "TERMINAL_HORIZON_MATURITY",
+  "COMMON_FOUR_ORIGIN_OUTAGE",
+  "SCORE_BLIND_LAGGED_STATE",
+  "TARGET_SPECIFIC_GAPS",
+  "MODEL_EXECUTION_FAILURE",
+  "OUTCOME_DEPENDENT_FORBIDDEN",
+]
+imputation_allowed = false
+used_token_allowed = false
+
+[alternatives]
+power_scales = [0.90, 0.75, 0.50]
+false_null_pattern_ids = ["SINGLE", "TARGET5", "MODEL20", "DENSE200"]
+false_null_counts = [1, 5, 20, 200]
+
+[[block_policies]]
+policy_id = "J01"
+requested_block_length = 1.0
+horizon_floor_policy = "none"
+joint_effective_block_length = 1.0
+
+[[block_policies]]
+policy_id = "J02"
+requested_block_length = 4.0
+horizon_floor_policy = "none"
+joint_effective_block_length = 4.0
+
+[[block_policies]]
+policy_id = "J03"
+requested_block_length = 4.0
+horizon_floor_policy = "max_horizon"
+joint_effective_block_length = 12.0
+
+[[block_policies]]
+policy_id = "J04"
+requested_block_length = 24.0
+horizon_floor_policy = "none"
+joint_effective_block_length = 24.0
+
+[stages.screening]
+outer_replications = 5000
+bootstrap_draws = 999
+
+[stages.final_null_validation]
+outer_replications = 20000
+bootstrap_draws = 9999
+
+[stages.power]
+outer_replications = 10000
+bootstrap_draws = 9999
+
+[stages.horizon_sensitivity]
+outer_replications = 5000
+bootstrap_draws = 9999
+
+[thresholds]
+nominal_alpha = 0.05
+screening_upper_99_max = 0.075
+final_upper_99_max = 0.060
+well_calibrated_lower = 0.040
+well_calibrated_upper = 0.060
+coverage_lower_99_min = 0.93
+power_lower_95_min = 0.80
+
+[gates]
+empirical_data_read = false
+origin_created = false
+promotion_eligible = false
+production_scoring_allowed = false
+readiness = false
+superiority_claim_allowed = false
+primary_policy_selected = false
+calibration_evidence_created = false

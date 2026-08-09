@@ -1,0 +1,135 @@
+schema_version = "beforeit-us-after-redefinitions-aggregate-first-scrap-adjusted-diagnostic.v1"
+classification = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+artifact_role = "AGGREGATE_FIRST_68_SCRAP_ADJUSTED_DIAGNOSTIC_ONLY"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+source_year = 2024
+source_frequency = "annual"
+unit = "millions USD"
+price_basis = "producers prices"
+source_industry_count = 71
+source_ordinary_commodity_count = 71
+model_industry_count = 68
+model_commodity_count = 68
+final_use_count = 20
+closure_codes = ["Used", "Other"]
+methodology_pdf_pages = [98, 123, 124, 214, 223, 224, 225]
+diagnostic_additional_methodology_pdf_pages = [213]
+
+aggregation_matrix_definition = "A[model,source] is binary; 441,445,452,4A0 map to 4A0 and every other source code maps identically"
+aggregate_intermediate_use_definition = "U68=A*Ucore*transpose(A)"
+aggregate_final_use_definition = "F68=A*Fcore"
+aggregate_make_definition = "V68=A*Vcore*transpose(A)"
+aggregate_commodity_output_definition = "q68=A*qcore"
+aggregate_industry_output_definition = "g68=A*g71"
+aggregate_scrap_output_definition = "h68=A*V[:,Used]"
+aggregate_other_output_definition = "o68=A*V[:,Other]"
+input_coefficient_definition = "B68=U68*diag(g68)^-1"
+same_table_market_share_definition = "D68=(A*Vcore*A')*diag(A*qcore)^-1"
+scrap_share_definition = "p68=h68/g68"
+nonscrap_transform_definition = "W68=(I-diag(p68))^-1*D68"
+requirements_definition = "H68=B68*W68"
+final_demand_definition = "e68=F68*1"
+q_composition_definition = "Cq=diag(q71)*transpose(A)*diag(q68)^-1"
+current_table_conditional_w_comparator_definition = "W68 versus A*W71*Cq, conditional on the asserted 2024 merged-retail preconditions"
+current_table_conditional_h_comparator_definition = "H68 versus A*H71*Cq, conditional on the asserted 2024 merged-retail preconditions"
+coefficient_comparator_scope = "CURRENT_TABLE_NUMERICAL_WITNESS_NOT_A_GENERAL_AGGREGATION_IDENTITY"
+merged_retail_preconditions = "441,445,452,4A0 have zero Used and Other make, each source-industry make row has only its identically coded commodity, and that own-commodity make equals source-industry output"
+used_make_component_policy = "H_IS_THE_MAKE_SIDE_SCRAP_COMPONENT_OF_COMPOSITE_USED_NOT_THE_USED_USE_OR_FINAL_ASSET_TRANSFER_ROWS"
+other_make_component_policy = "O_AND_T_OTHER_ARE_MAKE_SIDE_ARITHMETIC_CLOSURE_WITNESSES_NOT_ALLOCATIONS_OF_OTHER_USE_OR_FINAL_ROWS"
+special_use_exclusion_policy = "USED_AND_OTHER_USE_AND_FINAL_ROWS_EXCLUDED_FROM_U68_AND_E68_AND_RETAINED_IN_THE_CLOSURE_BOUNDARY_SIDECAR"
+raw_unweighted_w_shortcut_definition = "A*W71*transpose(A)"
+aggregate_first_intermediate_transform = "Z_AF=W68*U68"
+source_first_intermediate_transform = "Z_SF=A*W71*U71*transpose(A)"
+aggregate_first_final_transform = "Y_AF=W68*F68"
+source_first_final_transform = "Y_SF=A*W71*F71"
+other_output_term_definition = "t_other=B68*((I-diag(p68))^-1*o68)"
+other_adjusted_fixed_point = "q68=H68*q68+e68+t_other+retained_source_residuals"
+
+same_table_source_policy = "ONLY_PINNED_AFTER_REDEFINITIONS_V_U_F_Q_G"
+official_cross_archive_d_policy = "FORBIDDEN_NOT_LOADED_NOT_ACCEPTED"
+final_use_policy = "ALL_20_SIGNED_COLUMNS"
+aggregation_order = "AGGREGATE_LEVELS_BEFORE_RATIOS_AND_W"
+source_first_comparison_policy = "Q_COMPOSITION_WEIGHTED_COEFFICIENTS_PLUS_FLOW_LEVEL_NONCOMMUTATION"
+raw_unweighted_w_shortcut_policy = "EXPLICITLY_REJECTED"
+other_term_role = "ARITHMETIC_OMISSION_WITNESS_ONLY"
+negative_cell_policy = "PRESERVE_AND_LEDGER"
+rounding_policy = "PRESERVE_PUBLISHED_CURRENT_DOLLAR_RESIDUALS_AND_SEPARATE_FORMULA_FLOATING_POINT"
+explicit_mask_policy = "PRESERVE_SOURCE_MASKS_DERIVED_VALUES_HAVE_FALSE_MASK"
+
+aggregate_first_diagnostic = true
+runtime_transform_selected = false
+apply_to_runtime_u = false
+apply_to_runtime_a = false
+apply_to_runtime_beta = false
+raw_unweighted_w_shortcut_accepted = false
+other_boundary_selected = false
+current_dollar_price_quantity_decomposition = false
+quarterly_dynamic_law = false
+financial_counterpart_mapping = false
+row_adjustment_observation_operator = false
+double_entry_transition_tests = false
+runtime_calibration_admissible = false
+calibration_dictionary_write = false
+figaro_dictionary_write = false
+parameter_write = false
+initial_conditions_write = false
+model_state_write = false
+forecast_origin_admissible = false
+accounting_gate_effect = "NONE"
+promotion_ready = false
+balancing_applied = false
+clipping_applied = false
+normalization_applied = false
+raking_applied = false
+
+emitted_runtime_keys = []
+forbidden_runtime_keys = [
+    "U",
+    "a",
+    "beta",
+    "prices",
+    "quantities",
+    "RoW_financial_counterpart",
+    "row_adjustment_observation_operator",
+    "FIGARO",
+    "parameters",
+    "initial_conditions",
+    "model_state",
+]
+
+scientific_role = "Same-table aggregate-first arithmetic diagnostic for the 68-sector BEA scrap-adjusted industry transformation. It preserves current-dollar source residuals, separates floating-point formula residuals, and rejects direct runtime materialization pending closure-boundary and dynamic validation."
+
+promotion_blockers = [
+    "AGGREGATE_FIRST_68_SCRAP_ADJUSTED_DIAGNOSTIC_ONLY",
+    "SAME_TABLE_MARKET_SHARE_NOT_BEA_PUBLISHED_D",
+    "AGGREGATE_FIRST_AND_SOURCE_FIRST_TRANSFORMED_FLOWS_DO_NOT_COMMUTE",
+    "RETAIL_WITHIN_AGGREGATE_COMPOSITION_NOT_MODELED",
+    "PUBLISHED_CURRENT_DOLLAR_ROUNDING_RESIDUALS_RETAINED",
+    "NEGATIVE_MAKE_DERIVED_MARKET_SHARE_CELL_POLICY_NOT_APPROVED",
+    "USED_ASSET_TRANSFER_AND_NEGATIVE_FLOW_SEMANTICS_NOT_MAPPED",
+    "OTHER_COMPOSITE_NOT_SPLIT_NONCOMPARABLE_IMPORTS_VS_ROW_ADJUSTMENT",
+    "OTHER_OUTPUT_TERM_HAS_NO_ADMISSIBLE_DOMESTIC_OR_ROTW_BOUNDARY",
+    "OTHER_NONCOMPARABLE_IMPORT_FINANCIAL_COUNTERPART_NOT_MAPPED_TO_ROTW",
+    "ROW_ADJUSTMENT_COMPONENTS_AND_ACCOUNTING_COUNTERPARTS_NOT_IDENTIFIED",
+    "SIGNED_FINAL_USE_COMPONENTS_NOT_BEHAVIORALLY_DECOMPOSED",
+    "CLOSURE_CURRENT_DOLLAR_PRICE_QUANTITY_DECOMPOSITION_NOT_IDENTIFIED",
+    "CLOSURE_QUARTERLY_DYNAMIC_LAW_NOT_ESTIMATED",
+    "CLOSURE_CORE_INPUT_COST_AND_PRODUCTION_CONSTRAINT_BOUNDARY_NOT_SELECTED",
+    "CLOSURE_DOUBLE_ENTRY_AND_BANK_IDENTITIES_NOT_TRANSITION_TESTED",
+    "INDUSTRY_COMMODITY_RUNTIME_TRANSFORMATION_NOT_SELECTED",
+    "AGGREGATE_FIRST_TRANSFORM_NOT_VALIDATED_ACROSS_ORIGIN_VINTAGES",
+    "CURRENT_VINTAGE_NOT_FORECAST_ORIGIN_ELIGIBLE",
+]
+
+[byte_pins]
+after_redefinitions_fixture_sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
+after_redefinitions_manifest_sha256 = "ff555043829e5d12ba787ba9ad7d58ef4f0d2ee306740d6847bdfec800935030"
+after_redefinitions_source_zip_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+after_redefinitions_source_metadata_sha256 = "8be9fbef6e2c18a7388cd61bd14312159fc3984d4dbc2c60158e977ee7f0e878"
+after_redefinitions_producer_use_workbook_sha256 = "9e3791d657909843ce202161bae00cf8a425d7e1bf866cc8a0462810f0ae00c7"
+after_redefinitions_producer_make_workbook_sha256 = "073b87c7e52e76fb78ad7ddafb0c2e60f9188fc5a4e56dc0094f4a7ae3f529c6"
+model_mapping_sha256 = "546b3dc15cbb194210ce564a44626b146551b161ca0ce5ffb90a8a5261b4553c"
+sector_mapping_sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+closure_boundary_contract_sha256 = "ad6f1995575b1fa612577eb4001e9163159d6802fa947d6f5385a2d07758172f"
+methodology_pdf_sha256 = "535627e5e44f8461c0a04410f4a05c55d47f2e325d9473cb2df06e5d3e6b271d"
+methodology_receipt_sha256 = "b4b210be3c364415473f1ef407ed7ea6e9edc2b299bd1058c1658b0ebb3b91ac"

@@ -1,0 +1,101 @@
+schema_version = "beforeit-us-abm-gdp-operator-qualification.v1"
+contract_id = "beforeit-us-abm-gdp-operator-mechanics.v1"
+information_track = "revised_mixed_vintage_diagnostic"
+qualification_status = "MODEL_OPERATOR_MECHANICS_VALIDATED_NONADMITTING"
+target_inventory_semantic_sha256 = "bdbbeb48a39c7fdd03972626cf7f1e421ba7c5dd254f5537a40dda0eb4ae1fcb"
+operator_count = 2
+path_evaluation_rule = "transform_each_raw_path_before_any_ensemble_summary"
+origin_row_rule = "row_one_is_origin_and_output_row_h_plus_one_is_horizon_h"
+quarterly_flow_rule = "model_gdp_flows_are_quarterly_and_saar_divide_by_four_constants_cancel_in_log_growth"
+historical_identity_validation_status = "NOT_RUN"
+official_concept_validation_status = "NOT_RUN"
+seasonal_adjustment_bridge_status = "NOT_MODELED"
+release_revision_policy = "NOT_CONSUMED_SYNTHETIC_MECHANICS_ONLY"
+accepted_path_kind = "RAW_MODEL_UNCORRECTED_SYNTHETIC"
+
+blockers = [
+    "FULL_ACCOUNTING_BRIDGE_UNRESOLVED",
+    "OUTPUT_SCALE_BRIDGE_UNVALIDATED",
+    "TIER1_TARGET_OPERATOR_COVERAGE_ZERO_OF_EIGHT",
+    "HISTORICAL_ORIGIN_COUNT_ZERO",
+    "BEA_CHAIN_TYPE_REAL_GDP_EQUIVALENCE_NOT_VALIDATED",
+    "DIRECT_T10109_HISTORICAL_IDENTITY_NOT_VALIDATED",
+]
+
+prohibited_actions = [
+    "run_model",
+    "load_truth",
+    "emit_forecast",
+    "score",
+    "infer",
+    "admit_origin",
+    "approve_tier1_operator",
+    "promote",
+    "register_production",
+]
+
+[declarations]
+synthetic_fixture_only = true
+raw_model_only = true
+model_execution_allowed = false
+empirical_path_allowed = false
+truth_access_allowed = false
+forecast_emission_allowed = false
+scoring_allowed = false
+inference_allowed = false
+class_h_allowed = false
+bridge_adjustment_allowed = false
+origin_reanchoring_allowed = false
+origin_admissible = false
+promotion_eligible = false
+production_registry_allowed = false
+tier1_operator_approved = false
+
+[[source_files]]
+path = "src/utils/data.jl"
+sha256 = "3b42bcc124e5242c2a9b7303d9feddbfa7d6e54b07e62961ef646bf06ff8b5b8"
+role = "native_nominal_and_real_gdp_measurement_fields"
+
+[[source_files]]
+path = "src/agent_actions/aggregates.jl"
+sha256 = "b8839ce9a624e25c94b1d039747dbd3cb882a4bb4efa4187642631544b440843"
+role = "forbidden_gross_output_agg_y_semantics"
+
+[[source_files]]
+path = "src/utils/get_predictions_from_sims.jl"
+sha256 = "52829784340cfaef9608df3b45eb9f53c3a120c73d474c3f64ec8ed9c7ce5737"
+role = "legacy_simple_ratio_growth_exclusion"
+
+[[source_files]]
+path = "scripts/us/forecasting/targets/tier1_targets.toml"
+sha256 = "328a8717e6626dfa8a57b2068cf82ba9b7231c108275760fe6cf2546b58a82fc"
+role = "tier1_target_and_operator_contract"
+
+[[source_files]]
+path = "scripts/us/forecasting/diagnostics/revised_data/abm_engineering_protocol.toml"
+sha256 = "34461f24ff09e1aa1eed7bf9bad5d8b415eab011bd82b8f7e7a114d0e2246743"
+role = "no_output_engineering_boundary"
+
+[[operators]]
+target_id = "real_gdp"
+target_version = "bea-real-gdp.v1-draft"
+operator_version = "abm-to-bea-real-gdp.v1-draft"
+raw_model_fields = ["data.real_gdp"]
+forbidden_model_fields = ["agg.Y", "data.real_gdp_ea"]
+formula = "400*log(real_gdp[path,t]/real_gdp[path,t-1])"
+output_unit = "percentage_points_annual_rate"
+frequency = "quarterly"
+mechanics_status = "MODEL_OPERATOR_MECHANICS_VALIDATED_NONADMITTING"
+concept_bridge_status = "PENDING_VALIDATION"
+
+[[operators]]
+target_id = "gdp_deflator"
+target_version = "bea-gdp-deflator.v1-draft"
+operator_version = "abm-to-bea-gdp-deflator.v1-draft"
+raw_model_fields = ["data.nominal_gdp", "data.real_gdp"]
+forbidden_model_fields = ["agg.pi_", "data.gdp_deflator_growth_ea"]
+formula = "400*log((nominal_gdp[path,t]/real_gdp[path,t])/(nominal_gdp[path,t-1]/real_gdp[path,t-1]))"
+output_unit = "percentage_points_annual_rate"
+frequency = "quarterly"
+mechanics_status = "MODEL_OPERATOR_MECHANICS_VALIDATED_NONADMITTING"
+concept_bridge_status = "PENDING_VALIDATION"

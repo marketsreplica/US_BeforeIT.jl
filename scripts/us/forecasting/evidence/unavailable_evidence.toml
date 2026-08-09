@@ -1,0 +1,243 @@
+[artifact]
+schema_version = "beforeit-us-artifact-evidence.v1"
+canonicalization = "sorted_typed_v1_excluding_artifact_content_sha256"
+content_sha256 = "01fa10389150bc8c905ef502f583510649745b3bb38bea9b263975fb6662dc3f"
+
+[contract]
+contract_id = "beforeit-us-artifact-evidence-verification.v1"
+protocol_id = "beforeit-us-forecast-evaluation.v1-draft"
+protocol_sha256 = "88519e5b04936f528396cf5243ff270844d0d38651fd84fc3b1c76fef997b584"
+evidence_class = "repository_audit"
+created_at_utc = "2026-08-05T00:00:00Z"
+availability_status = "unavailable"
+status_reason = "No local historical truth matrices or validated operator evidence receipts are registered. This manifest records absence and cannot verify forecast evidence."
+required_target_count = 8
+required_truth_layers = ["first_release", "near_mature", "mature"]
+minimum_common_protocol_eligible_origins = 40
+eligible_product_id = "quarterly_unconditional"
+eligible_origin_rule_id = "quarterly-after-advance.v1-draft"
+eligible_information_track = "common_information"
+
+[[truth_manifests]]
+target_id = "real_gdp"
+truth_layer_id = "first_release"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "real_gdp"
+truth_layer_id = "near_mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "real_gdp"
+truth_layer_id = "mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "pce_price_index"
+truth_layer_id = "first_release"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "pce_price_index"
+truth_layer_id = "near_mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "pce_price_index"
+truth_layer_id = "mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "core_pce_price_index"
+truth_layer_id = "first_release"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "core_pce_price_index"
+truth_layer_id = "near_mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "core_pce_price_index"
+truth_layer_id = "mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "gdp_deflator"
+truth_layer_id = "first_release"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "gdp_deflator"
+truth_layer_id = "near_mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "gdp_deflator"
+truth_layer_id = "mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "unemployment_rate"
+truth_layer_id = "first_release"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "unemployment_rate"
+truth_layer_id = "near_mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "unemployment_rate"
+truth_layer_id = "mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "payroll_employment"
+truth_layer_id = "first_release"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "payroll_employment"
+truth_layer_id = "near_mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "payroll_employment"
+truth_layer_id = "mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "effective_federal_funds_rate"
+truth_layer_id = "first_release"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "effective_federal_funds_rate"
+truth_layer_id = "near_mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "effective_federal_funds_rate"
+truth_layer_id = "mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "nominal_gdp"
+truth_layer_id = "first_release"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "nominal_gdp"
+truth_layer_id = "near_mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[truth_manifests]]
+target_id = "nominal_gdp"
+truth_layer_id = "mature"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[operator_manifests]]
+target_id = "real_gdp"
+operator_id = "abm-to-bea-real-gdp.v1-draft"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[operator_manifests]]
+target_id = "pce_price_index"
+operator_id = "abm-to-bea-pce-price-index.v1-draft"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[operator_manifests]]
+target_id = "core_pce_price_index"
+operator_id = "abm-to-bea-core-pce-price-index.v1-draft"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[operator_manifests]]
+target_id = "gdp_deflator"
+operator_id = "abm-to-bea-gdp-deflator.v1-draft"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[operator_manifests]]
+target_id = "unemployment_rate"
+operator_id = "abm-to-bls-unemployment-rate.v1-draft"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[operator_manifests]]
+target_id = "payroll_employment"
+operator_id = "abm-to-bls-payroll-employment.v1-draft"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[operator_manifests]]
+target_id = "effective_federal_funds_rate"
+operator_id = "abm-to-frb-effective-federal-funds-rate.v1-draft"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"
+
+[[operator_manifests]]
+target_id = "nominal_gdp"
+operator_id = "abm-to-bea-nominal-gdp.v1-draft"
+status = "unavailable"
+manifest_path = "unavailable"
+manifest_sha256 = "unavailable"

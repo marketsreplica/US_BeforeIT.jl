@@ -1,0 +1,27 @@
+[artifact]
+schema_version = "beforeit-us-schema-contract.v1"
+document_schema = "beforeit-us-trust-key-registry.v1"
+evidence_class = "SYNTHETIC_INERT"
+
+[contract]
+required_state = "ABSENT_NOT_PROVISIONED"
+role_key_count = 0
+revocation_count = 0
+rotation_count = 0
+private_key_fields_allowed = false
+certificate_bytes_allowed = false
+signature_bytes_allowed = false
+
+[production_successor_requirements]
+signature_algorithm = "ECDSA_P256_SHA256"
+role_separation = [
+    "MODEL_OWNER",
+    "INDEPENDENT_VALIDATOR",
+    "CUSTODY_OPERATOR",
+    "VERIFIER_RELEASE_OWNER",
+    "VERIFIER_RELEASE_VALIDATOR",
+]
+validity_intervals_required = true
+revocation_status_at_signing_time_required = true
+rotation_predecessor_and_successor_binding_required = true
+compromised_key_quarantine_required = true

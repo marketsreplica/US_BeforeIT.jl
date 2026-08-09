@@ -1,0 +1,176 @@
+{
+  "artifact": {
+    "canonicalization": "utf8-sorted-keys-compact-json-lf.v1",
+    "content_sha256": "50cc87614dfbfc63ddc58342b24ea8d20a2b6d6364fd804f51e86ea3ac155a8f",
+    "logical_profile_physical_sha256": "512b35c1d80c9d6c8b387cdd68affd4a1ae92b1dc040c04aacae8545b47ef157",
+    "logical_profile_semantic_sha256": "c661bc84b0b9f9ee3c6ff28982721a9a9dacd14d6e73cc6859db54737429b491",
+    "role": "PRESENT_DAY_PHYSICAL_LAYOUT_DIAGNOSTIC_NONADMITTING",
+    "schema_version": "beforeit-us-census-structural-present-day-physical-profile.v1",
+    "status": "CANNOT_RUN"
+  },
+  "boundary": {
+    "availability_claimed": false,
+    "body_to_url_provenance_claimed": false,
+    "custody_claimed": false,
+    "external_bodies_required": true,
+    "future_compatibility_claimed": false,
+    "independent_audit_required": true,
+    "logical_incompatibilities_must_remain_lossless": true,
+    "logical_contract_compatible": false,
+    "present_day_only": true,
+    "provider_authenticated": false,
+    "self_accepted": false,
+    "source_verification_mandatory": true,
+    "successor_required_for_any_qualification": true,
+    "transport_authenticated": false
+  },
+  "cross_source": {
+    "expected_derivative_sha256": "e7939eeb63224fa169ee22f7c67e7c658e717a6a56cec26cf62e250bfbf91c43"
+  },
+  "gates": {
+    "accuracy_claim_allowed": false,
+    "availability_verified": false,
+    "custody_verified": false,
+    "forecast_execution_allowed": false,
+    "inventory_mutation_authorized": false,
+    "model_input_allowed": false,
+    "origin_admissible": false,
+    "policy_qualified": false,
+    "production_allowed": false,
+    "promotion_allowed": false,
+    "provider_provenance_verified": false,
+    "qualified_dispatch_allowed": false,
+    "ready": false,
+    "response_header_authenticity_verified": false,
+    "scoring_allowed": false,
+    "transport_authenticated": false,
+    "truth_access_allowed": false
+  },
+  "sources": [
+    {
+      "declared_source_url": "https://www2.census.gov/programs-surveys/aies/data/2023/AIES00INV.zip",
+      "expected_derivative_sha256": "eb4f979513bbfb94f775223c1edf822639b0e2f02b7b2f3ecc086a6ba645cedb",
+      "filename": "AIES00INV.zip",
+      "kind": "aies_zip",
+      "layout": {
+        "data_rows": 1279,
+        "lf_counts": {"dat": 1280, "fields": 24, "readme": 4},
+        "physical_header": ["GEOTYPE", "ST", "GEO_ID", "GEO_LABEL", "GEO_ID_F", "SECTOR", "NAICS", "NAICS_LABEL", "NAICS_F", "TYPOP", "TYPOP_LABEL", "TAXSTAT", "TAXSTAT_LABEL", "YEAR", "RCPT_TOT_VAL", "RCPT_TOT_VAL_F", "INV_E_TOT_DVAL", "INV_E_TOT_DVAL_F", "RCPT_TOT_CV", "RCPT_TOT_CV_F", "INV_E_TOT_CV", "INV_E_TOT_CV_F", "INDLEVEL"],
+        "zip_members": [
+          {"compressed_bytes": 27413, "crc32": "002d0a67", "name": "AIES00INV.dat", "sha256": "3c87c24c2f1a4c4544d4ab3b0c082f2b39fa7b038fa71e9db93ec130ac66e421", "timestamp": [2026, 2, 18, 14, 29, 16], "uncompressed_bytes": 222366},
+          {"compressed_bytes": 465, "crc32": "f639d885", "name": "AIES00INV_FIELDS.txt", "sha256": "347c1289edcdbd251f61c447f5af762a4e86e39df22d07b9974259a9775bb3e1", "timestamp": [2026, 2, 18, 14, 29, 16], "uncompressed_bytes": 1378},
+          {"compressed_bytes": 188, "crc32": "aa61e67b", "name": "AIES00INV_README.txt", "sha256": "20ce202f8bbeb422f3ef3dfd1471784b27a48d8fe6bd1de3f032b5a48d462d1d", "timestamp": [2026, 2, 18, 14, 29, 16], "uncompressed_bytes": 294}
+        ]
+      },
+      "observed_current": {"body_bytes": 28470, "body_sha256": "d141f6b6f932335b404557d3007766f75d6d110bfa065b533e2b74a0a277664b", "raw_header_bytes": 1231, "raw_header_sha256": "44c4fd09e97cffeb6fd6653181c33a0a6e9435b75fb8ea46babcf592704612e1"},
+      "product_code": "AIES00INV",
+      "response_diagnostic": {"accept-ranges": "bytes", "cache-control": "public, max-age=14400", "cf-cache-status": "HIT", "content-length": "28470", "content-type": "application/zip", "date": "Sat, 08 Aug 2026 11:08:36 GMT", "last-modified": "Thu, 26 Feb 2026 12:01:08 GMT", "strict-transport-security": "max-age=31536000", "x-content-type-options": "nosniff"},
+      "source_id": "aies00inv_2023_economy_wide"
+    },
+    {
+      "declared_source_url": "https://www2.census.gov/programs-surveys/aies/data/2023/AIES31INV.zip",
+      "expected_derivative_sha256": "a37acdc8884a921ee3b33a5740607d507c3f6fce586fa44e95b0c3ca69de9da4",
+      "filename": "AIES31INV.zip",
+      "kind": "aies_zip",
+      "layout": {
+        "data_rows": 648,
+        "lf_counts": {"dat": 649, "fields": 23, "readme": 4},
+        "physical_header": ["GEO_ID", "GEO_LABEL", "GEO_ID_F", "GEOTYPE", "SECTOR", "INDLEVEL", "NAICS", "NAICS_LABEL", "NAICS_F", "YEAR", "INV_E_TOT_DVAL", "INV_E_TOT_DVAL_F", "INV_E_LIFO_VAL", "INV_E_LIFO_VAL_F", "INV_E_LIFO_RSV_VAL", "INV_E_LIFO_RSV_VAL_F", "INV_E_TOT_CV", "INV_E_TOT_CV_F", "INV_E_LIFO_CV", "INV_E_LIFO_CV_F", "INV_E_LIFO_RSV_CV", "INV_E_LIFO_RSV_CV_F"],
+        "zip_members": [
+          {"compressed_bytes": 17835, "crc32": "959a2c61", "name": "AIES31INV.dat", "sha256": "76c5c2c5600c795a6378214cd47f1bd4557bf0f3471a7ab807e73b5f6f68e2eb", "timestamp": [2026, 2, 19, 8, 33, 8], "uncompressed_bytes": 80426},
+          {"compressed_bytes": 467, "crc32": "5c62c86c", "name": "AIES31INV_FIELDS.txt", "sha256": "ff9b26a42634e5a865719b033979d2c73c70c7988c91a726afb525143ca58623", "timestamp": [2026, 2, 19, 8, 33, 8], "uncompressed_bytes": 1590},
+          {"compressed_bytes": 196, "crc32": "08644016", "name": "AIES31INV_README.txt", "sha256": "53776bec2e069c9024e1a3aa485fc12bc4d8e56d9551e5f5df7dc7b54aecb1e1", "timestamp": [2026, 2, 19, 8, 33, 8], "uncompressed_bytes": 301}
+        ]
+      },
+      "observed_current": {"body_bytes": 18902, "body_sha256": "6d2fc3faf1a7e69f9c6fb882233a94f871e5b2e39626963a9c14a3b5228fd3dd", "raw_header_bytes": 1232, "raw_header_sha256": "8b0c79b9cdb5eb11c5ff8e81e7bd9e30cbb1254c73f13e86fdd0dd1c2678ae65"},
+      "product_code": "AIES31INV",
+      "response_diagnostic": {"accept-ranges": "bytes", "cache-control": "public, max-age=14400", "cf-cache-status": "HIT", "content-length": "18902", "content-type": "application/zip", "date": "Sat, 08 Aug 2026 11:08:37 GMT", "last-modified": "Thu, 26 Feb 2026 12:01:08 GMT", "strict-transport-security": "max-age=31536000", "x-content-type-options": "nosniff"},
+      "source_id": "aies31inv_2023_manufacturing_valuation"
+    },
+    {
+      "declared_source_url": "https://www2.census.gov/programs-surveys/aies/data/2023/AIES42INV.zip",
+      "expected_derivative_sha256": "7068d6e01ba4dfb9f47fc86f0773e23d12be8e09800f38c9d18d0f164dda5dea",
+      "filename": "AIES42INV.zip",
+      "kind": "aies_zip",
+      "layout": {
+        "data_rows": 45,
+        "lf_counts": {"dat": 46, "fields": 25, "readme": 4},
+        "physical_header": ["YEAR", "GEOTYPE", "GEO_ID", "GEO_LABEL", "GEO_ID_F", "SECTOR", "INDLEVEL", "NAICS", "NAICS_LABEL", "NAICS_F", "TYPOP", "TYPOP_LABEL", "INV_E_TOT_DVAL", "INV_E_TOT_DVAL_F", "INV_E_LIFO_RSV_VAL", "INV_E_LIFO_RSV_VAL_F", "INV_E_LIFO_VAL", "INV_E_LIFO_VAL_F", "INV_E_TOT_CV", "INV_E_TOT_CV_F", "INV_E_LIFO_RSV_CV", "INV_E_LIFO_RSV_CV_F", "INV_E_LIFO_CV", "INV_E_LIFO_CV_F"],
+        "zip_members": [
+          {"compressed_bytes": 1749, "crc32": "e81316f3", "name": "AIES42INV.dat", "sha256": "bff3207ca7c5392e926cb5972b3d6f080d624fc07ba3a15f899ff1e407f6d8e2", "timestamp": [2026, 2, 19, 8, 33, 8], "uncompressed_bytes": 9238},
+          {"compressed_bytes": 481, "crc32": "e183d280", "name": "AIES42INV_FIELDS.txt", "sha256": "3d53a93d8a971915313244e79558feaf7c741acf4ea97947fe85069ddc958e68", "timestamp": [2026, 2, 19, 8, 33, 8], "uncompressed_bytes": 1678},
+          {"compressed_bytes": 196, "crc32": "9bc84b62", "name": "AIES42INV_README.txt", "sha256": "1b04521abc55bdd526e96ec5f966b59af51e08891636dd2bf37e6281d2d8e1fc", "timestamp": [2026, 2, 19, 8, 33, 8], "uncompressed_bytes": 301}
+        ]
+      },
+      "observed_current": {"body_bytes": 2830, "body_sha256": "ad2345d73371f99765d21939e9806be8f14eea71238384877783e5c256406013", "raw_header_bytes": 1230, "raw_header_sha256": "4bf0980bc5c9554ff5e16c22667ad760f4b2c0c367a2febb3dff38db615d03b2"},
+      "product_code": "AIES42INV",
+      "response_diagnostic": {"accept-ranges": "bytes", "cache-control": "public, max-age=14400", "cf-cache-status": "HIT", "content-length": "2830", "content-type": "application/zip", "date": "Sat, 08 Aug 2026 11:08:38 GMT", "last-modified": "Thu, 26 Feb 2026 12:01:08 GMT", "strict-transport-security": "max-age=31536000", "x-content-type-options": "nosniff"},
+      "source_id": "aies42inv_2023_wholesale_valuation"
+    },
+    {
+      "declared_source_url": "https://www2.census.gov/programs-surveys/aies/data/2023/AIES44INV.zip",
+      "expected_derivative_sha256": "5b6186497b8953d36534f1efa642e105bc5e17dfdc0cf674d7ea150225443cf8",
+      "filename": "AIES44INV.zip",
+      "kind": "aies_zip",
+      "layout": {
+        "data_rows": 72,
+        "lf_counts": {"dat": 73, "fields": 26, "readme": 4},
+        "physical_header": ["GEOTYPE", "ST", "GEO_ID", "GEO_LABEL", "GEO_ID_F", "NAICS", "NAICS_LABEL", "NAICS_F", "YEAR", "INV_E_TOT_DVAL", "INV_E_TOT_DVAL_F", "INV_E_LIFO_RSV_VAL", "INV_E_LIFO_RSV_VAL_F", "INV_E_LIFO_VAL", "INV_E_LIFO_VAL_F", "INV_E_TOT_CV", "INV_E_TOT_CV_F", "INV_E_LIFO_RSV_CV", "INV_E_LIFO_RSV_CV_F", "INV_E_LIFO_CV", "INV_E_LIFO_CV_F", "INDLEVEL", "SECTOR", "SUBSECTOR", "INDGROUP"],
+        "zip_members": [
+          {"compressed_bytes": 2987, "crc32": "4441704f", "name": "AIES44INV.dat", "sha256": "7201ea30b25f0ad139a19b411c9c408de55bc606d959e39f6a4de88753a2a1a9", "timestamp": [2026, 2, 19, 8, 33, 8], "uncompressed_bytes": 9226},
+          {"compressed_bytes": 494, "crc32": "d92efc2b", "name": "AIES44INV_FIELDS.txt", "sha256": "d62c9f8e80be9266a6a73579721ebe9d2be12660a3d2e7f947d0ced512bf5f8c", "timestamp": [2026, 2, 19, 8, 33, 8], "uncompressed_bytes": 1695},
+          {"compressed_bytes": 196, "crc32": "411f063f", "name": "AIES44INV_README.txt", "sha256": "517edcb8f2f74a48b386be9549343d8246a7f4b6d7b36ae208765ce914498104", "timestamp": [2026, 2, 19, 8, 33, 8], "uncompressed_bytes": 301}
+        ]
+      },
+      "observed_current": {"body_bytes": 4081, "body_sha256": "07965c9360d6a918c7f8214e45d14d3da8170c84b394d090c701e3a6c78d7d52", "raw_header_bytes": 1231, "raw_header_sha256": "9370168caa9479a6d65c55f755539ac13b4168015a6900c86d66f2f51f3abb36"},
+      "product_code": "AIES44INV",
+      "response_diagnostic": {"accept-ranges": "bytes", "cache-control": "public, max-age=14400", "cf-cache-status": "HIT", "content-length": "4081", "content-type": "application/zip", "date": "Sat, 08 Aug 2026 11:08:38 GMT", "last-modified": "Thu, 26 Feb 2026 12:01:08 GMT", "strict-transport-security": "max-age=31536000", "x-content-type-options": "nosniff"},
+      "source_id": "aies44inv_2023_retail_valuation"
+    },
+    {
+      "declared_source_url": "https://www2.census.gov/programs-surveys/aies/data/2023/AIES51INV.zip",
+      "expected_derivative_sha256": "885436de98bdaa1daa186808097d29fdffe058c5b74796b7ab059ae5b40d7b2b",
+      "filename": "AIES51INV.zip",
+      "kind": "aies_zip",
+      "layout": {
+        "data_rows": 8,
+        "lf_counts": {"dat": 9, "fields": 29, "readme": 4},
+        "physical_header": ["GEOTYPE", "GEO_ID", "GEO_LABEL", "GEO_ID_F", "SECTOR", "INDLEVEL", "NAICS", "NAICS_LABEL", "NAICS_F", "TAXSTAT", "TAXSTAT_LABEL", "YEAR", "INV_E_TOT_DVAL", "INV_E_TOT_DVAL_F", "INV_E_FIN_VAL", "INV_E_FIN_VAL_F", "INV_E_WIP_VAL", "INV_E_WIP_VAL_F", "INV_E_MAT_VAL", "INV_E_MAT_VAL_F", "INV_E_TOT_CV", "INV_E_TOT_CV_F", "INV_E_FIN_CV", "INV_E_FIN_CV_F", "INV_E_WIP_CV", "INV_E_WIP_CV_F", "INV_E_MAT_CV", "INV_E_MAT_CV_F"],
+        "zip_members": [
+          {"compressed_bytes": 561, "crc32": "5126f4ea", "name": "AIES51INV.dat", "sha256": "7389d050e6e0e1ee38f87ce703e2fdd52a3b3d7b05f2736cf3c6ffba71170d04", "timestamp": [2026, 2, 19, 8, 33, 8], "uncompressed_bytes": 1480},
+          {"compressed_bytes": 513, "crc32": "86235d03", "name": "AIES51INV_FIELDS.txt", "sha256": "fb84fe8ac07e81cad9b069d288293232ac445c26f92b80eee3bf1b6b42ee72e7", "timestamp": [2026, 2, 19, 8, 33, 8], "uncompressed_bytes": 2049},
+          {"compressed_bytes": 196, "crc32": "1d64ba12", "name": "AIES51INV_README.txt", "sha256": "ca3aba9d2b4eea5db4c25c2f868ea082a8da1960f8a8fa3c084b24d76d7d0361", "timestamp": [2026, 2, 19, 8, 33, 8], "uncompressed_bytes": 301}
+        ]
+      },
+      "observed_current": {"body_bytes": 1674, "body_sha256": "33aec64ddc61cc1bb59622c3b87bed96b4e27553453ebe8ef3df47829dc7d774", "raw_header_bytes": 1231, "raw_header_sha256": "d97dbb926c54deabad9e3dc1a185e78476f56bc8b9d51065ba10edc8d1287f74"},
+      "product_code": "AIES51INV",
+      "response_diagnostic": {"accept-ranges": "bytes", "cache-control": "public, max-age=14400", "cf-cache-status": "HIT", "content-length": "1674", "content-type": "application/zip", "date": "Sat, 08 Aug 2026 11:08:39 GMT", "last-modified": "Thu, 26 Feb 2026 12:01:08 GMT", "strict-transport-security": "max-age=31536000", "x-content-type-options": "nosniff"},
+      "source_id": "aies51inv_2023_information_stages"
+    },
+    {
+      "declared_source_url": "https://www2.census.gov/programs-surveys/susb/tables/2022/us_state_6digitnaics_2022.txt",
+      "expected_derivative_sha256": "3af9452b60288c42121419fb911bf084bc32263c29f8f615a6be817a3d40b636",
+      "filename": "us_state_6digitnaics_2022.txt",
+      "kind": "susb_text",
+      "layout": {
+        "data_rows": 570105,
+        "lf_count": 570106,
+        "physical_header": ["STATE", "NAICS", "ENTRSIZE", "FIRM", "ESTB", "EMPL", "EMPLFL_N", "PAYR", "PAYRFL_N", "RCPT", "RCPTFL_N", "STATEDSCR", "NAICSDSCR", "ENTRSIZEDSCR"],
+        "size_code_map": [
+          {"description": "01: Total", "logical": "01", "physical": "01"},
+          {"description": "02: <5", "logical": "02", "physical": "02"},
+          {"description": "03: 5-9", "logical": "03", "physical": "03"},
+          {"description": "04: 10-19", "logical": "04", "physical": "26"},
+          {"description": "05: <20", "logical": "05", "physical": "33"},
+          {"description": "06: 20-99", "logical": "06", "physical": "34"},
+          {"description": "07: 100-499", "logical": "07", "physical": "35"},
+          {"description": "08: <500", "logical": "08", "physical": "37"},
+          {"description": "09: 500+", "logical": "09", "physical": "36"}
+        ]
+      },
+      "observed_current": {"body_bytes": 56000447, "body_sha256": "6f7b2f2b14cbad9dbfeb31d3bfc9f729368a0e971727de4eda88c9f83f77a513", "raw_header_bytes": 1192, "raw_header_sha256": "6a67f504eb580e668e58ad2179ab68e54e0dca83f6844a19e5facc0452200092"},
+      "response_diagnostic": {"accept-ranges": "bytes", "cache-control": "public, max-age=14400", "cf-cache-status": "HIT", "content-length": "56000447", "content-type": "text/plain", "date": "Sat, 08 Aug 2026 11:08:40 GMT", "last-modified": "Thu, 10 Apr 2025 13:17:09 GMT", "strict-transport-security": "max-age=31536000", "x-content-type-options": "nosniff"},
+      "source_id": "susb_employer_enterprises"
+    }
+  ]
+}

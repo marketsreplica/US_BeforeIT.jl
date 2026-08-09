@@ -1,0 +1,50 @@
+[artifact]
+schema_version = "beforeit-us-bea-nipa-discovery-fixtures.v2"
+fixture_set_id = "bea-hmi7-discovery-workbook-catalog.v2"
+status = "HERMETIC_DISCOVERY_METADATA_ONLY"
+as_of_date = "2026-08-05"
+digest_algorithm = "sha256"
+raw_release_workbooks_included = false
+availability_evidence_included = false
+origin_admission_evidence_included = false
+normalization = "JSON responses were reduced to the fields and rows required by the parser tests and pretty-printed with a terminal newline. They are normalized fixtures, not byte-identical raw HTTP responses."
+
+[[fixtures]]
+path = "directory_id_2007q1_advance.json"
+sha256 = "75ad4eb1c262cc0ffd3074840d33e8545533c937a13fbc55855f4102e20856a7"
+fixture_kind = "normalized_official_response_subset"
+source_locator = "https://apps.bea.gov/histdata/core/data/UrlPath_getID/?UrlPath=%2FInetpub%2Fwwwroot%2Fwebsite%2Fwebsite%2FHistData%2FFiles%2FReleases%2FGDP_and_PI%5C2007%5CQ1%5C1.%20Advance_April-27-2007"
+source_response_persisted = false
+release_workbook_bytes = false
+
+[[fixtures]]
+path = "release_directories_subset.json"
+sha256 = "0dad90ca4f0c2de6004d127b89c6e01dbc6e59f8b35df216de8dc4dcfececdf1"
+fixture_kind = "normalized_official_response_subset"
+source_locator = "https://apps.bea.gov/histdata/core/data/Fea_DisplayChildrenC/?HistMainId=7&getFiles=false&getDirs=true"
+source_response_persisted = false
+release_workbook_bytes = false
+
+[[fixtures]]
+path = "release_files_2007q1_advance.json"
+sha256 = "35c9d9e07405f3eca59e271c1a9347e9f79e0300f564cb4922b5fbc6e3e92352"
+fixture_kind = "normalized_official_response_subset"
+source_locator = "https://apps.bea.gov/histdata/core/data/Fea_DisplayChildrenC/?HistMainId=7&thePath=%2FInetpub%2Fwwwroot%2Fwebsite%2Fwebsite%2FHistData%2FFiles%2FReleases%2FGDP_and_PI%5C2007%5CQ1%5C1.%20Advance_April-27-2007&getFiles=true&getDirs=false"
+source_response_persisted = false
+release_workbook_bytes = false
+
+[[fixtures]]
+path = "release_files_2002q2_final.json"
+sha256 = "794cfc3ae7efd7f8b0dd5075bcc897f2e0540b095aded5a99fe8951036b2207f"
+fixture_kind = "normalized_official_response_subset"
+source_locator = "https://apps.bea.gov/histdata/core/data/Fea_DisplayChildrenC/?HistMainId=7&thePath=%2FInetpub%2Fwwwroot%2Fwebsite%2Fwebsite%2FHistData%2FFiles%2FReleases%2FGDP_and_PI%5C2002%5CQ2%5C3.%20Final_September-27-2002&getFiles=true&getDirs=false"
+source_response_persisted = false
+release_workbook_bytes = false
+
+[[fixtures]]
+path = "resolved_path_2007q1_advance.json"
+sha256 = "8b33efa1cd0d25e08d8c3c736bb9d0fe07922bee513e5938551b34034c5cd42f"
+fixture_kind = "normalized_official_response_subset"
+source_locator = "https://apps.bea.gov/histdata/core/data/getPath/12921"
+source_response_persisted = false
+release_workbook_bytes = false

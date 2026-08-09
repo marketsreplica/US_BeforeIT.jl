@@ -50,6 +50,8 @@ Manifest.toml
 
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
+__pycache__/
+*.py[cod]
 
 # IPython
 profile_default/
@@ -136,5 +138,10 @@ data/us/db/
 !data/us/baselines/*.jld2
 !data/us/calibration/
 !data/us/calibration/*.jld2
+!data/us/accounting/
+!data/us/accounting/candidates/
+!data/us/accounting/candidates/*.jld2
+!scripts/us/accounting/fixtures/**/*.csv
+!scripts/us/accounting/fixtures/**/manifest.toml
 !output/us_calibration/*.csv
 !output/us_calibration/*.json

@@ -1,0 +1,21 @@
+[artifact]
+schema_version = "beforeit-us-schema-contract.v1"
+document_schema = "beforeit-us-retention-custody.v3"
+evidence_class = "SYNTHETIC_INERT"
+
+[geometry]
+origin_reference_quarter = "2026Q3"
+maximum_horizon_quarters = 12
+maximum_target_reference_quarter = "2029Q3"
+maximum_target_period_end_utc = "2029-09-30T23:59:59Z"
+mature_truth_lag_months = 60
+mathematical_minimum_retain_until_utc = "2034-09-30T23:59:59Z"
+
+[contract]
+custody_decision_count = 0
+truth_loaded = false
+deletion_allowed = false
+authenticated_owner_and_validator_decisions_required = true
+rfc3161_timestamp_required = true
+durable_replica_evidence_required = true
+last_mature_truth_receipt_independent_audit_required = true

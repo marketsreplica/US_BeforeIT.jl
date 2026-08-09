@@ -1,0 +1,125 @@
+[artifact]
+schema_version = "beforeit-us-bea-nipa-present-day-receipt-summary.v1"
+summary_id = "bea-nipa-r2026q2-advance-present-day-capture-20260805t233223328z"
+release_id = "r2026q2_advance"
+reference_period = "2026Q2"
+estimate_label = "advance"
+source_agency = "U.S. Bureau of Economic Analysis"
+source_attribution = "Source: U.S. Bureau of Economic Analysis"
+scope = "TRACKED_SUMMARY_OF_IGNORED_LOCAL_EXACT_BYTE_RECEIPT"
+raw_and_receipt_bytes_checked_into_git = false
+present_day_acquisition_observed = true
+historical_release_availability_verified = false
+release_event_timestamp_verified_for_exact_workbook_bytes = false
+first_state_verified = false
+origin_admissible = false
+inventory_registered = false
+ready = false
+
+[source_policy]
+terms_url = "https://www.bea.gov/index.php/help/faq/145"
+terms_reviewed_on = "2026-08-05"
+reviewed_status = "PUBLIC_DOMAIN_UNLESS_OTHERWISE_STATED"
+attribution_policy = "BEA_SOURCE_AND_RELEASE_IDENTIFIERS_PRESERVED"
+
+[archive_discovery]
+hmi_id = 7
+archive_directory_id = "16887"
+archive_label = "Advance_July-30-2026"
+directory_path_reverse_checked = true
+observed_as_present_day_metadata = true
+historical_availability_inferred = false
+directory_listing_response_sha256_ephemeral = "f818afb3d7c95e9a1534373a17fd479b53db569575083c41c3744d03ab988d3d"
+directory_id_response_sha256_ephemeral = "8d584c02ed8c02ec48ff7f4d8fd01fc6454a4ebdf80b8a09a5d21c995a2baaca"
+resolved_path_response_sha256_ephemeral = "b0a38e48d728edbb5eb451bb8f76cbf99afe43bd8beb09c42fa8502c79bb4676"
+release_files_response_sha256_ephemeral = "1e88f6343c6dda325bb942b99f36f465f2cf177499e00b2ba0f2d7766659d954"
+metadata_response_bytes_persisted = false
+
+[capture]
+transaction_id = "bea-nipa-r2026q2-advance-20260805t233223328z"
+capture_agent = "beforeit-bea-nipa-live-capture"
+capture_agent_version = "1.0.0"
+command_started_at_utc = "2026-08-05T23:32:23Z"
+command_completed_at_utc = "2026-08-05T23:32:29Z"
+pair_started_at_utc = "2026-08-05T23:32:23Z"
+pair_completed_at_utc = "2026-08-05T23:32:25Z"
+observed_pair_span_seconds = 2
+clock_basis = "CAPTURE_HOST_UTC_CLOCK_OBSERVATION_ONLY"
+external_timestamp_attestation = false
+
+[raw_pair]
+raw_bundle_sha256 = "9f4152937f58d777feb0f6562c1b1ca3681b0e51c1aa03b486fd5d29d1e794ff"
+raw_bundle_relative_path = "bea_nipa/hmi7/objects/sha256-9f4152937f58d777feb0f6562c1b1ca3681b0e51c1aa03b486fd5d29d1e794ff"
+atomic_pair_complete = true
+all_or_nothing_validation = true
+
+[[workbooks]]
+workbook_id = "r2026q2_advance_s1"
+section_id = "1"
+url = "https://apps.bea.gov/HistData/Files/Releases/GDP_and_PI/2026/Q2/Advance_July-30-2026/Section1all_xls.xlsx"
+effective_url = "https://apps.bea.gov/HistData/Files/Releases/GDP_and_PI/2026/Q2/Advance_July-30-2026/Section1all_xls.xlsx"
+http_status = 200
+redirect_count = 0
+response_date = "Wed, 05 Aug 2026 23:32:23 GMT"
+last_modified = "Thu, 30 Jul 2026 13:48:02 GMT"
+etag = "\"afc95ba2a20dd1:0\""
+content_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+byte_count = 4056562
+sha256 = "ddcd0c5b693cb5d179198e67dda60f817e0e97196e6f1c158152971bbc80b136"
+acquisition_started_at_utc = "2026-08-05T23:32:23Z"
+response_headers_at_utc = "2026-08-05T23:32:24Z"
+acquisition_completed_at_utc = "2026-08-05T23:32:24Z"
+
+[[workbooks]]
+workbook_id = "r2026q2_advance_s2"
+section_id = "2"
+url = "https://apps.bea.gov/HistData/Files/Releases/GDP_and_PI/2026/Q2/Advance_July-30-2026/Section2all_xls.xlsx"
+effective_url = "https://apps.bea.gov/HistData/Files/Releases/GDP_and_PI/2026/Q2/Advance_July-30-2026/Section2all_xls.xlsx"
+http_status = 200
+redirect_count = 0
+response_date = "Wed, 05 Aug 2026 23:32:25 GMT"
+last_modified = "Thu, 30 Jul 2026 13:48:02 GMT"
+etag = "\"e98f41a2a20dd1:0\""
+content_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+byte_count = 4870580
+sha256 = "1d5e3c6e177f6ba818bacf6361b3f21b7996e6cfdf55afb4d2a86a41bd2a4011"
+acquisition_started_at_utc = "2026-08-05T23:32:24Z"
+response_headers_at_utc = "2026-08-05T23:32:25Z"
+acquisition_completed_at_utc = "2026-08-05T23:32:25Z"
+
+[semantic_linkage]
+mapping_profile_id = "september_2023_rebase"
+mapping_audit_file_sha256 = "424e34febc2054a055f8f9495a94f08fd93d8229d035b0a349b0446f0e7c2b5f"
+target_profile_file_sha256 = "cd1b8ac0d98dafbafcce13a035573e9dec728b68de01c96b53f04a06f5bfba00"
+target_profile_content_sha256 = "e768bb45b11ced8ef3b8657aa2ffad1b2ae6465e15aa58967db155d2d39d474d"
+content_fingerprint_schema_version = "beforeit-us-bea-nipa-content-fingerprint.v2"
+content_fingerprint_parser_sha256 = "7f054199aa7077a2ee3a68c001279a3795c9d4305031588253441ddb90cda55e"
+content_fingerprint_file_sha256 = "a08c824620e30d09ebdb9bd35cadd1d9f45e36a7bf5b83e1d4d1551d1310bf33"
+linked_target_ids = ["core_pce_price_index", "gdp_deflator", "nominal_gdp", "pce_price_index", "real_gdp"]
+exact_mapping_count = 5
+reference_period_count_per_target = 318
+execution_environment_in_semantic_identity = false
+repository_state_in_semantic_identity = false
+
+[receipt]
+receipt_schema_version = "beforeit-us-bea-nipa-workbook-receipt.v1"
+receipt_id = "bea-nipa-r2026q2-advance-pair-20260805t233223328z.v1"
+receipt_content_sha256 = "9265bc33d7e6ff71eb32e72f792104f982701321a7be16cedf92318aedeccedd"
+receipt_file_sha256 = "0547b1f480325005a961fe9dbf6a1a816cdb784e47398cf90afc8f0e4bdd51d1"
+receipt_relative_path = "bea_nipa/hmi7/receipts/objects/sha256-9265bc33d7e6ff71eb32e72f792104f982701321a7be16cedf92318aedeccedd/receipt-content-sha256-9265bc33d7e6ff71eb32e72f792104f982701321a7be16cedf92318aedeccedd.toml"
+local_exact_byte_validation_passed = true
+tracked_summary_is_substitute_for_receipt = false
+
+[historical_availability]
+audit_file = "pilot_2026q2_availability_audit.toml"
+audit_file_sha256 = "2505a2aec7dc50f4d0fdae6d7aaa143932fe49398f8fa0ce10cccef06e24bcd2"
+candidate_origin_cutoff_utc = "2026-07-31T14:00:00Z"
+exact_pair_bound_to_independent_pre_origin_evidence = false
+outcome = "EXACT_WORKBOOK_BYTE_AVAILABILITY_AT_ORIGIN_NOT_PROVEN"
+
+[inventory]
+inventory_file = "../current_inventory.toml"
+inventory_file_sha256_before_and_after = "110b4448db0b49e95cbc2fe1cf7019f6b877b3f391c6069a81c2e7c3c2a086ae"
+inventory_mutated = false
+registered_release_event_count = 0
+admissible_origin_count = 0

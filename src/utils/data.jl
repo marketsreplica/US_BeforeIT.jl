@@ -15,6 +15,8 @@ Bit.@object struct Data(Object) <: AbstractData
     real_capitalformation::Vector{Bit.typeFloat} = Bit.typeFloat[]
     nominal_fixed_capitalformation::Vector{Bit.typeFloat} = Bit.typeFloat[]
     real_fixed_capitalformation::Vector{Bit.typeFloat} = Bit.typeFloat[]
+    nominal_inventory_investment::Vector{Bit.typeFloat} = Bit.typeFloat[]
+    real_inventory_investment::Vector{Bit.typeFloat} = Bit.typeFloat[]
     nominal_fixed_capitalformation_dwellings::Vector{Bit.typeFloat} = Bit.typeFloat[]
     real_fixed_capitalformation_dwellings::Vector{Bit.typeFloat} = Bit.typeFloat[]
     nominal_exports::Vector{Bit.typeFloat} = Bit.typeFloat[]
@@ -91,39 +93,127 @@ end
 
 function allocate_new_data!(m::AbstractModel)
     d = m.data
-    for f in fieldnames(typeof(d))[1:26]
-        push!(getfield(d, f), 0.0)
+    for field_name in fieldnames(typeof(d))
+        field_name in (:nominal_sector_gva, :real_sector_gva) &&
+            continue
+        field = getfield(d, field_name)
+        push!(field, zero(eltype(field)))
     end
     push!(d.nominal_sector_gva, zeros(m.prop.G))
     return push!(d.real_sector_gva, zeros(m.prop.G))
 end
 
+"""
+    model_implied_opening_macro(model)
+
+Return the opening current-price flow record implied by the initialized agent
+state and behavioral parameters. This diagnostic remains available when an
+artifact supplies separate observed opening macro controls, so measurement
+anchoring cannot conceal the latent state/demand reconciliation gap.
+"""
+function model_implied_opening_macro(m::AbstractModel)
+    p = m.prop
+    total_household_income =
+        sum(m.w_act.Y_h) + sum(m.w_inact.Y_h) +
+        sum(m.firms.Y_h) + m.bank.Y_h
+    nominal_gdp =
+        sum(m.firms.Y_i .* (1 .- 1 ./ m.firms.beta_i)) +
+        total_household_income * p.psi / (1 / p.tau_VAT + 1) +
+        p.tau_G * m.gov.C_G +
+        total_household_income * p.psi_H / (1 / p.tau_CF + 1) +
+        p.tau_EXPORT * m.rotw.C_E
+    nominal_household_consumption = total_household_income * p.psi
+    nominal_government_consumption = (1 + p.tau_G) * m.gov.C_G
+    nominal_capitalformation =
+        sum(m.firms.Y_i .* m.firms.delta_i ./ m.firms.kappa_i) +
+        total_household_income * p.psi_H
+    nominal_fixed_capitalformation = nominal_capitalformation
+    nominal_fixed_capitalformation_dwellings =
+        total_household_income * p.psi_H
+    nominal_exports = (1 + p.tau_EXPORT) * m.rotw.C_E
+    nominal_imports = m.rotw.Y_I
+    expenditure_residual =
+        nominal_gdp -
+        nominal_household_consumption -
+        nominal_government_consumption -
+        nominal_capitalformation -
+        nominal_exports +
+        nominal_imports
+    return (;
+        nominal_gdp,
+        nominal_household_consumption,
+        nominal_government_consumption,
+        nominal_capitalformation,
+        nominal_fixed_capitalformation,
+        nominal_fixed_capitalformation_dwellings,
+        nominal_exports,
+        nominal_imports,
+        expenditure_residual,
+    )
+end
+
 function update_data_init!(m::AbstractModel)
     d, p = m.data, m.prop
 
-    tot_Y_h = sum(m.w_act.Y_h) + sum(m.w_inact.Y_h) + sum(m.firms.Y_h) + m.bank.Y_h
-    d.nominal_gdp[1] =
-        sum(m.firms.Y_i .* (1 .- 1 ./ m.firms.beta_i)) +
-        tot_Y_h * p.psi / (1 / p.tau_VAT + 1) +
-        p.tau_G * m.gov.C_G +
-        tot_Y_h * p.psi_H / (1 / p.tau_CF + 1) +
-        p.tau_EXPORT * m.rotw.C_E
+    implied = model_implied_opening_macro(m)
+    use_opening_macro_controls =
+        hasproperty(p, :use_opening_macro_controls) &&
+        p.use_opening_macro_controls
+    if use_opening_macro_controls
+        # The first data row is an observed origin-quarter flow record. Its
+        # signed inventory-investment component is deliberately distinct from
+        # firms' nonnegative opening inventory stocks. Prices are normalized to
+        # one at initialization, so the model-unit real row equals the nominal
+        # control row; official chain-type levels remain in the observation
+        # operator because they are not additive outside their reference year.
+        d.nominal_gdp[1] = p.opening_nominal_gdp
+        d.nominal_household_consumption[1] =
+            p.opening_nominal_household_consumption
+        # The legacy Data field is named government consumption, while the
+        # source control deliberately includes government gross investment.
+        d.nominal_government_consumption[1] =
+            p.opening_nominal_government_consumption_and_investment
+        d.nominal_capitalformation[1] =
+            p.opening_nominal_capitalformation
+        d.nominal_fixed_capitalformation[1] =
+            p.opening_nominal_fixed_capitalformation
+        d.nominal_inventory_investment[1] =
+            p.opening_nominal_inventory_investment
+        d.nominal_fixed_capitalformation_dwellings[1] =
+            p.opening_nominal_fixed_capitalformation_dwellings
+        d.nominal_exports[1] = p.opening_nominal_exports
+        d.nominal_imports[1] = p.opening_nominal_imports
+    else
+        d.nominal_gdp[1] = implied.nominal_gdp
+        d.nominal_household_consumption[1] =
+            implied.nominal_household_consumption
+        d.nominal_government_consumption[1] =
+            implied.nominal_government_consumption
+        d.nominal_capitalformation[1] =
+            implied.nominal_capitalformation
+        d.nominal_fixed_capitalformation[1] =
+            implied.nominal_fixed_capitalformation
+        d.nominal_inventory_investment[1] =
+            implied.nominal_capitalformation -
+            implied.nominal_fixed_capitalformation
+        d.nominal_fixed_capitalformation_dwellings[1] =
+            implied.nominal_fixed_capitalformation_dwellings
+        d.nominal_exports[1] = implied.nominal_exports
+        d.nominal_imports[1] = implied.nominal_imports
+    end
+
     d.real_gdp[1] = d.nominal_gdp[1]
     d.nominal_gva[1] = sum(m.firms.Y_i .* ((1 .- m.firms.tau_Y_i) .- 1 ./ m.firms.beta_i))
     d.real_gva[1] = d.nominal_gva[1]
-    d.nominal_household_consumption[1] = tot_Y_h * p.psi
     d.real_household_consumption[1] = d.nominal_household_consumption[1]
-    d.nominal_government_consumption[1] = (1 + p.tau_G) * m.gov.C_G
     d.real_government_consumption[1] = d.nominal_government_consumption[1]
-    d.nominal_capitalformation[1] = sum(m.firms.Y_i .* m.firms.delta_i ./ m.firms.kappa_i) + tot_Y_h * p.psi_H
     d.real_capitalformation[1] = d.nominal_capitalformation[1]
-    d.nominal_fixed_capitalformation[1] = d.nominal_capitalformation[1]
-    d.real_fixed_capitalformation[1] = d.nominal_capitalformation[1]
-    d.nominal_fixed_capitalformation_dwellings[1] = tot_Y_h * p.psi_H
+    d.real_fixed_capitalformation[1] =
+        d.nominal_fixed_capitalformation[1]
+    d.real_inventory_investment[1] =
+        d.nominal_inventory_investment[1]
     d.real_fixed_capitalformation_dwellings[1] = d.nominal_fixed_capitalformation_dwellings[1]
-    d.nominal_exports[1] = (1 + p.tau_EXPORT) * m.rotw.C_E
     d.real_exports[1] = d.nominal_exports[1]
-    d.nominal_imports[1] = m.rotw.Y_I
     d.real_imports[1] = d.nominal_imports[1]
     d.operating_surplus[1] = sum(
         m.firms.Y_i .* (1 .- ((1 + p.tau_SIF) .* m.firms.w_bar_i ./ m.firms.alpha_bar_i + 1 ./ m.firms.beta_i)) .-
@@ -188,6 +278,12 @@ function update_data_step!(m::AbstractModel)
         sum(m.firms.DS_i)
     d.nominal_fixed_capitalformation[t] = sum(m.firms.P_CF_i .* m.firms.I_i) + (1 + p.tau_CF) * tot_I_h
     d.real_fixed_capitalformation[t] = sum(m.firms.I_i) + (1 + p.tau_CF) * tot_I_h / m.agg.P_bar_CF_h
+    d.nominal_inventory_investment[t] =
+        d.nominal_capitalformation[t] -
+        d.nominal_fixed_capitalformation[t]
+    d.real_inventory_investment[t] =
+        d.real_capitalformation[t] -
+        d.real_fixed_capitalformation[t]
     d.nominal_fixed_capitalformation_dwellings[t] = (1 + p.tau_CF) * tot_I_h
     d.real_fixed_capitalformation_dwellings[t] = (1 + p.tau_CF) * tot_I_h / m.agg.P_bar_CF_h
     d.nominal_exports[t] = (1 + p.tau_EXPORT) * m.rotw.C_l

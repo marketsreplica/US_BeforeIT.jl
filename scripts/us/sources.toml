@@ -10,7 +10,13 @@ data_truth_vintage = "2026-08-04"
 economic_outlook_actual_start = "2023-12-31"
 economic_outlook_actual_end = "2026-06-30"
 scale = 0.00001
-model_sector_system = "BEA summary, 68 observed commodity sectors"
+model_sector_system = "BEA summary, 68 modeled commodities from 71 source industries"
+source_industry_count = 71
+modeled_commodity_count = 68
+raw_use_shape = [68, 71]
+model_bridge_shape = [68, 68]
+retail_source_industries = ["441", "445", "452", "4A0"]
+retail_model_commodity = "4A0"
 
 [endpoints]
 bea = "https://apps.bea.gov/api/data/"
@@ -63,6 +69,13 @@ firm_interest_noncorporate = "T71100:8"
 
 [quarterly_nipa_lines]
 nominal_gdp_quarterly = "T10105:1"
+nominal_household_consumption_quarterly = "T10105:2"
+nominal_gross_private_domestic_investment_quarterly = "T10105:7"
+nominal_fixed_investment_quarterly = "T10105:8"
+nominal_inventory_investment_quarterly = "T10105:14"
+nominal_exports_quarterly = "T10105:16"
+nominal_imports_quarterly = "T10105:19"
+nominal_government_consumption_and_investment_quarterly = "T10105:22"
 real_gdp_quarterly = "T10106:1"
 real_household_consumption_quarterly = "T10106:2"
 real_fixed_capitalformation_quarterly = "T10106:8"

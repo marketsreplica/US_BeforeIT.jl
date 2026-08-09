@@ -1,0 +1,18 @@
+[artifact]
+schema_version = "beforeit-us-schema-contract.v1"
+document_schema = "beforeit-us-trust-bootstrap-reference.v1"
+evidence_class = "SYNTHETIC_INERT"
+
+[contract]
+required_state = "ABSENT_NOT_PROVISIONED"
+anchor_location = "OUT_OF_EVIDENCE_AND_OUT_OF_BAND"
+accepted_anchor_count = 0
+embedded_public_keys_allowed = false
+self_asserted_anchor_allowed = false
+generated_key_material_allowed = false
+
+[production_successor_requirements]
+independent_bootstrap_ceremony = true
+trust_anchor_fingerprints_pinned_out_of_band = true
+owner_and_validator_organizations_distinct = true
+documented_compromise_recovery = true

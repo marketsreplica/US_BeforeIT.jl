@@ -1,6 +1,6 @@
 # U.S. BeforeIT calibration: data, acquisition, and storage plan
 
-Last investigated and link-checked: **2026-08-01**.
+Last investigated and link-checked: **2026-08-06**.
 
 This document is the implementation specification for building a United States
 calibration of BeforeIT. It is based on the actual fields read by
@@ -10,10 +10,21 @@ macroeconomic data wish list.
 ## Executive decision
 
 1. **A national first version can be built entirely from public data.** No
-   commercial purchase is required for a 71-sector U.S. calibration.
-2. Use the **BEA 71-industry summary classification** as the canonical sector
-   system. It is available annually and is the closest U.S. analogue to the
-   64-sector European FIGARO input used by the existing calibration.
+   commercial purchase is required for the U.S. structural calibration.
+2. Use the **BEA summary system with 71 source industries and 68 modeled
+   commodities** as the canonical dimensional contract. BEA Table 259 supplies
+   68 commodity rows and 71 industry columns; the four retail source
+   industries are aggregated to the observed `4A0` retail commodity before
+   constructing the symmetric bridge. A governed industry-technology
+   diagnostic now produces a 70×70 commodity system with `Other` and `Used`
+   explicit; it is not reduced to the model's 68×68 core until the common
+   valuation and closure-account policies are approved. This is the closest
+   U.S. analogue to the 64-sector European FIGARO input used by the existing
+   calibration. BEA's after-redefinitions direct-requirements and market-share
+   workbooks now supply the primary `A = B*D` commodity comparator, with Table
+   59 inversion retained only as a published-rounding round trip. These remain
+   current-vintage transformation evidence rather than independent data or a
+   model input.
 3. Build two named baselines:
    - **2024Q4 structural baseline:** all annual structural accounts aligned to
      the latest complete 2024 BEA input-output data.
@@ -97,8 +108,9 @@ documents the 15-, 71-, 138-, and detailed classifications.
 Table 259, **Use of Commodities by Industries—Summary**, is the primary table.
 Table 262, **Domestic Supply of Commodities by Industries—Summary**, should be
 ingested as a validation source for imports, margins, and supply. The current
-model derives imports and re-exports as a goods-balance residual; it should not
-quietly mix that residual with a separately measured import vector.
+U.S. adapter opts into measured Table 262 imports; the upstream residual
+goods-balance calculation remains only as a fallback for other country
+artifacts. A measured import vector must not be mixed with that fallback.
 
 The BEA API test on 2026-08-01 found explicit annual I-O years through 2024.
 Use the maximum year returned by the parameter metadata; `Year=Latest` returned
@@ -109,6 +121,12 @@ an internal API error in the test.
 | Required input | Proposed series |
 |---|---|
 | `nominal_gdp_quarterly` | BEA NIPA nominal GDP |
+| `nominal_household_consumption_quarterly` | BEA NIPA personal consumption expenditures |
+| `nominal_gross_private_domestic_investment_quarterly` | BEA NIPA gross private domestic investment |
+| `nominal_fixed_investment_quarterly` | BEA NIPA fixed investment |
+| `nominal_inventory_investment_quarterly` | BEA NIPA signed change in private inventories; this is a flow, not an inventory stock |
+| `nominal_exports_quarterly`, `nominal_imports_quarterly` | BEA NIPA nominal exports and imports |
+| `nominal_government_consumption_and_investment_quarterly` | BEA NIPA government consumption expenditures and gross investment |
 | `real_gdp_quarterly` | BEA NIPA real GDP |
 | `unemployment_rate_quarterly` | BLS CPS unemployment rate, quarterly average, expressed as a fraction |
 | `euribor` | Replace semantically with the effective federal funds rate; keep the existing field name only at the adapter boundary |
@@ -118,13 +136,40 @@ an internal API error in the test.
 
 The code derives the GDP deflator from nominal/real GDP, estimates the domestic
 government/export/import processes, estimates a Taylor rule, and constructs
-their initial paths.
+their initial paths. The nominal T10105 controls are preserved for opening
+account reconciliation:
+
+```text
+GDP = PCE + gross private domestic investment
+    + exports - imports + government
+gross private domestic investment = fixed investment
+    + signed change in private inventories
+```
+
+They are not yet allocated to all model sectors or used to anchor every
+installed opening-state component.
 
 **Critical units rule:** BEA quarterly NIPA flow levels are normally reported
 at seasonally adjusted annual rates. Divide nominal and real quarterly flow
 levels by four before supplying them to calibration. Do not divide rates or
 end-of-period balance-sheet stocks. The resulting `timescale` should be close
-to 0.25; a value close to 1 is a likely SAAR error.
+to 0.25; a value close to 1 is a likely SAAR error. Preserve negative
+inventory-investment quarters after the SAAR conversion.
+
+**Inventory warning:** the current research artifact's
+`inventory_statistical_discrepancy_s` is an unreconciled commodity-balance
+diagnostic, not BEA F030 or NIPA inventory investment. Its use as an opening
+stock bridge is rejected for forecast promotion in
+`data/us/validation/ACCOUNTING_GATES.toml`. Do not force GDP closure by adding
+that discrepancy to capital formation. The standalone inventory-stock ledger
+now fixes end-of-period, no-SAAR-division, unit, M3-stage, and missing-not-zero
+semantics, but its fixture is explicitly synthetic. It emits no `S_s`: BEA
+Table 5.8.5B is now archived and verified for all 29 published 2026Q1 rows as
+a current-vintage diagnostic, but it is not an origin-time first-release
+receipt and is origin-ineligible. Holder-to-model-sector and
+holder-to-commodity mappings, manufacturing/wholesale/retail stage evidence,
+valuation and stage-to-model-stock-scope bridges, latent-state reconciliation,
+and origin-time receipts are still required.
 
 ### 1.4 `ea` block: a U.S.-specific semantic issue
 
@@ -155,7 +200,8 @@ The raw data above generate the main stocks and states:
 - sector employment (`N_s`);
 - GDP, inflation, policy rate, and historical series;
 - benefit amounts per unemployed/inactive/other household;
-- 71-sector technology, wage, tax, final-demand, and network parameters;
+- 68-commodity technology, wage, tax, final-demand, and network parameters
+  derived from 71 BEA source industries;
 - effective household, corporate, payroll, consumption, capital-formation,
   government, and export tax rates; and
 - AR(1), Taylor-rule, and shock-covariance parameters.
@@ -182,6 +228,8 @@ The current code also imposes assumptions that data acquisition cannot solve:
 |---|---|---|---|
 | 71×71 use matrix and final demand | [BEA Input-Output Accounts](https://www.bea.gov/data/industries/input-output-accounts-data), API dataset `InputOutput`, Table 259 | API JSON or official XLSX; use explicit year and save the table metadata | **Works; primary source** |
 | Domestic supply/import validation | BEA I-O Table 262 | Ingest with Table 259 and reconcile by commodity | **Works; QA source** |
+| Commodity network comparator | BEA after-redefinitions direct-requirements and market-share workbooks, plus I-O Table 59 | Compute the primary direct matrix as `B*D`; use `I-inv(L59)` only as a published-rounding round trip; apply Table 262 `T007` output and aggregate transactions/output before recomputing coefficients | **Works; diagnostic only** |
+| Private-inventory holder controls | BEA NIPA Table 5.8.5B (`T50805B`) | Preserve end-of-quarter current-price stocks, duplicate controls, final-sales denominators, ratios, redacted-source/semantic hashes, and receipt metadata; never divide stocks by four or equate their change with NIPA inventory investment | **Current vintage verified; origin-ineligible and not model-mapped** |
 | Industry output controls | [BEA GDP by Industry](https://www.bea.gov/data/gdp/gdp-industry) | API dataset `GDPbyIndustry`; map BEA industry codes to the 71 summary codes | **Works** |
 | Industry assets | [BEA Fixed Assets](https://apps.bea.gov/iTable/?ReqID=10&step=2) | API tables `FAAt301ESI` (current-cost net stock), `FAAt304ESI` (depreciation), and `FAAt307ESI` (investment) | **Works** |
 | Residential assets | BEA Fixed Assets | `FAAt501`, `FAAt504`, and `FAAt507`; allocate consistently with the I-O dwelling investment vector | **Works** |
@@ -572,6 +620,39 @@ For product taxes, maintain two views:
 This makes the present zeroing transparent and allows the model accounting to
 be repaired later without recollecting source data.
 
+### 6.3 Current opening-accounting candidate status
+
+The installed structural and nowcast baselines remain protected legacy
+research artifacts; they have not been relabeled as accounting-valid.
+Separate 2024Q4 and 2026Q1 candidate JLD2 files now anchor the first observed
+row to the exact BEA T10105 current-dollar controls. This resolves only the
+observation-layer identity at the published $1m rounding tolerance.
+
+The same candidates deliberately preserve and report the initialized
+agent-state implications. Their latent expenditure residuals are
+-$137,674.939893m and -$147,094.197894m, respectively. Supply/use valuation,
+the sector demand bridge, an origin-eligible and bridge-complete nonnegative
+model inventory vector, full accounting, vintage eligibility, and
+forecast-skill evaluation remain failed or missing. The current-vintage
+T50805B holder controls do not close the allocation, valuation, stage/scope,
+latent-reconciliation, or origin-time receipt gaps. The candidates are
+therefore `RESEARCH_ONLY_NOT_PROMOTED`, are not loaded by
+`load_us_baseline`, and must not appear in an accuracy table.
+
+The candidate builder disables the rejected commodity-balance inventory
+closure, removes all discrepancy-derived inventory aliases, retains the T007
+gap without balancing, and stores signed NIPA inventory investment separately
+from inventory stocks. Exact details and commands are in
+`scripts/us/accounting/README.md`.
+
+The official `B*D`, T007-scaled comparator does not close these blockers.
+Its 70×70 transaction total is $426,517.009816m below the purchasers-price
+symmetric-use diagnostic. Table 59 inversion agrees within published-rounding
+tolerance but remains only a round trip. The cross-system gap is retained as a
+price/system-boundary diagnostic because a production conversion requires
+cell-specific trade and transportation margins; it is not a scalar
+reconciliation target or an accuracy result.
+
 ## 7. Implementation sequence
 
 ### Phase 0 — lock definitions
@@ -613,7 +694,10 @@ be repaired later without recollecting source data.
 
 ### Phase 4 — empirical validation and optional procurement
 
-- backtest using RTDSM/ALFRED vintages;
+- backtest against directly archived release vintages, using RTDSM only as a
+  curated date/month-granular research proxy rather than strict intraday
+  origin evidence; exclude FRED/ALFRED acquisition until written
+  project-specific clearance;
 - compare simulated U.S. moments and impulse responses with observed data;
 - sensitivity-test the six hard-coded behavioral/financial assumptions; and
 - only then trial a vendor against a measured shortcoming such as regional

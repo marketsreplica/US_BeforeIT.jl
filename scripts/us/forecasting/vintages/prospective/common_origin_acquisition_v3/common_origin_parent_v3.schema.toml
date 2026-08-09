@@ -1,0 +1,107 @@
+[artifact]
+schema_version = "beforeit-us-metadata-schema-contract.v1"
+described_schema_version = "beforeit-us-common-origin-acquisition-parent.v3"
+status = "CLOSED_FAIL_CLOSED"
+canonicalization = "sorted-typed-length-prefixed-v1-excluding-artifact-content-sha256"
+content_sha256 = "a140f2c730102ab882f606c2780d1214f0db691f4f921b5e9c1a140cfaf520ce"
+
+[contract]
+purpose = "one exact 2026Q3 common-origin information-set composition parent"
+unknown_fields_allowed = false
+row_order = "strictly_sorted_by_legacy_requirement_id_then_legacy_profile_id"
+exact_row_count = 107
+exact_requirement_count = 21
+missing_rows_allowed = false
+extra_rows_allowed = false
+duplicate_rows_allowed = false
+narrower_profile_universe_allowed = false
+synthetic_evidence_can_satisfy_readiness = false
+current_maximum_status = "CANNOT_RUN"
+successor_only_status = "READY_FOR_FORECAST_SEAL_NO_TRUTH_LOADED"
+ready_requires_new_schema_and_authenticated_trust_anchors = true
+ready_to_score_allowed = false
+numeric_control_fields_require_toml_integer = true
+standalone_result_self_hash_is_authoritative = false
+result_validation_requires_exact_parent_replay = true
+
+[root]
+required_tables = ["artifact", "origin", "baseline", "custody", "approvals", "gates"]
+required_arrays = ["rows"]
+
+[artifact_fields]
+exact = ["schema_version", "evidence_class", "canonicalization", "content_sha256"]
+schema_version = "beforeit-us-common-origin-acquisition-parent.v3"
+evidence_class_allowed = ["PROSPECTIVE_NONSYNTHETIC", "SYNTHETIC_TEST_ONLY"]
+
+[origin_fields]
+exact = ["origin_id", "reference_quarter", "origin_timestamp_utc", "origin_rule"]
+origin_id = "origin.2026q3.prospective-capture-candidate.v2"
+reference_quarter = "2026Q3"
+origin_timestamp_utc = "2026-10-30T14:00:00Z"
+origin_rule = "FIRST_BUSINESS_DAY_AFTER_BEA_ADVANCE_AT_10:00_AMERICA/NEW_YORK"
+
+[baseline_fields]
+exact = [
+    "policy_path",
+    "policy_physical_sha256",
+    "legacy_v2_module_sha256",
+    "legacy_v2_contract_sha256",
+    "legacy_v2_semantic_sha256",
+    "legacy_profile_count",
+    "legacy_requirement_count",
+    "opaque_audit_tuple_sha256",
+    "typed_length_tuple_sha256",
+]
+
+[custody_fields]
+exact = ["receipt_path", "receipt_sha256"]
+required_schema_version = "beforeit-us-retention-custody-covenant.v2"
+
+[approval_fields]
+exact = [
+    "evidence_subject_sha256",
+    "owner_id",
+    "owner_receipt_path",
+    "owner_receipt_sha256",
+    "validator_id",
+    "validator_receipt_path",
+    "validator_receipt_sha256",
+]
+distinct_identities_receipts_and_hashes_required = true
+
+[row_fields]
+exact = [
+    "legacy_requirement_id",
+    "legacy_profile_id",
+    "active_profile_id",
+    "dispatch_id",
+    "receipt_path",
+    "receipt_sha256",
+    "supersession_decision_sha256",
+]
+supersession_not_applicable_literal = "NOT_APPLICABLE"
+supersession_unavailable_literal = "UNAVAILABLE_NOT_FROZEN"
+
+[resource_limits]
+maximum_metadata_file_bytes = 16777216
+maximum_total_raw_bytes_per_parent = 68719476736
+maximum_total_replica_bytes_per_parent = 137438953472
+maximum_vector_items = 4096
+maximum_table_entries = 4096
+maximum_string_bytes = 1048576
+maximum_identifier_bytes = 512
+maximum_relative_path_bytes = 4096
+maximum_path_component_bytes = 255
+maximum_path_components = 128
+
+[gate_fields]
+exact = [
+    "origin_admission_allowed",
+    "forecast_execution_allowed",
+    "truth_access_allowed",
+    "scoring_allowed",
+    "accuracy_claim_allowed",
+    "promotion_allowed",
+    "production_allowed",
+]
+required_value = false

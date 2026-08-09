@@ -7,11 +7,14 @@ generated_at = "2026-08-04T00:27:13.126"
 model_sector_system = "BEA summary, retail aggregated to observed 68-commodity topology"
 nowcast_period = "2026Q1"
 sector_count = 68
+status_schema_correction_date = "2026-08-06"
+status_schema_note = "Overall parameter status is fail-closed across source_control_reconciles and model_mapping_admissible. The imports and T013/T016 source controls reconcile, but their legacy model mappings are rejected and unselected."
 structural_period = "2024Q4"
 
 [parameter_counts]
-APPROVED = 40
+APPROVED = 38
 DUBIOUS = 17
+REJECTED = 2
 
 [[parameters]]
 detail = "2024 year-end structural axis."
@@ -286,20 +289,24 @@ source = "BEA InputOutput 259"
 status = "APPROVED"
 unit = "millions USD"
 [[parameters]]
-detail = "Table 262 commodity MCIF+MADJ. Negative CIF/FOB adjustment entries are floored at zero and positive entries are proportionally rescaled to the T017 structural control net of Other/Used commodities."
+detail = "The raw signed Table 262 MCIF+MADJ rows and T017 control reconcile, but the legacy nonnegative vector floors CIF/FOB adjustment entries and proportionally rescales positive rows. The current accounting contract leaves the model import boundary unselected, so this construction is rejected as an admissible model mapping."
 frequency = "A"
+model_mapping_admissible = "REJECTED"
 name = "imports"
 shape = "68×1"
 source = "BEA InputOutput 262"
-status = "APPROVED"
+source_control_reconciles = "APPROVED"
+status = "REJECTED"
 unit = "millions USD"
 [[parameters]]
-detail = "T013/T016 by commodity; model retail sector 4A0 aggregates supply rows 441, 445, 452, and 4A0 before division."
+detail = "The code-keyed T013/T016 arithmetic control is reproducible, including retail aggregation, but no source use-cell margin/tax allocation identifies the proportional recipient rescale. It is rejected as an admissible model mapping."
 frequency = "A"
+model_mapping_admissible = "REJECTED"
 name = "purchasers_to_basic_price"
 shape = "68×1"
 source = "BEA InputOutput 262"
-status = "APPROVED"
+source_control_reconciles = "APPROVED"
+status = "REJECTED"
 unit = "basic-price supply / purchasers-price supply"
 [[parameters]]
 detail = "Table 259 V001."

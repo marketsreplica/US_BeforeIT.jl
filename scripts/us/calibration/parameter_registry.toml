@@ -1,0 +1,1750 @@
+[schema]
+registry_id = "beforeit-us-raw-structural-parameters"
+schema_version = "1.0.0"
+baseline_artifact = "data/us/baselines/US_2024Q4_structural.jld2"
+baseline_parameter_count = 66
+baseline_artifact_sha256 = "8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+scope = "Raw structural parameters only; class-H corrections and forecast combinations are forbidden"
+as_of = "2026-08-05"
+gate_policy = "Only approved rows may pass WS-2B; provisional, unresolved, or rejected rows keep the gate closed"
+
+[parameter_classes]
+A = "Directly observed: update only on an eligible release"
+B = "Identity-derived: recompute after the relevant reconciled release"
+C = "Econometrically estimated: re-estimate at the frozen-origin cadence"
+D = "Latent behavioral: estimate from identified training moments and freeze between reviews"
+E = "Institutional or policy: update on a rule change or eligible evidence release"
+F = "Modeling assumption: replication value plus explicit sensitivity range; never silently fit"
+G = "Numerical resolution: change only after numerical validation"
+H = "Publication layer: past-error correction or combination weight; prohibited in raw structural parameters"
+
+[review_statuses]
+approved = "Source, identity, uncertainty, tests, ownership, and independent review are complete"
+provisional = "Construction is traceable but independent review or a preregistered check remains open"
+unresolved = "A named conceptual, measurement, accounting, or sensitivity decision remains open"
+rejected = "The current construction failed a registered test and is ineligible"
+
+[forecast_products]
+raw_abm = "Uncorrected agent-based model path"
+aggregate = "Production aggregate forecast"
+sector = "Production sector forecast"
+nowcast = "Within-quarter production nowcast"
+density = "Production probabilistic forecast"
+scenario = "Production conditional scenario"
+research_only = "Diagnostic or sensitivity output carrying a visible non-production label"
+
+[[parameter]]
+parameter_id = "T"
+model_symbol = "T"
+description = "Requested simulation horizon stored in the structural parameter artifact."
+economic_unit = "quarters"
+frequency = "per model run"
+sector_dimension = "scalar"
+parameter_class = "G"
+source_series = ["model configuration"]
+source_table_and_line = "src/utils/calibration.jl:897"
+reference_period = "2024Q4-origin baseline"
+release_vintage = "BeforeIT 0.6 calibration code inspected 2026-08-05"
+transformation = "Set to the integer constant 12."
+estimator_or_identity = "T = 12"
+admissible_range = "positive integer; production protocol currently requires 12"
+prior_or_uncertainty = "No sampling uncertainty; alternative horizons require forecast-protocol validation."
+update_cadence = "only with a versioned forecast-product horizon change"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["forecast horizon contract", "array allocation bounds"]
+sensitivity_result = "structural_check_passed: artifact value is 12; horizon-performance sensitivity not yet reviewed"
+owner = "UNASSIGNED: forecast-protocol lead"
+independent_validator = "UNASSIGNED: numerical-protocol reviewer"
+review_status = "provisional"
+tests = ["registry:positive_integer", "baseline:value_equals_12", "planned:horizon_contract"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "tau_Y_s"
+model_symbol = "τ^Y_s"
+description = "Sector product-tax wedge in the producer/product accounting block; the raw artifact currently carries the explicit zero-tax dynamic variant."
+economic_unit = "fraction of sector output"
+frequency = "annual structural"
+sector_dimension = "68-vector by modeled producing sector"
+parameter_class = "F"
+source_series = ["BEA Input-Output Tables 259 and 262 observed product-tax valuation bridge", "zero-product-tax model variant"]
+source_table_and_line = "src/utils/calibration.jl:880; data/us/validation/DATA_CHECKLIST.md:taxes_products"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Observed product taxes are retained upstream, but the current model-compatible artifact divides a deliberately zeroed vector by output."
+estimator_or_identity = "tau_Y_s = selected_variant_product_taxes_s / output_s; selected raw variant is zero-product-tax"
+admissible_range = "68 finite rates; zero vector only under named zero-tax variant; observed-tax variant must preserve accounting closure"
+prior_or_uncertainty = "Structural variant uncertainty, not a sampling prior; observed and zero-tax prototypes must both be published."
+update_cadence = "only after WS-2C tax-accounting review or an eligible I-O release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["product-tax revenue", "basic-to-purchasers valuation", "GDP identity closure"]
+sensitivity_result = "not_run: installed vector is all zero while observed bridge is nonzero; upstream compatibility is itself unresolved"
+owner = "UNASSIGNED: tax-accounting calibration lead"
+independent_validator = "UNASSIGNED: national-accounts tax reviewer"
+review_status = "unresolved"
+tests = ["registry:length_68_finite", "planned:observed_tax_prototype", "planned:zero_tax_prototype", "planned:no_tax_double_count"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "tau_K_s"
+model_symbol = "τ^K_s"
+description = "Sector taxes on production less subsidies relative to sector output."
+economic_unit = "fraction of sector output"
+frequency = "annual structural"
+sector_dimension = "68-vector by modeled producing sector"
+parameter_class = "B"
+source_series = ["BEA Input-Output Table 259 T00OTOP", "BEA T005 output controls"]
+source_table_and_line = "src/utils/calibration.jl:881-883"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Map source-industry production taxes to 68 modeled sectors and divide by output; replace undefined values with zero."
+estimator_or_identity = "tau_K_s = taxes_on_production_s / output_s"
+admissible_range = "68 finite rates in [-1,1]; negative subsidies are permitted and zeros require traceability"
+prior_or_uncertainty = "Mapping and output-denominator uncertainty; no false independent sampling errors by sector."
+update_cadence = "recompute after reconciled annual I-O release"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["production-tax wedge", "sector value-added identity", "government revenue"]
+sensitivity_result = "source mapping is traceable; full three-approach accounting review remains pending"
+owner = "UNASSIGNED: tax-accounting calibration lead"
+independent_validator = "UNASSIGNED: national-accounts reviewer"
+review_status = "provisional"
+tests = ["registry:length_68_finite", "planned:production_tax_identity", "planned:sector_sign_audit"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "b_CF_g"
+model_symbol = "b^CF_g"
+description = "Commodity composition shares for firms' non-dwelling fixed capital formation."
+economic_unit = "share of total non-dwelling fixed investment"
+frequency = "annual structural"
+sector_dimension = "68-vector by modeled commodity"
+parameter_class = "B"
+source_series = ["BEA Input-Output Table 259 fixed-investment final-use columns", "BEA residential investment control"]
+source_table_and_line = "src/utils/calibration.jl:885"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Subtract the residential-investment composition from total fixed capital formation and normalize the remaining commodity vector."
+estimator_or_identity = "b_CF_g = non_dwelling_fixed_investment_g / sum_g(non_dwelling_fixed_investment_g)"
+admissible_range = "68 nonnegative finite shares summing to one within tolerance"
+prior_or_uncertainty = "Valuation and residential-allocation uncertainty propagated through alternative reconciled vectors."
+update_cadence = "recompute after eligible annual I-O release"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["firm investment composition", "fixed-investment total"]
+sensitivity_result = "simplex check available; dependence on unresolved residential composition remains to be quantified"
+owner = "UNASSIGNED: final-demand calibration lead"
+independent_validator = "UNASSIGNED: fixed-investment reviewer"
+review_status = "provisional"
+tests = ["registry:simplex_68", "planned:residential_nonresidential_partition"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "b_CFH_g"
+model_symbol = "b^CFH_g"
+description = "Commodity composition shares for household dwelling investment."
+economic_unit = "share of total residential fixed investment"
+frequency = "annual structural"
+sector_dimension = "68-vector by modeled commodity"
+parameter_class = "B"
+source_series = ["BEA Input-Output Table 259 residential fixed-investment column F02R", "BEA Table 262 valuation bridge"]
+source_table_and_line = "src/utils/calibration.jl:886; US_FORECASTING_PLAN.md II.2 Block 2"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Current calibration allocates a scalar dwellings control using a constructed product vector; planned replacement uses the documented F02R commodity vector directly."
+estimator_or_identity = "b_CFH_g = residential_fixed_investment_g / sum_g(residential_fixed_investment_g)"
+admissible_range = "68 nonnegative finite shares summing to one within tolerance"
+prior_or_uncertainty = "Alternative F02R/valuation constructions must be retained; no precision claim until the source line mapping is reviewed."
+update_cadence = "recompute after eligible annual I-O release or approved bridge revision"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["residential investment composition", "dwelling-capital formation"]
+sensitivity_result = "not_run: plan identifies current composition as needing reconstruction from the documented BEA residential vector"
+owner = "UNASSIGNED: housing calibration lead"
+independent_validator = "UNASSIGNED: BEA final-use reviewer"
+review_status = "unresolved"
+tests = ["registry:simplex_68", "planned:F02R_line_trace", "planned:residential_composition_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "b_HH_g"
+model_symbol = "b^HH_g"
+description = "Commodity budget shares for household consumption."
+economic_unit = "share of total household consumption"
+frequency = "annual structural"
+sector_dimension = "68-vector by modeled commodity"
+parameter_class = "B"
+source_series = ["BEA Input-Output Table 259 final-use column F010"]
+source_table_and_line = "src/utils/calibration.jl:887"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Normalize current-dollar household consumption by its commodity total."
+estimator_or_identity = "b_HH_g = household_consumption_g / sum_g(household_consumption_g)"
+admissible_range = "68 nonnegative finite shares summing to one within tolerance"
+prior_or_uncertainty = "Source revision and commodity-aggregation uncertainty; simplex covariance should be used in later calibration."
+update_cadence = "recompute after eligible annual I-O release"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["household demand composition", "household consumption total"]
+sensitivity_result = "simplex construction is traceable; independent valuation-basis review remains pending"
+owner = "UNASSIGNED: household-demand calibration lead"
+independent_validator = "UNASSIGNED: final-use accounts reviewer"
+review_status = "provisional"
+tests = ["registry:simplex_68", "planned:household_final_use_trace"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "c_G_g"
+model_symbol = "c^G_g"
+description = "Commodity composition shares for government consumption and gross-investment demand represented by the government agent."
+economic_unit = "share of total government demand"
+frequency = "annual structural"
+sector_dimension = "68-vector by modeled commodity"
+parameter_class = "B"
+source_series = ["BEA Input-Output Table 259 F06C, F07C, and F10C"]
+source_table_and_line = "src/utils/calibration.jl:890"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Sum registered government final-use columns by commodity and normalize by the total."
+estimator_or_identity = "c_G_g = government_consumption_g / sum_g(government_consumption_g)"
+admissible_range = "68 nonnegative finite shares summing to one within tolerance"
+prior_or_uncertainty = "Government-consumption boundary and commodity aggregation uncertainty."
+update_cadence = "recompute after eligible annual I-O release"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["government demand composition", "government demand total"]
+sensitivity_result = "simplex construction is traceable; government consumption/investment boundary review remains pending"
+owner = "UNASSIGNED: fiscal-demand calibration lead"
+independent_validator = "UNASSIGNED: government-accounts reviewer"
+review_status = "provisional"
+tests = ["registry:simplex_68", "planned:government_final_use_boundary"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "c_E_g"
+model_symbol = "c^E_g"
+description = "Commodity composition shares of domestic U.S. exports."
+economic_unit = "share of total domestic exports"
+frequency = "annual structural"
+sector_dimension = "68-vector by modeled commodity"
+parameter_class = "B"
+source_series = ["BEA Input-Output Table 259 F040 exports", "re-export and explicit-trade bridge"]
+source_table_and_line = "src/utils/calibration.jl:891"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Form domestic exports, apply the nonnegative calibration-share routine, and normalize; any redistribution must enter the QA residual ledger."
+estimator_or_identity = "c_E_g = nonnegative_share(domestic_exports_g)"
+admissible_range = "68 nonnegative finite shares summing to one; no unreported sign clipping"
+prior_or_uncertainty = "Trade/re-export mapping and nonnegative redistribution uncertainty; retain raw signed and adjusted vectors."
+update_cadence = "recompute after eligible annual I-O release or trade-bridge revision"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["export commodity composition", "domestic-export total", "redistributed negative weight"]
+sensitivity_result = "not_run: plan requires per-vintage reporting of clamped or redistributed weight"
+owner = "UNASSIGNED: external-sector calibration lead"
+independent_validator = "UNASSIGNED: trade-accounts reviewer"
+review_status = "unresolved"
+tests = ["registry:simplex_68", "planned:trade_sign_residual_ledger", "planned:reexport_bridge"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "c_I_g"
+model_symbol = "c^I_g"
+description = "Commodity composition shares of U.S. imports."
+economic_unit = "share of total imports"
+frequency = "annual structural"
+sector_dimension = "68-vector by modeled commodity"
+parameter_class = "B"
+source_series = ["BEA Input-Output Tables 259 and 262 explicit imports", "commodity-balance bridge"]
+source_table_and_line = "src/utils/calibration.jl:892"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Use the explicit import vector, apply the nonnegative calibration-share routine, and normalize; retain any residual allocation."
+estimator_or_identity = "c_I_g = nonnegative_share(imports_g)"
+admissible_range = "68 nonnegative finite shares summing to one; no unreported sign clipping"
+prior_or_uncertainty = "Import valuation, residual-inventory closure, and nonnegative redistribution uncertainty."
+update_cadence = "recompute after eligible annual I-O release or trade-bridge revision"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["import commodity composition", "import total", "commodity-balance residual"]
+sensitivity_result = "not_run: explicit-inventory, confidence-weighted balance, and residual-import closures remain to be compared"
+owner = "UNASSIGNED: external-sector calibration lead"
+independent_validator = "UNASSIGNED: trade-accounts reviewer"
+review_status = "unresolved"
+tests = ["registry:simplex_68", "planned:trade_sign_residual_ledger", "planned:import_closure_variants"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "a_sg"
+model_symbol = "a_sg"
+description = "Commodity input shares by modeled producing sector."
+economic_unit = "share of each producing sector's intermediate-input bundle"
+frequency = "annual structural"
+sector_dimension = "68 commodities × 68 modeled producing sectors"
+parameter_class = "B"
+source_series = ["BEA Input-Output Table 259 intermediate-use block", "68×68 column-controlled bridge"]
+source_table_and_line = "src/utils/calibration.jl:888-889"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Map the 71 source industries to 68 producing sectors, column-control the sparse core to T005, and normalize every producing-sector column."
+estimator_or_identity = "a_sg = intermediate_consumption_gs / sum_g(intermediate_consumption_gs)"
+admissible_range = "68×68 finite nonnegative matrix; each nonempty column sums to one; structural zeros require provenance"
+prior_or_uncertainty = "Bridge-adjustment covariance and alternative balancing methods; raw, observed-aggregation, bridged, and reconciled matrices remain separate."
+update_cadence = "recompute after eligible annual I-O release or approved reconciliation change"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["production network", "intermediate row and column controls", "sector input shares"]
+sensitivity_result = "not_run: sparse core is only 98.573% of T005 before column scaling; symmetric accounting gate remains open"
+owner = "UNASSIGNED: input-output calibration lead"
+independent_validator = "UNASSIGNED: supply-use accounting reviewer"
+review_status = "unresolved"
+tests = ["registry:matrix_68x68_column_simplex", "source:intermediate_control_gap", "planned:WS2C_balance_gate"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "T_max"
+model_symbol = "T_max"
+description = "Number of requested forecast quarters already available in the exogenous source panel."
+economic_unit = "quarters"
+frequency = "per forecast origin"
+sector_dimension = "scalar"
+parameter_class = "G"
+source_series = ["quarterly panel maximum date", "calibration origin", "T"]
+source_table_and_line = "src/utils/calibration.jl:898"
+reference_period = "2024Q4 origin with data panel available through 2026Q2-equivalent window"
+release_vintage = "data truth 2026-08-04"
+transformation = "Subtract unavailable future observations from T and clamp the subtraction at zero."
+estimator_or_identity = "T_max = T - max(0, calibration_index + T - maximum_panel_index)"
+admissible_range = "integer in [0,T]"
+prior_or_uncertainty = "Deterministic date-axis quantity; uncertainty enters only through later data availability."
+update_cadence = "every forecast origin or source-panel extension"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["observed-versus-simulated exogenous path boundary"]
+sensitivity_result = "structural_check_passed: artifact value is 6 and lies in [0,12]"
+owner = "UNASSIGNED: forecast-data lead"
+independent_validator = "UNASSIGNED: leakage-control reviewer"
+review_status = "provisional"
+tests = ["registry:T_max_bounds", "planned:frozen_origin_exogenous_boundary"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "S"
+model_symbol = "S"
+description = "Number of modeled producing sectors after the 71-source-industry to 68-sector bridge."
+economic_unit = "modeled producing sectors"
+frequency = "structural vintage"
+sector_dimension = "scalar defining a 68-sector producing dimension"
+parameter_class = "G"
+source_series = ["BEA Input-Output Table 259 industry columns", "BEA-71 to model-68 concordance"]
+source_table_and_line = "src/utils/calibration.jl:475-476; scripts/us/bea71.toml"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output release ingested by data truth 2026-08-04"
+transformation = "Aggregate four retail source industries and construct a square modeled system."
+estimator_or_identity = "S = G = size(intermediate_consumption,1) = 68"
+admissible_range = "exactly 68 for this artifact and concordance version"
+prior_or_uncertainty = "No sampling uncertainty; bridge choice is model uncertainty tracked in WS-2C."
+update_cadence = "only with a versioned sector-concordance change"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["dimension consistency", "industry-to-commodity bridge"]
+sensitivity_result = "contract_check_passed: installed artifact equals 68; aggregation alternatives not yet tested"
+owner = "UNASSIGNED: national-accounts calibration lead"
+independent_validator = "UNASSIGNED: input-output reviewer"
+review_status = "provisional"
+tests = ["registry:value_equals_68", "concept:source71_model68", "planned:aggregation_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "G"
+model_symbol = "G"
+description = "Number of modeled commodity groups used for demands, supplies, and prices."
+economic_unit = "modeled commodities"
+frequency = "structural vintage"
+sector_dimension = "scalar defining a 68-commodity product dimension"
+parameter_class = "G"
+source_series = ["BEA Input-Output Table 259 commodity rows"]
+source_table_and_line = "src/utils/calibration.jl:475; scripts/us/bea71.toml"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output release ingested by data truth 2026-08-04"
+transformation = "Retain the 68 observed summary commodities, including aggregate retail commodity 4A0."
+estimator_or_identity = "G = size(intermediate_consumption,1) = 68"
+admissible_range = "exactly 68 for this artifact and concordance version"
+prior_or_uncertainty = "No sampling uncertainty; product aggregation uncertainty requires separate variants."
+update_cadence = "only with a versioned commodity-concordance change"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["commodity dimension consistency", "final-demand share closure"]
+sensitivity_result = "contract_check_passed: installed artifact equals 68; alternative aggregation not yet reviewed"
+owner = "UNASSIGNED: national-accounts calibration lead"
+independent_validator = "UNASSIGNED: input-output reviewer"
+review_status = "provisional"
+tests = ["registry:value_equals_68", "concept:modeled_commodity", "planned:aggregation_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "T_prime"
+model_symbol = "T′"
+description = "Length of the historical estimation and initialization window available at the structural origin."
+economic_unit = "quarters"
+frequency = "per forecast origin"
+sector_dimension = "scalar"
+parameter_class = "G"
+source_series = ["quarterly panel date axis"]
+source_table_and_line = "src/utils/calibration.jl:896"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "data truth 2026-08-04"
+transformation = "Inclusive difference between calibration-origin and estimation-start indices."
+estimator_or_identity = "T_prime = T_calibration_exo - T_estimation_exo + 1"
+admissible_range = "integer >= 8; installed value 112"
+prior_or_uncertainty = "Deterministic date-axis quantity; start-date selection is specification uncertainty."
+update_cadence = "every forecast origin; start date only by versioned estimation protocol"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["AR sample length", "historical-state array length"]
+sensitivity_result = "contract_check_passed: installed value 112; alternative start windows not yet compared"
+owner = "UNASSIGNED: econometrics lead"
+independent_validator = "UNASSIGNED: frozen-origin reviewer"
+review_status = "provisional"
+tests = ["registry:positive_integer", "baseline:value_equals_112", "planned:estimation_window_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "I_s"
+model_symbol = "I_s"
+description = "Integerized number of firm agents in each modeled producing sector."
+economic_unit = "firm agents"
+frequency = "annual structural"
+sector_dimension = "68-vector by modeled producing sector"
+parameter_class = "A"
+source_series = ["Census SUSB employer enterprises", "BLS QCEW establishments", "USDA farm count", "government and housing proxies"]
+source_table_and_line = "data/us/validation/DATA_CHECKLIST.md:firms; src/utils/calibration.jl:857-864"
+reference_period = "2024 annual productive-unit controls"
+release_vintage = "mixed eligible releases through data truth 2026-08-04"
+transformation = "Bridge exclusions, nowcast lagged SUSB with QCEW growth, multiply by 1e-5, MATLAB-round, and floor every sector at one."
+estimator_or_identity = "I_s = max(1, round(scale * firms_s))"
+admissible_range = "68 positive integers; sum must equal total firm-agent count"
+prior_or_uncertainty = "Concept and proxy uncertainty dominates; retain enterprise, establishment, farm, and pseudo-producer alternatives."
+update_cadence = "eligible annual source release; scale only after numerical-validation gate"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["sector firm counts", "firm-size distribution", "matching density"]
+sensitivity_result = "not_run: 54 of 68 sectors have one firm at scale 1e-5; productive-unit ontology and scale ladder remain open"
+owner = "UNASSIGNED: business-demography calibration lead"
+independent_validator = "UNASSIGNED: Census/QCEW concept reviewer"
+review_status = "unresolved"
+tests = ["source:firm_concept_bridge", "registry:length_68_positive_integer", "planned:scale_ladder", "planned:productive_unit_ontology"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "H_inact"
+model_symbol = "H^inact"
+description = "Integerized number of economically inactive household agents."
+economic_unit = "person agents"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "A"
+source_series = ["BLS CPS LNU05000000 inactive persons"]
+source_table_and_line = "data/us/validation/DATA_CHECKLIST.md:inactive_census; src/utils/calibration.jl:857-864"
+reference_period = "2024 annual average"
+release_vintage = "BLS CPS data truth 2026-08-04"
+transformation = "Average source persons, multiply by 1e-5, MATLAB-round, and floor at one."
+estimator_or_identity = "H_inact = max(1, round(scale * inactive_census))"
+admissible_range = "positive integer and consistent with the modeled population control"
+prior_or_uncertainty = "CPS sampling uncertainty plus integerization and agent-scale sensitivity."
+update_cadence = "eligible annual CPS release; scale only after numerical-validation gate"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["inactive population", "transfer-recipient count"]
+sensitivity_result = "source_check_passed: installed value 1005; scale sensitivity remains pending"
+owner = "UNASSIGNED: labor calibration lead"
+independent_validator = "UNASSIGNED: CPS reviewer"
+review_status = "provisional"
+tests = ["source:cps_inactive_control", "registry:positive_integer", "planned:scale_ladder"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "H_act"
+model_symbol = "H^act"
+description = "Modeled active-household count, including workers, unemployed persons, firm-owner households, and one bank-owner household."
+economic_unit = "household/person agents under a mixed model identity"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BLS CPS employed persons", "BLS CPS unemployed persons", "I_s firm-agent counts"]
+source_table_and_line = "src/utils/calibration.jl:899"
+reference_period = "2024 annual labor and productive-unit controls"
+release_vintage = "mixed eligible releases through data truth 2026-08-04"
+transformation = "Scale and integerize component counts, then add workers, unemployed, all firm owners, and one bank owner."
+estimator_or_identity = "H_act = sum(employees_s) + unemployed + sum(I_s) + 1"
+admissible_range = "positive integer; must equal its registered components exactly"
+prior_or_uncertainty = "Propagates CPS, jobs-to-persons, firm-concept, integerization, and household-boundary uncertainty."
+update_cadence = "recompute after any labor, firm-count, or scale update"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["active household count", "labor and ownership population closure"]
+sensitivity_result = "not_run: identity holds at 1826 agents, but the mixed person/owner-household ontology remains unresolved"
+owner = "UNASSIGNED: labor-and-household calibration lead"
+independent_validator = "UNASSIGNED: population-concepts reviewer"
+review_status = "unresolved"
+tests = ["registry:H_act_identity", "source:jobs_to_people_bridge", "planned:household_owner_ontology"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "J"
+model_symbol = "J"
+description = "Synthetic number of government demand agents used for matching granularity."
+economic_unit = "synthetic government agents"
+frequency = "structural vintage"
+sector_dimension = "scalar"
+parameter_class = "F"
+source_series = ["I_s firm-agent counts", "upstream replication constant"]
+source_table_and_line = "src/utils/calibration.jl:902-905"
+reference_period = "2024Q4 structural baseline"
+release_vintage = "BeforeIT replication convention inspected 2026-08-05"
+transformation = "Divide total scaled firm agents by four and MATLAB-round."
+estimator_or_identity = "J = round(sum(I_s)/4)"
+admissible_range = "positive integer; alternatives must hold aggregate government demand fixed"
+prior_or_uncertainty = "Discrete synthetic-count alternatives selected only through matching-variance and scale tests."
+update_cadence = "freeze between preregistered numerical-resolution reviews"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["government-goods matching variance", "rationing rates"]
+sensitivity_result = "not_run: installed value 33 is inherited and is not an observed government-entity count"
+owner = "UNASSIGNED: matching calibration lead"
+independent_validator = "UNASSIGNED: numerical-resolution reviewer"
+review_status = "unresolved"
+tests = ["registry:J_identity", "planned:J_matching_variance", "planned:scale_ladder"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "L"
+model_symbol = "L"
+description = "Synthetic number of foreign-consumer agents used to allocate export demand."
+economic_unit = "synthetic foreign-consumer agents"
+frequency = "structural vintage"
+sector_dimension = "scalar"
+parameter_class = "F"
+source_series = ["I_s firm-agent counts", "upstream replication constant"]
+source_table_and_line = "src/utils/calibration.jl:906-908"
+reference_period = "2024Q4 structural baseline"
+release_vintage = "BeforeIT replication convention inspected 2026-08-05"
+transformation = "Divide total scaled firm agents by two and MATLAB-round."
+estimator_or_identity = "L = round(sum(I_s)/2)"
+admissible_range = "positive integer; alternatives must hold aggregate exports fixed"
+prior_or_uncertainty = "Discrete synthetic-count alternatives selected only through allocation and scale tests."
+update_cadence = "freeze between preregistered numerical-resolution reviews"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["export-allocation variance", "trade matching and rationing"]
+sensitivity_result = "not_run: installed value 65 is inherited and is not an observed foreign-consumer count"
+owner = "UNASSIGNED: matching calibration lead"
+independent_validator = "UNASSIGNED: external-sector reviewer"
+review_status = "unresolved"
+tests = ["registry:L_identity", "planned:L_allocation_invariance", "planned:scale_ladder"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "alpha_s"
+model_symbol = "α_s"
+description = "Quarterly labor productivity: sector output volume proxy per modeled employed person."
+economic_unit = "model output units per employed person per quarter"
+frequency = "annual structure converted to quarterly"
+sector_dimension = "68-vector by modeled producing sector"
+parameter_class = "B"
+source_series = ["BEA Input-Output T005 output controls", "BLS QCEW job shares", "BLS CPS employed-person control"]
+source_table_and_line = "src/utils/calibration.jl:865,878"
+reference_period = "2024 annual structure and labor controls"
+release_vintage = "mixed eligible releases through data truth 2026-08-04"
+transformation = "Convert annual output by timescale, divide by bridged sector employed persons, replace missing values, and apply MIN_PRODUCTIVITY floor."
+estimator_or_identity = "alpha_s = max(timescale * output_s / employees_s, MIN_PRODUCTIVITY)"
+admissible_range = "68 finite strictly positive values; floor-binding sectors require review"
+prior_or_uncertainty = "Propagate output-basis, jobs-to-persons, sector-allocation, timescale, and floor uncertainty."
+update_cadence = "recompute after reconciled I-O or labor release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["sector output per worker", "aggregate labor productivity", "floor-binding incidence"]
+sensitivity_result = "not_run: jobs-to-persons bridge, real-quantity interpretation, and productivity-floor effects remain open"
+owner = "UNASSIGNED: production calibration lead"
+independent_validator = "UNASSIGNED: productivity-measurement reviewer"
+review_status = "unresolved"
+tests = ["registry:length_68_finite_positive", "planned:productivity_floor_binding", "planned:double_deflation"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "beta_s"
+model_symbol = "β_s"
+description = "Sector gross-output to intermediate-input coefficient used by firm production."
+economic_unit = "ratio"
+frequency = "annual structural"
+sector_dimension = "68×1 vector by modeled producing sector"
+parameter_class = "B"
+source_series = ["BEA Input-Output Table 259 T005 controls", "68×68 intermediate-use bridge"]
+source_table_and_line = "src/utils/calibration.jl:866,879"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Divide sector output by the column sum of bridged intermediate consumption; replace undefined values."
+estimator_or_identity = "beta_s = output_s / sum_g(intermediate_consumption_gs)"
+admissible_range = "68 finite positive ratios; no unexplained zero or floor"
+prior_or_uncertainty = "Dominated by the sparse-core column-control bridge and industry/commodity basis uncertainty."
+update_cadence = "recompute after reconciled supply/use release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["intermediate-input share", "sector gross-output identity"]
+sensitivity_result = "not_run: raw sparse core is column-scaled to T005 and awaits WS-2C reconciliation"
+owner = "UNASSIGNED: input-output calibration lead"
+independent_validator = "UNASSIGNED: supply-use accounting reviewer"
+review_status = "unresolved"
+tests = ["registry:finite_positive", "source:intermediate_control_gap", "planned:symmetric_supply_use_gate"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "kappa_s"
+model_symbol = "κ_s"
+description = "Quarterly output per unit of productive non-dwelling capital at assumed normal utilization."
+economic_unit = "quarterly output per current-cost capital unit"
+frequency = "annual structure converted to quarterly"
+sector_dimension = "68-vector by modeled producing sector"
+parameter_class = "B"
+source_series = ["BEA Input-Output T005 output", "BEA Fixed Assets current-cost net stock", "normal utilization omega"]
+source_table_and_line = "src/utils/calibration.jl:867,879"
+reference_period = "2024 annual structure"
+release_vintage = "mixed BEA releases through data truth 2026-08-04"
+transformation = "Divide quarterly output by non-dwelling productive capital and omega=0.85; replace missing values and apply MIN_PRODUCTIVITY."
+estimator_or_identity = "kappa_s = max(timescale * output_s / (capital_s * omega), MIN_PRODUCTIVITY)"
+admissible_range = "68 finite strictly positive values; floor-binding and denominator bridges require review"
+prior_or_uncertainty = "Propagate current-cost asset allocation, government/housing bridges, utilization range, price-basis interpretation, and floor effects."
+update_cadence = "recompute after reconciled I-O or Fixed Assets release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["capital-output ratio", "capacity utilization", "sector production capacity"]
+sensitivity_result = "not_run: omega, government/housing asset allocation, and real-volume interpretation remain open"
+owner = "UNASSIGNED: capital-stock calibration lead"
+independent_validator = "UNASSIGNED: fixed-assets reviewer"
+review_status = "unresolved"
+tests = ["registry:length_68_finite_positive", "planned:omega_sensitivity", "planned:capital_bridge_review"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "delta_s"
+model_symbol = "δ_s"
+description = "Quarterly depreciation rate on productive non-dwelling capital at assumed normal utilization."
+economic_unit = "fraction per quarter"
+frequency = "annual structure converted to quarterly"
+sector_dimension = "68-vector by modeled producing sector"
+parameter_class = "B"
+source_series = ["BEA Fixed Assets depreciation", "BEA Fixed Assets current-cost net stock", "normal utilization omega"]
+source_table_and_line = "src/utils/calibration.jl:868-869"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Fixed Assets data truth 2026-08-04"
+transformation = "Divide quarterly consumption of fixed capital by productive capital and omega=0.85; replace undefined values with zero."
+estimator_or_identity = "delta_s = timescale * CFC_s / (capital_s * omega)"
+admissible_range = "68 finite values in [0,1); every zero requires a documented source or bridge"
+prior_or_uncertainty = "Propagate asset/depreciation allocation and utilization uncertainty; retain government/housing bridge variants."
+update_cadence = "recompute after eligible Fixed Assets release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["sector depreciation", "capital-stock law of motion"]
+sensitivity_result = "not_run: zero handling, utilization, and government/housing allocations await review"
+owner = "UNASSIGNED: capital-stock calibration lead"
+independent_validator = "UNASSIGNED: fixed-assets reviewer"
+review_status = "unresolved"
+tests = ["registry:length_68_rate_bounds", "planned:zero_denominator_audit", "planned:omega_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "w_s"
+model_symbol = "w̄_s"
+description = "Opening quarterly wage payment per modeled employed person by sector."
+economic_unit = "millions of current U.S. dollars per modeled employed person per quarter"
+frequency = "annual structure converted to quarterly"
+sector_dimension = "68-vector by modeled producing sector"
+parameter_class = "B"
+source_series = ["BEA NIPA wage control", "BLS QCEW sector wage shares", "BLS CPS employed-person control"]
+source_table_and_line = "src/utils/calibration.jl:870,876"
+reference_period = "2024 annual wages and employment"
+release_vintage = "mixed eligible releases through data truth 2026-08-04"
+transformation = "Constrain QCEW wage allocation to the BEA total, convert annual wages to quarterly, and divide by CPS-rescaled sector persons."
+estimator_or_identity = "w_s = timescale * wages_s / employees_s"
+admissible_range = "68 finite nonnegative values; zeros require review"
+prior_or_uncertainty = "Propagate QCEW allocation, jobs-to-persons scaling, source sampling, and integerization."
+update_cadence = "recompute after eligible wage or employment release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["sector average wage", "aggregate compensation", "labor cost share"]
+sensitivity_result = "not_run: constrained wage allocation and jobs-to-persons bridge are DUBIOUS upstream inputs"
+owner = "UNASSIGNED: labor-income calibration lead"
+independent_validator = "UNASSIGNED: labor-statistics reviewer"
+review_status = "unresolved"
+tests = ["source:sector_wage_control", "registry:length_68_nonnegative", "planned:wage_bridge_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "tau_INC"
+model_symbol = "τ^INC"
+description = "Effective household income-tax rate used on modeled labor and capital income."
+economic_unit = "fraction of taxable household income"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BEA NIPA personal current taxes", "BEA capital-tax bridge", "BEA wages, property income, proprietors' income, and household contributions"]
+source_table_and_line = "src/utils/calibration.jl:910-913; scripts/us/sources.toml NIPA mappings"
+reference_period = "2024 annual flows"
+release_vintage = "BEA NIPA data truth 2026-08-04"
+transformation = "Divide household income and capital taxes by wages plus property and mixed income less household social contributions."
+estimator_or_identity = "tau_INC = (income_tax + capital_taxes) / (wages + property_income + mixed_income - household_contributions)"
+admissible_range = "finite rate in [0,1]"
+prior_or_uncertainty = "Propagate NIPA revisions and the property-income/capital-tax boundary alternatives."
+update_cadence = "recompute after eligible annual NIPA release"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["household tax receipts", "disposable-income identity"]
+sensitivity_result = "identity is traceable; rental/property-income and capital-tax boundaries remain independently unreviewed"
+owner = "UNASSIGNED: fiscal calibration lead"
+independent_validator = "UNASSIGNED: NIPA income-account reviewer"
+review_status = "provisional"
+tests = ["registry:unit_interval", "planned:household_income_identity", "planned:property_income_boundary"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "tau_FIRM"
+model_symbol = "τ^FIRM"
+description = "Effective corporate-tax rate relative to the model-compatible positive-profit denominator."
+economic_unit = "fraction of modeled taxable firm and bank profit"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BEA NIPA taxes on corporate income", "modeled sector operating surplus", "firm interest", "firm debt", "firm cash", "bank equity"]
+source_table_and_line = "src/utils/calibration.jl:916-943"
+reference_period = "2024 annual flows with 2024Q4 financial stocks"
+release_vintage = "mixed BEA and Federal Reserve data truth 2026-08-04"
+transformation = "Construct BeforeIT sector profit after depreciation, inputs, taxes, interest, and deposit allocation; divide quarterly corporate tax by the positive-profit plus bank denominator."
+estimator_or_identity = "tau_FIRM = quarterly_corporate_tax / model_compatible_positive_tax_base"
+admissible_range = "finite rate in [0,1]; denominator must be positive and reconciled"
+prior_or_uncertainty = "Profit-denominator specification, firm-interest concept, debt-instrument mapping, and source revisions."
+update_cadence = "recompute after eligible NIPA, I-O, or Financial Accounts release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["corporate-tax receipts", "firm after-tax profit", "bank profit tax"]
+sensitivity_result = "not_run: profit denominator and annual firm-interest bridge remain open and materially affect the rate"
+owner = "UNASSIGNED: corporate-tax calibration lead"
+independent_validator = "UNASSIGNED: corporate-accounts reviewer"
+review_status = "unresolved"
+tests = ["registry:unit_interval", "planned:profit_denominator_reconciliation", "planned:corporate_tax_receipt_identity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "tau_VAT"
+model_symbol = "τ^VAT"
+description = "Effective household consumption product-tax rate used as a U.S. sales-tax analogue."
+economic_unit = "fraction of household consumption at the registered denominator basis"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BEA Input-Output Tables 259 and 262 household product-tax valuation bridge"]
+source_table_and_line = "src/utils/calibration.jl:944; data/us/validation/DATA_CHECKLIST.md:taxes_products_household"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Allocate commodity product/import taxes to F010 household uses and divide by household consumption."
+estimator_or_identity = "tau_VAT = household_product_taxes / household_consumption"
+admissible_range = "finite rate in [0,1]"
+prior_or_uncertainty = "Valuation-bridge allocation uncertainty; preserve raw tax controls and alternative allocations."
+update_cadence = "recompute after eligible I-O release or approved valuation-bridge change"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["household product-tax receipts", "purchasers-to-basic valuation"]
+sensitivity_result = "not_run: upstream household product-tax field is DUBIOUS pending WS-2C valuation review"
+owner = "UNASSIGNED: tax-accounting calibration lead"
+independent_validator = "UNASSIGNED: indirect-tax reviewer"
+review_status = "unresolved"
+tests = ["registry:unit_interval", "planned:household_tax_allocation", "planned:no_tax_double_count"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "tau_SIF"
+model_symbol = "τ^SIF"
+description = "Effective employer social-insurance contribution rate on sector wages."
+economic_unit = "fraction of wage and salary compensation"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BEA NIPA employer social-insurance contributions", "BEA/QCEW wage control"]
+source_table_and_line = "src/utils/calibration.jl:915"
+reference_period = "2024 annual flows"
+release_vintage = "BEA NIPA data truth 2026-08-04"
+transformation = "Divide employer social contributions by aggregate registered wages."
+estimator_or_identity = "tau_SIF = employer_contributions / sum_s(wages_s)"
+admissible_range = "finite rate in [0,1]"
+prior_or_uncertainty = "NIPA revision and wage-allocation uncertainty."
+update_cadence = "recompute after eligible annual NIPA release"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["employer contribution receipts", "labor cost share"]
+sensitivity_result = "aggregate identity is traceable; independent sector-wage bridge review remains pending"
+owner = "UNASSIGNED: labor-tax calibration lead"
+independent_validator = "UNASSIGNED: NIPA compensation reviewer"
+review_status = "provisional"
+tests = ["registry:unit_interval", "planned:employer_contribution_identity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "tau_SIW"
+model_symbol = "τ^SIW"
+description = "Effective household social-insurance contribution rate on wages."
+economic_unit = "fraction of wage and salary compensation"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BEA NIPA household social-insurance contributions", "BEA/QCEW wage control"]
+source_table_and_line = "src/utils/calibration.jl:946"
+reference_period = "2024 annual flows"
+release_vintage = "BEA NIPA data truth 2026-08-04"
+transformation = "Divide household social contributions by aggregate registered wages."
+estimator_or_identity = "tau_SIW = household_contributions / sum_s(wages_s)"
+admissible_range = "finite rate in [0,1]"
+prior_or_uncertainty = "NIPA revision, household/institutional boundary, and wage-allocation uncertainty."
+update_cadence = "recompute after eligible annual NIPA release"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["household contribution receipts", "disposable-income identity"]
+sensitivity_result = "aggregate identity is traceable; independent wage and contribution-boundary review remains pending"
+owner = "UNASSIGNED: labor-tax calibration lead"
+independent_validator = "UNASSIGNED: NIPA income reviewer"
+review_status = "provisional"
+tests = ["registry:unit_interval", "planned:household_contribution_identity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "tau_EXPORT"
+model_symbol = "τ^EXPORT"
+description = "Effective product-tax rate applied to domestic exports; installed value is zero."
+economic_unit = "fraction of domestic export value"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "F"
+source_series = ["BEA Table 262 product/import-tax valuation bridge", "zero-rating structural convention"]
+source_table_and_line = "src/utils/calibration.jl:947"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Divide allocated export product taxes by domestic exports; current bridge assigns zero to exports."
+estimator_or_identity = "tau_EXPORT = export_product_taxes / sum_g(domestic_exports_g) = 0 in installed variant"
+admissible_range = "finite rate in [0,1]; zero requires an explicit zero-rating convention"
+prior_or_uncertainty = "Structural valuation/tax-treatment alternatives; no observational precision is claimed for the imposed zero."
+update_cadence = "only after tax-accounting rule review or eligible I-O release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["export tax receipts", "trade-price wedge"]
+sensitivity_result = "not_run: zero is an explicit bridge convention, not a directly observed U.S. calibration"
+owner = "UNASSIGNED: external-tax calibration lead"
+independent_validator = "UNASSIGNED: trade-tax reviewer"
+review_status = "unresolved"
+tests = ["registry:unit_interval", "planned:export_tax_line_trace", "planned:zero_rate_variant"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "tau_CF"
+model_symbol = "τ^CF"
+description = "Effective product-tax rate on household dwelling capital formation."
+economic_unit = "fraction of residential fixed investment"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BEA Input-Output Tables 259 and 262 residential-investment tax bridge"]
+source_table_and_line = "src/utils/calibration.jl:948"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Allocate product/import taxes to residential capital formation and divide by its commodity total."
+estimator_or_identity = "tau_CF = residential_investment_product_taxes / residential_fixed_investment"
+admissible_range = "finite rate in [0,1]"
+prior_or_uncertainty = "Residential composition and valuation-bridge allocation uncertainty."
+update_cadence = "recompute after eligible I-O release or approved residential bridge"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["residential investment tax receipts", "dwelling purchasers-price wedge"]
+sensitivity_result = "not_run: both the product-tax bridge and residential composition are unresolved"
+owner = "UNASSIGNED: housing-tax calibration lead"
+independent_validator = "UNASSIGNED: indirect-tax reviewer"
+review_status = "unresolved"
+tests = ["registry:unit_interval", "planned:residential_tax_allocation", "planned:no_tax_double_count"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "tau_G"
+model_symbol = "τ^G"
+description = "Effective product-tax rate on government consumption."
+economic_unit = "fraction of government consumption"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BEA Input-Output Tables 259 and 262 government-use tax bridge"]
+source_table_and_line = "src/utils/calibration.jl:949"
+reference_period = "2024 annual structure"
+release_vintage = "BEA Input-Output data truth 2026-08-04"
+transformation = "Allocate product/import taxes to government consumption uses and divide by the government-use total."
+estimator_or_identity = "tau_G = government_use_product_taxes / government_consumption"
+admissible_range = "finite rate in [0,1]"
+prior_or_uncertainty = "Government-use boundary and valuation-bridge allocation uncertainty."
+update_cadence = "recompute after eligible I-O release or approved valuation bridge"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["government-use product taxes", "government purchasers-price wedge"]
+sensitivity_result = "not_run: upstream government product-tax field is DUBIOUS pending WS-2C review"
+owner = "UNASSIGNED: fiscal-tax calibration lead"
+independent_validator = "UNASSIGNED: government-accounts reviewer"
+review_status = "unresolved"
+tests = ["registry:unit_interval", "planned:government_tax_allocation", "planned:no_tax_double_count"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "psi"
+model_symbol = "ψ"
+description = "Household propensity to devote disposable income to non-housing consumption including its product-tax wedge."
+economic_unit = "fraction of disposable income"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BEA household consumption", "household product-tax bridge", "modeled disposable-income identity"]
+source_table_and_line = "src/utils/calibration.jl:950"
+reference_period = "2024 annual flows"
+release_vintage = "mixed BEA data truth 2026-08-04"
+transformation = "Divide household consumption plus allocated household product taxes by modeled disposable income."
+estimator_or_identity = "psi = (household_consumption + household_product_taxes) / disposable_income"
+admissible_range = "finite rate in [0,1.5]; psi plus psi_H must be reviewed jointly"
+prior_or_uncertainty = "Disposable-income boundary, property-income, tax allocation, and source-revision uncertainty."
+update_cadence = "recompute after reconciled annual household-account release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["household consumption total", "saving rate", "disposable-income identity"]
+sensitivity_result = "not_run: household product taxes and disposable-income boundary remain open"
+owner = "UNASSIGNED: household calibration lead"
+independent_validator = "UNASSIGNED: sector-accounts reviewer"
+review_status = "unresolved"
+tests = ["registry:finite_propensity", "planned:household_budget_identity", "planned:saving_rate_validation"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "psi_H"
+model_symbol = "ψ^H"
+description = "Household propensity to devote disposable income to dwelling investment including its product-tax wedge."
+economic_unit = "fraction of disposable income"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BEA residential fixed investment", "residential product-tax bridge", "modeled disposable-income identity"]
+source_table_and_line = "src/utils/calibration.jl:952"
+reference_period = "2024 annual flows"
+release_vintage = "mixed BEA data truth 2026-08-04"
+transformation = "Divide residential fixed investment plus allocated product taxes by modeled disposable income."
+estimator_or_identity = "psi_H = (residential_investment + residential_product_taxes) / disposable_income"
+admissible_range = "finite rate in [0,1]; psi plus psi_H must be reviewed jointly"
+prior_or_uncertainty = "Residential composition, tax allocation, disposable-income boundary, and source-revision uncertainty."
+update_cadence = "recompute after reconciled annual household and housing release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["residential investment", "household saving allocation", "disposable-income identity"]
+sensitivity_result = "not_run: residential composition and product-tax allocation remain unresolved"
+owner = "UNASSIGNED: housing calibration lead"
+independent_validator = "UNASSIGNED: household-accounts reviewer"
+review_status = "unresolved"
+tests = ["registry:finite_propensity", "planned:household_budget_identity", "planned:residential_investment_bridge"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "theta_DIV"
+model_symbol = "θ^DIV"
+description = "Effective dividend payout ratio aligning modeled distributed firm and bank profit with household property and mixed income."
+economic_unit = "fraction of after-tax modeled profit"
+frequency = "annual structural"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BEA NIPA property income", "BEA proprietors' income", "modeled profit denominator", "firm interest and financial stocks"]
+source_table_and_line = "src/utils/calibration.jl:953-958"
+reference_period = "2024 annual flows with 2024Q4 stocks"
+release_vintage = "mixed BEA and Federal Reserve data truth 2026-08-04"
+transformation = "Divide quarterly property plus mixed income by model-compatible positive profit after interest, bank adjustments, and corporate tax."
+estimator_or_identity = "theta_DIV = quarterly_distributed_income / model_compatible_after_tax_profit"
+admissible_range = "finite rate in [0,1]; denominator must be positive and reconciled"
+prior_or_uncertainty = "Property/mixed-income boundary, profit denominator, firm-interest bridge, and debt-instrument mapping uncertainty."
+update_cadence = "recompute after eligible NIPA, I-O, or Financial Accounts release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["distributed household income", "retained earnings", "firm and bank equity dynamics"]
+sensitivity_result = "not_run: installed value is near one and depends on unresolved profit and property-income definitions"
+owner = "UNASSIGNED: income-distribution calibration lead"
+independent_validator = "UNASSIGNED: corporate-and-household accounts reviewer"
+review_status = "unresolved"
+tests = ["registry:unit_interval", "planned:dividend_income_identity", "planned:profit_denominator_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "mu"
+model_symbol = "μ"
+description = "Effective firm borrowing spread over the opening policy rate."
+economic_unit = "fraction per quarter"
+frequency = "quarterly stock-flow identity using annual interest bridge"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BEA NIPA nonfinancial-business interest paid", "Federal Reserve nonfinancial business debt", "effective federal funds rate"]
+source_table_and_line = "src/utils/calibration.jl:909; data/us/validation/DATA_CHECKLIST.md:firm_interest"
+reference_period = "2024 annual interest, 2024Q4 debt and policy rate"
+release_vintage = "mixed BEA/Federal Reserve data truth 2026-08-04"
+transformation = "Convert interest to a quarterly rate on observed total credit-market debt and subtract the quarterly policy rate."
+estimator_or_identity = "mu = quarterly_firm_interest / firm_debt - r_bar"
+admissible_range = "finite quarterly spread in [-0.10,0.50]"
+prior_or_uncertainty = "Annual-to-quarter allocation, interest boundary, total-credit-to-bank-loan mapping, and timing uncertainty."
+update_cadence = "recompute after eligible NIPA or Financial Accounts release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["aggregate interest expense", "firm borrowing rate", "bank net interest margin"]
+sensitivity_result = "not_run: firm-interest field and single-instrument debt mapping are explicitly unresolved"
+owner = "UNASSIGNED: financial calibration lead"
+independent_validator = "UNASSIGNED: flow-of-funds reviewer"
+review_status = "unresolved"
+tests = ["registry:finite_rate", "planned:firm_interest_line_trace", "planned:credit_instrument_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "r_G"
+model_symbol = "r^G"
+description = "Effective quarterly interest rate on consolidated general-government debt."
+economic_unit = "fraction per quarter"
+frequency = "quarterly identity using annual flow and quarter-end stock"
+sector_dimension = "scalar"
+parameter_class = "B"
+source_series = ["BEA NIPA general-government interest paid", "Federal Reserve federal plus state/local debt"]
+source_table_and_line = "src/utils/calibration.jl:959"
+reference_period = "2024 annual interest and 2024Q4 debt"
+release_vintage = "mixed BEA/Federal Reserve data truth 2026-08-04"
+transformation = "Convert government interest paid to a quarterly amount and divide by quarter-end credit-market debt."
+estimator_or_identity = "r_G = quarterly_government_interest / government_debt"
+admissible_range = "finite quarterly rate in [-0.05,0.25]"
+prior_or_uncertainty = "Flow-stock timing, consolidated boundary, debt valuation, and source revision uncertainty."
+update_cadence = "recompute after eligible NIPA or Financial Accounts release"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["government interest expense", "debt-service rate"]
+sensitivity_result = "identity and source mapping are traceable; timing convention awaits independent review"
+owner = "UNASSIGNED: fiscal-financial calibration lead"
+independent_validator = "UNASSIGNED: government-debt reviewer"
+review_status = "provisional"
+tests = ["registry:finite_rate", "planned:government_interest_identity", "planned:flow_stock_timing"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "theta_UB"
+model_symbol = "θ^UB"
+description = "Net replacement-rate parameter governing newly unemployed workers and later unemployment-benefit payments."
+economic_unit = "fraction of prior net wage"
+frequency = "institutional review"
+sector_dimension = "scalar"
+parameter_class = "F"
+source_series = ["inherited gross replacement constant 0.55", "tau_INC", "tau_SIW"]
+source_table_and_line = "src/utils/calibration.jl:960"
+reference_period = "2024Q4 structural baseline"
+release_vintage = "inherited BeforeIT convention inspected 2026-08-05"
+transformation = "Apply household income-tax and worker-contribution wedges to an assumed 55% gross replacement rate."
+estimator_or_identity = "theta_UB = 0.55 * (1 - tau_INC) * (1 - tau_SIW)"
+admissible_range = "finite rate in [0,1]; preregistered U.S. evidence range required"
+prior_or_uncertainty = "State, wage, duration, and emergency-program heterogeneity; estimate an origin-vintage effective mapping from DOL/NIPA evidence."
+update_cadence = "freeze between institutional reviews; update on rule/evidence release"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["new-unemployed replacement rate", "benefit duration and aggregate UI bill"]
+sensitivity_result = "not_run: 0.55 is inherited from Austrian calibration and is not a U.S. observation"
+owner = "UNASSIGNED: labor-policy calibration lead"
+independent_validator = "UNASSIGNED: unemployment-insurance reviewer"
+review_status = "unresolved"
+tests = ["registry:unit_interval", "planned:DOL_effective_replacement_mapping", "planned:UI_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "theta"
+model_symbol = "θ"
+description = "Quarterly principal-amortization rate on firm debt."
+economic_unit = "fraction of outstanding debt per quarter"
+frequency = "structural assumption review"
+sector_dimension = "scalar"
+parameter_class = "F"
+source_series = ["upstream BeforeIT literature/replication constant"]
+source_table_and_line = "src/utils/calibration.jl:961"
+reference_period = "not period-specific"
+release_vintage = "BeforeIT replication convention inspected 2026-08-05"
+transformation = "Set to the constant 0.05."
+estimator_or_identity = "theta = 0.05"
+admissible_range = "rate in [0,1]; empirical maturity-implied range must be preregistered"
+prior_or_uncertainty = "Modeling-assumption range informed by U.S. business-credit maturity and amortization evidence."
+update_cadence = "freeze between structural reviews"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["debt maturity", "firm cash flow", "default incidence"]
+sensitivity_result = "not_run: no U.S. evidence mapping or forecast-relevant sensitivity is registered yet"
+owner = "UNASSIGNED: firm-finance calibration lead"
+independent_validator = "UNASSIGNED: credit-markets reviewer"
+review_status = "unresolved"
+tests = ["registry:unit_interval", "planned:amortization_evidence", "planned:default_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "zeta"
+model_symbol = "ζ"
+description = "Reduced-form bank capital/leverage constraint coefficient."
+economic_unit = "capital-to-exposure fraction under the model definition"
+frequency = "institutional/model review"
+sector_dimension = "scalar"
+parameter_class = "F"
+source_series = ["upstream BeforeIT literature/replication constant"]
+source_table_and_line = "src/utils/calibration.jl:962"
+reference_period = "not period-specific"
+release_vintage = "BeforeIT replication convention inspected 2026-08-05"
+transformation = "Set to the constant 0.03; not mechanically equated to the U.S. supplementary leverage ratio."
+estimator_or_identity = "zeta = 0.03"
+admissible_range = "rate in (0,1); reduced-form U.S. exposure/capital mapping required"
+prior_or_uncertainty = "Regulatory-concept mapping and behavioral sensitivity; compare evidence-informed capital-ratio alternatives."
+update_cadence = "freeze between regulatory/model reviews"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["bank lending capacity", "capital adequacy", "credit rationing"]
+sensitivity_result = "not_run: 0.03 is an assumption with no completed U.S. regulatory mapping"
+owner = "UNASSIGNED: banking calibration lead"
+independent_validator = "UNASSIGNED: bank-regulation reviewer"
+review_status = "unresolved"
+tests = ["registry:open_unit_interval", "planned:capital_concept_mapping", "planned:credit_rationing_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "zeta_LTV"
+model_symbol = "ζ^LTV"
+description = "Loan-to-value ceiling applied to household dwelling finance."
+economic_unit = "loan-to-collateral-value fraction"
+frequency = "institutional/model review"
+sector_dimension = "scalar"
+parameter_class = "F"
+source_series = ["upstream BeforeIT literature/replication constant"]
+source_table_and_line = "src/utils/calibration.jl:963"
+reference_period = "not period-specific"
+release_vintage = "BeforeIT replication convention inspected 2026-08-05"
+transformation = "Set to the constant 0.60."
+estimator_or_identity = "zeta_LTV = 0.60"
+admissible_range = "rate in (0,1]; U.S. mortgage-distribution sensitivity range required"
+prior_or_uncertainty = "Heterogeneity across borrower, mortgage type, vintage, and policy regime."
+update_cadence = "freeze between housing-credit reviews"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["mortgage credit", "housing investment", "household leverage"]
+sensitivity_result = "not_run: 0.60 has no completed mapping to U.S. mortgage origination evidence"
+owner = "UNASSIGNED: housing-finance calibration lead"
+independent_validator = "UNASSIGNED: mortgage-market reviewer"
+review_status = "unresolved"
+tests = ["registry:open_closed_unit_interval", "planned:LTV_distribution_mapping", "planned:housing_credit_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "zeta_b"
+model_symbol = "ζ^b"
+description = "Loan-to-capital ratio assigned to a new firm after bankruptcy."
+economic_unit = "loan-to-capital fraction"
+frequency = "behavioral/model review"
+sector_dimension = "scalar"
+parameter_class = "F"
+source_series = ["upstream BeforeIT literature/replication constant"]
+source_table_and_line = "src/utils/calibration.jl:964"
+reference_period = "not period-specific"
+release_vintage = "BeforeIT replication convention inspected 2026-08-05"
+transformation = "Set to the constant 0.50."
+estimator_or_identity = "zeta_b = 0.50"
+admissible_range = "rate in [0,1]; entry-finance evidence range required"
+prior_or_uncertainty = "Latent entry-finance behavior represented as a visible assumption and tested against entry/default moments."
+update_cadence = "freeze between structural behavioral reviews"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["post-bankruptcy entry capitalization", "default cascades", "firm turnover"]
+sensitivity_result = "not_run: no U.S. entry-finance mapping or scale-robust sensitivity is complete"
+owner = "UNASSIGNED: firm-dynamics calibration lead"
+independent_validator = "UNASSIGNED: business-dynamics reviewer"
+review_status = "unresolved"
+tests = ["registry:unit_interval", "planned:entry_finance_moments", "planned:bankruptcy_scale_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "alpha_G"
+model_symbol = "α_G"
+description = "Autoregressive coefficient for the log level of aggregate real government demand under the installed AR variant."
+economic_unit = "dimensionless AR(1) coefficient"
+frequency = "quarterly estimation"
+sector_dimension = "scalar aggregate process"
+parameter_class = "C"
+source_series = ["BEA NIPA T10106:22 real government consumption expenditures and gross investment"]
+source_table_and_line = "src/utils/calibration.jl:990-1030"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Divide SAAR dollar levels by four upstream, anchor to 2024 structural government demand, take logs, and fit AR(1) with intercept."
+estimator_or_identity = "OLS/VAR helper: log(G_t) = alpha_G*log(G_{t-1}) + beta_G + epsilon_G_t"
+admissible_range = "finite; production log-level variant requires |alpha_G| < 1 or a documented local-to-unity treatment"
+prior_or_uncertainty = "Frozen-origin coefficient covariance plus block-bootstrap and level-versus-growth specification uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["government-demand persistence", "multi-horizon government-demand forecast errors"]
+sensitivity_result = "not_run: installed log-level coefficient is near unit root and the growth-rate AR wiring gate remains open"
+owner = "UNASSIGNED: time-series calibration lead"
+independent_validator = "UNASSIGNED: macroeconometrics reviewer"
+review_status = "unresolved"
+tests = ["registry:finite", "planned:AR_stationarity", "planned:level_growth_frozen_origin_compare"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "beta_G"
+model_symbol = "β_G"
+description = "Intercept for the installed log-level AR(1) government-demand process."
+economic_unit = "log model-demand units per quarter"
+frequency = "quarterly estimation"
+sector_dimension = "scalar aggregate process"
+parameter_class = "C"
+source_series = ["BEA NIPA T10106:22 real government consumption expenditures and gross investment"]
+source_table_and_line = "src/utils/calibration.jl:990-1030"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Use the intercept from the AR(1) fitted to anchored log government demand."
+estimator_or_identity = "OLS/VAR helper intercept in log(G_t) = alpha_G*log(G_{t-1}) + beta_G + epsilon_G_t"
+admissible_range = "finite; jointly plausible with alpha_G and the series' unconditional level"
+prior_or_uncertainty = "Joint frozen-origin covariance with alpha_G plus level/growth specification uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["government-demand long-run level", "multi-horizon forecast bias"]
+sensitivity_result = "not_run: interpretation changes under the preregistered growth-rate AR alternative"
+owner = "UNASSIGNED: time-series calibration lead"
+independent_validator = "UNASSIGNED: macroeconometrics reviewer"
+review_status = "unresolved"
+tests = ["registry:finite", "planned:AR_unconditional_mean", "planned:level_growth_frozen_origin_compare"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "sigma_G"
+model_symbol = "σ_G"
+description = "Innovation standard deviation for the government-demand AR(1) process."
+economic_unit = "log points per quarter"
+frequency = "quarterly estimation"
+sector_dimension = "scalar aggregate process"
+parameter_class = "C"
+source_series = ["BEA NIPA T10106:22 real government consumption expenditures and gross investment"]
+source_table_and_line = "src/utils/calibration.jl:990-1030"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Take the square root of the fitted residual covariance for the selected AR specification."
+estimator_or_identity = "sigma_G = standard deviation of epsilon_G"
+admissible_range = "finite and nonnegative"
+prior_or_uncertainty = "Residual-variance and finite-sample uncertainty; robust and rolling estimates must be compared."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["government-demand innovation variance", "forecast density calibration"]
+sensitivity_result = "not_run: residual variance depends on unresolved level-versus-growth specification and innovation-centering checks"
+owner = "UNASSIGNED: time-series calibration lead"
+independent_validator = "UNASSIGNED: density-forecast reviewer"
+review_status = "unresolved"
+tests = ["registry:nonnegative_finite", "planned:innovation_centering", "planned:variance_stability"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "alpha_E"
+model_symbol = "α_E"
+description = "Autoregressive coefficient for the log level of aggregate real U.S. exports under the installed AR variant."
+economic_unit = "dimensionless AR(1) coefficient"
+frequency = "quarterly estimation"
+sector_dimension = "scalar aggregate export process"
+parameter_class = "C"
+source_series = ["BEA NIPA T10106:16 real exports"]
+source_table_and_line = "src/utils/calibration.jl:997-1034"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Divide SAAR dollar levels by four upstream, anchor to 2024 domestic exports, take logs, and fit AR(1) with intercept."
+estimator_or_identity = "OLS/VAR helper: log(E_t) = alpha_E*log(E_{t-1}) + beta_E + epsilon_E_t"
+admissible_range = "finite; production log-level variant requires |alpha_E| < 1 or documented local-to-unity treatment"
+prior_or_uncertainty = "Frozen-origin covariance plus block-bootstrap, pandemic-window, and level-versus-growth specification uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["export persistence", "multi-horizon export forecast errors"]
+sensitivity_result = "not_run: installed coefficient is near unit root and export AR variant selection remains open"
+owner = "UNASSIGNED: external-sector econometrics lead"
+independent_validator = "UNASSIGNED: macroeconometrics reviewer"
+review_status = "unresolved"
+tests = ["registry:finite", "planned:AR_stationarity", "planned:export_level_growth_compare"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "beta_E"
+model_symbol = "β_E"
+description = "Intercept for the installed log-level AR(1) U.S. export process."
+economic_unit = "log model-export units per quarter"
+frequency = "quarterly estimation"
+sector_dimension = "scalar aggregate export process"
+parameter_class = "C"
+source_series = ["BEA NIPA T10106:16 real exports"]
+source_table_and_line = "src/utils/calibration.jl:997-1034"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Use the intercept from the AR(1) fitted to anchored log domestic exports."
+estimator_or_identity = "OLS/VAR helper intercept in log(E_t) = alpha_E*log(E_{t-1}) + beta_E + epsilon_E_t"
+admissible_range = "finite; jointly plausible with alpha_E and the series' unconditional level"
+prior_or_uncertainty = "Joint frozen-origin covariance with alpha_E plus level/growth specification uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["export long-run level", "multi-horizon export forecast bias"]
+sensitivity_result = "not_run: interpretation changes under growth-rate AR and alternative trade anchors"
+owner = "UNASSIGNED: external-sector econometrics lead"
+independent_validator = "UNASSIGNED: macroeconometrics reviewer"
+review_status = "unresolved"
+tests = ["registry:finite", "planned:AR_unconditional_mean", "planned:export_level_growth_compare"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "sigma_E"
+model_symbol = "σ_E"
+description = "Innovation standard deviation for the U.S. export AR(1) process."
+economic_unit = "log points per quarter"
+frequency = "quarterly estimation"
+sector_dimension = "scalar aggregate export process"
+parameter_class = "C"
+source_series = ["BEA NIPA T10106:16 real exports"]
+source_table_and_line = "src/utils/calibration.jl:997-1034"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Take the square root of the fitted export residual covariance for the selected AR specification."
+estimator_or_identity = "sigma_E = standard deviation of epsilon_E"
+admissible_range = "finite and nonnegative"
+prior_or_uncertainty = "Residual-variance, pandemic-window, and finite-sample uncertainty; robust alternatives required."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["export innovation variance", "forecast density calibration"]
+sensitivity_result = "not_run: variance depends on unresolved AR specification and innovation-centering tests"
+owner = "UNASSIGNED: external-sector econometrics lead"
+independent_validator = "UNASSIGNED: density-forecast reviewer"
+review_status = "unresolved"
+tests = ["registry:nonnegative_finite", "planned:innovation_centering", "planned:export_variance_stability"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "alpha_I"
+model_symbol = "α_I"
+description = "Autoregressive coefficient for the log level of aggregate real U.S. imports under the installed AR variant."
+economic_unit = "dimensionless AR(1) coefficient"
+frequency = "quarterly estimation"
+sector_dimension = "scalar aggregate import process"
+parameter_class = "C"
+source_series = ["BEA NIPA T10106:19 real imports"]
+source_table_and_line = "src/utils/calibration.jl:1004-1037"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Divide SAAR dollar levels by four upstream, anchor to 2024 imports, take logs, and fit AR(1) with intercept."
+estimator_or_identity = "OLS/VAR helper: log(I_t) = alpha_I*log(I_{t-1}) + beta_I + epsilon_I_t"
+admissible_range = "finite; production log-level variant requires |alpha_I| < 1 or documented local-to-unity treatment"
+prior_or_uncertainty = "Frozen-origin covariance plus block-bootstrap, pandemic-window, and level-versus-growth specification uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["import persistence", "multi-horizon import forecast errors"]
+sensitivity_result = "not_run: installed coefficient is near unit root and import AR variant selection remains open"
+owner = "UNASSIGNED: external-sector econometrics lead"
+independent_validator = "UNASSIGNED: macroeconometrics reviewer"
+review_status = "unresolved"
+tests = ["registry:finite", "planned:AR_stationarity", "planned:import_level_growth_compare"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "beta_I"
+model_symbol = "β_I"
+description = "Intercept for the installed log-level AR(1) U.S. import process."
+economic_unit = "log model-import units per quarter"
+frequency = "quarterly estimation"
+sector_dimension = "scalar aggregate import process"
+parameter_class = "C"
+source_series = ["BEA NIPA T10106:19 real imports"]
+source_table_and_line = "src/utils/calibration.jl:1004-1037"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Use the intercept from the AR(1) fitted to anchored log imports."
+estimator_or_identity = "OLS/VAR helper intercept in log(I_t) = alpha_I*log(I_{t-1}) + beta_I + epsilon_I_t"
+admissible_range = "finite; jointly plausible with alpha_I and the series' unconditional level"
+prior_or_uncertainty = "Joint frozen-origin covariance with alpha_I plus level/growth and trade-anchor specification uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["import long-run level", "multi-horizon import forecast bias"]
+sensitivity_result = "not_run: interpretation changes under growth-rate AR and alternative commodity-balance closures"
+owner = "UNASSIGNED: external-sector econometrics lead"
+independent_validator = "UNASSIGNED: macroeconometrics reviewer"
+review_status = "unresolved"
+tests = ["registry:finite", "planned:AR_unconditional_mean", "planned:import_level_growth_compare"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "sigma_I"
+model_symbol = "σ_I"
+description = "Innovation standard deviation for the U.S. import AR(1) process."
+economic_unit = "log points per quarter"
+frequency = "quarterly estimation"
+sector_dimension = "scalar aggregate import process"
+parameter_class = "C"
+source_series = ["BEA NIPA T10106:19 real imports"]
+source_table_and_line = "src/utils/calibration.jl:1004-1037"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Take the square root of the fitted import residual covariance for the selected AR specification."
+estimator_or_identity = "sigma_I = standard deviation of epsilon_I"
+admissible_range = "finite and nonnegative"
+prior_or_uncertainty = "Residual-variance, pandemic-window, and finite-sample uncertainty; robust alternatives required."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["import innovation variance", "forecast density calibration"]
+sensitivity_result = "not_run: variance depends on unresolved AR specification and innovation-centering tests"
+owner = "UNASSIGNED: external-sector econometrics lead"
+independent_validator = "UNASSIGNED: density-forecast reviewer"
+review_status = "unresolved"
+tests = ["registry:nonnegative_finite", "planned:innovation_centering", "planned:import_variance_stability"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "alpha_Y_EA"
+model_symbol = "α_Y,policy"
+description = "Autoregressive coefficient for log U.S. real GDP in the legacy ea-named domestic monetary-policy block."
+economic_unit = "dimensionless AR(1) coefficient"
+frequency = "quarterly estimation"
+sector_dimension = "scalar domestic-policy process"
+parameter_class = "C"
+source_series = ["BEA NIPA T10106:1 real U.S. GDP duplicated into the legacy ea adapter"]
+source_table_and_line = "src/utils/calibration.jl:984-989; README_US_CALIBRATION.md:1.4"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Divide SAAR level by four upstream, take the log of U.S. real GDP, and fit AR(1) with intercept."
+estimator_or_identity = "OLS/VAR helper: log(Y_US,t) = alpha_Y_EA*log(Y_US,t-1) + beta_Y_EA + epsilon_Y_EA,t"
+admissible_range = "finite; production log-level process requires |alpha_Y_EA| < 1 or documented local-to-unity treatment"
+prior_or_uncertainty = "Frozen-origin covariance plus revision, local-to-unity, trend, and estimation-window uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["domestic activity persistence", "Taylor-rule activity regressor", "GDP process forecast errors"]
+sensitivity_result = "not_run: legacy naming is resolved semantically, but near-unit-root log-level specification remains open"
+owner = "UNASSIGNED: monetary-policy econometrics lead"
+independent_validator = "UNASSIGNED: macroeconometrics reviewer"
+review_status = "unresolved"
+tests = ["concept:legacy_ea_is_domestic", "planned:AR_stationarity", "planned:GDP_process_variants"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "beta_Y_EA"
+model_symbol = "β_Y,policy"
+description = "Intercept for the log U.S. real-GDP AR(1) in the legacy ea-named domestic policy block."
+economic_unit = "log millions of chained U.S. dollars per quarter"
+frequency = "quarterly estimation"
+sector_dimension = "scalar domestic-policy process"
+parameter_class = "C"
+source_series = ["BEA NIPA T10106:1 real U.S. GDP duplicated into the legacy ea adapter"]
+source_table_and_line = "src/utils/calibration.jl:984-989"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Use the intercept from the AR(1) fitted to log U.S. real GDP."
+estimator_or_identity = "OLS/VAR helper intercept in the registered alpha_Y_EA equation"
+admissible_range = "finite; jointly plausible with alpha_Y_EA and the observed GDP scale"
+prior_or_uncertainty = "Joint frozen-origin covariance with alpha_Y_EA plus trend and specification uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["GDP long-run level", "activity-process forecast bias"]
+sensitivity_result = "not_run: unconditional-level interpretation is fragile under near-unit-root persistence"
+owner = "UNASSIGNED: monetary-policy econometrics lead"
+independent_validator = "UNASSIGNED: macroeconometrics reviewer"
+review_status = "unresolved"
+tests = ["registry:finite", "planned:AR_unconditional_mean", "planned:GDP_process_variants"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "sigma_Y_EA"
+model_symbol = "σ_Y,policy"
+description = "Innovation standard deviation for the log U.S. real-GDP process in the legacy ea-named policy block."
+economic_unit = "log points per quarter"
+frequency = "quarterly estimation"
+sector_dimension = "scalar domestic-policy process"
+parameter_class = "C"
+source_series = ["BEA NIPA T10106:1 real U.S. GDP duplicated into the legacy ea adapter"]
+source_table_and_line = "src/utils/calibration.jl:984-989"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Take the square root of the fitted residual covariance from the log-level GDP AR(1)."
+estimator_or_identity = "sigma_Y_EA = standard deviation of epsilon_Y_EA"
+admissible_range = "finite and nonnegative"
+prior_or_uncertainty = "Residual-variance, data-revision, pandemic-window, and finite-sample uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["GDP innovation variance", "forecast density calibration"]
+sensitivity_result = "not_run: residual variance depends on unresolved trend/local-to-unity treatment"
+owner = "UNASSIGNED: monetary-policy econometrics lead"
+independent_validator = "UNASSIGNED: density-forecast reviewer"
+review_status = "unresolved"
+tests = ["registry:nonnegative_finite", "planned:innovation_centering", "planned:GDP_variance_stability"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "alpha_pi_EA"
+model_symbol = "α_π,policy"
+description = "Autoregressive coefficient for quarterly U.S. GDP-deflator inflation in the legacy ea-named domestic policy block."
+economic_unit = "dimensionless AR(1) coefficient"
+frequency = "quarterly estimation"
+sector_dimension = "scalar domestic-policy inflation process"
+parameter_class = "C"
+source_series = ["BEA nominal GDP T10105:1", "BEA real GDP T10106:1", "implied U.S. GDP deflator"]
+source_table_and_line = "src/utils/calibration.jl:967-969; README_US_CALIBRATION.md:1.4"
+reference_period = "1997Q1 through 2024Q4, with 1996Q4 used for the first difference"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Construct the GDP deflator, take first differences of its log, and fit AR(1) with intercept."
+estimator_or_identity = "OLS/VAR helper: pi_t = alpha_pi_EA*pi_{t-1} + beta_pi_EA + epsilon_pi_EA,t"
+admissible_range = "finite; production process requires |alpha_pi_EA| < 1"
+prior_or_uncertainty = "Frozen-origin covariance plus data-revision, pandemic-window, and inflation-measure uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["GDP-deflator inflation persistence", "Taylor-rule inflation regressor"]
+sensitivity_result = "stationarity bound holds in installed artifact; origin-by-origin stability and independent review remain pending"
+owner = "UNASSIGNED: inflation econometrics lead"
+independent_validator = "UNASSIGNED: price-statistics reviewer"
+review_status = "provisional"
+tests = ["registry:stationary_AR1", "planned:inflation_measure_sensitivity", "planned:frozen_origin_parameter_stability"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "beta_pi_EA"
+model_symbol = "β_π,policy"
+description = "Intercept for quarterly U.S. GDP-deflator inflation in the legacy ea-named domestic policy block."
+economic_unit = "log inflation points per quarter"
+frequency = "quarterly estimation"
+sector_dimension = "scalar domestic-policy inflation process"
+parameter_class = "C"
+source_series = ["BEA nominal GDP T10105:1", "BEA real GDP T10106:1", "implied U.S. GDP deflator"]
+source_table_and_line = "src/utils/calibration.jl:967-969"
+reference_period = "1997Q1 through 2024Q4, with 1996Q4 used for the first difference"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Use the intercept from the AR(1) fitted to quarterly log GDP-deflator changes."
+estimator_or_identity = "OLS/VAR helper intercept in the registered alpha_pi_EA equation"
+admissible_range = "finite; implied unconditional inflation must be economically plausible"
+prior_or_uncertainty = "Joint frozen-origin covariance with alpha_pi_EA and inflation-measure uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["unconditional inflation rate", "inflation forecast bias"]
+sensitivity_result = "implied rate is finite; alternative inflation measures and frozen-origin stability remain pending"
+owner = "UNASSIGNED: inflation econometrics lead"
+independent_validator = "UNASSIGNED: price-statistics reviewer"
+review_status = "provisional"
+tests = ["registry:finite", "planned:AR_unconditional_mean", "planned:inflation_measure_sensitivity"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "sigma_pi_EA"
+model_symbol = "σ_π,policy"
+description = "Innovation standard deviation for quarterly U.S. GDP-deflator inflation."
+economic_unit = "log inflation points per quarter"
+frequency = "quarterly estimation"
+sector_dimension = "scalar domestic-policy inflation process"
+parameter_class = "C"
+source_series = ["BEA nominal GDP T10105:1", "BEA real GDP T10106:1", "implied U.S. GDP deflator"]
+source_table_and_line = "src/utils/calibration.jl:967-969"
+reference_period = "1997Q1 through 2024Q4, with 1996Q4 used for the first difference"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Take the square root of the residual covariance from the inflation AR(1)."
+estimator_or_identity = "sigma_pi_EA = standard deviation of epsilon_pi_EA"
+admissible_range = "finite and nonnegative"
+prior_or_uncertainty = "Residual-variance, revision, pandemic-window, and inflation-measure uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["inflation innovation variance", "inflation density calibration"]
+sensitivity_result = "nonnegative in installed artifact; robust variance and origin stability remain pending"
+owner = "UNASSIGNED: inflation econometrics lead"
+independent_validator = "UNASSIGNED: density-forecast reviewer"
+review_status = "provisional"
+tests = ["registry:nonnegative_finite", "planned:innovation_centering", "planned:inflation_variance_stability"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "C"
+model_symbol = "C"
+description = "Joint innovation covariance matrix for domestic-policy GDP, export, and import stochastic processes."
+economic_unit = "squared log points per quarter"
+frequency = "quarterly estimation"
+sector_dimension = "3×3 process covariance ordered [Y_US_policy, exports, imports]"
+parameter_class = "C"
+source_series = ["residuals from alpha_Y_EA/beta_Y_EA", "residuals from alpha_E/beta_E", "residuals from alpha_I/beta_I"]
+source_table_and_line = "src/utils/calibration.jl:1039-1049"
+reference_period = "1997Q1 through 2024Q4, aligned to the selected AR variants"
+release_vintage = "BEA quarterly panel data truth 2026-08-04"
+transformation = "Align residual samples and compute the sample covariance across GDP, export, and import innovations."
+estimator_or_identity = "C = cov([epsilon_Y_EA epsilon_E epsilon_I]) under log-level mode; GDP residual is shifted under growth-rate domestic mode"
+admissible_range = "finite symmetric 3×3 positive-semidefinite matrix with nonnegative diagonal"
+prior_or_uncertainty = "Wishart/bootstrap covariance uncertainty plus residual-alignment and mixed-AR-specification uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin with the selected AR variant"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["cross-process shock dependence", "joint forecast density", "scenario innovation propagation"]
+sensitivity_result = "not_run: PSD check passes, but innovation centering, residual alignment, and mixed level/growth semantics remain open"
+owner = "UNASSIGNED: multivariate econometrics lead"
+independent_validator = "UNASSIGNED: density-and-scenario reviewer"
+review_status = "unresolved"
+tests = ["baseline:covariance_PSD", "planned:innovation_centering", "planned:residual_alignment", "planned:joint_density_calibration"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "rho"
+model_symbol = "ρ"
+description = "Interest-rate smoothing coefficient in the estimated U.S. Taylor-rule representation."
+economic_unit = "dimensionless lag coefficient"
+frequency = "quarterly estimation"
+sector_dimension = "scalar monetary-policy rule"
+parameter_class = "C"
+source_series = ["FRED FEDFUNDS effective federal funds rate", "BEA U.S. GDP deflator", "BEA U.S. real GDP"]
+source_table_and_line = "src/utils/estimate.jl:53-75; src/utils/calibration.jl:971-976"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "Federal Reserve/BEA data truth 2026-08-04"
+transformation = "Convert the annualized-percent policy rate to a quarterly fraction and estimate a lagged-rate regression with U.S. inflation and real-GDP growth."
+estimator_or_identity = "rho is the lag coefficient from the Taylor-rule regression"
+admissible_range = "finite in [0,1) for the production rule; local-to-unity treatment must be explicit"
+prior_or_uncertainty = "Frozen-origin regression covariance, real-time-vintage revisions, regime breaks, and effective-lower-bound uncertainty."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["policy-rate persistence", "multi-horizon policy-rate forecast errors"]
+sensitivity_result = "raw pre-forecast-error-fit value is restored; real-time-vintage and regime-stability review remains pending"
+owner = "UNASSIGNED: monetary-policy calibration lead"
+independent_validator = "UNASSIGNED: monetary-econometrics reviewer"
+review_status = "provisional"
+tests = ["registry:rho_bounds", "firewall:no_class_H_override", "planned:real_time_taylor_rule"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "xi_pi"
+model_symbol = "ξ_π"
+description = "Long-run Taylor-rule response coefficient on quarterly U.S. GDP-deflator inflation."
+economic_unit = "policy-rate response per unit inflation"
+frequency = "quarterly estimation"
+sector_dimension = "scalar monetary-policy rule"
+parameter_class = "C"
+source_series = ["FRED FEDFUNDS", "BEA implied U.S. GDP deflator"]
+source_table_and_line = "src/utils/estimate.jl:53-75; src/utils/calibration.jl:971-976"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "Federal Reserve/BEA data truth 2026-08-04"
+transformation = "Estimate the contemporaneous inflation coefficient and divide by one minus rho."
+estimator_or_identity = "xi_pi = gamma_inflation / (1 - rho)"
+admissible_range = "finite in [-5,10]; denominator-distance and policy-stability checks required"
+prior_or_uncertainty = "Joint delta-method/bootstrap uncertainty with rho, vintage revisions, regime breaks, and inflation-measure alternatives."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["policy response to inflation", "policy-rate forecasts", "inflation stabilization"]
+sensitivity_result = "raw pre-forecast-error-fit value is restored; coefficient stability and denominator amplification remain pending"
+owner = "UNASSIGNED: monetary-policy calibration lead"
+independent_validator = "UNASSIGNED: monetary-econometrics reviewer"
+review_status = "provisional"
+tests = ["registry:finite", "firewall:no_class_H_override", "planned:taylor_denominator_stability"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "xi_gamma"
+model_symbol = "ξ_γ"
+description = "Long-run Taylor-rule response coefficient on quarterly U.S. real-GDP growth."
+economic_unit = "policy-rate response per unit real-GDP growth"
+frequency = "quarterly estimation"
+sector_dimension = "scalar monetary-policy rule"
+parameter_class = "C"
+source_series = ["FRED FEDFUNDS", "BEA NIPA T10106:1 real U.S. GDP"]
+source_table_and_line = "src/utils/estimate.jl:53-75; src/utils/calibration.jl:971-976"
+reference_period = "1997Q1 through 2024Q4"
+release_vintage = "Federal Reserve/BEA data truth 2026-08-04"
+transformation = "Estimate the contemporaneous real-GDP-growth coefficient and divide by one minus rho."
+estimator_or_identity = "xi_gamma = gamma_growth / (1 - rho)"
+admissible_range = "finite in [-5,10]; denominator-distance and policy-stability checks required"
+prior_or_uncertainty = "Joint delta-method/bootstrap uncertainty with rho, real-time GDP revisions, regime breaks, and activity-gap alternatives."
+update_cadence = "re-estimate at every frozen quarterly origin"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["policy response to activity", "policy-rate forecasts", "output stabilization"]
+sensitivity_result = "raw pre-forecast-error-fit value is restored; real-time GDP and denominator stability remain pending"
+owner = "UNASSIGNED: monetary-policy calibration lead"
+independent_validator = "UNASSIGNED: monetary-econometrics reviewer"
+review_status = "provisional"
+tests = ["registry:finite", "firewall:no_class_H_override", "planned:real_time_activity_measure"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "pi_star"
+model_symbol = "π*"
+description = "Quarterly central-bank inflation target used by the Taylor rule."
+economic_unit = "fraction per quarter"
+frequency = "institutional-policy review"
+sector_dimension = "scalar monetary-policy rule"
+parameter_class = "E"
+source_series = ["Federal Reserve 2 percent longer-run inflation goal", "BeforeIT policy-rule conversion"]
+source_table_and_line = "src/utils/estimate.jl:72"
+reference_period = "policy regime applicable at the forecast origin"
+release_vintage = "Federal Reserve policy convention reviewed 2026-08-05"
+transformation = "Convert a 2% annual compound target to an equivalent quarterly rate."
+estimator_or_identity = "pi_star = (1.02)^(1/4) - 1"
+admissible_range = "quarterly rate corresponding to a documented annual target; installed value must equal the compound conversion"
+prior_or_uncertainty = "Institutional-rule uncertainty and alternative target-measure interpretation; not estimated from forecast errors."
+update_cadence = "only on a documented policy-framework change"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["Taylor-rule steady state", "long-run inflation anchor"]
+sensitivity_result = "conversion check passes for the installed value; policy-measure interpretation awaits independent review"
+owner = "UNASSIGNED: monetary-policy calibration lead"
+independent_validator = "UNASSIGNED: Federal Reserve policy reviewer"
+review_status = "provisional"
+tests = ["registry:compound_annual_to_quarterly", "firewall:not_forecast_error_fitted"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "r_star"
+model_symbol = "r*"
+description = "Taylor-rule quarterly intercept term implied by the inflation target and estimated inflation response."
+economic_unit = "fraction per quarter"
+frequency = "quarterly estimation with institutional target"
+sector_dimension = "scalar monetary-policy rule"
+parameter_class = "C"
+source_series = ["pi_star", "xi_pi"]
+source_table_and_line = "src/utils/estimate.jl:73"
+reference_period = "1997Q1 through 2024Q4 policy-rule estimate and origin policy target"
+release_vintage = "Federal Reserve/BEA data truth 2026-08-04"
+transformation = "Combine the compound quarterly inflation target with the estimated long-run inflation response."
+estimator_or_identity = "r_star = pi_star * (xi_pi - 1)"
+admissible_range = "finite quarterly rate in [-0.10,0.10]"
+prior_or_uncertainty = "Propagate joint xi_pi estimation uncertainty and institutional target uncertainty; this is not an independently observed natural rate."
+update_cadence = "recompute with every frozen-origin Taylor-rule estimate or target change"
+allowed_forecast_products = ["raw_abm", "research_only"]
+identification_targets = ["Taylor-rule intercept", "policy-rate steady state"]
+sensitivity_result = "raw pre-forecast-error-fit value is restored; natural-rate interpretation is explicitly rejected pending a separate concept"
+owner = "UNASSIGNED: monetary-policy calibration lead"
+independent_validator = "UNASSIGNED: monetary-econometrics reviewer"
+review_status = "provisional"
+tests = ["registry:r_star_identity", "firewall:no_class_H_override", "planned:policy_intercept_interpretation"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "use_growth_rate_ar1"
+model_symbol = "variant.use_growth_rate_ar1"
+description = "Model-variant switch selecting growth-rate AR(1) processes for domestic government, export, and import aggregates; installed raw baseline selects log levels."
+economic_unit = "boolean"
+frequency = "structural specification review"
+sector_dimension = "scalar model-variant flag"
+parameter_class = "F"
+source_series = ["forecasting specification choice"]
+source_table_and_line = "src/utils/calibration.jl:1011-1037,1108"
+reference_period = "2024Q4 structural baseline"
+release_vintage = "BeforeIT calibration code inspected 2026-08-05"
+transformation = "Set false to fit domestic G/E/I AR processes in log levels; true selects first log differences."
+estimator_or_identity = "boolean structural variant; installed value false"
+admissible_range = "boolean; selection must be preregistered and cannot use evaluation-period outcomes"
+prior_or_uncertainty = "Discrete model uncertainty evaluated with frozen-origin training data and common-information backtests."
+update_cadence = "freeze before evaluation; revisit only in a versioned model-selection cycle"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["stationarity", "multi-horizon G/E/I forecast accuracy", "density calibration"]
+sensitivity_result = "not_run: plan explicitly requires guarding and comparing growth-rate versus log-level wiring"
+owner = "UNASSIGNED: time-series calibration lead"
+independent_validator = "UNASSIGNED: leakage-control reviewer"
+review_status = "unresolved"
+tests = ["registry:boolean", "planned:growth_rate_AR_wiring", "planned:frozen_origin_model_selection"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "use_product_tax_netting"
+model_symbol = "variant.use_product_tax_netting"
+description = "Model-variant switch selecting the product-tax netting treatment in the supply/use adapter; installed baseline enables netting."
+economic_unit = "boolean"
+frequency = "structural accounting review"
+sector_dimension = "scalar model-variant flag"
+parameter_class = "F"
+source_series = ["BEA Tables 259/262 valuation bridge", "model accounting specification"]
+source_table_and_line = "scripts/us/USPipeline.jl:2899; src/utils/calibration.jl parameter packing"
+reference_period = "2024 annual structure"
+release_vintage = "BEA data truth 2026-08-04 and code inspected 2026-08-05"
+transformation = "Set true in the U.S. FIGARO adapter and carry the selected treatment into the raw parameter artifact."
+estimator_or_identity = "boolean structural variant; installed value true"
+admissible_range = "boolean; selected variant must close all registered current-price identities"
+prior_or_uncertainty = "Discrete observed-tax versus zero-tax/netting structural uncertainty."
+update_cadence = "only after WS-2C accounting gate or versioned valuation-bridge revision"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["product-tax revenue", "producer/purchaser prices", "three-approach GDP closure"]
+sensitivity_result = "not_run: observed-tax and zero-product-tax prototypes are not yet jointly closed"
+owner = "UNASSIGNED: tax-accounting calibration lead"
+independent_validator = "UNASSIGNED: national-accounts reviewer"
+review_status = "unresolved"
+tests = ["registry:boolean", "planned:observed_zero_tax_variants", "planned:tax_identity_closure"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+
+[[parameter]]
+parameter_id = "use_commodity_balance_inventory"
+model_symbol = "variant.use_commodity_balance_inventory"
+description = "Legacy U.S. variant switch that converts part of an unreconciled commodity-balance discrepancy into opening inventory stock. The discrepancy is not observed inventory investment."
+economic_unit = "boolean"
+frequency = "structural accounting review"
+sector_dimension = "scalar model-variant flag"
+parameter_class = "F"
+source_series = ["BEA Tables 259/262 supply/use controls", "BEA NIPA T10105 line 14", "model commodity-balance specification"]
+source_table_and_line = "scripts/us/USPipeline.jl FIGARO adapter; src/utils/calibration.jl commodity_balance_diagnostics and opening_inventory_from_discrepancy; data/us/validation/ACCOUNTING_GATES.toml"
+reference_period = "2024 annual structure"
+release_vintage = "BEA data truth 2026-08-04 and code inspected 2026-08-05"
+transformation = "When true, set the nonnegative opening stock to timescale * positive_part(-commodity_discrepancy). Keep this legacy numerical bridge separate from signed quarterly inventory investment."
+estimator_or_identity = "boolean structural variant; installed value true"
+admissible_range = "Installed true value is rejected for forecast promotion; a replacement must separately reconcile supply/make, valuation, inventory flow, and inventory stock."
+prior_or_uncertainty = "The annual discrepancy sums to -531156.360 million, is 88.18 times the F030 vector in L2 norm, and has correlation -0.0371 with F030. Replacement-closure uncertainty remains unresolved."
+update_cadence = "only after WS-2C accounting gate or versioned reconciliation change"
+allowed_forecast_products = ["research_only"]
+identification_targets = ["commodity supply/use closure", "NIPA T10105 inventory investment", "private inventory stocks", "import residual"]
+sensitivity_result = "rejected_current_proxy: the opening GDP gap equals the scaled discrepancy, while official T10105 inventory investment differs materially in magnitude and sometimes sign; explicit-stock, confidence-weighted, and residual-import alternatives remain to be compared"
+owner = "UNASSIGNED: supply-use calibration lead"
+independent_validator = "UNASSIGNED: inventory-and-trade reviewer"
+review_status = "rejected"
+tests = ["registry:boolean", "implemented:opening_residual_equals_scaled_discrepancy", "implemented:f030_and_t10105_non_equivalence", "planned:closure_variant_compare"]
+artifact_hash = "sha256:8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"

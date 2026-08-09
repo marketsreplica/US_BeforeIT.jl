@@ -1,0 +1,186 @@
+[artifact]
+schema_version = "beforeit-us-origin-package.v1"
+canonicalization = "sorted_typed_v1_excluding_artifact_content_sha256"
+content_sha256 = "dbadd9008743f5745cd7152cc5b90fe17c26b5b25f34b1cee91f60b21c72df27"
+
+[origin]
+origin_id = "origin.2026q1.current-vintage-audit"
+origin_kind = "current_diagnostic"
+origin_timestamp_utc = "2026-08-05T00:00:00Z"
+reference_period = "2026Q1"
+created_at_utc = "2026-08-05T19:42:02Z"
+protocol_sha256 = "88519e5b04936f528396cf5243ff270844d0d38651fd84fc3b1c76fef997b584"
+environment_sha256 = "c2e596cf8452c5b890bb0ef66c05bc72a57fa25ab6f8fe790f8db4600b035263"
+macro_control_sha256 = "ed75c563d10509c6e13d2fb34bd97757ceecdc89f1ed355017cccbec53539bee"
+mapping_registry_sha256 = "a5afb57a8551b06c6583aa81a1f79f41575a334eca95960167d9b2a9e6f1d665"
+model_variant_sha256 = "1fbdf6fcbeedc07fb9971b7e39c18852f74ace8fb07055b4f1ad2f43dcb29728"
+parameter_registry_sha256 = "7b24a4548247e7e0122681d75a3e2f9eb1a302e06c989c418b41bc49e2edcdda"
+information_track = "revised_mixed_vintage_diagnostic"
+evidence_class = "diagnostic_only_no_promotion"
+status = "cannot_run"
+
+[[blocks]]
+block_id = "quarterly_vintages"
+status = "missing"
+eligibility_basis = "release_timestamp"
+artifact_sha256 = "unavailable"
+as_of_timestamp_utc = "unavailable"
+reason = "The local warehouse contains retrieval-day current-data snapshots, not exact historical releases with release timestamps and realtime intervals."
+evidence = [
+    "Local audit found retrieval labels 2026-08-02 and 2026-08-04 only.",
+    "No signed origin manifest or release calendar exists.",
+]
+
+[[blocks]]
+block_id = "structural_inputs"
+status = "rejected"
+eligibility_basis = "release_timestamp"
+artifact_sha256 = "unavailable"
+as_of_timestamp_utc = "unavailable"
+reason = "The current 2024 structure is revised/current-vintage. Its source observation row passes, but latent-state, inventory-stock, and full supply/make-valuation reconciliation remain failed and are not forecast-admissible."
+evidence = [
+    "Source-aware structural candidate SHA-256 8f42bb7761b31d67defaad9797fa01bc2a39eaf663a2b7c04f7163e13fbdb3d2.",
+    "data/us/validation/ACCOUNTING_GATES.toml SHA-256 adac4e2cb6280673d8b5686dcafbd779e739c4a0a909bfc398b5d0e605dc6dd6: observation PASS, latent/inventory/supply/full accounting FAIL.",
+]
+
+[[blocks]]
+block_id = "dynamic_parameters"
+status = "missing"
+eligibility_basis = "origin_information_cutoff"
+artifact_sha256 = "unavailable"
+as_of_timestamp_utc = "unavailable"
+reason = "No origin-specific dynamic-parameter artifact has been estimated from an exact past-only information set."
+evidence = [
+    "The existing calibration artifacts are current engineering objects rather than rolling-origin estimates.",
+]
+
+[[blocks]]
+block_id = "origin_state"
+status = "missing"
+eligibility_basis = "origin_information_cutoff"
+artifact_sha256 = "unavailable"
+as_of_timestamp_utc = "unavailable"
+reason = "No governed latent and micro opening-state distribution has been built for this origin."
+evidence = [
+    "The opening observation fields exist, but PCE, GPDI, fixed-investment, trade, government, and inventory stock/flow mappings remain unresolved or rejected at the latent state and sector levels.",
+]
+
+[[blocks]]
+block_id = "observation_operator"
+status = "pending"
+eligibility_basis = "frozen_configuration"
+artifact_sha256 = "unavailable"
+as_of_timestamp_utc = "unavailable"
+reason = "The Tier-1 observation bridges and target operators are not frozen and the local panel lacks required protocol series."
+evidence = [
+    "Protocol target bridge_status values remain pending.",
+    "Local audit identifies missing PCE price, core PCE, and CES payroll observations.",
+]
+
+[[blocks]]
+block_id = "model_variant"
+status = "available"
+eligibility_basis = "frozen_configuration"
+artifact_sha256 = "1fbdf6fcbeedc07fb9971b7e39c18852f74ace8fb07055b4f1ad2f43dcb29728"
+as_of_timestamp_utc = "not_applicable"
+reason = "The hash-addressed variant artifact is available, although its scientific approval gate remains open."
+evidence = [
+    "scripts/us/forecasting/variants/baseline_variants.toml.",
+]
+
+[[blocks]]
+block_id = "parameter_registry"
+status = "available"
+eligibility_basis = "frozen_configuration"
+artifact_sha256 = "7b24a4548247e7e0122681d75a3e2f9eb1a302e06c989c418b41bc49e2edcdda"
+as_of_timestamp_utc = "not_applicable"
+reason = "The registry has complete parameter coverage and a deterministic digest, but its promotion gate is open."
+evidence = [
+    "66 of 66 parameters are covered; 22 are provisional, 43 unresolved, and 1 rejected.",
+]
+
+[[blocks]]
+block_id = "forecast_registry"
+status = "pending"
+eligibility_basis = "frozen_configuration"
+artifact_sha256 = "unavailable"
+as_of_timestamp_utc = "unavailable"
+reason = "The registry kernel exists but no origin-specific experiment registry has been initialized because the origin cannot pass pre-run gates."
+evidence = [
+    "scripts/us/forecasting/registry/USForecastRegistry.jl.",
+]
+
+[[gates]]
+gate_id = "vintage_firewall"
+status = "fail"
+reason = "Exact-as-of quarterly and structural releases cannot be reconstructed from the local retrieval snapshots."
+evidence = [
+    "No local historical release_timestamp/realtime-interval warehouse or origin manifest.",
+]
+
+[[gates]]
+gate_id = "macro_control_identity"
+status = "pass"
+reason = "The retrieved T10105 current-vintage controls close both published nominal identities within source rounding."
+evidence = [
+    "GDP identity residual -0.5 million dollars.",
+    "GPDI identity residual 0.0 million dollars.",
+]
+
+[[gates]]
+gate_id = "accounting"
+status = "fail"
+reason = "The BEA-anchored opening observation identity passes at source rounding, but the model-implied latent identity, inventory stock, and source-aware supply/make, valuation, excluded-code, and stock-flow bridges remain failed."
+evidence = [
+    "2024Q4 observed residual +0.25 million dollars; model-implied latent residual -137674.939893 million dollars.",
+    "2026Q1 observed residual -0.50 million dollars; model-implied latent residual -147094.197894 million dollars.",
+    "data/us/validation/ACCOUNTING_GATES.toml SHA-256 adac4e2cb6280673d8b5686dcafbd779e739c4a0a909bfc398b5d0e605dc6dd6 retains full_accounting_status=FAIL.",
+]
+
+[[gates]]
+gate_id = "parameter_registry"
+status = "fail"
+reason = "The complete registry still contains provisional, unresolved, and rejected forecast-relevant parameters."
+evidence = [
+    "22 provisional, 43 unresolved, and 1 rejected parameter.",
+]
+
+[[gates]]
+gate_id = "variant_manifest"
+status = "fail"
+reason = "The variant artifact is hash-addressed but lacks model-owner and independent-validator approval."
+evidence = [
+    "Variant gate status open; both signatories unassigned.",
+]
+
+[[gates]]
+gate_id = "semantic_mapping"
+status = "fail"
+reason = "None of the seven opening NIPA-to-model mappings is approved and the inventory flow-to-stock mapping is explicitly rejected."
+evidence = [
+    "scripts/us/forecasting/origins/opening_macro_mapping.toml content SHA-256 a5afb57a8551b06c6583aa81a1f79f41575a334eca95960167d9b2a9e6f1d665 remains OPEN; observation-only evidence confers no mapping approval.",
+]
+
+[[gates]]
+gate_id = "observation_operator"
+status = "pending"
+reason = "Tier-1 bridges and truth operators are not frozen or fully populated."
+evidence = [
+    "PCE price, core PCE, and CES payroll are absent from the current local target panel.",
+]
+
+[[gates]]
+gate_id = "origin_state"
+status = "pending"
+reason = "No approved macro-to-micro anchoring algorithm or origin-state draw artifact exists."
+evidence = [
+    "Opening source observations are typed, but no approved latent macro-to-micro rake, sector allocation, or independent inventory-stock mapping exists.",
+]
+
+[[gates]]
+gate_id = "scale_convergence"
+status = "pending"
+reason = "No preregistered agent-scale convergence experiment has been run on an admissible origin."
+evidence = [
+    "Existing runs are engineering smoke tests, not frozen-origin scale evidence.",
+]

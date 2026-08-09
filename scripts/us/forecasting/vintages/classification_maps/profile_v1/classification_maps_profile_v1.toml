@@ -1,0 +1,274 @@
+prohibited_actions = ["NETWORK_REQUEST", "FILESYSTEM_WRITE", "RAW_CAPTURE", "ORIGIN_ADMISSION", "SOURCE_INVENTORY_MUTATION", "FORECAST_EXECUTION", "TRUTH_ACCESS", "SCORING", "MODEL_MAPPING_PROMOTION", "CLAIM_PUBLISHER_AUTHENTICATION", "CLAIM_CURRENT_ORIGIN", "CLAIM_SYNTHETIC_BYTES_CAME_FROM_PLANNED_LOCATOR", "REVERSE_CONCORDANCE_IN_PLACE", "TREAT_OTHER_OR_USED_AS_NAICS"]
+
+[artifact]
+schema_version = "beforeit-us-classification-maps-offline-profile.v1"
+contract_id = "classification-maps-six-profile-offline-parser-candidate.v1"
+status = "CANNOT_RUN"
+canonicalization = "sorted-typed-length-aware-excluding-artifact-content-sha256.v1"
+content_sha256 = "1ea4517532226a4d7026fd5e2061f32a2866e057a73e1064351ffb55ac33c992"
+
+[scope]
+requirement_id = "classification_maps"
+source_id = "official_classification_maps"
+capture_id = "final_structural_pre_origin"
+profile_count = 6
+object_count = 7
+official_workbook_count = 6
+shared_projection_object_count = 2
+repository_local_object_count = 1
+offline_validation_only = true
+synthetic_fixture_only = true
+network_action_count = 0
+filesystem_write_action_count = 0
+current_qualified_count = 0
+official_workbook_bodies_present = false
+current_origin_receipts_present = false
+provider_physical_layouts_evidenced = false
+synthetic_fixture_is_provider_layout_claim = false
+fixture_bytes_attributed_to_planned_locators = false
+local_bridge_exact_bytes_present = true
+local_bridge_prospective_receipt_present = false
+common_origin_v4_integration = false
+claim_ceiling = "OFFLINE_SYNTHETIC_PARSER_AND_LOCAL_FIXITY_RECEIPT_ONLY_NO_OFFICIAL_BODY_OR_CURRENT_ORIGIN"
+
+[limits]
+maximum_part_bytes = 8388608
+maximum_workbook_bytes = 33554432
+maximum_xml_nodes = 250000
+maximum_xml_depth = 64
+maximum_xml_attributes_per_node = 32
+maximum_rows = 100000
+maximum_columns = 64
+maximum_cell_bytes = 1048576
+maximum_bridge_bytes = 1048576
+
+[semantics]
+bea_concordance_direction = "BEA_TO_NAICS"
+naics_concordance_direction = "NAICS_2017_TO_NAICS_2022"
+inverse_policy = "SEPARATE_DERIVATION_ONLY_NEVER_IN_PLACE_REVERSAL"
+cardinality_policy = "DERIVE_FROM_COMPLETE_ORDERED_SOURCE_TARGET_PAIRS"
+row_preservation_policy = "PRESERVE_CODES_TITLES_ORDER_NOTES_AND_EXPLICIT_BLANKS"
+summary_axis_policy = "SHARED_2024_USE_MAKE_OBJECT_PROJECTIONS_MUST_MATCH_EXACTLY"
+summary_industry_count = 71
+summary_commodity_count_including_special_accounts = 73
+summary_special_accounts = ["Other", "Used"]
+special_account_policy = "BEA_SPECIAL_ACCOUNTS_NOT_NAICS_INDUSTRIES_OR_MISSINGNESS_TOKENS"
+range_code_policy = "PRESERVE_RANGE_CODES_AS_STRINGS_NEVER_NUMERICALLY_COERCE"
+fixture_origin_label = "SYNTHETIC_NO_URL_ATTRIBUTION"
+ooxml_fixture_policy = "INDEPENDENT_SYNTHETIC_PARTS_NOT_ZIP_OR_PROVIDER_LAYOUT_EVIDENCE"
+local_bridge_policy = "REPOSITORY_AUTHORED_MAPPING_NOT_OFFICIAL_BEA_OR_CENSUS_CROSSWALK"
+
+[[profiles]]
+profile_id = "bea_summary_codes"
+selector = "BEA:InputOutput:Year=2024:summary_industry_and_commodity_code_lists:71_source_industries,71_source_commodities,Other,Used"
+object_ids = ["bea_summary_use_2024", "bea_summary_make_2024"]
+parser_contract = "BEA_SUMMARY_AXIS_V1"
+direction = "SHARED_USE_MAKE_AXIS_EQUALITY"
+
+[[profiles]]
+profile_id = "bea_industry_commodity_naics_concordance"
+selector = "BEA:InputOutputClassification:member=BEA-Industry-and-Commodity-Codes-and-NAICS-Concordance.xlsx:publication_path=2023-10:full_published_industry_and_commodity_code_to_NAICS_definitions=true"
+object_ids = ["bea_industry_commodity_naics_concordance"]
+parser_contract = "BEA_TO_NAICS_CONCORDANCE_V1"
+direction = "BEA_TO_NAICS"
+
+[[profiles]]
+profile_id = "beforeit_bea71_model_bridge"
+selector = "BEFOREIT:repository:scripts/us/bea71.toml:sha256=2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f:71_to_68_retail_Other_Used_QCEW_SUSB_fixed_asset_concordance"
+object_ids = ["beforeit_bea71_model_bridge"]
+parser_contract = "BEFOREIT_BEA71_TOML_V1"
+direction = "BEA71_TO_BEFOREIT68_WITH_TYPED_AUXILIARY_MAPPINGS"
+
+[[profiles]]
+profile_id = "naics_2017"
+selector = "CENSUS:NAICS:2017:official_structure"
+object_ids = ["naics_2017_structure"]
+parser_contract = "NAICS_STRUCTURE_V1"
+direction = "NAICS_2017_HIERARCHY"
+
+[[profiles]]
+profile_id = "naics_2017_to_2022"
+selector = "CENSUS:NAICS:2017_to_2022:official_concordance"
+object_ids = ["naics_2017_to_2022_concordance"]
+parser_contract = "NAICS_CONCORDANCE_V1"
+direction = "NAICS_2017_TO_NAICS_2022"
+
+[[profiles]]
+profile_id = "naics_2022"
+selector = "CENSUS:NAICS:2022:official_structure"
+object_ids = ["naics_2022_structure"]
+parser_contract = "NAICS_STRUCTURE_V1"
+direction = "NAICS_2022_HIERARCHY"
+
+[[objects]]
+object_id = "bea_summary_use_2024"
+source_class = "OFFICIAL_SHARED_PARENT_PROJECTION"
+planned_locator = "IOUse_After_Redefinitions_PRO_Summary.xlsx#2024"
+media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+fixture_kind = "SYNTHETIC_OOXML_PARTS_ONLY"
+evidence_status = "NONPROSPECTIVE_PARENT_HASH_ONLY_OFFICIAL_BODY_ABSENT_HERE"
+official = true
+official_body_present = false
+local_bytes_present = false
+current_origin_receipt_present = false
+provider_layout_evidenced = false
+shared_parent_profile_sha256 = "4f8ce3d53d11964c1268ee7ecfe18701b90b46ff73816b4a9af246e36db753a5"
+shared_parent_object_sha256 = "9e3791d657909843ce202161bae00cf8a425d7e1bf866cc8a0462810f0ae00c7"
+repository_path = "NOT_APPLICABLE"
+repository_sha256 = "UNAVAILABLE"
+
+[[objects]]
+object_id = "bea_summary_make_2024"
+source_class = "OFFICIAL_SHARED_PARENT_PROJECTION"
+planned_locator = "IOMake_After_Redefinitions_PRO_Summary.xlsx#2024"
+media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+fixture_kind = "SYNTHETIC_OOXML_PARTS_ONLY"
+evidence_status = "NONPROSPECTIVE_PARENT_HASH_ONLY_OFFICIAL_BODY_ABSENT_HERE"
+official = true
+official_body_present = false
+local_bytes_present = false
+current_origin_receipt_present = false
+provider_layout_evidenced = false
+shared_parent_profile_sha256 = "4f8ce3d53d11964c1268ee7ecfe18701b90b46ff73816b4a9af246e36db753a5"
+shared_parent_object_sha256 = "073b87c7e52e76fb78ad7ddafb0c2e60f9188fc5a4e56dc0094f4a7ae3f529c6"
+repository_path = "NOT_APPLICABLE"
+repository_sha256 = "UNAVAILABLE"
+
+[[objects]]
+object_id = "bea_industry_commodity_naics_concordance"
+source_class = "OFFICIAL_BEACONCORDANCE_WORKBOOK"
+planned_locator = "https://www.bea.gov/sites/default/files/2023-10/BEA-Industry-and-Commodity-Codes-and-NAICS-Concordance.xlsx"
+media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+fixture_kind = "SYNTHETIC_OOXML_PARTS_ONLY"
+evidence_status = "DISCOVERY_LOCATOR_ONLY_OFFICIAL_BODY_ABSENT"
+official = true
+official_body_present = false
+local_bytes_present = false
+current_origin_receipt_present = false
+provider_layout_evidenced = false
+shared_parent_profile_sha256 = "UNAVAILABLE"
+shared_parent_object_sha256 = "UNAVAILABLE"
+repository_path = "NOT_APPLICABLE"
+repository_sha256 = "UNAVAILABLE"
+
+[[objects]]
+object_id = "beforeit_bea71_model_bridge"
+source_class = "REPOSITORY_LOCAL_PROJECT_MAPPING"
+planned_locator = "scripts/us/bea71.toml"
+media_type = "application/toml"
+fixture_kind = "REPOSITORY_LOCAL_EXACT_TOML_RECEIPT"
+evidence_status = "EXACT_REPOSITORY_BYTES_NO_PROSPECTIVE_RECEIPT_NOT_OFFICIAL"
+official = false
+official_body_present = false
+local_bytes_present = true
+current_origin_receipt_present = false
+provider_layout_evidenced = true
+shared_parent_profile_sha256 = "UNAVAILABLE"
+shared_parent_object_sha256 = "UNAVAILABLE"
+repository_path = "scripts/us/bea71.toml"
+repository_sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+
+[[objects]]
+object_id = "naics_2017_structure"
+source_class = "OFFICIAL_CENSUS_NAICS_WORKBOOK"
+planned_locator = "https://www.census.gov/naics/2017NAICS/2017_NAICS_Structure.xlsx"
+media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+fixture_kind = "SYNTHETIC_OOXML_PARTS_ONLY"
+evidence_status = "DISCOVERY_LOCATOR_ONLY_OFFICIAL_BODY_ABSENT"
+official = true
+official_body_present = false
+local_bytes_present = false
+current_origin_receipt_present = false
+provider_layout_evidenced = false
+shared_parent_profile_sha256 = "UNAVAILABLE"
+shared_parent_object_sha256 = "UNAVAILABLE"
+repository_path = "NOT_APPLICABLE"
+repository_sha256 = "UNAVAILABLE"
+
+[[objects]]
+object_id = "naics_2017_to_2022_concordance"
+source_class = "OFFICIAL_CENSUS_NAICS_WORKBOOK"
+planned_locator = "https://www.census.gov/naics/concordances/2017_to_2022_NAICS.xlsx"
+media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+fixture_kind = "SYNTHETIC_OOXML_PARTS_ONLY"
+evidence_status = "DISCOVERY_LOCATOR_ONLY_OFFICIAL_BODY_ABSENT"
+official = true
+official_body_present = false
+local_bytes_present = false
+current_origin_receipt_present = false
+provider_layout_evidenced = false
+shared_parent_profile_sha256 = "UNAVAILABLE"
+shared_parent_object_sha256 = "UNAVAILABLE"
+repository_path = "NOT_APPLICABLE"
+repository_sha256 = "UNAVAILABLE"
+
+[[objects]]
+object_id = "naics_2022_structure"
+source_class = "OFFICIAL_CENSUS_NAICS_WORKBOOK"
+planned_locator = "https://www.census.gov/naics/2022NAICS/2022_NAICS_Structure.xlsx"
+media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+fixture_kind = "SYNTHETIC_OOXML_PARTS_ONLY"
+evidence_status = "DISCOVERY_LOCATOR_ONLY_OFFICIAL_BODY_ABSENT"
+official = true
+official_body_present = false
+local_bytes_present = false
+current_origin_receipt_present = false
+provider_layout_evidenced = false
+shared_parent_profile_sha256 = "UNAVAILABLE"
+shared_parent_object_sha256 = "UNAVAILABLE"
+repository_path = "NOT_APPLICABLE"
+repository_sha256 = "UNAVAILABLE"
+
+[[source_pins]]
+pin_id = "prospective_v2_module"
+path = "scripts/us/forecasting/vintages/prospective/USProspectiveAcquisitionContractV2.jl"
+sha256 = "435df6c4b4de879c0f24d3f9bb9f7504fc6172ae34e94db8cb6ba84282d6e379"
+
+[[source_pins]]
+pin_id = "prospective_v2_contract"
+path = "scripts/us/forecasting/vintages/prospective/prospective_2026q3_contract_v2.toml"
+sha256 = "b24ff0c40172d2a23991fbe75c2fe42c6ba6c6c1f5fd46d079ac6d51429bf98f"
+
+[[source_pins]]
+pin_id = "common_origin_v4_module"
+path = "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v4/USCommonOriginAcquisitionV4.jl"
+sha256 = "0f4c248950ebee59d1e6b5882db6516cbb539f9e54c7dfbb6b53fe0f7a5f6b4e"
+
+[[source_pins]]
+pin_id = "common_origin_v4_policy"
+path = "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v4/common_origin_acquisition_v4_policy.toml"
+sha256 = "84e74d236f0e0ac781a482b996be95fceefe56f2a349be089b51054c3edd8834"
+
+[[source_pins]]
+pin_id = "after_redefinitions_adapter_module"
+path = "scripts/us/forecasting/vintages/bea_industry/after_redefinitions_2025_adapter_v1/USBEAAfterRedefinitions2025AdapterV1.jl"
+sha256 = "6384181f9cd2afdc9693fd0e01f313cd52004efe41fdafec6f18916ee27d3dc6"
+
+[[source_pins]]
+pin_id = "after_redefinitions_profile"
+path = "scripts/us/forecasting/vintages/bea_industry/after_redefinitions_2025_adapter_v1/bea_after_redefinitions_2025_profile_v1.toml"
+sha256 = "4f8ce3d53d11964c1268ee7ecfe18701b90b46ff73816b4a9af246e36db753a5"
+
+[[source_pins]]
+pin_id = "beforeit_bea71_model_bridge"
+path = "scripts/us/bea71.toml"
+sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+
+[[source_pins]]
+pin_id = "current_inventory"
+path = "scripts/us/forecasting/vintages/current_inventory.toml"
+sha256 = "110b4448db0b49e95cbc2fe1cf7019f6b877b3f391c6069a81c2e7c3c2a086ae"
+
+[gates]
+official_bodies_captured = false
+current_origin_receipts_verified = false
+provider_layouts_verified = false
+all_profiles_physically_qualified = false
+origin_admissible = false
+model_mapping_allowed = false
+forecast_execution_allowed = false
+truth_access_allowed = false
+scoring_allowed = false
+inventory_mutation_allowed = false
+production_allowed = false
+ready = false

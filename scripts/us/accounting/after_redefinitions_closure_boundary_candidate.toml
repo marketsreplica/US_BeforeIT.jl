@@ -1,0 +1,142 @@
+schema_version = "beforeit-us-after-redefinitions-closure-boundary-candidate.v1"
+classification = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+artifact_role = "TYPED_CLOSURE_BOUNDARY_CANDIDATE_ONLY"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+source_year = 2024
+source_frequency = "annual"
+unit = "millions USD"
+price_basis = "producers prices"
+source_industry_count = 71
+source_ordinary_commodity_count = 71
+model_commodity_count = 68
+model_industry_count = 68
+closure_codes = ["Used", "Other"]
+methodology_pdf_pages = [98, 123, 124, 214, 223, 224, 225]
+
+scrap_output_formula = "h[i] = V_make[i,Used]"
+scrap_share_formula = "p[i] = h[i] / g[i]"
+nonscrap_ratio_formula = "r[i] = 1 - p[i]"
+nonscrap_transform_formula = "W = (I - diag(p))^-1 * D_core"
+core_market_share_definition = "D_core = D_official[:,ordinary_commodities]"
+orientation = "industry_by_commodity"
+used_policy = "SOURCE_SIGNED_LEDGER_PLUS_DIAGNOSTIC_BEA_NONSCRAP_WITNESS"
+other_policy = "SOURCE_SIGNED_COMPOSITE_LEDGER_COMPONENT_SPLIT_UNRESOLVED"
+market_share_policy = "OFFICIAL_PUBLISHED_D_RETAINED_WITHOUT_GENERIC_CLOSURE_APPLICATION"
+official_d_role = "ROUNDED_SEPARATELY_PUBLISHED_CROSS_ARCHIVE_WITNESS_ONLY"
+same_table_identity_role = "V_CORE_AND_Q_CORE_DEFINE_SOURCE_IDENTITY_OFFICIAL_D_RESIDUAL_IS_LEDGERED"
+eventual_model_transform_order = "AGGREGATE_MAKE_OUTPUT_AND_SCRAP_TO_68_BEFORE_FORMING_P_D_AND_W"
+aggregation_commutation_policy = "SOURCE_FIRST_AND_AGGREGATE_FIRST_NONSCRAP_TRANSFORMS_NOT_INTERCHANGEABLE"
+negative_cell_policy = "PRESERVE_AND_LEDGER"
+explicit_mask_policy = "PRESERVE_SOURCE_MASKS_DERIVED_VALUES_HAVE_FALSE_MASK"
+cross_archive_release_identity = "NOT_EXTERNALLY_BOUND"
+cross_archive_application_status = "ARITHMETIC_DIAGNOSTIC_ONLY"
+
+candidate_materialized = true
+nonscrap_diagnostic_computed = true
+runtime_nonscrap_transformation_implemented = false
+w_runtime_admissible = false
+generic_closure_market_share_application = false
+closure_disjoint_from_model_core = true
+seventy_account_runtime_expansion = false
+closure_smearing_into_core_u = false
+closure_smearing_into_a = false
+closure_smearing_into_beta = false
+other_component_split = false
+used_asset_transfer_mapping = false
+current_dollar_price_quantity_decomposition = false
+quarterly_dynamic_law = false
+financial_counterpart_mapping = false
+row_adjustment_observation_operator = false
+behavioral_production_constraint_mapping = false
+double_entry_transition_tests = false
+industry_commodity_runtime_transform_selected = false
+aggregate_first_68_nonscrap_transform_built = false
+runtime_calibration_admissible = false
+calibration_dictionary_write = false
+figaro_dictionary_write = false
+parameter_write = false
+initial_conditions_write = false
+model_state_write = false
+forecast_origin_admissible = false
+accounting_gate_effect = "NONE"
+balancing_applied = false
+normalization_applied = false
+clipping_applied = false
+raking_applied = false
+
+forbidden_runtime_keys = [
+    "U",
+    "a",
+    "beta",
+    "prices",
+    "quantities",
+    "RoW_financial_counterpart",
+    "row_adjustment_observation_operator",
+    "FIGARO",
+    "parameters",
+    "initial_conditions",
+    "model_state",
+]
+
+scientific_role = "Byte-pinned source-aware diagnostic that computes BEA's make-side scrap h, p, nonscrap ratio, and W witness while retaining the composite Used asset-transfer ledger and Other outside the 68-sector runtime technology and preserving every signed source ledger and explicit mask."
+
+promotion_blockers = [
+    "CLOSURE_BOUNDARY_CANDIDATE_DIAGNOSTIC_ONLY",
+    "MULTI_ARCHIVE_RELEASE_IDENTITY_NOT_EXTERNALLY_BOUND",
+    "PUBLISHED_MARKET_SHARE_ROUNDING_DRIFT_RETAINED",
+    "SOURCE_FIRST_AND_AGGREGATE_FIRST_NONSCRAP_NOT_INTERCHANGEABLE",
+    "AGGREGATE_FIRST_68_NONSCRAP_TRANSFORM_NOT_BUILT",
+    "USED_SCRAP_NONSCRAP_TRANSFORMATION_NOT_IMPLEMENTED",
+    "USED_ASSET_TRANSFER_AND_NEGATIVE_FLOW_SEMANTICS_NOT_MAPPED",
+    "OTHER_COMPOSITE_NOT_SPLIT_NONCOMPARABLE_IMPORTS_VS_ROW_ADJUSTMENT",
+    "OTHER_NONCOMPARABLE_IMPORT_FINANCIAL_COUNTERPART_NOT_MAPPED_TO_ROTW",
+    "ROW_ADJUSTMENT_COMPONENTS_AND_ACCOUNTING_COUNTERPARTS_NOT_IDENTIFIED",
+    "CLOSURE_CURRENT_DOLLAR_PRICE_QUANTITY_DECOMPOSITION_NOT_IDENTIFIED",
+    "CLOSURE_QUARTERLY_DYNAMIC_LAW_NOT_ESTIMATED",
+    "CLOSURE_CORE_INPUT_COST_AND_PRODUCTION_CONSTRAINT_BOUNDARY_NOT_SELECTED",
+    "CLOSURE_DOUBLE_ENTRY_AND_BANK_IDENTITIES_NOT_TRANSITION_TESTED",
+    "INDUSTRY_COMMODITY_TRANSFORMATION_NOT_SELECTED",
+    "70_ACCOUNT_PRODUCT_MIX_DIAGNOSTIC_NOT_RUNTIME_TECHNOLOGY",
+]
+
+[byte_pins]
+after_redefinitions_fixture_sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
+after_redefinitions_manifest_sha256 = "ff555043829e5d12ba787ba9ad7d58ef4f0d2ee306740d6847bdfec800935030"
+after_redefinitions_source_zip_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+after_redefinitions_source_metadata_sha256 = "8be9fbef6e2c18a7388cd61bd14312159fc3984d4dbc2c60158e977ee7f0e878"
+after_redefinitions_producer_use_workbook_sha256 = "9e3791d657909843ce202161bae00cf8a425d7e1bf866cc8a0462810f0ae00c7"
+after_redefinitions_producer_make_workbook_sha256 = "073b87c7e52e76fb78ad7ddafb0c2e60f9188fc5a4e56dc0094f4a7ae3f529c6"
+after_redefinitions_import_workbook_sha256 = "9246c68288bb593495366288b9d8fd2038cae1ff500855ccd3e5c4377d0d3b25"
+after_redefinitions_purchaser_use_workbook_sha256 = "9d55530ec5cd4688855ef474c779d0dba5f2e1e74d4fcfcdc95cddc64c69262b"
+official_market_share_fixture_sha256 = "d4df6c610caaca42a9579a4c868efbee6d5f5842467f392bd6a0e75ac8cd748e"
+official_market_share_manifest_sha256 = "a225951d7ec03aaaaa97f5cc02e58b862e00918dbd31cc35093d80f9dde8c35d"
+official_market_share_source_zip_sha256 = "e9b9ac6b45bc0385aeb7c21f38ffbcf3eab2e92c0ecadecc43b11ab6dd104eae"
+official_market_share_source_metadata_sha256 = "f3f57a7209f7c6d9b0f76b041f17ae78e9da1d8644dbd7d6815471e740abfaca"
+official_direct_workbook_sha256 = "2e128bc5a51e7a12854e9a58afd5ebaca2e384e80abe113fd4274179628b3439"
+official_market_share_workbook_sha256 = "57c858ae61fa02d6f5b419d265a695318386ec21078ac24d0622f2001aca89d2"
+producer_price_adapter_contract_sha256 = "de524df56ad47fb1f26534019386b27f1fc45ebc927bda5f39c3ad812259cf58"
+model_mapping_sha256 = "546b3dc15cbb194210ce564a44626b146551b161ca0ce5ffb90a8a5261b4553c"
+sector_mapping_sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+valuation_contract_sha256 = "110f82037e45e1de3ce4f5a1df2b7982d064e90a9323f255c7441452fa6d2ede"
+final_use_contract_sha256 = "b4e3969a52618b4e462b8e468ada784dda85cae86550fb27659d2afbb4cbb2be"
+supply_fixture_sha256 = "c4461fbe971d8fb70750ff4cce6bb09e582a024d7cc1f6e8ebd8e3685bab69e0"
+supply_manifest_sha256 = "564a99ec2011b2566b8951e9eecb4737c0bfbc88f1e077b1eaf596af9894575c"
+table_262_source_sha256 = "91d6686dce15fe1d96f35f1752382bf1d47d274c067f52febc60ae40014406e8"
+methodology_pdf_sha256 = "535627e5e44f8461c0a04410f4a05c55d47f2e325d9473cb2df06e5d3e6b271d"
+methodology_receipt_sha256 = "b4b210be3c364415473f1ef407ed7ea6e9edc2b299bd1058c1658b0ebb3b91ac"
+
+[[closure_account]]
+code = "Used"
+methodology_role = "COMPOSITE_SPECIAL_ACCOUNT_SCRAP_BYPRODUCT_PLUS_SIGNED_USED_ASSET_TRANSFERS"
+ordinary_model_commodity = false
+ordinary_model_producer_industry = false
+component_split = false
+methodology_pdf_pages = [98, 214, 223, 224, 225]
+
+[[closure_account]]
+code = "Other"
+methodology_role = "NONCOMPARABLE_IMPORTS_AND_REST_OF_WORLD_ADJUSTMENT_COMPOSITE"
+ordinary_model_commodity = false
+ordinary_model_producer_industry = false
+component_split = false
+methodology_pdf_pages = [123, 124]

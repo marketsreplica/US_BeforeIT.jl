@@ -1,0 +1,38 @@
+schema_version = "beforeit-us-bea-2024-negative-cell-semantics-fixture.v1"
+classification = "LITERATURE_BACKED_CELL_LEVEL_SIGN_DOMAIN_EVIDENCE_NOT_SOLVER_ADMISSION"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+candidate_problem_scope_hash = "scope1:9b41bd41ba5ba7f421aac0a3244cd58bf663fef36dcd507628af4d009cb69088"
+candidate_problem_hash = "problem1:07607869be848a0016e5de1ea861b6350593369b92f973eac8b417648803a3d3"
+source_zip_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+producer_use_workbook_sha256 = "9e3791d657909843ce202161bae00cf8a425d7e1bf866cc8a0462810f0ae00c7"
+producer_make_workbook_sha256 = "073b87c7e52e76fb78ad7ddafb0c2e60f9188fc5a4e56dc0094f4a7ae3f529c6"
+import_workbook_sha256 = "9246c68288bb593495366288b9d8fd2038cae1ff500855ccd3e5c4377d0d3b25"
+fixture_path = "negative_cell_semantics.csv"
+fixture_sha256 = "fdf867edacd59b086bcbbdeb637d0b007515392379c298f2bc8ac83db22dbd0d"
+fixture_byte_count = 9070
+source_unresolved_cell_count = 23
+literature_supported_signed_cell_count = 16
+remaining_unresolved_cell_count = 7
+inventory_change_signed_cell_count = 4
+used_fixed_asset_signed_cell_count = 6
+used_intermediate_signed_cell_count = 5
+other_adjustment_signed_cell_count = 1
+used_other_component_resolved = false
+solver_admissible = false
+reliability_receipt_count = 0
+covariance_receipt_count = 0
+structural_zero_approval_count = 0
+adjustment_record_count = 0
+model_state_write = false
+accounting_gate_effect = "NONE"
+forecast_score_effect = "NONE"
+
+evidence_policy = "Exact tuple-keyed literature overlay only. No sign-, magnitude-, adjacency-, or label-pattern inheritance is allowed."
+used_other_boundary = "A supported signed domain does not identify the 2024 scrap-versus-used, noncomparable-import-versus-rest-of-world, seller/buyer, dealer-service, transport-service, or behavioral-state components."
+unresolved_policy = "Publishing/software intellectual-property import allocations, two negative intermediate import allocations, and the negative federal-nondefense utilities make cell remain hard blockers."
+
+[literature_locator]
+BEA_IO_CONCEPTS_METHODS_2006 = "chapter 6, printed pp. 6-5–6-6; chapter 7, printed pp. 7-9–7-11; chapter 12 import-matrix construction, printed pp. 12-5–12-7; chapter 12 requirements/U–V/scrap definitions, printed pp. 12-21–12-23"
+BEA_NIPA_HANDBOOK_CHAPTER_7 = "printed pp. 7-2–7-3, Change in Private Inventories definition and overview"
+SNA_2008 = "paragraphs 10.38–10.42 and 14.101–14.109"
+BEA_INDUSTRY_CLASSIFICATION_2018 = "Appendix A, printed/PDF p. 15"

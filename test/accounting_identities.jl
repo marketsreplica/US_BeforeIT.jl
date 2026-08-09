@@ -16,6 +16,21 @@ using Test
         Bit.collect_data!(model)
     end
 
+    residuals = Bit.get_accounting_residuals(model.data)
+    @test all(
+        isapprox.(residuals.income_and_production, 0.0; atol = 1.0e-8),
+    )
+    @test all(
+        isapprox.(residuals.gdp_and_expenditure, 0.0; atol = 1.0e-8),
+    )
+    @test all(
+        isapprox.(
+            residuals.gdp_and_expenditure_real,
+            0.0;
+            atol = 1.0e-8,
+        ),
+    )
+
     # income accounting and production accounting should be equal
     zero = sum(model.data.nominal_gva - model.data.compensation_employees - model.data.operating_surplus - model.data.taxes_production)
     @test isapprox(zero, 0.0, atol = 1.0e-8)

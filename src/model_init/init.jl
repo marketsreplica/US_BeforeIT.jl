@@ -11,6 +11,14 @@ Returns:
 - model::AbstractModel: The initialized model.
 """
 function Model(parameters::Dict{String, Any}, initial_conditions::Dict{String, Any})
+    get(parameters, "use_growth_rate_ar1", false) &&
+        throw(
+        ArgumentError(
+            "Model cannot consume growth-rate AR(1) coefficients as log-level " *
+                "coefficients. Use ModelGR or recalibrate with " *
+                "use_growth_rate_ar1=false.",
+        ),
+    )
 
     # properties
     properties = Bit.Properties(parameters, initial_conditions)

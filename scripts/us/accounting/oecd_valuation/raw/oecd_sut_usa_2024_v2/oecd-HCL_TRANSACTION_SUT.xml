@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--NSI Web Service v8.19.8.0-->
+<message:Structure xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:structure="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+  <message:Header>
+    <message:ID>IDREF10670</message:ID>
+    <message:Test>false</message:Test>
+    <message:Prepared>2026-08-06T17:14:22.1750219+02:00</message:Prepared>
+    <message:Sender id="Unknown" />
+    <message:Receiver id="Unknown" />
+  </message:Header>
+  <message:Structures>
+    <structure:HierarchicalCodelists>
+      <structure:HierarchicalCodelist id="HCL_TRANSACTION_SUT" agencyID="OECD.SDD.NAD" version="1.0" isFinal="true">
+        <common:Name xml:lang="en">HCL Transaction SUT</common:Name>
+        <common:Name xml:lang="fr">HCL Transaction SUT</common:Name>
+        <structure:IncludedCodelist alias="CL_TRANSACTION@OECDSDDNAD@10">
+          <Ref id="CL_TRANSACTION" version="1.0" agencyID="OECD.SDD.NAD" package="codelist" class="Codelist" />
+        </structure:IncludedCodelist>
+        <structure:Hierarchy id="H" leveled="false">
+          <common:Name xml:lang="en">Hierarchy for CL_TRANSACTION</common:Name>
+          <structure:HierarchicalCode id="TS">
+            <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="TS" />
+            </structure:CodeID>
+            <structure:HierarchicalCode id="P1">
+              <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="P1" />
+              </structure:CodeID>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="P7">
+              <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="P7" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="P71">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P71" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="P72">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P72" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="P72F">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P72F" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="P7ADJ">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P7ADJ" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="P33">
+              <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="P33" />
+              </structure:CodeID>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="OTTM">
+              <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="OTTM" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="OTTM1">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="OTTM1" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="OTTM2">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="OTTM2" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="D21X31">
+              <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="D21X31" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="D21">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="D21" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="D31">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="D31" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+          </structure:HierarchicalCode>
+          <structure:HierarchicalCode id="TU">
+            <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="TU" />
+            </structure:CodeID>
+            <structure:HierarchicalCode id="P2">
+              <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="P2" />
+              </structure:CodeID>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="P3">
+              <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="P3" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="P3S14DC">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P3S14DC" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="P34">
+                  <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="P34" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="P3S15">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P3S15" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="P3S13">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P3S13" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="P5">
+              <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="P5" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="P51G">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P51G" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="P52">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P52" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="P53">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P53" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="P6">
+              <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="P6" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="P61">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P61" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="P61B">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P61B" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="P61C">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P61C" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="P6A">
+                <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P6A" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+          </structure:HierarchicalCode>
+          <structure:HierarchicalCode id="_X">
+            <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="_X" />
+            </structure:CodeID>
+          </structure:HierarchicalCode>
+          <structure:HierarchicalCode id="_Z">
+            <structure:CodelistAliasRef>CL_TRANSACTION@OECDSDDNAD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="_Z" />
+            </structure:CodeID>
+          </structure:HierarchicalCode>
+        </structure:Hierarchy>
+      </structure:HierarchicalCodelist>
+    </structure:HierarchicalCodelists>
+  </message:Structures>
+</message:Structure>

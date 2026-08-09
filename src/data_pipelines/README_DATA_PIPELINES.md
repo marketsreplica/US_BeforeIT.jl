@@ -125,7 +125,8 @@ ORDER BY creation_time;
 
 The database uses a mapping between:
 - **NAICS**: North American Industry Classification System (US standard)
-- **BeforeIT Sectors**: Internal 71-sector classification used by the model
+- **BeforeIT U.S. model system**: 68 modeled commodities derived from 71 BEA
+  source industries; the retail sources are aggregated to commodity `4A0`
 - **NACE**: European classification (for compatibility with EU data)
 
 ### Data Quality Features
@@ -143,7 +144,8 @@ The database uses a mapping between:
 The database schema matches the requirements identified in the BeforeIT.jl model:
 
 1. **Time Series Data**: Quarterly/annual economic indicators for model estimation
-2. **Sectoral Data**: 71-sector disaggregation for structural modeling
+2. **Sectoral Data**: 71-source-industry inputs and the explicit 68-commodity
+   model bridge for structural modeling
 3. **Financial Flows**: Complete financial accounts for agent balance sheets
 4. **Government Data**: Detailed fiscal operations for government sector modeling
 5. **Initial Conditions**: All required variables for model initialization

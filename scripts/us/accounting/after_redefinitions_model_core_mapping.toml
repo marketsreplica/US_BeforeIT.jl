@@ -1,0 +1,93 @@
+schema_version = "beforeit-us-after-redefinitions-model-core-mapping.v1"
+classification = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+forecast_origin_admissible = false
+model_state_write = false
+accounting_gate_effect = "NONE"
+source_year = 2024
+source_price_basis = "producers prices"
+source_commodity_count = 73
+source_industry_count = 71
+model_commodity_count = 68
+model_industry_count = 68
+common_basis_fixture_sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
+sector_mapping_path = "scripts/us/bea71.toml"
+sector_mapping_sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+retail_source_codes = ["441", "445", "452", "4A0"]
+retail_model_code = "4A0"
+closure_account_codes = ["Used", "Other"]
+aggregation_rule = "Identity-map every model code except aggregate source codes 441, 445, 452, and 4A0 to model code 4A0. Retain Used and Other in separate closure accounts."
+value_rule = "Sum current-dollar source cells. No balancing, sign clipping, proportional allocation, or valuation conversion."
+explicit_mask_rule = "An aggregate is explicit when any contributing source cell is numeric; it remains selected-zero-not-shown only when every contributing source cell is an ellipsis zero."
+scientific_role = "Dimension bridge from the pinned producer-price common-basis diagnostic to the 68-commodity by 68-producing-sector model core. Closure accounts remain outside the core and are not inventory or statistical-discrepancy allocations."
+
+model_codes = [
+    "111CA",
+    "113FF",
+    "211",
+    "212",
+    "213",
+    "22",
+    "23",
+    "311FT",
+    "313TT",
+    "315AL",
+    "321",
+    "322",
+    "323",
+    "324",
+    "325",
+    "326",
+    "327",
+    "331",
+    "332",
+    "333",
+    "334",
+    "335",
+    "3361MV",
+    "3364OT",
+    "337",
+    "339",
+    "42",
+    "481",
+    "482",
+    "483",
+    "484",
+    "485",
+    "486",
+    "487OS",
+    "493",
+    "4A0",
+    "511",
+    "512",
+    "513",
+    "514",
+    "521CI",
+    "523",
+    "524",
+    "525",
+    "532RL",
+    "5411",
+    "5412OP",
+    "5415",
+    "55",
+    "561",
+    "562",
+    "61",
+    "621",
+    "622",
+    "623",
+    "624",
+    "711AS",
+    "713",
+    "721",
+    "722",
+    "81",
+    "GFE",
+    "GFGD",
+    "GFGN",
+    "GSLE",
+    "GSLG",
+    "HS",
+    "ORE",
+]

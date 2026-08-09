@@ -1,0 +1,214 @@
+schema_version = "beforeit-us-constrained-stone-reconciliation-contract.v1"
+contract_id = "us-ws2c-constrained-stone-research-v1"
+method_id = "CONSTRAINED_STONE_GLS"
+method_version = "stone-gls-equality-v1"
+classification = "RESEARCH_ONLY_METHOD_QUALIFICATION_NOT_ORIGIN_ELIGIBLE"
+promotion_status = "NOT_PROMOTED"
+scientific_scope = "Hermetic qualification of an equality-constrained Stone/generalized least-squares estimator on a frozen synthetic signed ledger. This contract does not balance BEA or OECD data, select an accounting closure, write model state, change an accounting gate, admit a forecast origin, or produce an accuracy score."
+estimator = "minimize 0.5*(x-y)'*Sigma^(-1)*(x-y) subject to A*x=b after exact fixed cells are removed from the adjustable vector"
+solution = "x_hat=y+Sigma*A'*(A*Sigma*A')^plus*(b-A*y), using a tolerance-ranked Moore-Penrose inverse so consistent redundant exact controls do not change the unique primal solution"
+posterior_covariance = "Sigma_hat=Sigma-Sigma*A'*(A*Sigma*A')^plus*A*Sigma"
+ledger_price_basis = "PRODUCERS_PRICES"
+reliability_schema_version = "beforeit-us-stone-reliability-class.v1"
+covariance_schema_version = "beforeit-us-stone-covariance-class.v1"
+comparator_schema_version = "beforeit-us-reconciliation-comparator-status.v1"
+rank_relative_tolerance = 1.0e-12
+rank_absolute_tolerance = 1.0e-14
+control_absolute_tolerance = 1.0e-10
+sign_tolerance = 1.0e-12
+covariance_symmetry_tolerance = 1.0e-12
+covariance_positive_definite_tolerance = 1.0e-12
+benchmark_fixture_path = "scripts/us/accounting/fixtures/stone_reconciliation_synthetic_v1/benchmark.toml"
+benchmark_fixture_sha256 = "f9fd56a5c070fd290936a9e77094da50dde16e6a911b8012ad3b32be439caf82"
+forecast_origin_admissible = false
+promotion_ready = false
+model_state_write = false
+accounting_gate_effect = "NONE"
+
+[expected_benchmark]
+cell_count = 6
+adjustable_cell_count = 4
+predetermined_cell_count = 2
+structural_zero_count = 1
+negative_cell_count = 1
+control_count = 5
+adjustable_constraint_rank = 2
+adjustable_control_count = 3
+fixed_only_control_count = 2
+dependent_adjustable_control_count = 1
+high_confidence_adjustment = 0.6
+low_confidence_adjustment = 5.4
+low_to_high_absolute_adjustment_ratio = 9.0
+objective_value = 1.8
+raw_vs_truth_rmse = 2.254624876411447
+reconciled_vs_truth_rmse = 0.05773502691896288
+rmse_improvement = 2.196889849492484
+raw_vs_truth_mae = 1.0
+reconciled_vs_truth_mae = 0.033333333333333215
+mae_improvement = 0.9666666666666668
+maximum_balanced_control_residual = 1.0e-10
+sign_violation_count = 0
+structural_zero_violation_count = 0
+
+[[covariance_class]]
+class_id = "independent_measurement_v1"
+version = "v1"
+structure = "INDEPENDENT"
+correlation = 0.0
+group_required = false
+scientific_basis = "Diagonal covariance is an explicit synthetic benchmark assumption, not a claim about BEA or OECD source dependence."
+
+[[covariance_class]]
+class_id = "shared_source_equicorrelation_v1"
+version = "v1"
+structure = "EQUICORRELATED"
+correlation = 0.25
+group_required = true
+scientific_basis = "A positive within-group correlation exercises non-diagonal GLS covariance without asserting a production-source correlation estimate."
+
+[[covariance_class]]
+class_id = "exact_fixed_v1"
+version = "v1"
+structure = "EXACT_FIXED"
+correlation = 0.0
+group_required = false
+scientific_basis = "Predetermined and confirmed structural-zero cells are removed from the adjustable vector and therefore have zero prior and posterior adjustment variance."
+
+[[reliability_class]]
+class_id = "source_high_v1"
+version = "v1"
+adjustable = true
+prior_standard_uncertainty = 1.0
+covariance_class_id = "independent_measurement_v1"
+confidence_rank = 1
+scientific_basis = "Frozen synthetic high-confidence class; its variance is one ninth of source_low_v1."
+
+[[reliability_class]]
+class_id = "source_medium_correlated_v1"
+version = "v1"
+adjustable = true
+prior_standard_uncertainty = 1.0
+covariance_class_id = "shared_source_equicorrelation_v1"
+confidence_rank = 2
+scientific_basis = "Frozen synthetic medium-confidence class used only to exercise a valid non-diagonal covariance block."
+
+[[reliability_class]]
+class_id = "source_low_v1"
+version = "v1"
+adjustable = true
+prior_standard_uncertainty = 3.0
+covariance_class_id = "independent_measurement_v1"
+confidence_rank = 3
+scientific_basis = "Frozen synthetic low-confidence class; its variance is nine times source_high_v1, so it should absorb nine times the adjustment under their common exact sum."
+
+[[reliability_class]]
+class_id = "predetermined_exact_v1"
+version = "v1"
+adjustable = false
+prior_standard_uncertainty = 0.0
+covariance_class_id = "exact_fixed_v1"
+confidence_rank = 0
+scientific_basis = "An explicitly predetermined cell is substituted into every constraint and cannot absorb an adjustment."
+
+[[reliability_class]]
+class_id = "structural_zero_exact_v1"
+version = "v1"
+adjustable = false
+prior_standard_uncertainty = 0.0
+covariance_class_id = "exact_fixed_v1"
+confidence_rank = 0
+scientific_basis = "A confirmed structural zero is fixed at numeric zero; unavailable and merely measured-zero source states are not represented by this class."
+
+[[comparator]]
+method_id = "ORDINARY_RAS"
+status = "NOT_RUN_BLOCKED"
+eligible = false
+blockers = [
+    "FULL_BENCHMARK_LEDGER_CONTAINS_A_LEGITIMATE_NEGATIVE_CELL",
+    "GENERAL_LINEAR_CONTROLS_ARE_NOT_A_COMPLETE_KNOWN_ROW_AND_COLUMN_MARGIN_PAIR",
+    "NO_ORDINARY_RAS_IMPLEMENTATION_IS_INCLUDED_IN_THIS_CHECKPOINT",
+]
+citation_ids = ["UN_SUT_IOT_2018"]
+scientific_basis = "Ordinary RAS is restricted to homogeneous nonnegative matrices with known, mutually consistent row and column margins. Signed cells, unknown margins, mixed valuation bases, or conflicting margins fail closed."
+
+[[comparator]]
+method_id = "CROSS_ENTROPY_ROBINSON_2001"
+status = "NOT_RUN_BLOCKED"
+eligible = false
+blockers = [
+    "CELL_SUPPORTS_AND_PRIOR_ERROR_DISTRIBUTIONS_ARE_NOT_PREREGISTERED",
+    "A_VERIFIED_CROSS_ENTROPY_SOLVER_IS_NOT_IMPLEMENTED_IN_THIS_CHECKPOINT",
+]
+citation_ids = ["ROBINSON_CATTANEO_ELSAID_2001"]
+scientific_basis = "The cited method can incorporate priors, errors, and constraints, but reporting a comparator without frozen supports, probability priors, error treatment, and verified optimization would not be a correct implementation."
+
+[[comparator]]
+method_id = "CORRECTED_GRAS_LENZEN_2007"
+status = "NOT_RUN_BLOCKED"
+eligible = false
+blockers = [
+    "THE_BENCHMARK_HAS_GENERAL_LINEAR_CONTROLS_RATHER_THAN_ONLY_PRESCRIBED_ROW_AND_COLUMN_TOTALS",
+    "THE_CORRECTED_ZERO_AND_SIGN_AWARE_GRAS_OBJECTIVE_AND_ITERATION_ARE_NOT_IMPLEMENTED_IN_THIS_CHECKPOINT",
+]
+citation_ids = ["LENZEN_WOOD_GALLEGO_2007", "UN_SUT_IOT_2018"]
+scientific_basis = "Lenzen, Wood, and Gallego correct both zero handling and the GRAS objective. A superficially similar signed scaling routine is not an admissible comparator."
+
+[[citation]]
+citation_id = "UN_SUT_IOT_2018"
+kind = "PRIMARY_OFFICIAL_GUIDANCE"
+authors = "United Nations Statistics Division"
+year = 2018
+title = "Handbook on Supply, Use and Input-Output Tables with Extensions and Applications"
+locator = "sections 11.104-11.116; Box 11.3, especially Stone method discussion at paragraphs 11.119-11.120; sections 18.79-18.81"
+url = "https://unstats.un.org/unsd/nationalaccount/docs/SUT_IOT_HB_Final_Cover.pdf"
+doi = ""
+access_date = "2026-08-06"
+relevance = "Requires investigation before automation; describes Stone reconciliation as covariance-weighted quadratic adjustment under linear constraints; notes that more reliable data move less; distinguishes RAS extensions for negative entries and conflicting sources."
+
+[[citation]]
+citation_id = "STONE_CHAMPERNOWNE_MEADE_1942"
+kind = "PRIMARY_ACADEMIC_METHOD_LINEAGE"
+authors = "Richard Stone; D. G. Champernowne; James E. Meade"
+year = 1942
+title = "The Precision of National Income Estimates"
+locator = "The Review of Economic Studies 9(2), 111-125"
+url = "https://doi.org/10.2307/2967664"
+doi = "10.2307/2967664"
+access_date = "2026-08-06"
+relevance = "Introduces the reliability-aware national-account estimation lineage on which constrained Stone reconciliation is based."
+
+[[citation]]
+citation_id = "BYRON_1978"
+kind = "PRIMARY_ACADEMIC_METHOD"
+authors = "R. P. Byron"
+year = 1978
+title = "The Estimation of Large Social Account Matrices"
+locator = "Journal of the Royal Statistical Society, Series A, 141(3), 359-367; equations (5)-(9)"
+url = "https://documents.worldbank.org/curated/en/645001467980482557/pdf/REP65000The0es0ial0account0matrices.pdf"
+doi = "10.2307/2344807"
+access_date = "2026-08-06"
+relevance = "Formalizes the constrained quadratic-loss Stone solution, its covariance update, exclusion of predetermined zeros, and the need to remove or generalize over redundant restrictions."
+
+[[citation]]
+citation_id = "ROBINSON_CATTANEO_ELSAID_2001"
+kind = "PRIMARY_ACADEMIC_COMPARATOR"
+authors = "Sherman Robinson; Andrea Cattaneo; Moataz El-Said"
+year = 2001
+title = "Updating and Estimating a Social Accounting Matrix Using Cross Entropy Methods"
+locator = "Economic Systems Research 13(1), 47-64"
+url = "https://doi.org/10.1080/09535310120026247"
+doi = "10.1080/09535310120026247"
+access_date = "2026-08-06"
+relevance = "Defines a cross-entropy framework using prior information, errors, and accounting constraints; retained here as a preregistered but unimplemented comparator."
+
+[[citation]]
+citation_id = "LENZEN_WOOD_GALLEGO_2007"
+kind = "PRIMARY_ACADEMIC_COMPARATOR_CORRECTION"
+authors = "Manfred Lenzen; Richard Wood; Blanca Gallego"
+year = 2007
+title = "Some Comments on the GRAS Method"
+locator = "Economic Systems Research 19(4), 461-465; sections 2 and 4-5"
+url = "https://doi.org/10.1080/09535310701698613"
+doi = "10.1080/09535310701698613"
+access_date = "2026-08-06"
+relevance = "Corrects GRAS zero handling and its objective/iteration for matrices decomposed into positive and absolute-negative parts; retained here as a preregistered but unimplemented comparator."

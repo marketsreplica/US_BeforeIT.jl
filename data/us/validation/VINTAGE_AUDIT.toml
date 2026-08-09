@@ -1,0 +1,157 @@
+schema_version = "beforeit-us-installed-vintage-audit.v1"
+audit_date = "2026-08-05"
+scope = "read-only inventory of ignored local raw, curated, database, and cache artifacts"
+protocol_file_sha256 = "d41db749b8b6b99a4e6570aa44fdaf18850e6c7e05b5d370ce5f2b5bc92c8ba3"
+protocol_canonical_sha256 = "88519e5b04936f528396cf5243ff270844d0d38651fd84fc3b1c76fef997b584"
+release_eligibility_rule = "release_timestamp_utc <= origin_timestamp_utc"
+missing_intraday_timestamp_policy = "ineligible"
+protocol_admissible_historical_origins = 0
+strict_no_download_pilot_runnable = false
+installed_artifact_class = "current_or_retrieval_day_revised_snapshots"
+decision = "Record 2026Q1 as a revised/mixed-vintage cannot-run diagnostic; do not run or score a forecast competition."
+earliest_installed_model_state = "2024Q4"
+earliest_installed_model_state_status = "engineering_diagnostic_only"
+
+[raw_archive]
+file_count = 338
+payload_count = 169
+metadata_sidecar_count = 169
+unique_payload_hash_count = 146
+all_http_statuses_200 = true
+all_payload_basenames_match_sha256 = true
+all_sidecars_resolve_to_matching_payload = true
+combined_all_files_manifest_sha256 = "f22dea36f3abd94f69486739a1654bfa79ba18d479cef3e7e06cb69d67e8eecc"
+combined_payload_manifest_sha256 = "c375243e9030170b23de10e6c6dc8dedbf526b697a41453fd3d4051050defac2"
+
+[[raw_snapshots]]
+retrieval_vintage = "2026-08-02"
+file_count = 126
+payload_count = 63
+unique_payload_hash_count = 63
+payload_bytes = 67420792
+retrieved_at_utc_min = "2026-08-02T15:16:14.367"
+retrieved_at_utc_max = "2026-08-02T15:46:46.799"
+all_files_manifest_sha256 = "411ce2c12d30f43c41d7c381992be854d64c05d58abaff9052df15aedf8be7d0"
+payload_manifest_sha256 = "a04e5683cbe018d48e214f6f85dac98ec8d04e985d88b0902e575aabf809d524"
+
+[[raw_snapshots]]
+retrieval_vintage = "2026-08-04"
+file_count = 212
+payload_count = 106
+unique_payload_hash_count = 105
+payload_bytes = 77270446
+retrieved_at_utc_min = "2026-08-03T23:32:05.905"
+retrieved_at_utc_max = "2026-08-04T00:26:44.320"
+all_files_manifest_sha256 = "23bb3c2937478c4f04c958c3528eb5529a829df24e7d2761f7b1832d4f89bb02"
+payload_manifest_sha256 = "086352b58c3f04aca22e8a111f06173f633850ea7d58e1f1a212dea76f9d8d8a"
+
+[curated_archive]
+parquet_file_count = 32
+files_per_snapshot = 16
+snapshot_2026_08_02_manifest_sha256 = "a8e31e4cc12af5724fda3e2af400dbcae4983b4126310eae69b724cc912f3c19"
+snapshot_2026_08_04_manifest_sha256 = "be658f4a79dc71831223c43961f1cf6a04f6858a582457a2464e2ce7de982d47"
+sqlite_placeholder_bytes = 0
+
+[database]
+duckdb_bytes = 9449472
+duckdb_sha256 = "0f84d7bd0eceb5d6314ec9424147c355ac66e45583fdce9edc509def1b1d6353"
+table_count = 17
+selected_acquisition_count = 47
+selected_payload_hash_set_sha256 = "7d34b22fd4efcaf851cd27d1dde918f88bc6d934cda45ee7cd8903924b1f2ea9"
+acquisition_timestamp_min = "2026-08-04T00:26:31.471"
+acquisition_timestamp_max = "2026-08-04T00:27:04.883"
+observation_row_count = 4707
+observation_date_count = 724
+observation_period_start = "1996-01-31"
+observation_period_end = "2026-07-01"
+observation_approved_count = 4659
+observation_dubious_count = 42
+observation_missing_count = 6
+quarterly_panel_row_count = 119
+quarterly_panel_start = "1996Q4"
+quarterly_panel_end = "2026Q2"
+structural_years = [2024]
+
+[cache]
+jld2_stage_snapshot_count = 7
+approximate_bytes = 251000000
+combined_manifest_sha256 = "072245f543bf43e1efd32263ac60911b993fa3914f03c01fd5c9e847e1550ade"
+
+[provenance_defect]
+selected_acquisition_count = 47
+db_sidecar_timestamp_text_mismatch_count = 45
+db_sidecar_timestamp_difference_over_one_second_count = 40
+maximum_absolute_timestamp_difference_seconds = 3273.36
+interpretation = "Sidecars preserve metadata for reused content while the database records later refetch events; neither alone is a complete append-only acquisition-event ledger."
+
+[missing_bitemporal_fields]
+fields = [
+    "release_timestamp_utc",
+    "realtime_start",
+    "realtime_end",
+    "source_release_id",
+    "source_url_or_file",
+    "retrieved_at_utc",
+    "seasonal_adjustment",
+    "stock_flow_index_rate",
+    "classification_vintage",
+    "transformation_version",
+]
+
+[tier1_coverage]
+required_target_count = 8
+approximately_present_target_count = 4
+exact_vintage_clean_target_count = 0
+approximately_present = [
+    "real_gdp",
+    "nominal_gdp",
+    "gdp_deflator_derived",
+    "unemployment_rate",
+]
+missing = [
+    "pce_price_index",
+    "core_pce_price_index",
+    "payroll_employment",
+]
+wrong_granularity = [
+    "effective_federal_funds_rate: installed monthly FEDFUNDS is not the required quarterly average of daily EFFR releases",
+]
+first_release_truth_matrices = 0
+near_mature_truth_matrices = 0
+mature_60_month_truth_matrices = 0
+
+[first_acquisition_candidate]
+origin_timestamp_utc = "2026-07-31T14:00:00Z"
+origin_rule = "first business day after the 2026Q2 BEA advance release, 10:00 America/New_York"
+status = "candidate_not_reconstructible_from_installed_data"
+scoring_status_if_acquired = "provisional_until_60_month_mature_truth_exists"
+required_release_families = [
+    "BEA 2026Q2 advance GDP package released 2026-07-30",
+    "BLS June 2026 Employment Situation first release",
+    "daily New York Fed EFFR releases eligible by the origin",
+    "Federal Reserve 2026Q1 Z.1 release package",
+    "release-bound 2024 structural source packages and classifications",
+    "ALFRED and RTDSM vintage histories",
+]
+
+[first_acquisition_candidate.official_sources]
+bea_release_schedule = "https://www.bea.gov/news/schedule"
+bls_employment_archive = "https://www.bls.gov/bls/news-release/empsit.htm"
+bls_ces_vintage_data = "https://www.bls.gov/web/empsit/cesvininfo.htm"
+new_york_fed_reference_rate_policy = "https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates"
+federal_reserve_z1 = "https://www.federalreserve.gov/releases/z1/"
+philadelphia_fed_rtdsm = "https://www.philadelphiafed.org/surveys-and-data/real-time-data-research/real-time-data-set-for-macroeconomists"
+
+[recommended_backfill]
+items = [
+    "append-only source-release and retrieval-event registry",
+    "complete eight-target bitemporal matrices",
+    "first, third, and 60-month truth matrices",
+    "ALFRED and RTDSM output histories",
+    "BLS CES vintage files",
+    "archived BEA release packages",
+    "daily EFFR releases",
+    "release-specific Z.1 packages",
+    "annual structural releases and versioned classification bridges",
+    "signed origin manifests and vintage-completeness dashboard",
+]

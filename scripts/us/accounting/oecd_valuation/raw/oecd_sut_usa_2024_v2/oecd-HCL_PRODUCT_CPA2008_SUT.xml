@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--NSI Web Service v8.19.8.0-->
+<message:Structure xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:structure="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+  <message:Header>
+    <message:ID>IDREF10669</message:ID>
+    <message:Test>false</message:Test>
+    <message:Prepared>2026-08-06T17:14:21.9029515+02:00</message:Prepared>
+    <message:Sender id="Unknown" />
+    <message:Receiver id="Unknown" />
+  </message:Header>
+  <message:Structures>
+    <structure:HierarchicalCodelists>
+      <structure:HierarchicalCodelist id="HCL_PRODUCT_CPA2008_SUT" agencyID="OECD.SDD.NAD" version="1.0" isFinal="true">
+        <common:Name xml:lang="en">HCL Product SUT</common:Name>
+        <common:Name xml:lang="fr">HCL produit SUT</common:Name>
+        <structure:IncludedCodelist alias="CL_PRODUCT_CPA2008@OECD@11">
+          <Ref id="CL_PRODUCT_CPA2008" version="1.1" agencyID="OECD" package="codelist" class="Codelist" />
+        </structure:IncludedCodelist>
+        <structure:Hierarchy id="H" leveled="false">
+          <common:Name xml:lang="en">Hierarchy for CL_PRODUCT_CPA2008</common:Name>
+          <structure:HierarchicalCode id="_T">
+            <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="_T" />
+            </structure:CodeID>
+            <structure:HierarchicalCode id="CPA08_A">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_A" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_A01">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_A01" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_A02">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_A02" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_A03">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_A03" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_B">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_B" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_B05">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_B05" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_B06">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_B06" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_B07">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_B07" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_B08">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_B08" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_B09">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_B09" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_C">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_C" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_C10T12">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C10T12" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="CPA08_C10">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_C10" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_C11">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_C11" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_C12">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_C12" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C13T15">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C13T15" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="CPA08_C13">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_C13" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_C14">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_C14" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_C15">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_C15" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C16">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C16" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C17">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C17" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C18">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C18" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C19">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C19" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C20">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C20" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C21">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C21" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C22">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C22" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C23">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C23" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C24">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C24" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C25">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C25" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C26">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C26" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C27">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C27" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C28">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C28" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C29">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C29" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C30">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C30" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C31_32">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C31_32" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="CPA08_C31">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_C31" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_C32">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_C32" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_C33">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_C33" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_D">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_D" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_D35">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_D35" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_E">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_E" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_E36">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_E36" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_E37T39">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_E37T39" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="CPA08_E37">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_E37" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_E38">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_E38" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_E39">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_E39" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_F">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_F" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_F41">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_F41" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_F42">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_F42" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_F43">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_F43" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_G">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_G" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_G45">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_G45" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_G46">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_G46" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_G47">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_G47" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_H">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_H" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_H49">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_H49" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_H50">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_H50" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_H51">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_H51" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_H52">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_H52" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_H53">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_H53" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_I">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_I" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_I55">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_I55" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_I56">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_I56" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_J">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_J" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_J58">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_J58" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_J59_60">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_J59_60" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="CPA08_J59">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_J59" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_J60">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_J60" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_J61">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_J61" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_J62_63">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_J62_63" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="CPA08_J62">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_J62" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_J63">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_J63" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_K">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_K" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_K64">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_K64" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_K65">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_K65" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_K66">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_K66" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_L">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_L" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_L68A">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_L68A" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_L68B">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_L68B" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_M">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_M" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_M69_70">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_M69_70" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="CPA08_M69">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_M69" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_M70">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_M70" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_M71">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_M71" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_M72">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_M72" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_M73">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_M73" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_M74_75">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_M74_75" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="CPA08_M74">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_M74" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_M75">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_M75" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_N">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_N" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_N77">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_N77" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_N78">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_N78" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_N79">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_N79" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_N80T82">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_N80T82" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="CPA08_N80">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_N80" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_N81">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_N81" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_N82">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_N82" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_O">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_O" />
+              </structure:CodeID>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_P">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_P" />
+              </structure:CodeID>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_Q">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_Q" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_Q86">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_Q86" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_Q87_88">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_Q87_88" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="CPA08_Q87">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_Q87" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_Q88">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_Q88" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_R">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_R" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_R90T92">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_R90T92" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="CPA08_R90">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_R90" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_R91">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_R91" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="CPA08_R92">
+                  <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="CPA08_R92" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_R93">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_R93" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_S">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_S" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_S94">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_S94" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_S95">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_S95" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_S96">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_S96" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_T">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_T" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="CPA08_T97">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_T97" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="CPA08_T98">
+                <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="CPA08_T98" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="CPA08_U">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="CPA08_U" />
+              </structure:CodeID>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="_X">
+              <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="_X" />
+              </structure:CodeID>
+            </structure:HierarchicalCode>
+          </structure:HierarchicalCode>
+          <structure:HierarchicalCode id="_Z">
+            <structure:CodelistAliasRef>CL_PRODUCT_CPA2008@OECD@11</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="_Z" />
+            </structure:CodeID>
+          </structure:HierarchicalCode>
+        </structure:Hierarchy>
+      </structure:HierarchicalCodelist>
+    </structure:HierarchicalCodelists>
+  </message:Structures>
+</message:Structure>

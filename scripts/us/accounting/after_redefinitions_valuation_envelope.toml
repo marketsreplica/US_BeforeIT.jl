@@ -1,0 +1,74 @@
+schema_version = "beforeit-us-after-redefinitions-valuation-envelope.v1"
+classification = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+forecast_origin_admissible = false
+model_state_write = false
+accounting_gate_effect = "NONE"
+source_year = 2024
+
+supply_fixture_path = "scripts/us/accounting/fixtures/bea_2024_approved"
+supply_fixture_sha256 = "c4461fbe971d8fb70750ff4cce6bb09e582a024d7cc1f6e8ebd8e3685bab69e0"
+supply_manifest_sha256 = "564a99ec2011b2566b8951e9eecb4737c0bfbc88f1e077b1eaf596af9894575c"
+supply_table_id = "262"
+supply_table_source_sha256 = "91d6686dce15fe1d96f35f1752382bf1d47d274c067f52febc60ae40014406e8"
+supply_source_status = "APPROVED_ARCHIVED"
+
+after_redefinitions_fixture_path = "scripts/us/accounting/fixtures/bea_after_redefinitions_common_basis_approved"
+after_redefinitions_fixture_sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
+after_redefinitions_manifest_sha256 = "ff555043829e5d12ba787ba9ad7d58ef4f0d2ee306740d6847bdfec800935030"
+after_redefinitions_source_zip_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+after_redefinitions_source_status = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+
+model_mapping_path = "scripts/us/accounting/after_redefinitions_model_core_mapping.toml"
+model_mapping_sha256 = "546b3dc15cbb194210ce564a44626b146551b161ca0ce5ffb90a8a5261b4553c"
+sector_mapping_path = "scripts/us/bea71.toml"
+sector_mapping_sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+
+component_codes = [
+    "T007",
+    "MCIF",
+    "MADJ",
+    "T013",
+    "Trade",
+    "Trans",
+    "T014",
+    "TOP",
+    "MDTY",
+    "SUB",
+    "T015",
+    "T016",
+]
+component_meanings = [
+    "domestic commodity output at basic prices",
+    "imports at border valuation",
+    "CIF/FOB and related import valuation adjustments",
+    "total product supply at basic prices",
+    "wholesale and retail trade margins",
+    "transportation costs",
+    "total trade and transportation margins",
+    "taxes on products",
+    "import duties",
+    "subsidies on products",
+    "net taxes on products, import duties, and subsidies",
+    "total product supply at purchasers prices",
+]
+row_equations = [
+    "T007 + MCIF + MADJ = T013",
+    "Trade + Trans = T014",
+    "TOP + MDTY + SUB = T015",
+    "T013 + T014 + T015 = T016",
+]
+
+cross_archive_release_identity = "NOT_EXTERNALLY_BOUND"
+cross_archive_interpretation = "The two separately captured current-vintage sources share reference year 2024, but no external receipt proves that they belong to one release state."
+producer_basic_relation = "At published grand-total and rounded-cell-sum level, after-redefinitions producer-price commodity output equals before-redefinitions domestic basic-price output plus net product taxes. Commodity rows additionally contain a signed zero-sum redefinition redistribution."
+redefinition_residual_policy = "Retain producer output minus basic output minus net product tax by commodity. Do not relabel, allocate, balance, or clip it."
+cell_allocation_policy = "NONE"
+tax_variant_effect = "NONE_DIAGNOSTIC_ONLY"
+margin_allocation_applied = false
+tax_allocation_applied = false
+redefinition_allocation_applied = false
+domestic_use_subtraction_applied = false
+balancing_applied = false
+clipping_applied = false
+scientific_role = "Versioned valuation envelope and impossibility witness for a scalar or ungoverned proportional bridge. It retains published row controls and exposes the unallocated redefinition vector; it is not a final-use or intermediate-use cell allocator."

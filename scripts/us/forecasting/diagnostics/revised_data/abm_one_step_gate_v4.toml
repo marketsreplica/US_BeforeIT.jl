@@ -1,0 +1,381 @@
+schema_version = "beforeit-us-revised-data-abm-one-step-gate.v4"
+contract_id = "beforeit-us-revised-data-abm-base-one-step-qualification.v4"
+information_track = "revised_mixed_vintage"
+diagnostic_class = "quarantined_initial_transition_software_qualification"
+model_variant = "base"
+model_constructor_id = "BeforeIT.Model"
+origin_period = "2026Q1"
+target_period = "2026Q2"
+horizon = 1
+path_count = 32
+master_seed = 20260807
+seed_namespace_experiment_id = "us-abm-constructor-gate-v3"
+model_id = "beforeit-us-abm-base"
+path_kind = "RAW_MODEL_UNCORRECTED_REVISED_MIXED_VINTAGE_DIAGNOSTIC"
+v3_module_sha256 = "e035a8b35e65ea383d28ceef6673ae311e6fe74a5394a2c45bf576e0b0600815"
+v3_protocol_sha256 = "9bea1d110879275e33cc58d87a802c5e51e2b2f3d33929d7db073e81bd07166d"
+withdrawn_v3_reference_result_sha256 = "68df3185b7159ac4b9fadcdb82ffb2e674ff5fdf6a89aa8d78585b4e4cf3105b"
+v3_opening_fingerprint_set_sha256 = "2f359965fa08785101870a46332cdd66c91e744a664e9803fc198ef53e024a18"
+v2_protocol_sha256 = "efcdce3fb08e0b7496f9293c299787994eda85f2d7f750603a7f5a8b0856cab4"
+v2_qualified_input_sha256 = "bd9ac9c9054ef51289e5dfb51281e9f259684f19230e8c1a34c47f84d8062011"
+v2_seed_plan_sha256 = "7b42c8280d4ce398d9e426940480a635960817d1befddb9c801dbb1fcc94ec2c"
+synthetic_operator_module_sha256 = "28ae259cecbe20a6d2d6c91de4bed6eab86f676864f9476b0977e6bcc0cd7492"
+synthetic_operator_protocol_sha256 = "c94de45ad463db87d93a6002ca4c6ee9ca5e908423bd793396db5c87d52ae148"
+julia_load_path_env = "@:@stdlib"
+symbolic_load_path = ["@", "@stdlib"]
+compiled_modules_mode = "no"
+pkgimages_mode = "no"
+julia_use_compiled_modules_code = 0
+julia_use_pkgimages_code = 0
+julia_generating_output_code = 0
+precompiletools_uuid = "aea7be01-6a6a-4083-8856-8a6e6704d82a"
+package_import_side_data_file_count = 10
+package_import_side_data_manifest_sha256 = "646fd7727a5885fd9514d0ebf9e722a0b63295f785c52f2a42498d757214ec0a"
+selective_decode_contract = "jld2_named_datasets_parameters_and_initial_conditions_only_period_axis_from_frozen_v3_protocol"
+expected_one_step_path_set_sha256 = "a9e8e6c9d22e5284d163da21477d8726a663590e2e8e3735e54018daac671199"
+expected_path_one_post_collection_state_sha256 = "ce48b0f392ea3be58f392d8be77c647e5e5738dd841194af9422ca5608d5a525"
+expected_one_step_method_origin_sha256 = "c01f4283b344992f9f6c3590dbd702a0860cfd6f86647e8af88d2b96ba11fe36"
+real_gdp_formula = "400*(log(real_gdp_row_2)-log(real_gdp_row_1))"
+gdp_deflator_formula = "400*((log(nominal_gdp_row_2)-log(real_gdp_row_2))-(log(nominal_gdp_row_1)-log(real_gdp_row_1)))"
+path_evaluation_rule = "transform_each_raw_path_before_any_ensemble_summary"
+origin_row_rule = "row_1_is_model_implied_unanchored_2026Q1_labeled_opening_and_row_2_is_h1_2026Q2"
+one_step_rule = "seed_then_exactly_one_explicit_serial_step_then_exactly_one_collect_data"
+construction_input_rule = "reassemble_fresh_qualified_inputs_for_every_construction"
+synthetic_oracle_rule = "pure_formula_fixture_only_never_empirical_model_paths"
+execution_count_scope = "gate_owned_calls_after_beforeit_require_excludes_package_import_and_precompile_workloads"
+blockers = [
+    "REVISED_MIXED_VINTAGE_ORIGIN_NONADMISSIBLE",
+    "HISTORICAL_ORIGIN_COUNT_ZERO",
+    "US_EVALUATION_TRUTH_NOT_USED",
+    "V3_CANONICAL_DISPOSITION_WITHDRAWN",
+    "EMPIRICAL_FORECAST_NOT_VALIDATED",
+    "OFFICIAL_CONCEPT_BRIDGE_UNVALIDATED",
+    "INDEPENDENT_RNG_STREAMS_NOT_ESTABLISHED",
+    "FULL_RUNTIME_ATTESTATION_NOT_ESTABLISHED",
+    "TIER1_PROMOTION_FORBIDDEN",
+]
+prohibited_actions = [
+    "truth_access",
+    "emit_forecast",
+    "serialize_forecast",
+    "score",
+    "inference",
+    "origin_admission",
+    "registry_write",
+    "promotion",
+    "class_h",
+    "production",
+    "reanchor",
+    "bridge_adjust",
+]
+
+primary_path_order = [
+    1, 2, 3, 4, 5, 6, 7, 8,
+    9, 10, 11, 12, 13, 14, 15, 16,
+    17, 18, 19, 20, 21, 22, 23, 24,
+    25, 26, 27, 28, 29, 30, 31, 32,
+]
+reverse_path_order = [
+    32, 31, 30, 29, 28, 27, 26, 25,
+    24, 23, 22, 21, 20, 19, 18, 17,
+    16, 15, 14, 13, 12, 11, 10, 9,
+    8, 7, 6, 5, 4, 3, 2, 1,
+]
+replay_path_ids = [1]
+
+construction_seeds = [
+    5031910127460406113,
+    1800640781086547184,
+    2303797836613292799,
+    4317343911030018305,
+    3702634746480464642,
+    2648785862302636204,
+    4414831013187652133,
+    3936483942940814467,
+    1585554234299344068,
+    2799410045535767552,
+    6288098778649103898,
+    6961787840163358977,
+    2129679152141147343,
+    576547306833785497,
+    3517472245011203844,
+    6970498931470826593,
+    3997766355651258578,
+    1817892351882332218,
+    6265799985698961596,
+    7367482620586229882,
+    3713379603860054506,
+    5274302999252310238,
+    1772833175495004234,
+    760488549960904242,
+    8790891562094926257,
+    6649939104001475074,
+    8449263315430857112,
+    6608274874320083222,
+    9137224925166801550,
+    1484872645837357300,
+    7179219274923512899,
+    688411321486256431,
+]
+simulation_seeds = [
+    2266917128577262934,
+    4444760012277186539,
+    3651174077807036556,
+    2146669136077857564,
+    46979147683037833,
+    8553739648962259384,
+    900358092944529194,
+    7707664230584547405,
+    3989794215397469049,
+    3240280513414763330,
+    1263509336207037935,
+    7637340455438254344,
+    7796462805545082083,
+    2210936597111188594,
+    2558470289426878386,
+    7043570254294128523,
+    4872794908088545657,
+    1861119675183012121,
+    2312206511568207185,
+    85612170991494991,
+    5859468785594321252,
+    990102903587970797,
+    7379468772804241650,
+    7592386135322825472,
+    7864611730695461658,
+    2168010041185039217,
+    1149255264383777742,
+    7979128297625096098,
+    4823780517559225600,
+    8009638346654334670,
+    3102192835628747375,
+    19091115084160725,
+]
+
+[execution_counts]
+primary_constructions = 32
+primary_steps = 32
+primary_constructor_opening_collections = 32
+primary_post_step_collections = 32
+primary_total_collection_events = 64
+reverse_constructions = 32
+reverse_steps = 32
+reverse_constructor_opening_collections = 32
+reverse_post_step_collections = 32
+reverse_total_collection_events = 64
+replay_constructions = 1
+replay_steps = 1
+replay_constructor_opening_collections = 1
+replay_post_step_collections = 1
+replay_total_collection_events = 2
+total_constructions = 65
+total_steps = 65
+total_constructor_opening_collections = 65
+total_post_step_collections = 65
+total_collection_events = 130
+
+[declarations]
+diagnostic_only = true
+runner_implemented = true
+revised_mixed_vintage = true
+model_constructed = true
+model_stepped_once_per_construction = true
+software_one_step_verified = true
+initial_transition_characterized = true
+raw_opening_and_post_step_levels_preserved = true
+opening_row_is_model_implied_unanchored = true
+opening_row_is_official_truth = false
+opening_macro_controls_used = false
+path_order_invariance_executed = true
+same_seed_replay_executed = true
+v3_bootstrap_reexecuted = true
+v3_acceptance_relied_upon = false
+v2_raw_requalification_performed = true
+synthetic_formula_oracle_used_only_on_pure_fixture = true
+raw_diagnostic_path_values_returned = true
+measurement_basis_discontinuity_preserved = true
+truth_bearing_metadata_present_in_pinned_artifact = true
+truth_bearing_raw_artifact_bytes_hashed = true
+truth_bearing_metadata_deserialized = false
+truth_values_consumed_by_model_or_operator = false
+truth_values_used_for_scoring = false
+us_evaluation_truth_used = false
+us_nowcast_parameters_initial_conditions_selectively_deserialized = true
+package_import_side_data_deserialized = true
+package_import_side_data_attested = true
+package_import_side_data_passed_to_v4_constructor_or_gdp_operator = false
+package_precompile_workload_execution_guard_attested = true
+package_precompile_workload_executed = false
+precompiletools_clean_bootstrap_verified = true
+precompiletools_verbose_false = true
+ephemeral_jld2_snapshot_written = true
+zero_filesystem_writes_claimed = false
+independent_streams_established = false
+input_lineage_verified = false
+source_period_labels_authenticated = false
+empirical_forecast_validated = false
+forecast_artifact_emitted = false
+forecast_artifact_serialized = false
+score_computed = false
+inference_run = false
+origin_admissible = false
+registry_write_allowed = false
+promotion_eligible = false
+class_h_allowed = false
+production_allowed = false
+reanchoring_used = false
+bridge_adjustment_used = false
+tier1_operator_approved = false
+full_runtime_attestation = false
+
+[attestation_limits]
+repository_source_closure_validated = true
+manifest_source_trees_validated = true
+package_entrypoints_preresolved = true
+effective_load_path_attested = true
+effective_depot_path_enumerated = true
+artifact_overrides_required_absent = true
+method_origins_rechecked_after_execution = true
+package_import_side_data_attested = true
+compiled_modules_disabled = true
+pkgimages_disabled = true
+generating_output_required_false = true
+package_precompile_workload_execution_guard_attested = true
+precompiletools_clean_bootstrap_verified = true
+precompiletools_verbose_required_false = true
+binary_artifacts_attested = false
+binary_jll_payloads_attested = false
+compiled_caches_attested = false
+depot_contents_attested = false
+global_preferences_attested = false
+julia_executable_bytes_attested = false
+sysimage_bytes_attested = false
+same_user_filesystem_race_resistance_attested = false
+official_concept_bridge_validated = false
+historical_origin_validated = false
+empirical_accuracy_established = false
+
+[[pinned_files]]
+path = "scripts/us/forecasting/diagnostics/USRevisedDataABMConstructorGateV3.jl"
+sha256 = "e035a8b35e65ea383d28ceef6673ae311e6fe74a5394a2c45bf576e0b0600815"
+role = "withdrawn_v3_constructor_gate_scaffolding_implementation"
+
+[[pinned_files]]
+path = "scripts/us/forecasting/diagnostics/revised_data/abm_constructor_gate_v3.toml"
+sha256 = "9bea1d110879275e33cc58d87a802c5e51e2b2f3d33929d7db073e81bd07166d"
+role = "withdrawn_v3_constructor_gate_scaffolding_protocol"
+
+[[pinned_files]]
+path = "scripts/us/forecasting/targets/abm_gdp_operator/USABMGDPOperatorQualification.jl"
+sha256 = "28ae259cecbe20a6d2d6c91de4bed6eab86f676864f9476b0977e6bcc0cd7492"
+role = "accepted_synthetic_gdp_formula_oracle_implementation"
+
+[[pinned_files]]
+path = "scripts/us/forecasting/targets/abm_gdp_operator/operator_qualification.toml"
+sha256 = "c94de45ad463db87d93a6002ca4c6ee9ca5e908423bd793396db5c87d52ae148"
+role = "accepted_synthetic_gdp_formula_oracle_protocol"
+
+[[pinned_files]]
+path = "src/one_step.jl"
+sha256 = "1446053cf507aeb76263114c7a721a1377b787657829ff28409318173d19f905"
+role = "serial_one_step_method_source"
+
+[[pinned_files]]
+path = "src/utils/data.jl"
+sha256 = "3b42bcc124e5242c2a9b7303d9feddbfa7d6e54b07e62961ef646bf06ff8b5b8"
+role = "native_data_collection_and_gdp_measurement_source"
+
+[[pinned_files]]
+path = "src/shocks/shocks.jl"
+sha256 = "80ed969e8af62a29c894023356efbffc04bc00585aae977fe60c17e0e6e0c0d6"
+role = "no_shock_constructor_and_call_source"
+
+[[pinned_files]]
+path = "src/agent_actions/aggregates.jl"
+sha256 = "b8839ce9a624e25c94b1d039747dbd3cb882a4bb4efa4187642631544b440843"
+role = "gdp_and_model_time_transition_source"
+
+[[pinned_files]]
+path = "data/austria/parameters/2010Q1.jld2"
+sha256 = "137b9b6c9968b902704026751390cbb93666768bf5b8a92dcb8782e465c257a2"
+role = "beforeit_eager_import_side_data_austria_parameters"
+
+[[pinned_files]]
+path = "data/austria/initial_conditions/2010Q1.jld2"
+sha256 = "b47bdcb8cd36e2b57869f25a85bc6ab730feeccb3cd8dac236bf6807545fd087"
+role = "beforeit_eager_import_side_data_austria_initial_conditions"
+
+[[pinned_files]]
+path = "data/italy/parameters/2010Q1.jld2"
+sha256 = "e687fe848061f0c1847faadb723a0f370e45f7a555eba95e11b85dc58af93113"
+role = "beforeit_eager_import_side_data_italy_parameters"
+
+[[pinned_files]]
+path = "data/italy/initial_conditions/2010Q1.jld2"
+sha256 = "45660c8d3fcc2443cd510dbfcbc395b7f5a0607b4f5e1b75d5b35f820dd911f9"
+role = "beforeit_eager_import_side_data_italy_initial_conditions"
+
+[[pinned_files]]
+path = "data/steady_state/parameters/2010Q1.jld2"
+sha256 = "9204c044442d7f0f209aee957a5e11828939538bfd3e3bc8cc419237f73fcf85"
+role = "beforeit_eager_import_side_data_steady_state_parameters"
+
+[[pinned_files]]
+path = "data/steady_state/initial_conditions/2010Q1.jld2"
+sha256 = "4b402e9d3e9aa5efc166e853be529a0ce09a40cce9033b6907f1c452582a923d"
+role = "beforeit_eager_import_side_data_steady_state_initial_conditions"
+
+[[pinned_files]]
+path = "data/italy/calibration/calibration/2010Q1.jld2"
+sha256 = "49dc1a59ab9e73547463108556ca8bc1b30c72130365c63d7ca1cb49e84e276e"
+role = "beforeit_eager_import_side_data_italy_calibration"
+
+[[pinned_files]]
+path = "data/italy/calibration/figaro/2010.jld2"
+sha256 = "963de7c2fe2d2e89ae15a165ccea800d8af42380d9133eb2d310de588c19e1e6"
+role = "beforeit_eager_import_side_data_italy_figaro"
+
+[[pinned_files]]
+path = "data/italy/calibration/data/1996.jld2"
+sha256 = "8fc52d9741af911cb035584f3df0fbcff4ae4487ed502b7470ce04a8402ef09f"
+role = "beforeit_eager_import_side_data_italy_historical_data"
+
+[[pinned_files]]
+path = "data/italy/calibration/ea/1996.jld2"
+sha256 = "2a60c7b7edeb00a08c6c2d03b7ecf71d7ad8e9f4ca15da9844f906ba851c8f3d"
+role = "beforeit_eager_import_side_data_italy_ea_history"
+
+[[method_origins]]
+id = "CommonSolve.step!_serial"
+relative_path = "src/one_step.jl"
+defining_module = "BeforeIT"
+
+[[method_origins]]
+id = "NoShock_call"
+relative_path = "src/shocks/shocks.jl"
+defining_module = "BeforeIT"
+
+[[method_origins]]
+id = "NoShock_constructor"
+relative_path = "src/shocks/shocks.jl"
+defining_module = "BeforeIT"
+
+[[method_origins]]
+id = "collect_data!"
+relative_path = "src/utils/data.jl"
+defining_module = "BeforeIT"
+
+[[method_origins]]
+id = "set_gross_domestic_product!"
+relative_path = "src/agent_actions/aggregates.jl"
+defining_module = "BeforeIT"
+
+[[method_origins]]
+id = "set_time!"
+relative_path = "src/agent_actions/aggregates.jl"
+defining_module = "BeforeIT"
+
+[[method_origins]]
+id = "update_data_step!"
+relative_path = "src/utils/data.jl"
+defining_module = "BeforeIT"

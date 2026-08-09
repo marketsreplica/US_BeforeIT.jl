@@ -1,0 +1,20 @@
+accounting_gate_effect = "NONE"
+api_production_time_utc = "2026-08-06T00:40:11.567Z"
+coefficient_unit = "dollars of commodity output per dollar of commodity delivered to final use"
+fixture_cell_count = 5402
+fixture_sha256 = "d7285bc44bd9ee40cf51e1a7c0789fdce40b2764b438dec1c598cae81bc31b0b"
+forecast_origin_admissible = false
+generation_policy = "Regeneration fails unless the raw payload and redacted acquisition metadata match the approved current-vintage diagnostic hashes."
+projection = "Every numeric cell and both commodity-axis labels from the approved BEA API payload; descriptions and other envelope metadata omitted."
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+published_decimal_places = 7
+request_id = "table_59-2024-diagnostic"
+retrieved_at_utc = "2026-08-06T01:39:02.052Z"
+schema_version = "beforeit-us-total-requirements-fixture.v1"
+source_locator = "https://apps.bea.gov/api/data/?method=GetData&DataSetName=InputOutput&TableID=59&Year=2024"
+source_metadata_sha256 = "1cc83c9eec20698bb5a31aaba81eb98dd176126c187399a4d78910c65cebf787"
+source_sha256 = "f38f13ac18365fe4a68ad64fc9a6be6661b62893c3b714ee2d070cb7e0cc434d"
+status = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+table_id = "59"
+year = 2024
+

@@ -1,0 +1,212 @@
+[artifact]
+schema_version = "beforeit-us-metadata-schema-contract.v1"
+described_schema_version = "beforeit-us-prospective-profile-verification-receipt.v1"
+status = "CLOSED_FAIL_CLOSED"
+canonicalization = "sorted-typed-length-prefixed-v1-excluding-artifact-content-sha256"
+content_sha256 = "702ffcf060fd9bfb3530e3f9dee5936304351ab58ee386b53455662c3f069fe8"
+
+[contract]
+purpose = "one exact pre-origin profile evidence receipt consumed only as metadata by the common-origin acquisition v3 composition verifier"
+unknown_fields_allowed = false
+wildcard_dispatch_allowed = false
+leaf_source_execution_allowed = false
+synthetic_evidence_can_satisfy_readiness = false
+local_self_hash_authenticates_publisher = false
+transport_labels_authenticate_publisher = false
+current_v3_qualified_leaf_branch_reachable = false
+qualified_leaf_support_requires_new_schema = true
+
+[root]
+required_tables = [
+    "artifact",
+    "binding",
+    "selector",
+    "capture",
+    "release",
+    "leaf_verification",
+    "approvals",
+    "external_timestamp",
+    "retention",
+    "gates",
+]
+required_arrays = ["raw_artifacts", "replicas"]
+
+[artifact_fields]
+exact = ["schema_version", "evidence_class", "canonicalization", "content_sha256"]
+schema_version = "beforeit-us-prospective-profile-verification-receipt.v1"
+evidence_class_allowed = ["PROSPECTIVE_NONSYNTHETIC", "SYNTHETIC_TEST_ONLY"]
+
+[binding_fields]
+exact = [
+    "dispatch_id",
+    "requirement_id",
+    "source_id",
+    "evidence_role",
+    "legacy_profile_id",
+    "active_profile_id",
+    "legacy_selector",
+    "legacy_selector_sha256",
+    "active_selector",
+    "active_selector_sha256",
+    "legacy_v2_module_sha256",
+    "legacy_v2_contract_sha256",
+    "legacy_v2_semantic_sha256",
+]
+
+[selector_fields]
+exact = [
+    "candidate_catalog_path",
+    "candidate_catalog_sha256",
+    "resolution_path",
+    "resolution_sha256",
+    "eligible_candidate_count",
+    "selected_candidate_rank",
+    "set_resolution_complete",
+]
+eligible_candidate_count = 1
+selected_candidate_rank = 1
+set_resolution_complete = true
+catalog_and_resolution_receipt_completion_timestamps_required = true
+selected_candidate_official_locator_must_equal_release_locator = true
+
+[capture_fields]
+exact = [
+    "capture_id",
+    "capture_started_at_utc",
+    "receipt_completed_at_utc",
+    "availability_upper_bound_utc",
+    "reference_period_start",
+    "reference_period_end",
+]
+availability_rule = "receipt_completed_at_utc_equals_availability_upper_bound_utc_and_is_strictly_before_origin"
+reference_period_rule = "reference_period_start_lte_reference_period_end_lte_calendar_date_of_receipt_completed_at_utc"
+
+[release_fields]
+exact = [
+    "release_id",
+    "official_locator",
+    "official_release_timestamp_utc",
+    "release_notice_path",
+    "release_notice_sha256",
+]
+unknown_official_release_timestamp_literal = "UNKNOWN_NOT_ASSERTED"
+
+[raw_artifact_fields]
+exact = [
+    "artifact_id",
+    "path",
+    "sha256",
+    "byte_count",
+    "media_type",
+    "artifact_role",
+]
+minimum_count = 1
+all_paths_must_be_regular_unlinked_race_stable = true
+
+[replica_fields]
+exact = [
+    "replica_id",
+    "raw_artifact_id",
+    "path",
+    "sha256",
+    "byte_count",
+    "storage_domain_id",
+    "storage_backend_id",
+    "object_id",
+    "domain_attestation_path",
+    "domain_attestation_sha256",
+]
+exact_count_per_raw_artifact = 2
+distinct_paths_required = true
+distinct_inodes_required = true
+distinct_storage_domains_required = true
+distinct_storage_backends_required = true
+distinct_object_ids_required = true
+
+[leaf_verification_fields]
+exact = [
+    "verifier_id",
+    "verifier_version",
+    "verifier_source_path",
+    "verifier_source_sha256",
+    "verifier_test_path",
+    "verifier_test_sha256",
+    "verifier_qualified",
+    "result",
+    "result_receipt_path",
+    "result_receipt_sha256",
+    "independent_validation_receipt_schema_version",
+    "independent_validation_receipt_path",
+    "independent_validation_receipt_sha256",
+]
+current_v3_verifier_qualified_required_value = false
+successor_only_qualified_result = "VERIFIED_COMPLETE_NONSYNTHETIC"
+unqualified_result = "NOT_QUALIFIED_FAIL_CLOSED"
+composition_executes_leaf_source = false
+
+[approval_fields]
+exact = [
+    "evidence_subject_sha256",
+    "owner_id",
+    "owner_receipt_path",
+    "owner_receipt_sha256",
+    "validator_id",
+    "validator_receipt_path",
+    "validator_receipt_sha256",
+]
+owner_role = "MODEL_OWNER"
+validator_role = "INDEPENDENT_VALIDATOR"
+decision = "APPROVED_FOR_ORIGIN_INFORMATION_PROFILE_ONLY"
+distinct_identities_receipts_and_hashes_required = true
+
+[external_timestamp_fields]
+exact = ["evidence_subject_sha256", "receipt_path", "receipt_sha256"]
+required_schema_version = "beforeit-us-external-timestamp-attestation.v1"
+exact_subject_binding_required = true
+self_timestamp_not_sufficient = true
+
+[retention_fields]
+exact = ["custody_policy_id", "custody_schema_version", "minimum_retain_until_utc"]
+custody_policy_id = "beforeit-us-retention-custody-v2.2026q3"
+required_schema_version = "beforeit-us-retention-custody-covenant.v2"
+minimum_retain_until_utc = "2034-09-30T23:59:59Z"
+
+[gate_fields]
+exact = [
+    "origin_admission_allowed",
+    "forecast_execution_allowed",
+    "truth_access_allowed",
+    "scoring_allowed",
+    "accuracy_claim_allowed",
+    "promotion_allowed",
+    "production_allowed",
+]
+required_value = false
+
+[supporting_document_schemas]
+selector_candidate_catalog = "beforeit-us-selector-candidate-catalog.v1"
+selector_resolution = "beforeit-us-selector-resolution.v1"
+release_notice = "beforeit-us-release-notice-evidence.v1"
+leaf_verifier_result = "beforeit-us-qualified-leaf-verifier-result.v1"
+approval_receipt = "beforeit-us-profile-approval-attestation.v1"
+external_timestamp = "beforeit-us-external-timestamp-attestation.v1"
+replica_domain_attestation = "beforeit-us-replica-domain-attestation.v1"
+selector_catalog_exact_top_level_fields = ["artifact", "receipt_completed_at_utc", "binding", "selection", "candidates"]
+selector_resolution_exact_top_level_fields = ["artifact", "receipt_completed_at_utc", "binding", "resolution"]
+
+[resource_limits]
+maximum_metadata_file_bytes = 16777216
+maximum_raw_or_replica_file_bytes = 536870912
+maximum_timestamp_token_bytes = 16777216
+maximum_total_raw_bytes_per_profile = 1073741824
+maximum_total_replica_bytes_per_profile = 2147483648
+maximum_raw_artifacts_per_profile = 32
+maximum_replicas_per_profile = 64
+maximum_catalog_candidates_per_profile = 256
+maximum_vector_items = 4096
+maximum_table_entries = 4096
+maximum_string_bytes = 1048576
+maximum_identifier_bytes = 512
+maximum_relative_path_bytes = 4096
+maximum_path_component_bytes = 255
+maximum_path_components = 128

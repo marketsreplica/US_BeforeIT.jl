@@ -1,0 +1,613 @@
+schema_version = "beforeit-paper-code-crosswalk.v1"
+artifact_status = "draft"
+source_baseline_commit = "6030f7558a9956a99465a09e31c51f37df198c90"
+paper_reference = "Poledna, Miess, and Hommes, Economic Forecasting with an Agent-based Model, SSRN preprint dated 2019-11-11"
+paper_sha256 = "8fce5fea20d90a361346b32916bf88b680a6ae7e8f835a06ceb9a0aeb7debaf2"
+required_variant_ids = ["printed_paper_reference", "upstream_compatible_6030f75", "reviewed_us_port", "corrected_candidate"]
+blanket_replication_claims_prohibited = true
+expected_entry_count = 40
+expected_printed_difference_count = 19
+
+[artifact]
+canonicalization = "sorted_typed_v1_excluding_artifact_content_sha256"
+content_sha256 = "da097ef97ad6510dfed5234df7b14b4b48ad63d62a4f52f6829f70c0e2f6cde6"
+
+[[entries]]
+id = "paper_typo_a26_financing_gap"
+title = "A.26 prints a loan-demand sign inconsistent with the financing-gap prose"
+classification = "paper_typo_candidate"
+materiality = "high"
+paper_evidence = ["paper:PDF p.22 eq. A.26 and surrounding financing-gap definition"]
+code_evidence = ["repo:src/agent_actions/firms.jl:83-90"]
+resolution = "variant_split_retains_economic_financing_gap"
+status = "open_independent_adjudication"
+rationale = "The implemented maximum of zero and the negative expected-deposit gap makes loss-making or cash-short firms borrow; the literal print reverses that implication."
+test_evidence = ["repo:test/matlab_code/detabm.m:126-130", "pending:direct_a26_sign_property_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_literal_a26_sign_only", upstream_compatible_6030f75 = "execute_implemented_financing_gap_sign", reviewed_us_port = "retain_implemented_financing_gap_sign", corrected_candidate = "retain_economically_consistent_financing_gap_sign" }
+
+[[entries]]
+id = "paper_typo_a55_a56_debt_sign"
+title = "A.55-A.56 debt sign conflicts with the stated surplus and deficit convention"
+classification = "paper_typo_candidate"
+materiality = "critical"
+paper_evidence = ["paper:PDF p.28 eqs. A.55-A.56 and government-budget prose"]
+code_evidence = ["repo:src/agent_actions/government.jl:90-103"]
+resolution = "variant_split_retains_deficit_adds_debt"
+status = "open_independent_adjudication"
+rationale = "The code defines positive expenditure less revenue as a deficit and adds it to debt, matching the accounting convention stated in prose."
+test_evidence = ["repo:test/matlab_code/detabm.m:372", "pending:government_debt_sign_identity_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_literal_a55_a56_debt_sign_only", upstream_compatible_6030f75 = "execute_positive_deficit_adds_debt", reviewed_us_port = "retain_positive_deficit_adds_debt", corrected_candidate = "retain_positive_deficit_adds_debt_with_identity_gate" }
+
+[[entries]]
+id = "paper_typo_c4_bank_profit_interest_sign"
+title = "C.4 initial bank-profit deposit-interest sign conflicts with its prose"
+classification = "paper_typo_candidate"
+materiality = "high"
+paper_evidence = ["paper:PDF p.43 Appendix C.4 initial bank-profit equation and income-less-payments prose"]
+code_evidence = ["repo:src/model_init/agents.jl:395-398"]
+resolution = "variant_split_retains_implemented_bank_accounting"
+status = "open_independent_adjudication"
+rationale = "The implemented risk-premium loan income plus policy-rate return on bank equity is consistent with the repository bank-accounting convention, while the printed deposit term appears sign-inconsistent."
+test_evidence = ["pending:initial_bank_profit_accounting_identity_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_literal_c4_interest_sign_only", upstream_compatible_6030f75 = "execute_implemented_initial_bank_profit", reviewed_us_port = "retain_implemented_initial_bank_profit", corrected_candidate = "retain_implemented_bank_profit_pending_adjudication" }
+
+[[entries]]
+id = "diff_01_buyer_price_weight"
+title = "Buyer search uses exp(-2P) rather than the printed exp(-P)"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper:PDF p.18 Appendix A.1.1 buyer-search weight"]
+code_evidence = ["repo:src/markets/search_and_matching.jl:604-615"]
+resolution = "variant_split_preserves_price_elasticity"
+status = "documented_variant_split"
+rationale = "The factor of two changes supplier-selection elasticity and therefore transaction allocation."
+test_evidence = ["pending:price_weight_distribution_regression"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_exp_negative_price_weight", upstream_compatible_6030f75 = "execute_exp_negative_two_price_weight", reviewed_us_port = "retain_exp_negative_two_price_weight", corrected_candidate = "retain_exp_negative_two_price_until_scored_ablation" }
+
+[[entries]]
+id = "diff_02_buyer_size_available_supply"
+title = "Buyer size weight uses available supply rather than production"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper:PDF p.18 Appendix A.1.1 size component of buyer search"]
+code_evidence = ["repo:src/markets/search_and_matching.jl:276-290"]
+resolution = "variant_split_preserves_available_supply_weight"
+status = "documented_variant_split"
+rationale = "Including inventories and importer supply changes matching probabilities relative to production-only weights."
+test_evidence = ["pending:supplier_size_weight_inventory_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_production_only_size_weight", upstream_compatible_6030f75 = "execute_available_supply_size_weight", reviewed_us_port = "retain_available_supply_size_weight", corrected_candidate = "retain_available_supply_weight_until_scored_ablation" }
+
+[[entries]]
+id = "diff_03_sector_price_index_weighting"
+title = "Sector price index is sales-weighted and includes imports"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper:PDF p.23 eq. A.28 domestic production-weighted index"]
+code_evidence = ["repo:src/agent_actions/estimations.jl:152-166"]
+resolution = "variant_split_preserves_sales_import_index"
+status = "documented_variant_split"
+rationale = "Realized quantities and imported supply enter the implemented index, altering price signals throughout the model."
+test_evidence = ["pending:sector_price_index_weighting_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_domestic_production_weighted_index", upstream_compatible_6030f75 = "execute_sales_weighted_import_inclusive_index", reviewed_us_port = "retain_sales_weighted_import_inclusive_index", corrected_candidate = "retain_index_until_observation_consistent_ablation" }
+
+[[entries]]
+id = "diff_04_realized_input_price_profit"
+title = "Profit accounting uses firm-specific realized input prices"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper:PDF p.23 eq. A.27 market-index input costs"]
+code_evidence = ["repo:src/agent_actions/firms.jl:217-235", "repo:src/markets/search_and_matching.jl:426-434"]
+resolution = "variant_split_preserves_realized_input_costs"
+status = "open_replication_evidence"
+rationale = "The code records realized purchase prices and zero current purchase cost for zero-purchase firms; the behavioral effect requires a controlled replication comparison."
+test_evidence = ["pending:firm_profit_realized_input_price_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_market_index_input_cost", upstream_compatible_6030f75 = "execute_realized_firm_input_cost", reviewed_us_port = "retain_realized_firm_input_cost", corrected_candidate = "retain_realized_cost_with_zero_purchase_regression" }
+
+[[entries]]
+id = "diff_05_capacity_capped_desired_scale"
+title = "Desired capital, materials, and employment use capacity-capped output"
+classification = "printed_upstream_difference"
+materiality = "critical"
+paper_evidence = ["paper:PDF pp.20-21 eqs. A.13, A.17, and A.20 uncapped desired scale"]
+code_evidence = ["repo:src/agent_actions/firms.jl:15-29", "commit:6030f7558a9956a99465a09e31c51f37df198c90:src/agent_actions/firms.jl:15-27"]
+resolution = "variant_split_with_corrected_elementwise_cap"
+status = "corrected_candidate_implemented"
+rationale = "The upstream-compatible implementation intends a capacity cap, but two undotted minima caused a separate cross-firm defect recorded below."
+test_evidence = ["repo:test/agent_actions/firms.jl:20-45"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_uncapped_desired_input_scale", upstream_compatible_6030f75 = "execute_capacity_capped_scale_with_vector_min_defect", reviewed_us_port = "retain_capacity_capped_scale_with_known_vector_min_defect", corrected_candidate = "correct_capacity_cap_elementwise_for_all_inputs" }
+
+[[entries]]
+id = "diff_06_credit_headroom_installment"
+title = "Capital headroom nets the scheduled loan installment"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper:PDF pp.29-30 eqs. A.59, A.62, and A.64"]
+code_evidence = ["repo:src/agent_actions/firms.jl:32-45", "repo:src/markets/search_and_matching_credit.jl:13-29"]
+resolution = "variant_split_preserves_installment_netting"
+status = "open_independent_adjudication"
+rationale = "The code uses expected post-installment loans in leverage headroom; the printed equations are internally ambiguous."
+test_evidence = ["pending:credit_headroom_installment_property_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_full_prior_loans_in_headroom", upstream_compatible_6030f75 = "execute_post_installment_loans_in_headroom", reviewed_us_port = "retain_post_installment_headroom", corrected_candidate = "retain_post_installment_headroom_pending_adjudication" }
+
+[[entries]]
+id = "diff_07_stochastic_exogenous_innovations"
+title = "Exogenous transitions include innovations and correlated shocks"
+classification = "printed_upstream_difference"
+materiality = "critical"
+paper_evidence = ["paper:Appendix A transition equations print several exogenous processes deterministically", "paper:Section 3 reports Monte Carlo forecast distributions"]
+code_evidence = ["repo:src/utils/epsilon.jl:3-22", "repo:src/agent_actions/government.jl:10-18"]
+resolution = "variant_split_preserves_stochastic_forecast_distribution"
+status = "open_replication_evidence"
+rationale = "Innovations are necessary to produce the reported Monte Carlo distribution, but exact author-run shock construction is not available as authoritative ground truth."
+test_evidence = ["pending:correlated_exogenous_shock_covariance_test", "pending:author_forecast_artifact_replication"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_deterministic_printed_transitions", upstream_compatible_6030f75 = "execute_stochastic_correlated_exogenous_transitions", reviewed_us_port = "retain_stochastic_correlated_exogenous_transitions", corrected_candidate = "retain_versioned_stochastic_transition_manifest" }
+
+[[entries]]
+id = "diff_08_combined_retail_priority"
+title = "Consumption and housing investment share a combined retail demand"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper:PDF pp.25-26 eqs. A.44 and A.47 specify separate demands"]
+code_evidence = ["repo:src/markets/search_and_matching.jl:442-459"]
+resolution = "variant_split_preserves_combined_retail_ordering"
+status = "open_replication_evidence"
+rationale = "Combining the budgets imposes an allocation ordering when supply is scarce."
+test_evidence = ["pending:consumption_housing_retail_priority_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_separate_consumption_and_housing_demands", upstream_compatible_6030f75 = "execute_combined_retail_demand_order", reviewed_us_port = "retain_combined_retail_demand_order", corrected_candidate = "retain_combined_retail_order_until_scored_ablation" }
+
+[[entries]]
+id = "diff_09_firm_before_retail_allocation"
+title = "Firm buyers are served before retail buyers"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper:PDF p.18 Appendix A.1.1 does not specify buyer-class priority"]
+code_evidence = ["repo:src/markets/search_and_matching.jl:64-84"]
+resolution = "variant_split_records_firm_first_ordering"
+status = "documented_variant_split"
+rationale = "The ordering reserves each good's available inventory for business buyers before final demand."
+test_evidence = ["pending:firm_before_retail_scarcity_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_unspecified_buyer_class_order", upstream_compatible_6030f75 = "execute_firm_buyers_before_retail", reviewed_us_port = "retain_firm_buyers_before_retail", corrected_candidate = "retain_explicit_firm_first_order_until_ablation" }
+
+[[entries]]
+id = "diff_10_phantom_demand_second_pass"
+title = "A second pass records unmet demand against spare capacity"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper:PDF pp.18-19 Appendix A.1 leaves counterfactual allocation unspecified"]
+code_evidence = ["repo:src/markets/search_and_matching.jl:373-424"]
+resolution = "variant_split_records_unmet_capacity_pass"
+status = "documented_variant_split"
+rationale = "The second pass affects remembered demand and future production decisions even though it does not represent a realized transaction."
+test_evidence = ["repo:test/markets/search_and_matching.jl:147-180"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_unspecified_unmet_demand_allocation", upstream_compatible_6030f75 = "execute_counterfactual_spare_capacity_pass", reviewed_us_port = "retain_counterfactual_spare_capacity_pass", corrected_candidate = "retain_labeled_unmet_capacity_pass_with_transaction_test" }
+
+[[entries]]
+id = "diff_11_price_renormalized_final_demand"
+title = "Final-demand basket weights are price-renormalized each period"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper:PDF pp.25-26 eqs. A.43 and A.46 plus footnote 20"]
+code_evidence = ["repo:src/markets/search_and_matching.jl:232-240"]
+resolution = "variant_split_preserves_price_renormalization"
+status = "open_independent_adjudication"
+rationale = "The implemented weights preserve nominal shares as prices move, while the printed coefficients can be read as fixed real basket weights."
+test_evidence = ["pending:final_demand_weight_renormalization_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_fixed_final_demand_coefficients", upstream_compatible_6030f75 = "execute_price_renormalized_final_demand_weights", reviewed_us_port = "retain_price_renormalized_final_demand_weights", corrected_candidate = "retain_price_renormalization_pending_concept_adjudication" }
+
+[[entries]]
+id = "diff_12_zero_intercept_taylor_regression"
+title = "Taylor-rule regression omits an intercept and pins the neutral rate"
+classification = "printed_upstream_difference"
+materiality = "critical"
+paper_evidence = ["paper:PDF p.30 eq. A.69 and PDF p.33 Table B.5"]
+code_evidence = ["repo:src/utils/estimate.jl:53-75"]
+resolution = "variant_split_preserves_zero_intercept_restriction"
+status = "open_replication_evidence"
+rationale = "The code estimates a zero-intercept regression and sets the real equilibrium rate from the inflation target; the joint printed convention is not explicit."
+test_evidence = ["pending:taylor_rule_design_matrix_regression", "pending:author_estimation_convention_evidence"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_taylor_equation_without_inferred_regression_restriction", upstream_compatible_6030f75 = "execute_zero_intercept_taylor_with_pinned_neutral_rate", reviewed_us_port = "retain_zero_intercept_taylor_with_us_data", corrected_candidate = "require_versioned_policy_rule_variant_before_scoring" }
+
+[[entries]]
+id = "diff_13_zeroed_sector_product_tax"
+title = "Observed sector net product-tax rates are zeroed in dynamics"
+classification = "printed_upstream_difference"
+materiality = "critical"
+paper_evidence = ["paper:PDF pp.37-39 Appendix B.3 and Table B.7 use nonzero product-tax rates"]
+code_evidence = ["repo:src/utils/calibration.jl:544-559", "repo:src/utils/calibration.jl:877-884"]
+resolution = "variant_split_preserves_zero_tax_legacy_and_observed_tax_candidate"
+status = "open_economic_validation"
+rationale = "Zeroing taxes preserves the legacy expenditure identity but discards observed tax wedges; production variants must explicitly choose and reconcile one treatment."
+test_evidence = ["repo:test/utils/calibration_valuation_bridge.jl:50-104", "pending:nonzero_product_tax_accounting_gate"]
+owner = "calibration_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_nonzero_sector_product_tax_rates", upstream_compatible_6030f75 = "execute_zero_sector_product_tax_rates", reviewed_us_port = "retain_zero_dynamic_rates_with_observed_tax_metadata", corrected_candidate = "require_explicit_tax_variant_and_accounting_gate" }
+
+[[entries]]
+id = "diff_14_total_gfcf_housing_weights"
+title = "Housing investment basket inherits total fixed-capital shares"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper:PDF pp.35-36 Appendix B.2 uses dwellings investment"]
+code_evidence = ["repo:src/utils/calibration.jl:723-759", "repo:src/utils/calibration.jl:885-887"]
+resolution = "variant_split_requires_dwellings_specific_candidate"
+status = "open_economic_validation"
+rationale = "The reviewed implementation derives dwellings through a scalar split that leaves product composition tied to total GFCF rather than a dedicated residential vector."
+test_evidence = ["pending:dwellings_product_vector_source_and_sum_test"]
+owner = "calibration_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_dwellings_specific_investment_vector", upstream_compatible_6030f75 = "execute_total_gfcf_product_vector_for_housing", reviewed_us_port = "retain_total_gfcf_housing_vector_as_dubious", corrected_candidate = "require_residential_investment_product_vector_variant" }
+
+[[entries]]
+id = "diff_15_profit_concept_tax_dividend"
+title = "Corporate-tax and dividend rates use implemented profit concepts"
+classification = "printed_upstream_difference"
+materiality = "critical"
+paper_evidence = ["paper:PDF pp.34-39 Appendices B.1 and B.3 national-accounts denominators"]
+code_evidence = ["repo:src/utils/calibration.jl:915-958"]
+resolution = "variant_split_preserves_implemented_profit_denominator"
+status = "open_economic_validation"
+rationale = "The rate denominators are constructed from model profit after interest rather than the printed national-accounts concept."
+test_evidence = ["pending:tax_dividend_denominator_crosswalk_test"]
+owner = "calibration_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_national_accounts_profit_denominators", upstream_compatible_6030f75 = "execute_implemented_model_profit_denominators", reviewed_us_port = "retain_implemented_profit_denominators_with_dubious_status", corrected_candidate = "require_scored_profit_concept_variant_and_identity_test" }
+
+[[entries]]
+id = "diff_16_export_and_investment_tax_mapping"
+title = "Export tax is zero and investment tax follows implemented mapping"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper:PDF pp.37-39 Appendix B.3 tax mappings"]
+code_evidence = ["repo:src/utils/calibration.jl:706-710", "repo:src/utils/calibration.jl:945-950"]
+resolution = "variant_split_preserves_legacy_tax_mapping"
+status = "open_economic_validation"
+rationale = "The hard-coded export-tax zero and dwellings-based capital-formation tax are not the printed mappings."
+test_evidence = ["pending:export_and_investment_tax_mapping_test"]
+owner = "calibration_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_appendix_b3_export_investment_tax_mapping", upstream_compatible_6030f75 = "execute_zero_export_and_dwellings_investment_tax_mapping", reviewed_us_port = "retain_legacy_tax_mapping_with_dubious_status", corrected_candidate = "require_observed_tax_mapping_variant_and_accounting_gate" }
+
+[[entries]]
+id = "diff_17_scaled_agent_population"
+title = "Calibration supports scaled rather than one-to-one agent populations"
+classification = "printed_upstream_difference"
+materiality = "critical"
+paper_evidence = ["paper:PDF pp.33-39 Appendix B conceptually maps observed entities one to one"]
+code_evidence = ["repo:src/utils/calibration.jl:446-450", "repo:src/utils/calibration.jl:855-859"]
+resolution = "variant_split_records_agent_scale"
+status = "open_economic_validation"
+rationale = "Scaling changes matching granularity and tail behavior; every run must record the scale and pass convergence or sensitivity checks."
+test_evidence = ["pending:agent_scale_ladder_and_convergence_study"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_one_to_one_entity_population", upstream_compatible_6030f75 = "execute_configurable_scaled_agent_population", reviewed_us_port = "execute_us_scale_one_e_minus_five", corrected_candidate = "require_manifested_scale_and_convergence_gate" }
+
+[[entries]]
+id = "diff_18_labor_round_robin_matching"
+title = "Labor matching spreads hires across firms by shuffled rounds"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper:Appendix A labor market describes worker-side random visits"]
+code_evidence = ["repo:src/markets/search_and_matching_labour.jl:45-64"]
+resolution = "variant_split_preserves_round_based_labor_matching"
+status = "documented_variant_split"
+rationale = "At most one worker is assigned to each firm per round, reducing concentration relative to independent worker visits."
+test_evidence = ["pending:labor_matching_concentration_distribution_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_worker_side_random_firm_visits", upstream_compatible_6030f75 = "execute_shuffled_firm_round_hiring", reviewed_us_port = "retain_shuffled_firm_round_hiring", corrected_candidate = "retain_round_hiring_until_distributional_ablation" }
+
+[[entries]]
+id = "diff_19_min_productivity_floor"
+title = "Zero labor and capital productivities are floored at 1e-6"
+classification = "printed_upstream_difference"
+materiality = "high"
+paper_evidence = ["paper_gap:Appendix B specifies no numerical productivity floor"]
+code_evidence = ["repo:src/utils/calibration.jl:19-22", "repo:src/utils/calibration.jl:871-879"]
+resolution = "variant_split_records_numerical_floor"
+status = "open_economic_validation"
+rationale = "The floor prevents undefined initialization but can create artificial capacity in inactive sectors; binding incidence and sensitivity must be reported."
+test_evidence = ["pending:min_productivity_binding_incidence_test"]
+owner = "calibration_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_no_productivity_floor_specified", upstream_compatible_6030f75 = "execute_min_productivity_floor_one_e_minus_six", reviewed_us_port = "retain_floor_with_binding_incidence_unreported", corrected_candidate = "require_floor_incidence_and_sensitivity_report" }
+
+[[entries]]
+id = "convention_matlab_rounding"
+title = "Population scaling uses MATLAB ties-away-from-zero rounding"
+classification = "implementation_convention"
+materiality = "medium"
+paper_evidence = ["paper_gap:Appendix B does not define half-tie rounding semantics"]
+code_evidence = ["repo:src/utils/positive.jl:97-99", "repo:src/utils/calibration.jl:855-859"]
+resolution = "document_matlab_rounding_semantics"
+status = "documented_convention"
+rationale = "Exact rounding semantics affect small scaled populations and must not be described as distribution-equivalent to a different rule."
+test_evidence = ["pending:matlab_round_half_ties_up_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_rounding_semantics_unspecified", upstream_compatible_6030f75 = "execute_matlab_round_nearest_ties_up", reviewed_us_port = "retain_matlab_round_nearest_ties_up", corrected_candidate = "retain_tested_matlab_round_nearest_ties_up" }
+
+[[entries]]
+id = "convention_unemployment_benefit_timing"
+title = "Replacement rate is applied when benefits are calculated"
+classification = "implementation_convention"
+materiality = "high"
+paper_evidence = ["paper:Appendix A.2 household income and government-benefit equations"]
+code_evidence = ["repo:src/model_init/init_workers.jl:19-34", "repo:src/agent_actions/households.jl:17-27", "repo:src/agent_actions/government.jl:90-100"]
+resolution = "document_replacement_rate_application_timing"
+status = "documented_convention"
+rationale = "Remembered unemployment wages store the pre-replacement base and theta_UB is applied at payment or income calculation, avoiding double application."
+test_evidence = ["repo:test/matlab_code/simulateabm.m:181-190", "pending:unemployment_benefit_single_application_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_unemployment_benefit_equations", upstream_compatible_6030f75 = "execute_replacement_rate_at_benefit_calculation", reviewed_us_port = "retain_replacement_rate_at_benefit_calculation", corrected_candidate = "retain_single_application_with_regression_test" }
+
+[[entries]]
+id = "convention_ea_inflation_log1p"
+title = "External-area inflation evolves in log(1+pi)"
+classification = "implementation_convention"
+materiality = "high"
+paper_evidence = ["paper:Appendix A.6 external-area inflation process"]
+code_evidence = ["repo:src/agent_actions/estimations.jl:74-88", "repo:src/utils/calibration.jl:966-975"]
+resolution = "document_log_one_plus_inflation_transform"
+status = "documented_convention"
+rationale = "The transform determines the estimand and guarantees a positive gross inflation factor; it must be versioned with the external block."
+test_evidence = ["pending:ea_inflation_log1p_transition_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_external_inflation_process", upstream_compatible_6030f75 = "execute_log_one_plus_inflation_process", reviewed_us_port = "retain_log_one_plus_inflation_with_us_ea_proxy", corrected_candidate = "retain_versioned_log_one_plus_inflation_process" }
+
+[[entries]]
+id = "defect_vector_min_capacity_cap"
+title = "Undotted vector minimum selected one formula for all firms"
+classification = "latent_defect"
+materiality = "critical"
+paper_evidence = ["paper:PDF pp.20-21 firm-level desired capital, materials, and employment equations"]
+code_evidence = ["commit:6030f7558a9956a99465a09e31c51f37df198c90:src/agent_actions/firms.jl:15-27", "repo:src/agent_actions/firms.jl:15-29"]
+resolution = "correct_elementwise_capacity_minimum"
+status = "corrected_candidate_implemented"
+rationale = "Julia min(vector, vector) compares vectors lexicographically; the corrected candidate computes one broadcast minimum and reuses it for all three desired-input formulas."
+test_evidence = ["repo:test/agent_actions/firms.jl:20-45"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_firm_level_uncapped_equations", upstream_compatible_6030f75 = "execute_lexicographic_vector_minimum_defect", reviewed_us_port = "retain_known_lexicographic_vector_minimum_defect", corrected_candidate = "correct_elementwise_capacity_minimum_for_each_firm" }
+
+[[entries]]
+id = "defect_growth_rate_ar1_wiring"
+title = "Growth-rate coefficients could be consumed as log-level coefficients"
+classification = "latent_defect"
+materiality = "critical"
+paper_evidence = ["paper:Appendix A prints log-level AR(1) exogenous processes"]
+code_evidence = ["repo:src/utils/calibration.jl:995-1049", "repo:src/utils/calibration.jl:1107-1118", "repo:src/model_init/init.jl:12-21", "repo:src/model_extensions/init_growth_rate_model.jl:121-170"]
+resolution = "guard_base_model_against_growth_rate_coefficients"
+status = "corrected_candidate_implemented"
+rationale = "Calibration reuses alpha and beta keys across estimands, while ModelGR re-estimates its own growth processes; the base Model now rejects the incoherent flag."
+test_evidence = ["repo:test/agent_actions/firms.jl:48-53"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_log_level_ar_one_processes", upstream_compatible_6030f75 = "execute_unguarded_shared_growth_and_log_level_keys", reviewed_us_port = "disable_growth_rate_flag_in_reviewed_defaults", corrected_candidate = "require_modelgr_or_log_level_recalibration_guard" }
+
+[[entries]]
+id = "us_measured_trade"
+title = "U.S. calibration opts into measured commodity imports"
+classification = "us_fork_addition"
+materiality = "critical"
+paper_evidence = ["paper:Appendix B states imports are taken from the input-output system"]
+code_evidence = ["repo:src/utils/calibration.jl:54-108", "repo:scripts/us/USPipeline.jl:2890-2901"]
+resolution = "document_measured_trade_variant"
+status = "open_economic_validation"
+rationale = "The U.S. port uses BEA commodity imports rather than the upstream goods-balance residual, exposing a commodity-balance discrepancy that must be governed."
+test_evidence = ["repo:scripts/us/test/runtests.jl:173-234", "pending:measured_trade_full_commodity_balance_gate"]
+owner = "us_data_engineering"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_input_output_measured_trade_concept", upstream_compatible_6030f75 = "execute_residual_trade_closure_without_opt_in", reviewed_us_port = "enable_bea_measured_trade", corrected_candidate = "require_measured_trade_with_reconciled_commodity_balance" }
+
+[[entries]]
+id = "us_product_tax_netting_bridge"
+title = "U.S. port bridges purchasers prices to basic prices"
+classification = "us_fork_addition"
+materiality = "critical"
+paper_evidence = ["paper_gap:Eurostat basic-price product-by-product tables require no BEA valuation bridge"]
+code_evidence = ["repo:src/utils/calibration.jl:110-145", "repo:src/utils/calibration.jl:544-630", "repo:scripts/us/USPipeline.jl:2899-2907"]
+resolution = "document_product_tax_netting_variant"
+status = "open_economic_validation"
+rationale = "BEA use and supply tables require an explicit purchasers-to-basic valuation bridge; observed taxes are retained even though the current dynamic tax rates remain zero."
+test_evidence = ["repo:test/utils/calibration_valuation_bridge.jl:50-104", "pending:valuation_consistent_supply_use_gate"]
+owner = "us_data_engineering"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_native_basic_price_input_output_tables", upstream_compatible_6030f75 = "disable_purchasers_to_basic_price_bridge", reviewed_us_port = "enable_bea_product_tax_netting_bridge", corrected_candidate = "require_bridge_with_explicit_dynamic_tax_variant" }
+
+[[entries]]
+id = "us_opening_commodity_inventory"
+title = "U.S. opening inventories absorb negative commodity discrepancies"
+classification = "us_fork_addition"
+materiality = "critical"
+paper_evidence = ["paper:Appendix C sets firm opening inventories to zero"]
+code_evidence = ["repo:src/utils/calibration.jl:299-317", "repo:src/utils/calibration.jl:778-806", "repo:src/utils/calibration.jl:1221-1234", "repo:src/model_init/init_firms.jl:3-42"]
+resolution = "document_inventory_discrepancy_variant"
+status = "open_economic_validation"
+rationale = "The port converts only negative supply-use discrepancies to opening stock; this has no paper counterpart and cannot be called inventory without economic validation."
+test_evidence = ["repo:test/utils/calibration_valuation_bridge.jl:119-125", "pending:opening_inventory_dynamic_ablation"]
+owner = "calibration_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_zero_opening_firm_inventory", upstream_compatible_6030f75 = "execute_zero_opening_firm_inventory", reviewed_us_port = "enable_discrepancy_derived_opening_inventory", corrected_candidate = "require_explicit_inventory_or_statistical_discrepancy_classification" }
+
+[[entries]]
+id = "us_negative_trade_cells_clamped"
+title = "Negative U.S. commodity trade cells are floored and redistributed"
+classification = "us_fork_addition"
+materiality = "high"
+paper_evidence = ["paper_gap:No BEA re-export or valuation-adjustment clamp is specified"]
+code_evidence = ["repo:scripts/us/USPipeline.jl:1073-1115", "repo:scripts/us/USPipeline.jl:1216-1226", "repo:scripts/us/USPipeline.jl:1376-1388"]
+resolution = "document_nonnegative_trade_adjustment"
+status = "open_economic_validation"
+rationale = "Negative MCIF plus MADJ entries are treated as valuation artifacts, floored, and positive entries rescaled to preserve the aggregate control."
+test_evidence = ["repo:scripts/us/test/runtests.jl:173-183", "pending:trade_cell_redistribution_sensitivity"]
+owner = "us_data_engineering"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_no_negative_trade_cell_adjustment", upstream_compatible_6030f75 = "execute_positive_negative_residual_trade_split", reviewed_us_port = "enable_nonnegative_bea_import_redistribution", corrected_candidate = "retain_audited_redistribution_with_sensitivity_variant" }
+
+[[entries]]
+id = "us_ea_block_uses_us_data"
+title = "The U.S. port fills the external-area block with U.S. series"
+classification = "us_fork_addition"
+materiality = "critical"
+paper_evidence = ["paper:Appendix A.6 and B use euro-area GDP and inflation as an external block for Austria"]
+code_evidence = ["repo:scripts/us/USPipeline.jl:2925-2950", "repo:scripts/us/USPipeline.jl:2982-3001"]
+resolution = "document_us_self_referential_external_block"
+status = "open_economic_validation"
+rationale = "The Taylor rule reacts to an exogenous copy of U.S. activity and inflation while the model has no independent foreign-demand block."
+test_evidence = ["pending:external_block_alternative_mapping_ablation"]
+owner = "calibration_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_foreign_euro_area_external_block", upstream_compatible_6030f75 = "execute_country_specific_foreign_area_block", reviewed_us_port = "execute_us_series_as_external_area_proxy", corrected_candidate = "require_independent_external_block_variant_before_promotion" }
+
+[[entries]]
+id = "us_modelgr_extension"
+title = "ModelGR adds growth-rate AR(1) processes"
+classification = "us_fork_addition"
+materiality = "high"
+paper_evidence = ["paper_gap:The paper uses log-level AR(1) processes, not ModelGR"]
+code_evidence = ["repo:src/model_extensions/init_growth_rate_model.jl:1-170", "repo:src/BeforeIT.jl:108"]
+resolution = "document_opt_in_modelgr_extension"
+status = "open_economic_validation"
+rationale = "ModelGR is a distinct opt-in estimand and transition specification and is off in reviewed U.S. production configurations."
+test_evidence = ["pending:modelgr_transition_and_constructor_test", "repo:scripts/us/USPipeline.jl:3024-3029"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_log_level_ar_one_model", upstream_compatible_6030f75 = "disable_modelgr_extension", reviewed_us_port = "disable_modelgr_in_reviewed_us_defaults", corrected_candidate = "enable_modelgr_only_as_separate_scored_variant" }
+
+[[entries]]
+id = "us_canvas_extension"
+title = "ModelCANVAS adds demand-pull pricing and adaptive policy learning"
+classification = "us_fork_addition"
+materiality = "high"
+paper_evidence = ["paper_gap:CANVAS mechanisms postdate and are outside the Poledna reference model"]
+code_evidence = ["repo:src/model_extensions/init_CANVAS.jl:1-158", "repo:src/BeforeIT.jl:107"]
+resolution = "document_opt_in_canvas_extension"
+status = "open_economic_validation"
+rationale = "CANVAS overwrites firm decisions and re-estimates Taylor-rule parameters per period; it cannot be pooled with the baseline model."
+test_evidence = ["pending:modelcanvas_constructor_and_adaptive_rule_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_no_canvas_mechanisms", upstream_compatible_6030f75 = "disable_canvas_extension", reviewed_us_port = "disable_canvas_in_reviewed_us_defaults", corrected_candidate = "enable_canvas_only_as_separate_scored_variant" }
+
+[[entries]]
+id = "us_productivity_shock_timing"
+title = "Productivity shocks apply at simulation period one"
+classification = "us_fork_addition"
+materiality = "high"
+paper_evidence = ["paper_gap:No repository scenario-shock boundary convention is specified"]
+code_evidence = ["repo:src/shocks/shocks.jl:18-27", "repo:src/one_step.jl:63-70"]
+resolution = "document_productivity_shock_boundary"
+status = "open_regression_test"
+rationale = "The permanent multiplier is applied after expectations and policy updates when t equals one; scenario manifests must record that boundary."
+test_evidence = ["pending:productivity_shock_period_one_boundary_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_no_scenario_shock_timing", upstream_compatible_6030f75 = "execute_productivity_shock_at_period_one", reviewed_us_port = "retain_productivity_shock_at_period_one", corrected_candidate = "retain_period_one_timing_with_boundary_regression" }
+
+[[entries]]
+id = "us_consumption_shock_reversal_timing"
+title = "Temporary consumption shocks reverse at final_time plus one"
+classification = "us_fork_addition"
+materiality = "high"
+paper_evidence = ["paper_gap:No repository scenario-shock reversal convention is specified"]
+code_evidence = ["repo:src/shocks/shocks.jl:30-41", "repo:src/one_step.jl:63-70"]
+resolution = "document_consumption_shock_reversal_boundary"
+status = "open_regression_test"
+rationale = "A shock with final_time T is active through period T and divided out at T+1; off-by-one changes scenario duration."
+test_evidence = ["pending:consumption_shock_final_time_plus_one_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_no_scenario_shock_reversal_timing", upstream_compatible_6030f75 = "execute_consumption_reversal_at_final_time_plus_one", reviewed_us_port = "retain_consumption_reversal_at_final_time_plus_one", corrected_candidate = "retain_reversal_timing_with_boundary_regression" }
+
+[[entries]]
+id = "us_census_labor_and_sector_wages"
+title = "U.S. calibration adds census labor counts and sector D.11 wages"
+classification = "us_fork_addition"
+materiality = "high"
+paper_evidence = ["paper:Appendix B uses Austrian census and national-account labor inputs"]
+code_evidence = ["repo:src/utils/calibration.jl:525-534", "repo:src/utils/calibration.jl:841-859", "repo:scripts/us/USPipeline.jl:2873-2880"]
+resolution = "document_us_labor_source_adaptation"
+status = "open_economic_validation"
+rationale = "Observed person counts and sector wage controls replace rate-based and aggregate fallbacks but require establishment, job, and person concept bridges."
+test_evidence = ["repo:scripts/us/test/runtests.jl:421-451", "pending:labor_concept_bridge_acceptance_gate"]
+owner = "us_data_engineering"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_austrian_census_and_sector_wage_inputs", upstream_compatible_6030f75 = "execute_rate_and_aggregate_wage_fallbacks", reviewed_us_port = "enable_us_census_counts_and_sector_wages", corrected_candidate = "retain_us_inputs_with_concept_bridge_registry" }
+
+[[entries]]
+id = "us_transaction_and_opening_loggers"
+title = "The fork adds transaction and opening-state instrumentation"
+classification = "us_fork_addition"
+materiality = "medium"
+paper_evidence = ["paper_gap:No transaction or opening-state logger API is specified"]
+code_evidence = ["repo:src/one_step.jl:25-56", "repo:src/markets/search_and_matching.jl:99-140"]
+resolution = "document_nonbehavioral_instrumentation_extension"
+status = "open_regression_test"
+rationale = "Optional callbacks expose transactions and opening state; tests must show that disabled or observational logging does not alter draws or outcomes."
+test_evidence = ["pending:logger_observational_equivalence_test"]
+owner = "model_engineering_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_no_logger_api", upstream_compatible_6030f75 = "disable_transaction_and_opening_loggers", reviewed_us_port = "enable_loggers_only_for_audited_runs", corrected_candidate = "require_logger_observational_equivalence_test" }
+
+[[entries]]
+id = "us_provenance_validation_ledger"
+title = "The U.S. pipeline adds source hashes and a four-status parameter ledger"
+classification = "us_fork_addition"
+materiality = "high"
+paper_evidence = ["paper_gap:The paper reports data sources but no bitemporal hash or four-status artifact contract"]
+code_evidence = ["repo:scripts/us/USPipeline.jl:2522-2610", "repo:scripts/us/validation/USBitemporal.jl:1-280", "repo:scripts/us/calibration/parameter_registry.toml:1"]
+resolution = "document_provenance_and_quality_extension"
+status = "open_economic_validation"
+rationale = "Source SHA-256 values and APPROVED, DUBIOUS, REJECTED, or MISSING statuses improve auditability but do not themselves validate economic concepts."
+test_evidence = ["repo:scripts/us/validation/test_bitemporal.jl:1", "repo:scripts/us/test/runtests.jl:795-965"]
+owner = "us_data_engineering"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_narrative_data_source_disclosure", upstream_compatible_6030f75 = "disable_us_provenance_ledger", reviewed_us_port = "enable_hash_and_four_status_provenance_ledger", corrected_candidate = "require_terminal_parameter_status_and_vintage_hashes" }
+
+[[entries]]
+id = "us_forecast_error_calibration_layer"
+title = "Forecast-error-fitted parameters and damped output corrections have no paper counterpart"
+classification = "us_fork_addition"
+materiality = "critical"
+paper_evidence = ["paper_gap:Section 3 scores raw rolling forecasts and does not fit Taylor parameters or output bias corrections to forecast errors"]
+code_evidence = ["repo:scripts/us/forecasting/calibrate_outlook.jl:148-159", "repo:scripts/us/forecast_calibration.toml:1-28", "repo:scripts/us/USPipeline.jl:3044-3052"]
+resolution = "separate_forecast_error_layer_from_raw_calibration"
+status = "corrected_candidate_implemented"
+rationale = "The corrected candidate classifies the legacy adjustment as an engineering-only class-H artifact and prevents it from mutating raw baseline calibration."
+test_evidence = ["repo:scripts/us/forecasting/test_calibrate_outlook.jl:1", "repo:scripts/us/test/runtests.jl:498-632"]
+owner = "forecast_validation_lead"
+independent_validator = "unassigned"
+treatments = { printed_paper_reference = "reference_raw_forecasts_without_error_fitted_correction", upstream_compatible_6030f75 = "disable_us_forecast_error_calibration_layer", reviewed_us_port = "execute_embedded_forecast_error_parameter_and_output_corrections", corrected_candidate = "separate_class_h_corrections_and_retain_raw_forecast" }

@@ -1,79 +1,124 @@
-#DMTEST: Retrieves the Diebold-Mariano test statistic (1995) for the
-# equality of forecast accuracy of two forecasts under general assumptions.
-#
-#   DM = dmtest(e1, e2, ...) calculates the D-M test statistic on the base
-#   of the loss differential which is defined as the difference of the
-#   squared forecast errors
-#
-#   In particular, with the DM statistic one can test the null hypothesis:
-#   H0: E(d) = 0. The Diebold-Mariano test assumes that the loss
-#   differential process 'd' is stationary and defines the statistic as:
-#   DM = mean(d) / sqrt[ (1/T) * VAR(d) ]  ~ N(0,1),
-#   where VAR(d) is an estimate of the unconditional variance of 'd'.
-#
-#   This function also corrects for the autocorrelation that multi-period
-#   forecast errors usually exhibit. Note that an efficient h-period
-#   forecast will have forecast errors following MA(h-1) processes.
-#   Diebold-Mariano use a Newey-West type estimator for sample variance of
-#   the loss differential to account for this concern.
-#
-#   'e1' is a 'T1-by-1' vector of the forecast errors from the first model
-#   'e2' is a 'T2-by-1' vector of the forecast errors from the second model
-#
-#   It should hold that T1 = T2 = T.
-#
-#   DM = DMTEST(e1, e2, 'h') allows you to specify an additional parameter
-#   value 'h' to account for the autocorrelation in the loss differential
-#   for multi-period ahead forecasts.
-#       'h'         the forecast horizon, initially set equal to 1
-#
-#   DM = DMTEST(...) returns a constant:
-#       'DM'      the Diebold-Mariano (1995) test statistic
-#
-#  Modified code from Semin Ibisevic (2011)
-#  Steven Hoekstra
-#  $Date: 13/08/2024 $
-#
-# -------------------------------------------------------------------------
-# References
-# K. Bouman. Quantitative methods in international finance and
-# macroeconomics. Econometric Institute, 2011. Lecture FEM21004-11.
-#
-# Diebold, F.X. and R.S. Mariano (1995), "Comparing predictive accuracy",
-# Journal of Business & Economic Statistics, 13, 253-263.
-# -------------------------------------------------------------------------
-function dmtest_modified(e1::Vector{Float64}, e2::Vector{Float64}, h::Int = 1)
-    # Check input arguments
-    length(e1) != length(e2) && error("Vectors should be of equal length")
+"""
+    dmtest_modified(e1, e2, h = 1;
+        kernel = :bartlett,
+        small_sample = :hln,
+        reference = :auto)
 
-    # Initialization
-    n = length(e1)
+Compute the two-sided Diebold-Mariano test of equal squared-error predictive
+accuracy. The loss differential is `dₜ = e1ₜ² - e2ₜ²`, so a positive statistic
+means that the second forecast has the smaller average squared error.
 
-    # Define the loss differential
-    d = abs.(e1) .^ 2 .- abs.(e2) .^ 2
+For an `h`-step forecast, the long-run variance estimate uses lags
+`0:(h - 1)`. `kernel = :bartlett` applies Newey-West weights
+`1 - lag / h`; `kernel = :uniform` applies unit weights. The statistic is
 
-    # Calculate the variance of the loss differential, taking into account autocorrelation
-    if h > 1
-        gamma = [cov(d[1:(end - i)], d[(1 + i):end]) for i in 0:(h - 1)] / n
-        varD = gamma[1] + 2 * sum(gamma[2:h])
-    else
-        varD = var(d)
+`mean(d) / sqrt(long_run_variance / n)`.
+
+By default, the Harvey-Leybourne-Newbold (`small_sample = :hln`) multiplier is
+applied and the p-value uses a Student `t(n - 1)` reference distribution.
+Use `small_sample = :none` and/or `reference = :normal` for the corresponding
+asymptotic versions.
+
+The positional call and three-value argument convention of the previous
+implementation are preserved. Invalid, non-finite, too-short, and degenerate
+samples throw instead of silently changing the variance estimator.
+"""
+function dmtest_modified(
+        e1::AbstractVector{<:Real},
+        e2::AbstractVector{<:Real},
+        h::Integer = 1;
+        kernel::Symbol = :bartlett,
+        small_sample::Symbol = :hln,
+        reference::Symbol = :auto
+    )
+    length(e1) == length(e2) ||
+        throw(DimensionMismatch("forecast-error vectors must have equal length"))
+    errors1 = _forecast_test_sample(e1, "e1"; minimum_length = 2)
+    errors2 = _forecast_test_sample(e2, "e2"; minimum_length = 2)
+    horizon = _forecast_test_horizon(h, length(errors1); strict = small_sample == :hln)
+    small_sample in (:hln, :none) ||
+        throw(ArgumentError("small_sample must be :hln or :none"))
+
+    differential = abs2.(errors1) .- abs2.(errors2)
+    variance = _forecast_hac_long_run_variance(differential, horizon - 1; kernel)
+    statistic = mean(differential) / sqrt(variance / length(differential))
+
+    if small_sample == :hln
+        n = length(differential)
+        correction = sqrt((n + 1 - 2horizon + horizon * (horizon - 1) / n) / n)
+        statistic *= correction
     end
 
-    # Deal with a negative long-run variance estimate by replacing it with the corresponding short-run variance estimate
-    if varD < 0
-        h = 1
-        varD = var(d)
+    resolved_reference = reference == :auto ? (small_sample == :hln ? :t : :normal) : reference
+    p_value = _forecast_two_sided_pvalue(statistic, resolved_reference, length(differential))
+    return statistic, p_value
+end
+
+function _forecast_test_sample(
+        values::AbstractVector{<:Real},
+        name::AbstractString;
+        minimum_length::Integer
+    )
+    length(values) >= minimum_length ||
+        throw(ArgumentError("$name must contain at least $minimum_length observations"))
+    sample = Float64.(values)
+    all(isfinite, sample) || throw(ArgumentError("$name must contain only finite values"))
+    return sample
+end
+
+function _forecast_test_horizon(h::Integer, n::Integer; strict::Bool)
+    h isa Bool && throw(ArgumentError("forecast horizon must be an integer, not Bool"))
+    h >= 1 || throw(ArgumentError("forecast horizon must be at least 1"))
+    valid = strict ? h < n : h <= n
+    relation = strict ? "smaller than" : "no greater than"
+    valid || throw(ArgumentError("forecast horizon must be $relation the sample size ($n)"))
+    return Int(h)
+end
+
+function _forecast_kernel_weight(kernel::Symbol, lag::Integer, maxlag::Integer)
+    kernel == :bartlett && return 1 - lag / (maxlag + 1)
+    kernel == :uniform && return 1.0
+    throw(ArgumentError("kernel must be :bartlett or :uniform"))
+end
+
+function _forecast_hac_long_run_variance(
+        values::AbstractVector{<:Real},
+        maxlag::Integer;
+        kernel::Symbol
+    )
+    n = length(values)
+    0 <= maxlag < n ||
+        throw(ArgumentError("HAC lag must be nonnegative and smaller than the sample size"))
+    _forecast_kernel_weight(kernel, 0, maxlag)
+
+    centered = Float64.(values) .- mean(values)
+    autocovariance = Vector{Float64}(undef, maxlag + 1)
+    for lag in 0:maxlag
+        autocovariance[lag + 1] =
+            dot(view(centered, (lag + 1):n), view(centered, 1:(n - lag))) / n
     end
 
-    # k is calculated to adjust the statistic as per Harvey, Leybourne, and Newbold (1997)
-    k = sqrt((n + 1 - 2 * h + (h * (h - 1)) / n) / n)
+    estimate = autocovariance[1]
+    absolute_scale = abs(autocovariance[1])
+    for lag in 1:maxlag
+        weight = _forecast_kernel_weight(kernel, lag, maxlag)
+        estimate += 2 * weight * autocovariance[lag + 1]
+        absolute_scale += 2 * abs(weight * autocovariance[lag + 1])
+    end
 
-    # Retrieve the Diebold-Mariano statistic DM ~ N(0,1)
-    DM = (mean(d) / sqrt(varD / n)) * k
+    isfinite(estimate) || throw(DomainError(estimate, "HAC long-run variance is not finite"))
+    tolerance = 100 * eps(Float64) * absolute_scale
+    estimate > tolerance || throw(
+        DomainError(
+            estimate,
+            "HAC long-run variance is nonpositive or numerically degenerate; the test is undefined"
+        )
+    )
+    return estimate
+end
 
-    # Calculate p-value
-    p_value = 2 * cdf(Normal(0, 1), -abs(DM))
-
-    return DM, p_value
+function _forecast_two_sided_pvalue(statistic::Real, reference::Symbol, n::Integer)
+    reference == :normal && return 2 * ccdf(Normal(), abs(statistic))
+    reference == :t && return 2 * ccdf(TDist(n - 1), abs(statistic))
+    throw(ArgumentError("reference must be :auto, :normal, or :t"))
 end

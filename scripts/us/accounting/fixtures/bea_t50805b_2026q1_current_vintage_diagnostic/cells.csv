@@ -1,0 +1,30 @@
+table_name,series_code,line_number,line_description,time_period,metric_name,cl_unit,unit_mult,data_value,numeric_value,economic_unit,note_ref,row_semantic,counting_role
+T50805B,A371RC,1,Private inventories,2026Q1,Current Dollars,Level,6,"4,223,030",4.22303e6,millions_current_usd,"T50805B,T50805B.1",STOCK_LEVEL,PRIMARY_HOLDER_TOTAL
+T50805B,B372RC,2,Farm,2026Q1,Current Dollars,Level,6,"310,129",310129.0,millions_current_usd,T50805B,STOCK_LEVEL,PRIMARY_PARTITION_COMPONENT
+T50805B,N238RC,3,"Mining, utilities, and construction",2026Q1,Current Dollars,Level,6,"149,099",149099.0,millions_current_usd,T50805B,STOCK_LEVEL,PRIMARY_PARTITION_COMPONENT
+T50805B,N376RC,4,Manufacturing,2026Q1,Current Dollars,Level,6,"1,226,802",1.226802e6,millions_current_usd,T50805B,STOCK_LEVEL,PRIMARY_PARTITION_CONTROL
+T50805B,N377RC,5,Durable goods industries,2026Q1,Current Dollars,Level,6,"736,605",736605.0,millions_current_usd,T50805B,STOCK_LEVEL,MANUFACTURING_PARTITION_COMPONENT
+T50805B,N378RC,6,Nondurable goods industries,2026Q1,Current Dollars,Level,6,"490,197",490197.0,millions_current_usd,T50805B,STOCK_LEVEL,MANUFACTURING_PARTITION_COMPONENT
+T50805B,N379RC,7,Wholesale trade,2026Q1,Current Dollars,Level,6,"1,218,329",1.218329e6,millions_current_usd,T50805B,STOCK_LEVEL,PRIMARY_PARTITION_CONTROL
+T50805B,N380RC,8,Durable goods industries,2026Q1,Current Dollars,Level,6,"690,037",690037.0,millions_current_usd,T50805B,STOCK_LEVEL,WHOLESALE_PARTITION_COMPONENT
+T50805B,N381RC,9,Nondurable goods industries,2026Q1,Current Dollars,Level,6,"528,291",528291.0,millions_current_usd,T50805B,STOCK_LEVEL,WHOLESALE_PARTITION_COMPONENT
+T50805B,N382RC,10,Retail trade,2026Q1,Current Dollars,Level,6,"985,965",985965.0,millions_current_usd,T50805B,STOCK_LEVEL,PRIMARY_PARTITION_CONTROL
+T50805B,N864RC,11,Motor vehicle and parts dealers,2026Q1,Current Dollars,Level,6,"352,216",352216.0,millions_current_usd,T50805B,STOCK_LEVEL,RETAIL_PARTITION_COMPONENT
+T50805B,N239RC,12,Food and beverage stores,2026Q1,Current Dollars,Level,6,"81,634",81634.0,millions_current_usd,T50805B,STOCK_LEVEL,RETAIL_PARTITION_COMPONENT
+T50805B,N240RC,13,General merchandise stores,2026Q1,Current Dollars,Level,6,"121,783",121783.0,millions_current_usd,T50805B,STOCK_LEVEL,RETAIL_PARTITION_COMPONENT
+T50805B,N865RC,14,Other retail stores,2026Q1,Current Dollars,Level,6,"430,332",430332.0,millions_current_usd,T50805B,STOCK_LEVEL,RETAIL_PARTITION_COMPONENT
+T50805B,N385RC,15,Other industries,2026Q1,Current Dollars,Level,6,"332,707",332707.0,millions_current_usd,T50805B,STOCK_LEVEL,PRIMARY_PARTITION_COMPONENT
+T50805B,A371RC,16,Private inventories,2026Q1,Current Dollars,Level,6,"4,223,030",4.22303e6,millions_current_usd,T50805B,STOCK_LEVEL,DUPLICATE_TOTAL_CONTROL
+T50805B,N241RC,17,Durable goods industries,2026Q1,Current Dollars,Level,6,"1,932,407",1.932407e6,millions_current_usd,T50805B,STOCK_LEVEL,ALTERNATE_DURABILITY_PARTITION_COMPONENT
+T50805B,N242RC,18,Nondurable goods industries,2026Q1,Current Dollars,Level,6,"2,290,623",2.290623e6,millions_current_usd,T50805B,STOCK_LEVEL,ALTERNATE_DURABILITY_PARTITION_COMPONENT
+T50805B,A373RC,19,Nonfarm industries,2026Q1,Current Dollars,Level,6,"3,912,901",3.912901e6,millions_current_usd,T50805B,STOCK_LEVEL,SUPPLEMENTAL_HOLDER_CONTROL
+T50805B,N379RC,20,Wholesale trade,2026Q1,Current Dollars,Level,6,"1,218,329",1.218329e6,millions_current_usd,T50805B,STOCK_LEVEL,DUPLICATE_SUBTOTAL_CONTROL
+T50805B,N802RC,21,Merchant wholesale trade,2026Q1,Current Dollars,Level,6,"988,180",988180.0,millions_current_usd,T50805B,STOCK_LEVEL,WHOLESALE_TYPE_PARTITION_CONTROL
+T50805B,N803RC,22,Durable goods industries,2026Q1,Current Dollars,Level,6,"573,876",573876.0,millions_current_usd,T50805B,STOCK_LEVEL,MERCHANT_DURABILITY_PARTITION_COMPONENT
+T50805B,N804RC,23,Nondurable goods industries,2026Q1,Current Dollars,Level,6,"414,304",414304.0,millions_current_usd,T50805B,STOCK_LEVEL,MERCHANT_DURABILITY_PARTITION_COMPONENT
+T50805B,N805RC,24,Nonmerchant wholesale trade,2026Q1,Current Dollars,Level,6,"230,148",230148.0,millions_current_usd,T50805B,STOCK_LEVEL,WHOLESALE_TYPE_PARTITION_COMPONENT
+T50805B,A809RC,25,Final sales of domestic business,2026Q1,Current Dollars,Level,6,"1,869,524",1.869524e6,millions_current_usd,"T50805B,T50805B.2",EXCLUDED_FINAL_SALES,RATIO_DENOMINATOR_NOT_STOCK
+T50805B,A810RC,26,Final sales of goods and structures of domestic business,2026Q1,Current Dollars,Level,6,"1,016,730",1.01673e6,millions_current_usd,"T50805B,T50805B.2",EXCLUDED_FINAL_SALES,RATIO_DENOMINATOR_NOT_STOCK
+T50805B,A811RC,27,Private inventories to final sales,2026Q1,Current Dollar Ratios,Level,0,2.26,2.26,ratio,T50805B,EXCLUDED_RATIO,PUBLISHED_RATIO_NOT_STOCK
+T50805B,A812RC,28,Nonfarm inventories to final sales,2026Q1,Current Dollar Ratios,Level,0,2.09,2.09,ratio,T50805B,EXCLUDED_RATIO,PUBLISHED_RATIO_NOT_STOCK
+T50805B,A813RC,29,Nonfarm inventories to final sales of goods and structures,2026Q1,Current Dollar Ratios,Level,0,3.85,3.85,ratio,T50805B,EXCLUDED_RATIO,PUBLISHED_RATIO_NOT_STOCK

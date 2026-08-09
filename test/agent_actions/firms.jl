@@ -17,4 +17,41 @@ using Test
         @test Y_i == expected_Y_i
     end
 
+    @testset "desired inputs apply capacity caps firm by firm" begin
+        parameters = deepcopy(Bit.STEADY_STATE2010Q1.parameters)
+        initial_conditions =
+            deepcopy(Bit.STEADY_STATE2010Q1.initial_conditions)
+        firms = Bit.Model(parameters, initial_conditions).firms
+        firm_count = length(firms.K_i)
+
+        desired_output = fill(10.0, firm_count)
+        capacity = [isodd(index) ? 5.0 : 15.0 for index in 1:firm_count]
+        firms.K_i .= capacity
+        firms.kappa_i .= 1.0
+        firms.delta_i .= 0.25
+        firms.beta_i .= 2.0
+        firms.alpha_bar_i .= 2.0
+
+        investment, materials, employment =
+            Bit.desired_capital_material_employment(
+            firms,
+            desired_output,
+        )
+        constrained_output = min.(desired_output, capacity)
+
+        @test investment == 0.25 .* constrained_output
+        @test materials == constrained_output ./ 2.0
+        @test employment == max.(1.0, round.(constrained_output ./ 2.0))
+        @test investment[1] < investment[2]
+    end
+
+    @testset "base model rejects growth-rate coefficients" begin
+        parameters = deepcopy(Bit.STEADY_STATE2010Q1.parameters)
+        parameters["use_growth_rate_ar1"] = true
+        @test_throws ArgumentError Bit.Model(
+            parameters,
+            deepcopy(Bit.STEADY_STATE2010Q1.initial_conditions),
+        )
+    end
+
 end

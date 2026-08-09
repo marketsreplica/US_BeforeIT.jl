@@ -42,3 +42,329 @@ jobs:
       - uses: julia-actions/julia-runtest@v1
         env:
           JULIA_NUM_THREADS: 2
+          BEFOREIT_RUN_REMOTE_TESTS: 'false'
+
+  us-offline:
+    name: U.S. hermetic validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: julia-actions/setup-julia@v3
+        with:
+          version: '1.10'
+      - uses: actions/cache@v5
+        env:
+          cache-name: cache-us-offline
+        with:
+          path: ~/.julia
+          key: ${{ runner.os }}-us-${{ env.cache-name }}-${{ hashFiles('scripts/us/Project.toml', 'scripts/us/Manifest.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-us-${{ env.cache-name }}-
+            ${{ runner.os }}-us-
+      - name: Instantiate U.S. environment
+        run: julia --project=scripts/us -e 'using Pkg; Pkg.instantiate()'
+      - name: U.S. pipeline offline tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/test/runtests.jl
+      - name: Source-aware supply, make, and symmetric-use diagnostics
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_supply_make.jl
+      - name: Official BEA direct and total-requirements comparator
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_requirements.jl
+      - name: BEA after-redefinitions common producer-basis diagnostic
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_after_redefinitions_common_basis.jl
+      - name: BEA after-redefinitions 68-sector model-core aggregation
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_after_redefinitions_model_core.jl
+      - name: BEA after-redefinitions valuation envelope
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_after_redefinitions_valuation_envelope.jl
+      - name: BEA after-redefinitions final-use and GDP envelope
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_after_redefinitions_final_use_envelope.jl
+      - name: BEA after-redefinitions producer-price adapter candidate
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_after_redefinitions_producer_price_adapter_candidate.jl
+      - name: Rejected BEA generic industry-transform diagnostic
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_after_redefinitions_generic_industry_transform_diagnostic.jl
+      - name: BEA after-redefinitions closure-boundary candidate
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_after_redefinitions_closure_boundary_candidate.jl
+      - name: BEA aggregate-first 68-sector scrap-adjusted diagnostic
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_after_redefinitions_aggregate_first_scrap_adjusted_diagnostic.jl
+      - name: BEA 2017 detailed special-account reconstruction evidence
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_after_redefinitions_2017_special_accounts.jl
+      - name: Inventory-stock ledger contract
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_inventory_stock_ledger.jl
+      - name: BEA T50805B current-vintage inventory-stock diagnostic
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_bea_inventory_stock_diagnostic.jl
+      - name: Fail-closed inventory transition evidence ledger
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_inventory_transition_evidence_ledger.jl
+      - name: Inventory transition evidence writer smoke test
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/run_inventory_transition_evidence_ledger.jl "${{ runner.temp }}/us-inventory-transition-evidence"
+      - name: Census M3 inventory-stage fixture offline regeneration
+        run: python3 scripts/us/accounting/census_m3_inventory_stage/test_generate_census_m3_inventory_stage_fixture.py
+      - name: Census M3 inventory-stage evidence
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/census_m3_inventory_stage/test_census_m3_inventory_stage_evidence.jl
+      - name: Used and Other literature-backed evidence ledger
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_used_other_evidence_ledger.jl
+      - name: Used and Other evidence writer smoke test
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/run_used_other_evidence_ledger.jl "${{ runner.temp }}/us-used-other-evidence"
+      - name: Constrained Stone GLS method qualification
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_constrained_stone_reconciliation.jl
+      - name: Constrained Stone GLS writer smoke test
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/run_constrained_stone_reconciliation.jl "${{ runner.temp }}/us-constrained-stone-qualification"
+      - name: Production reconciliation candidate ledger
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_production_reconciliation_ledger.jl
+      - name: Production reconciliation candidate writer smoke test
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/run_production_reconciliation_candidate_ledger.jl "${{ runner.temp }}/us-production-reconciliation-candidate"
+      - name: BEA iTable display-semantics receipt
+        run: node scripts/us/accounting/test_bea_itable_display_semantics_receipt.mjs
+      - name: Production reconciliation admission evidence
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_production_reconciliation_admission_evidence.jl
+      - name: Production reconciliation admission-evidence writer smoke test
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/run_production_reconciliation_admission_evidence.jl "${{ runner.temp }}/us-production-reconciliation-admission-evidence"
+      - name: Production reconciliation readiness gate
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_production_reconciliation_readiness.jl
+      - name: Production reconciliation blocked-report smoke test
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/run_production_reconciliation_readiness.jl "${{ runner.temp }}/us-production-reconciliation-readiness"
+      - name: OECD source-axis valuation fixture offline regeneration
+        run: python3 scripts/us/accounting/oecd_valuation/test_generate_oecd_source_axis_fixture.py
+      - name: OECD source-axis valuation diagnostic
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/oecd_valuation/test_oecd_source_axis_valuation_diagnostic.jl
+      - name: BEA-anchored opening-accounting candidates
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_opening_accounting_candidate.jl
+      - name: Portable opening-accounting semantic construction and transitions
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/accounting/test_portable_accounting_semantics.jl
+      - name: U.S. accounting-transition harness
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_accounting_transition_harness.jl
+      - name: U.S. accounting-transition runner or typed envelope rejection
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/accounting/test_accounting_transition_runner.jl "${{ runner.temp }}/us-accounting-transition-harness"
+      - name: Outlook correction contract tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/test_calibrate_outlook.jl
+      - name: Forecast protocol tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/test_protocol.jl
+      - name: Model-variant crosswalk tests
+        run: julia --startup-file=no --project=. scripts/us/forecasting/variants/test_variants.jl
+      - name: Bitemporal leakage tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/validation/test_bitemporal.jl
+      - name: Parameter registry contract tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/calibration/runtests.jl
+      - name: Statistical benchmark contract tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/benchmarks/test_benchmarks.jl
+      - name: Frozen benchmark model-registry tests
+        run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/benchmarks/test_benchmark_model_registry.jl
+      - name: Authenticated OriginData receipt tests
+        run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/runner/test_origin_data_receipt.jl
+      - name: Synthetic trusted origin-builder tests
+        run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/origins/builder/test_trusted_origin_builder.jl
+      - name: Hermetic benchmark-origin adapter tests
+        run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/runner/test_benchmark_origin_adapter.jl
+      - name: Hermetic forecast-score kernel tests
+        run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/scoring/test_forecast_scores.jl
+      - name: Forecast-comparison inference kernel tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/inference/test_forecast_inference.jl
+      - name: Upstream regime-adjudication ledger tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/inference/regime_adjudication/test_regime_adjudication_ledger.jl
+      - name: Synthetic exact-design inference-calibration contract tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/inference/calibration/test_forecast_inference_calibration.jl
+      - name: Quarantined revised-data panel fixture tests
+        run: python3 scripts/us/forecasting/diagnostics/revised_data/test_revised_panel.py
+      - name: Quarantined revised-data benchmark diagnostic tests
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/diagnostics/test_revised_data_benchmark_diagnostic.jl
+      - name: Quarantined revised-data diagnostic runner smoke test
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/diagnostics/run_revised_data_benchmark_diagnostic.jl "${{ runner.temp }}/us-revised-data-diagnostic"
+      - name: Quarantined revised-data semi-structural comparison tests
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/diagnostics/test_revised_data_semi_structural_comparison.jl
+      - name: Quarantined revised-data semi-structural runner smoke test
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/diagnostics/run_revised_data_semi_structural_comparison.jl "${{ runner.temp }}/us-revised-data-semi-structural-comparison"
+      - name: Quarantined revised-data ABM engineering qualification tests
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/diagnostics/test_revised_data_abm_engineering_diagnostic.jl
+      - name: Quarantined revised-data ABM origin-firewall v2 tests
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/diagnostics/test_revised_data_abm_origin_firewall_v2.jl
+      - name: Rejected revised-data ABM constructor-gate v3 portable regression tests
+        env:
+          JULIA_LOAD_PATH: "@:@stdlib"
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/diagnostics/test_revised_data_abm_constructor_gate_v3.jl
+      - name: Accepted nonadmitting ABM one-step-gate v4 portable tests
+        env:
+          JULIA_LOAD_PATH: "@:@stdlib"
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --compiled-modules=no --pkgimages=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/diagnostics/test_revised_data_abm_one_step_gate_v4.jl
+      - name: Immutable forecast registry tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/registry/test_registry.jl
+      - name: Origin package and cannot-run contract tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/origins/test_origin_packages.jl
+      - name: Source-release registry and completeness tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/vintages/test_source_release_registry.jl
+      - name: Fail-closed release-availability policy tests
+        run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/availability/test_release_availability.jl
+      - name: Timezone-semantics generator extraction tests
+        run: python3 scripts/us/forecasting/vintages/availability/test_generate_timezone_semantics.py
+      - name: Historical-backfill and prospective-origin plan tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/vintages/test_historical_backfill_plan.jl
+      - name: Common-origin-window decision-contract tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/common_window/test_common_origin_window_decision.jl
+      - name: EFFR one-effective-date capture-contract tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/effr/capture_contract/test_effr_capture_contract.jl
+      - name: EFFR 2026-08-07 day-zero acquisition tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/effr/prospective_acquisition/test_effr_day_zero_acquisition.jl
+      - name: EFFR 2026Q3 offline campaign-control tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/effr/campaign/test_effr_campaign_control.jl
+      - name: Accepted nonadmitting EFFR restart-v2 schedule-control tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/effr/campaign_restart_v2/test_effr_campaign_restart_v2.jl
+      - name: Accepted nonadmitting EFFR restart-v4 capture-evaluator tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/effr/recurring_acquisition_restart_v4/test_effr_recurring_acquisition_restart_v4.jl
+      - name: EFFR 2026Q3 recurring acquisition tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/effr/recurring_acquisition/test_effr_recurring_acquisition.jl
+      - name: Accepted nonadmitting EFFR observed-state v3 tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/effr/observed_state_contract/test_effr_observed_state_contract_v3.jl
+      - name: BLS Employment Situation archive-capture contract tests
+        run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/bls_employment/test_bls_employment_archive_capture.jl
+      - name: BLS quarter-end 40-event metadata-manifest tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/bls_employment/quarter_end_metadata_manifest/test_bls_quarter_end_metadata_manifest.jl
+      - name: Prospective acquisition and requirements contract tests (v1)
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/vintages/prospective/test_prospective_acquisition_contract.jl
+      - name: Prospective acquisition and requirements contract tests (v2)
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/vintages/prospective/test_prospective_acquisition_contract_v2.jl
+      - name: BEA prospective schedule parser tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/vintages/bea_schedule/test_bea_schedule_monitor.jl
+      - name: BEA NIPA historical-archive discovery tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/vintages/bea_nipa/test_bea_nipa_discovery.jl
+      - name: BEA HMI7 sealed 40-release metadata-manifest tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/bea_nipa/advance_metadata_manifest/test_bea_hmi7_advance_metadata_manifest.jl
+      - name: BEA HMI7 40-release present-day capture-boundary tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/bea_nipa/advance_capture/test_bea_hmi7_advance_capture.jl
+      - name: BEA HMI7 one-release live-fetcher binding tests
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/bea_nipa/advance_live_fetcher/test_bea_hmi7_advance_live_fetcher.jl
+      - name: BEA HMI7 historical present-day capture tests
+        run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/bea_nipa/historical/test_bea_hmi7_historical_capture.jl
+      - name: BEA HMI7 historical semantic-fingerprint tests
+        run: python3 scripts/us/forecasting/vintages/bea_nipa/historical_fingerprints/test_fingerprint_historical_releases.py
+      - name: BEA HMI7 cross-archive revision-diagnostic tests
+        run: python3 scripts/us/forecasting/vintages/bea_nipa/historical_fingerprints/revision_diagnostic/test_revision_diagnostic.py
+      - name: Philadelphia Fed RTDSM bounded acquisition-contract tests
+        run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/rtdsm/acquisition/test_rtdsm_quarterly_acquisition.jl
+      - name: Philadelphia Fed RTDSM semantic-fingerprint tests
+        run: python3 scripts/us/forecasting/vintages/rtdsm/fingerprint/test_fingerprint_rtdsm_ooxml.py
+      - name: BEA NIPA workbook mapping-audit tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/vintages/bea_nipa/mapping_audit/test_mapping_audit.jl
+      - name: BEA NIPA exact-workbook acquisition tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/vintages/bea_nipa/test_bea_nipa_acquisition.jl
+      - name: BEA NIPA exact production target-profile tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/vintages/bea_nipa/test_pilot_2026q2_target_profile.jl
+      - name: BEA NIPA historical-availability audit tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/vintages/bea_nipa/test_pilot_2026q2_availability_audit.jl
+      - name: BEA NIPA OOXML content-fingerprint tests
+        run: python3 scripts/us/forecasting/vintages/bea_nipa/test_fingerprint_2026q2_pilot.py
+      - name: BEA NIPA immutable workbook-receipt tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/vintages/bea_nipa/receipts/test_bea_workbook_receipts.jl
+      - name: BEA NIPA present-day receipt-summary tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/vintages/bea_nipa/test_pilot_2026q2_present_day_receipt.jl
+      - name: Tier-1 target and truth coverage tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/targets/test_target_coverage.jl
+      - name: Synthetic ABM GDP operator-mechanics qualification
+        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/targets/abm_gdp_operator/test_abm_gdp_operator_qualification.jl
+      - name: Accepted nonadmitting synthetic PCE-price analogue mechanics
+        run: julia --startup-file=no --compiled-modules=no --pkgimages=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/targets/pce_price_analogue/test_pce_price_analogue_qualification.jl
+      - name: Local forecast-evidence bundle integrity tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/evidence/test_evidence_verifier.jl
+      - name: BLS July 2026 rehearsal receipt tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/evidence/test_bls_202607_rehearsal_receipt.jl
+      - name: BLS July 2026 rehearsal collector tests
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/evidence/test_bls_202607_rehearsal_capture.jl

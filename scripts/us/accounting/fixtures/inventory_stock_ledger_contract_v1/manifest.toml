@@ -1,0 +1,156 @@
+schema_version = "beforeit-us-inventory-stock-ledger-fixture.v1"
+fixture_id = "inventory-stock-ledger-contract-v1"
+fixture_sha256 = "809501fd6d0c34ca9312936e762ed691575ea51c847999b8c33b5423a05a0936"
+fixture_row_count = 5
+economic_unit = "millions_current_usd"
+stock_time_basis = "end_of_period"
+classification = "SYNTHETIC_CONTRACT_FIXTURE_NOT_SOURCE_EVIDENCE"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+forecast_origin_admissible = false
+model_state_write_authorized = false
+accounting_gate_effect = "NONE"
+
+[boundary]
+holder_to_commodity_bridge_applied = false
+valuation_bridge_applied = false
+stage_to_model_stock_scope_bridge_applied = false
+sector_coverage_complete = false
+model_state_reconciliation_applied = false
+model_inventory_vector_emitted = false
+production_promotion_ready = false
+missing_values_policy = "MISSING_NOT_ZERO"
+covered_holder_codes = ["31-33"]
+promotion_blockers = [
+    "SOURCE_BYTES_NOT_PINNED",
+    "SOURCE_VINTAGE_NOT_ORIGIN_ADMISSIBLE",
+    "HOLDER_TO_COMMODITY_BRIDGE_NOT_APPLIED",
+    "COST_TO_MODEL_PRICE_VALUATION_BRIDGE_NOT_APPLIED",
+    "STAGE_TO_MODEL_STOCK_SCOPE_BRIDGE_NOT_APPLIED",
+    "SECTOR_COVERAGE_INCOMPLETE",
+    "MODEL_STATE_RECONCILIATION_NOT_APPLIED",
+]
+
+[[sources]]
+source_id = "bea_nipa_t50805b_contract"
+source_agency = "U.S. Bureau of Economic Analysis"
+dataset_id = "NIPA"
+publication_id = "T50805B"
+source_status = "SYNTHETIC_CONTRACT_FIXTURE_NOT_SOURCE_EVIDENCE"
+raw_sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+raw_byte_count = 0
+metadata_sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+release_timestamp_utc = "not_applicable_synthetic"
+retrieved_at_utc = "not_applicable_synthetic"
+frequency = "quarterly"
+seasonal_adjustment = "seasonally_adjusted"
+annual_rate_flag = false
+saar_divisor = 1.0
+stock_flow_index_rate = "STOCK"
+published_unit = "billions_current_usd"
+multiplier_to_millions = 1000.0
+price_basis = "current_cost"
+valuation_basis = "current_replacement_cost"
+period_semantics = "end_of_period"
+economic_basis = "holder_industry"
+coverage_scope = "synthetic total-private-inventory aggregate control"
+vintage_classification = "SYNTHETIC_CONTRACT_FIXTURE_NOT_SOURCE_EVIDENCE"
+origin_admissible = false
+usage_role = "CONTROL_ONLY"
+
+[[sources]]
+source_id = "census_m3_contract"
+source_agency = "U.S. Census Bureau"
+dataset_id = "M3"
+publication_id = "TABLE_6_STAGE_OF_FABRICATION"
+source_status = "SYNTHETIC_CONTRACT_FIXTURE_NOT_SOURCE_EVIDENCE"
+raw_sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+raw_byte_count = 0
+metadata_sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+release_timestamp_utc = "not_applicable_synthetic"
+retrieved_at_utc = "not_applicable_synthetic"
+frequency = "monthly"
+seasonal_adjustment = "seasonally_adjusted"
+annual_rate_flag = false
+saar_divisor = 1.0
+stock_flow_index_rate = "STOCK"
+published_unit = "millions_current_usd"
+multiplier_to_millions = 1.0
+price_basis = "book_cost"
+valuation_basis = "non_lifo_cost"
+period_semantics = "end_of_period"
+economic_basis = "holder_industry"
+coverage_scope = "synthetic manufacturing-stage identity contract"
+vintage_classification = "SYNTHETIC_CONTRACT_FIXTURE_NOT_SOURCE_EVIDENCE"
+origin_admissible = false
+usage_role = "CONTROL_ONLY"
+
+[[series]]
+series_id = "bea_total_private_inventory"
+source_id = "bea_nipa_t50805b_contract"
+published_series_code = "A371RC_CONTRACT"
+description = "Synthetic total private inventory stock control"
+holder_basis = "holder_industry"
+holder_code = "PRIVATE"
+inventory_stage = "TOTAL"
+inventory_scope = "total_private_inventory"
+coverage_status = "AGGREGATE_CONTROL"
+usage_role = "CONTROL_ONLY"
+
+[[series]]
+series_id = "m3_finished_goods_inventory"
+source_id = "census_m3_contract"
+published_series_code = "M3_FINISHED_CONTRACT"
+description = "Synthetic manufacturing finished-goods inventory"
+holder_basis = "holder_industry"
+holder_code = "31-33"
+inventory_stage = "FINISHED_GOODS"
+inventory_scope = "manufacturing"
+coverage_status = "PARTIAL_HOLDER_COVERAGE"
+usage_role = "CONTROL_ONLY"
+
+[[series]]
+series_id = "m3_materials_inventory"
+source_id = "census_m3_contract"
+published_series_code = "M3_MATERIALS_CONTRACT"
+description = "Synthetic manufacturing materials-and-supplies inventory"
+holder_basis = "holder_industry"
+holder_code = "31-33"
+inventory_stage = "MATERIALS"
+inventory_scope = "manufacturing"
+coverage_status = "PARTIAL_HOLDER_COVERAGE"
+usage_role = "CONTROL_ONLY"
+
+[[series]]
+series_id = "m3_total_inventory"
+source_id = "census_m3_contract"
+published_series_code = "M3_TOTAL_CONTRACT"
+description = "Synthetic total manufacturing inventory"
+holder_basis = "holder_industry"
+holder_code = "31-33"
+inventory_stage = "TOTAL"
+inventory_scope = "manufacturing"
+coverage_status = "PARTIAL_HOLDER_COVERAGE"
+usage_role = "CONTROL_ONLY"
+
+[[series]]
+series_id = "m3_work_in_process_inventory"
+source_id = "census_m3_contract"
+published_series_code = "M3_WIP_CONTRACT"
+description = "Synthetic manufacturing work-in-process inventory"
+holder_basis = "holder_industry"
+holder_code = "31-33"
+inventory_stage = "WORK_IN_PROCESS"
+inventory_scope = "manufacturing"
+coverage_status = "PARTIAL_HOLDER_COVERAGE"
+usage_role = "CONTROL_ONLY"
+
+[[identities]]
+identity_id = "m3_manufacturing_stage_identity"
+equation = "total = materials + work_in_process + finished_goods"
+lhs_observation_ids = ["m3_total_inventory_q1_2026"]
+rhs_observation_ids = [
+    "m3_materials_q1_2026",
+    "m3_work_in_process_q1_2026",
+    "m3_finished_goods_q1_2026",
+]
+tolerance_millions_usd = 0.0

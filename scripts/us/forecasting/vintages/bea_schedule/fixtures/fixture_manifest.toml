@@ -1,0 +1,28 @@
+[artifact]
+schema_version = "beforeit-us-bea-schedule-fixtures.v1"
+fixture_set_id = "bea-schedule-2026q3-advance.v1"
+status = "HERMETIC_NORMALIZED_MUTABLE_SCHEDULE_FIXTURE"
+as_of_date = "2026-08-05"
+digest_algorithm = "sha256"
+source_locator = "https://www.bea.gov/news/schedule"
+source_locator_is_mutable = true
+raw_source_response_included = false
+release_bytes_included = false
+release_event_evidence_included = false
+origin_availability_evidence_included = false
+origin_admission_evidence_included = false
+normalization = "The source page was reduced to one structurally faithful target table row and normalized with stable whitespace and a terminal newline. This is not a byte-identical HTTP response."
+
+[[fixtures]]
+path = "schedule_2026q3_normalized.html"
+sha256 = "0b80055321ee728001742fb901c54852795230250f02a67fcea3615e4672c263"
+fixture_kind = "normalized_official_schedule_row"
+expected_date_text = "October 29"
+expected_time_text = "8:30 AM"
+expected_title = "GDP (Advance Estimate), 3rd Quarter 2026"
+expected_strict_match_count = 1
+source_response_persisted = false
+release_bytes = false
+release_evidence = false
+origin_evidence = false
+origin_admissible = false

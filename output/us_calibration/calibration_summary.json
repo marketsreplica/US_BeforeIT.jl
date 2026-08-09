@@ -26,7 +26,7 @@
     ],
     "truth_vintage": "2026-08-04"
   },
-  "generated_at": "2026-08-04T00:40:30.806",
+  "generated_at": "2026-08-05T18:20:59.771",
   "latest_backtest_quarter": "2026Q2",
   "metrics": [
     {
@@ -751,21 +751,21 @@
     "backtest_horizon_quarters": 1,
     "backtest_seed": 17000,
     "calibration_artifact_path": "data/us/calibration/US_2024_calibration_object.jld2",
-    "calibration_artifact_sha256": "c2d5e5fc476161e577af37c6c16064c291cd4d38bcc7b693e6f8598f12889f82",
+    "calibration_artifact_sha256": "4cce5d629e1776cbf67f645703d79a28108562f7f32f78b94b3dd10705e2e136",
     "code_revision": {
-      "calibration_script_sha256": "3863b0207ff1f2f63a1c7f823a3f12ced3d440e9596a1835da30cd90cc230ced",
-      "git_head": "b22939a27ad312ba332c530bcbedf2c993513071",
+      "calibration_script_sha256": "324b372c2ec07f9fdef9762d8dc8b3a70c671e8fb900beb36d690a954e5fbca6",
+      "git_head": "6030f7558a9956a99465a09e31c51f37df198c90",
       "working_tree_dirty": true
     },
     "config_path": "scripts/us/forecast_calibration.toml",
-    "config_sha256": "7ae10878709c1f2d3ee3c1346eb536c2855cd04ac0230ff45fb162b474e3ef00",
+    "config_sha256": "edc7a8c0872c1ba94de05efed8a092caf0cceb8f44de40a306d132a260c927ef",
     "ensemble_size": 128,
     "forecast_baseline_path": "data/us/baselines/US_2026Q1_nowcast.jld2",
-    "forecast_baseline_sha256": "0815b01c991ae96c8b35069b696bdab6d9e7325602670f0bbf4013a8d2aa8991",
+    "forecast_baseline_sha256": "eb8d28f6b2aef9b36cf294be8906d2d5481f1c8db66ea3d034b1a96f9194b0de",
     "forecast_horizon_quarters": 15,
     "forecast_seed": 67000,
     "structural_artifact_path": "data/us/baselines/US_2024Q4_structural.jld2",
-    "structural_artifact_sha256": "6d9af135b8ebec17f4eb44804aa244b4bdc84158527e0700474c15a28ae57644",
+    "structural_artifact_sha256": "8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d",
     "truth_path": "data/us/validation/ECONOMIC_OUTLOOK_ACTUALS.csv",
     "truth_sha256": "8f4dfa041eaba004494c43c67bbe98ac4ef33200955cca97c373e26a8cc8ef69"
   },

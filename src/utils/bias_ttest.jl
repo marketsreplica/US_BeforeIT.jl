@@ -1,41 +1,39 @@
-#BIAS_TTEST: One-sample t-test for forecast bias with Newey-West (HAC) standard errors.
-#
-#   Tests H₀: E[eₜ] = 0, i.e. whether the mean forecast error is significantly
-#   different from zero. Uses the same Newey-West variance estimator as the
-#   Diebold-Mariano test to account for autocorrelation in multi-step-ahead
-#   forecast errors.
-#
-#   'errors' is a 'T-by-1' vector of forecast errors (forecast - actual)
-#   'h'      is the forecast horizon (default 1), used as the truncation lag
-#            for the Newey-West estimator (MA(h-1) autocorrelation structure)
-#
-#   Returns:
-#       't_stat'   the t-statistic
-#       'p_value'  two-sided p-value from N(0,1)
-#
-function bias_ttest(errors::Vector{Float64}, h::Int = 1)
-    n = length(errors)
-    n < 2 && return NaN, NaN
-    d = errors
+"""
+    bias_ttest(errors, h = 1;
+        kernel = :bartlett,
+        small_sample = true,
+        reference = :t)
 
-    # Newey-West variance estimate (same structure as DM test). Cap the
-    # truncation lag at the available sample so short error series do not call
-    # `cov` on (near-)empty vectors; for n > h this is unchanged.
-    maxlag = min(h - 1, n - 2)
-    if maxlag >= 1
-        gamma = [cov(d[1:(end - i)], d[(1 + i):end]) for i in 0:maxlag] / n
-        varD = gamma[1] + 2 * sum(gamma[2:end])
-    else
-        varD = var(d)
+Test `H₀: E[errors] = 0` with a horizon-overlap HAC standard error. The
+autocovariances use denominator `n`, Bartlett weights run through lag `h - 1`,
+and the standard error of the mean is
+
+`sqrt(long_run_variance / n)`.
+
+With the default finite-sample factor `n / (n - 1)`, the `h = 1` statistic is
+exactly the textbook one-sample t-statistic. `reference = :t` uses `t(n - 1)`;
+set `reference = :normal` and/or `small_sample = false` for asymptotic
+inference. Invalid, too-short, and degenerate samples throw explicit errors.
+"""
+function bias_ttest(
+        errors::AbstractVector{<:Real},
+        h::Integer = 1;
+        kernel::Symbol = :bartlett,
+        small_sample::Bool = true,
+        reference::Symbol = :t
+    )
+    sample = _forecast_test_sample(errors, "errors"; minimum_length = 2)
+    horizon = _forecast_test_horizon(h, length(sample); strict = true)
+    reference in (:t, :normal) ||
+        throw(ArgumentError("reference must be :t or :normal"))
+
+    long_run_variance =
+        _forecast_hac_long_run_variance(sample, horizon - 1; kernel)
+    if small_sample
+        long_run_variance *= length(sample) / (length(sample) - 1)
     end
 
-    # Deal with a negative long-run variance estimate by replacing with short-run
-    if varD < 0
-        varD = var(d)
-    end
-
-    t_stat = mean(d) / sqrt(varD / n)
-    p_value = 2 * cdf(Normal(0, 1), -abs(t_stat))
-
-    return t_stat, p_value
+    statistic = mean(sample) / sqrt(long_run_variance / length(sample))
+    p_value = _forecast_two_sided_pvalue(statistic, reference, length(sample))
+    return statistic, p_value
 end

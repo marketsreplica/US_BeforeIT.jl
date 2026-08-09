@@ -1,0 +1,188 @@
+schema_version = "beforeit-us-after-redefinitions-2017-special-accounts-fixture.v2"
+classification = "2017_BENCHMARK_CURRENT_ARCHIVE_SNAPSHOT_NOT_ORIGIN_ELIGIBLE"
+artifact_role = "VINTAGE_SPECIFIC_SPECIAL_ACCOUNT_RECONSTRUCTION_EVIDENCE_ONLY"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+year = 2017
+benchmark_year = 2017
+source_frequency = "annual benchmark"
+unit = "millions of current dollars"
+price_basis = "producers prices"
+detail_industry_count = 402
+summary_industry_count = 71
+detail_component_count = 4
+summary_account_count = 2
+final_use_count = 20
+fixture_cell_count = 3644
+fixture_sha256 = "bb871c471b5bdc3dfea709749359717705167eff7e929bd9a2cc9071a21751e1"
+numeric_cell_count = 708
+selected_zero_not_shown_count = 2936
+native_blank_count = 2748
+ellipsis_not_shown_count = 188
+explicit_numeric_zero_count = 50
+negative_cell_count = 36
+detail_to_summary_industry_crosswalk_pinned = false
+component_crosswalk_pinned = true
+intermediate_cellwise_reconstruction_claimed = false
+make_cellwise_reconstruction_claimed = false
+reconstruction_scope = "CODE_KEYED_FINAL_USE_AND_AGGREGATE_CONTROLS_ONLY"
+detail_component_codes = ["S00401", "S00402", "S00300", "S00900"]
+summary_account_codes = ["Used", "Other"]
+final_use_codes = ["F010", "F02S", "F02E", "F02N", "F02R", "F030", "F040", "F050", "F06C", "F06S", "F06E", "F06N", "F07C", "F07S", "F07E", "F07N", "F10C", "F10S", "F10E", "F10N"]
+summary_industry_codes = ["111CA", "113FF", "211", "212", "213", "22", "23", "321", "327", "331", "332", "333", "334", "335", "3361MV", "3364OT", "337", "339", "311FT", "313TT", "315AL", "322", "323", "324", "325", "326", "42", "441", "445", "452", "4A0", "481", "482", "483", "484", "485", "486", "487OS", "493", "511", "512", "513", "514", "521CI", "523", "524", "525", "HS", "ORE", "532RL", "5411", "5415", "5412OP", "55", "561", "562", "61", "621", "622", "623", "624", "711AS", "713", "721", "722", "81", "GFGD", "GFGN", "GFE", "GSLG", "GSLE"]
+used_definition = "Used=S00401+S00402"
+other_definition = "Other=S00300+S00900"
+component_crosswalk_member = "component_crosswalk.json"
+component_crosswalk_sha256 = "da7cba1018448321e6401dbe08614b73b3f0d9e65dfbd902a22b49cb95124ee0"
+component_crosswalk_source_url = "https://apps.bea.gov/scb/issues/2018/08-august/pdf/0818-industry-tables.pdf"
+component_crosswalk_source_sha256 = "c14a23ec44327fe8d8eb5d0e511234bbb30a3dccc5141087b1da6a5c4dd1c024"
+component_crosswalk_source_byte_count = 219021
+component_crosswalk_source_pdf_index = 14
+component_crosswalk_source_printed_page = 15
+component_crosswalk_source_table_title = "Appendix A. Industries and Commodities in the Industry Economic Accounts"
+rounding_envelope_definition = "For each code-keyed final-use cell, absolute(two displayed detail components minus the independently displayed summary cell) <= 1.5 million dollars; T001, T004, T007, and aggregate make/output controls must reconstruct exactly."
+source_mask_policy = "Every selected source cell retains one native kind: numeric, blank, or ellipsis. selected_zero_not_shown is derived as blank union ellipsis; numeric zero remains numeric; signs are never clipped."
+source_make_placement_policy = "A nonzero make cell is a published source accounting placement, not identification of a technological producer, owner, government behavior, or model agent."
+rest_of_world_adjustment_policy = "S00900 is retained with its published signs and make placement; this fixture makes no zero-cash inference and authorizes no replay of cash or GDP."
+vintage_scope_policy = "All values and component shares are 2017-only evidence from the pinned current archive snapshot and must not be inferred, copied, or weighted into 2024 or another vintage."
+source_url = "https://apps.bea.gov/industry/release/zip/MAKE-USE-IMPORTS%20(AFTER%20REDEFINITIONS).zip"
+source_retrieved_at_utc = "2026-08-06T05:03:02.322Z"
+source_zip_byte_count = 8326144
+source_zip_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+source_metadata_sha256 = "8be9fbef6e2c18a7388cd61bd14312159fc3984d4dbc2c60158e977ee7f0e878"
+source_metadata_member = "source_acquisition_receipt.json"
+generator_member = "generate_after_redefinitions_2017_special_accounts_fixture.mjs"
+generator_sha256 = "6a0562c1d858703a4ab47656712a3937d2b3971df0e6abc667684af4355b69f5"
+canonicalization_backend = "node_js_deterministic_csv_and_toml"
+accepted_reader_contracts = ["openpyxl=3.1.5", "artifact_tool=2.8.39"]
+dual_reader_receipt_members = ["generation_openpyxl.json", "generation_artifact_tool.json"]
+openpyxl_fallback_member = "extract_after_redefinitions_2017_special_accounts_values.py"
+openpyxl_fallback_sha256 = "91cbb1d62bb4c55963616b70eb4e2d8667c2917fedec1b708fc4c281dd529b01"
+detail_use_workbook_member = "IOUse_After_Redefinitions_PRO_Detail.xlsx"
+detail_use_workbook_sha256 = "ee0f977ccc6b884d3e3b912596e39c1036f513880531dda33be947e68fb03fe4"
+summary_use_workbook_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+summary_use_workbook_sha256 = "9e3791d657909843ce202161bae00cf8a425d7e1bf866cc8a0462810f0ae00c7"
+detail_make_workbook_member = "IOMake_After_Redefinitions_PRO_Detail.xlsx"
+detail_make_workbook_sha256 = "96fb70a032e3ab81514231f49c2eae888b7ef8b741b00f352f2fc0fa8776db67"
+summary_make_workbook_member = "IOMake_After_Redefinitions_PRO_Summary.xlsx"
+summary_make_workbook_sha256 = "073b87c7e52e76fb78ad7ddafb0c2e60f9188fc5a4e56dc0094f4a7ae3f529c6"
+runtime_materialization_selected = false
+producer_agent_inference = false
+government_producer_inference = false
+zero_cash_inference = false
+current_vintage_weight_inference = false
+forecast_origin_admissible = false
+model_state_write = false
+calibration_dictionary_write = false
+accounting_gate_effect = "NONE"
+emitted_runtime_keys = []
+scientific_role = "Hermetic 2017 benchmark evidence for signed, mask-preserving reconstruction of BEA Used and Other code-keyed final-use cells and aggregate controls. Detailed and 71-industry intermediate/make cells are preserved independently, but no cellwise 402-to-71 reconstruction is claimed without a pinned official industry crosswalk. This is not a runtime transform, forecast origin, current-vintage split, or behavioral-agent identification."
+
+[[projection]]
+projection_id = "detail_use_intermediate_2017"
+source_level = "detail"
+source_table = "producer_use"
+source_member = "IOUse_After_Redefinitions_PRO_Detail.xlsx"
+source_ranges = ["2017!A405:B408", "2017!C5:ON6", "2017!C405:ON408"]
+row_count = 4
+column_count = 402
+cell_count = 1608
+projection_sha256 = "0ea86ea8f218f900f2e8ac991ae15432c24774fa4582ddcc500b32f235facdf8"
+
+[[projection]]
+projection_id = "detail_use_final_2017"
+source_level = "detail"
+source_table = "producer_use"
+source_member = "IOUse_After_Redefinitions_PRO_Detail.xlsx"
+source_ranges = ["2017!A405:B408", "2017!OP5:PI6", "2017!OP405:PI408"]
+row_count = 4
+column_count = 20
+cell_count = 80
+projection_sha256 = "6f3f10efa07beffd7755f92dd79581c556efeefa391043e0d5d67dcf1330b5a0"
+
+[[projection]]
+projection_id = "detail_use_controls_2017"
+source_level = "detail"
+source_table = "producer_use"
+source_member = "IOUse_After_Redefinitions_PRO_Detail.xlsx"
+source_ranges = ["2017!A405:B408", "2017!OO5:OO6", "2017!OO405:OO408", "2017!PJ5:PJ6", "2017!PJ405:PJ408", "2017!PK5:PK6", "2017!PK405:PK408"]
+row_count = 4
+column_count = 3
+cell_count = 12
+projection_sha256 = "3a8e0d21b31eab207311c36690555265600f8f13a1c24790afbf1d767dde4392"
+
+[[projection]]
+projection_id = "summary_use_intermediate_2017"
+source_level = "summary"
+source_table = "producer_use"
+source_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2017!A79:B80", "2017!C6:BU7", "2017!C79:BU80"]
+row_count = 2
+column_count = 71
+cell_count = 142
+projection_sha256 = "01a00c5d554577d644172d6940181b590946078b41a78ba1b1c2f303c473ca7a"
+
+[[projection]]
+projection_id = "summary_use_final_2017"
+source_level = "summary"
+source_table = "producer_use"
+source_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2017!A79:B80", "2017!BW6:CP7", "2017!BW79:CP80"]
+row_count = 2
+column_count = 20
+cell_count = 40
+projection_sha256 = "0cdc5bbc5b1d03fd8951b3936850467212100ed1a3c76bf92172bc2d9107c6f2"
+
+[[projection]]
+projection_id = "summary_use_controls_2017"
+source_level = "summary"
+source_table = "producer_use"
+source_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2017!A79:B80", "2017!BV6:BV7", "2017!BV79:BV80", "2017!CQ6:CQ7", "2017!CQ79:CQ80", "2017!CR6:CR7", "2017!CR79:CR80"]
+row_count = 2
+column_count = 3
+cell_count = 6
+projection_sha256 = "8e7c6a48c4c7a08e45bbf7095a7246f5ef66c4494a124907842bd7af1b8d41a8"
+
+[[projection]]
+projection_id = "detail_make_components_2017"
+source_level = "detail"
+source_table = "producer_make"
+source_member = "IOMake_After_Redefinitions_PRO_Detail.xlsx"
+source_ranges = ["2017!A7:B408", "2017!OK5:ON6", "2017!OK7:ON408"]
+row_count = 402
+column_count = 4
+cell_count = 1608
+projection_sha256 = "76759111809db2ab23bd0f9f15f7795bbbb39e397fc7111255a61deb00a6e390"
+
+[[projection]]
+projection_id = "detail_make_output_2017"
+source_level = "detail"
+source_table = "producer_make"
+source_member = "IOMake_After_Redefinitions_PRO_Detail.xlsx"
+source_ranges = ["2017!OK5:ON6", "2017!OK409:ON409"]
+row_count = 1
+column_count = 4
+cell_count = 4
+projection_sha256 = "75640964e6c83fe5d92ad70218eeb7e57bc0e27e51e9257da3c2ce7df63a1274"
+
+[[projection]]
+projection_id = "summary_make_components_2017"
+source_level = "summary"
+source_table = "producer_make"
+source_member = "IOMake_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2017!A8:B78", "2017!BV6:BW7", "2017!BV8:BW78"]
+row_count = 71
+column_count = 2
+cell_count = 142
+projection_sha256 = "7ea40a8b455ac904b1bd28cdc6f557a715caef337d6dcd9bf140a917fda30a42"
+
+[[projection]]
+projection_id = "summary_make_output_2017"
+source_level = "summary"
+source_table = "producer_make"
+source_member = "IOMake_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2017!BV6:BW7", "2017!BV79:BW79"]
+row_count = 1
+column_count = 2
+cell_count = 2
+projection_sha256 = "1a84f9739ecc3be1df809a95960dd38b627bf918d7954bdefd3512aa9d86a407"

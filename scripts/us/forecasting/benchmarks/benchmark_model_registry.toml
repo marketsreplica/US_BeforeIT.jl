@@ -1,0 +1,1226 @@
+schema_version = "beforeit-us-benchmark-model-registry.v1"
+registry_id = "beforeit-us-quarterly-statistical-benchmarks.v1"
+registry_status = "frozen_implementation_only"
+canonicalization = "utf8_length_prefixed_sorted_map.v1"
+digest_algorithm = "sha256"
+canonical_tracks = ["common_information", "published_forecast"]
+cross_track_pooling = false
+expected_target_panel_count = 2
+expected_model_count = 15
+registry_content_sha256 = "a6268e19fe217430eb3b9cbd267295e921a8da25d3c8291b53a5deca9b1d22ed"
+
+[execution_scope]
+evidence_class = "hermetic_validation_only_no_empirical_forecasts"
+empirical_forecast_execution_allowed = false
+production_scoring_allowed = false
+unsupported_model_policy = "reject"
+hash_verification = "required_before_model_execution"
+
+[[artifacts]]
+artifact_id = "benchmark_kernel_source"
+kind = "source"
+path = "USForecastBenchmarks.jl"
+sha256 = "4c326edeecacd520e49f4a1a432bf3325774c2390bfa13c02e0705ba7f37cd49"
+
+[[artifacts]]
+artifact_id = "bvar_source"
+kind = "source"
+path = "bvar.jl"
+sha256 = "9ee60dad2617a9cb395669e1cf996118a19307b72c313e1691e381e8c9c7fb1d"
+
+[[artifacts]]
+artifact_id = "semi_structural_source"
+kind = "source"
+path = "semi_structural.jl"
+sha256 = "cf01fa0f57fafd92d4181a6f884862cbb06b4511179304da89aa291496a980c9"
+
+[[artifacts]]
+artifact_id = "benchmark_model_card"
+kind = "model_card"
+path = "MODEL_CARD.md"
+sha256 = "1cedd06a20433c66dbe447e37efb58f62ecccae32f8f85e3a8e5134b2215c5d1"
+
+[[artifacts]]
+artifact_id = "semi_structural_model_card"
+kind = "model_card"
+path = "SEMI_STRUCTURAL_MODEL_CARD.md"
+sha256 = "af3d36f2e21696d041b5047371658b7b17f5905576e32ee4dbc8d4ef4b741539"
+
+[[artifacts]]
+artifact_id = "direct_ar_source"
+kind = "source"
+path = "direct_ar.jl"
+sha256 = "c3af2598215e8f15ce812998d3fc0240435edd65eaea931d3dfebe37dd23ffdf"
+
+[[artifacts]]
+artifact_id = "direct_ar_model_card"
+kind = "model_card"
+path = "DIRECT_AR_MODEL_CARD.md"
+sha256 = "7a4f1382d8305f0a1ee23c468332f397f423c0648d43b06455c6a9e292af675b"
+
+[[target_panels]]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+frequency = "quarterly"
+selection_rule = "all_eight_protocol_tier1_targets_in_protocol_order"
+transformation_rule = "pre_estimation_primary_transformation_only"
+missing_data_policy = "complete_case_panel_fail_origin_no_imputation"
+
+[[target_panels.targets]]
+target_id = "real_gdp"
+target_version = "bea-real-gdp.v1-draft"
+operator_version = "abm-to-bea-real-gdp.v1-draft"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_growth"
+secondary_transformation = "four_quarter_log_growth"
+transformation_version = "us-real-gdp-growth.v1-draft"
+output_unit = "percentage_points_annual_rate"
+model_input_name = "real_gdp"
+model_input_unit = "percentage_points_annual_rate"
+
+[[target_panels.targets]]
+target_id = "pce_price_index"
+target_version = "bea-pce-price-index.v1-draft"
+operator_version = "abm-to-bea-pce-price-index.v1-draft"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_inflation"
+secondary_transformation = "four_quarter_log_inflation"
+transformation_version = "us-pce-price-inflation.v1-draft"
+output_unit = "percentage_points_annual_rate"
+model_input_name = "pce_price_index"
+model_input_unit = "percentage_points_annual_rate"
+
+[[target_panels.targets]]
+target_id = "core_pce_price_index"
+target_version = "bea-core-pce-price-index.v1-draft"
+operator_version = "abm-to-bea-core-pce-price-index.v1-draft"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_inflation"
+secondary_transformation = "four_quarter_log_inflation"
+transformation_version = "us-core-pce-price-inflation.v1-draft"
+output_unit = "percentage_points_annual_rate"
+model_input_name = "core_pce_price_index"
+model_input_unit = "percentage_points_annual_rate"
+
+[[target_panels.targets]]
+target_id = "gdp_deflator"
+target_version = "bea-gdp-deflator.v1-draft"
+operator_version = "abm-to-bea-gdp-deflator.v1-draft"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_inflation"
+secondary_transformation = "four_quarter_log_inflation"
+transformation_version = "us-gdp-deflator-inflation.v1-draft"
+output_unit = "percentage_points_annual_rate"
+model_input_name = "gdp_deflator"
+model_input_unit = "percentage_points_annual_rate"
+
+[[target_panels.targets]]
+target_id = "unemployment_rate"
+target_version = "bls-unemployment-rate.v1-draft"
+operator_version = "abm-to-bls-unemployment-rate.v1-draft"
+aggregation = "quarterly_average_monthly"
+primary_transformation = "percent_level"
+secondary_transformation = "quarterly_change"
+transformation_version = "us-cps-unemployment-quarterly.v1-draft"
+output_unit = "percentage_points"
+model_input_name = "unemployment_rate"
+model_input_unit = "percentage_points"
+
+[[target_panels.targets]]
+target_id = "payroll_employment"
+target_version = "bls-payroll-employment.v1-draft"
+operator_version = "abm-to-bls-payroll-employment.v1-draft"
+aggregation = "quarterly_average_monthly"
+primary_transformation = "quarterly_log_growth"
+secondary_transformation = "revision_to_level"
+transformation_version = "us-ces-payroll-quarterly.v1-draft"
+output_unit = "log_points"
+model_input_name = "payroll_employment"
+model_input_unit = "log_points"
+
+[[target_panels.targets]]
+target_id = "effective_federal_funds_rate"
+target_version = "frb-effective-federal-funds-rate.v1-draft"
+operator_version = "abm-to-frb-effective-federal-funds-rate.v1-draft"
+aggregation = "quarterly_average_daily"
+primary_transformation = "percentage_point_level"
+secondary_transformation = "quarterly_change"
+transformation_version = "us-effr-quarterly-average.v1-draft"
+output_unit = "percentage_points"
+model_input_name = "effective_federal_funds_rate"
+model_input_unit = "percentage_points"
+
+[[target_panels.targets]]
+target_id = "nominal_gdp"
+target_version = "bea-nominal-gdp.v1-draft"
+operator_version = "abm-to-bea-nominal-gdp.v1-draft"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_growth"
+secondary_transformation = "four_quarter_log_growth"
+transformation_version = "us-nominal-gdp-growth.v1-draft"
+output_unit = "percentage_points_annual_rate"
+model_input_name = "nominal_gdp"
+model_input_unit = "percentage_points_annual_rate"
+
+[[target_panels]]
+target_panel_id = "quarterly_core4_contract_v1"
+frequency = "quarterly"
+selection_rule = "protocol_core4_real_gdp_pce_unemployment_effr_in_model_order"
+transformation_rule = "pre_estimation_primary_transformation_mapped_to_model_contract"
+missing_data_policy = "complete_case_core4_fail_origin_no_imputation"
+
+[[target_panels.targets]]
+target_id = "real_gdp"
+target_version = "bea-real-gdp.v1-draft"
+operator_version = "abm-to-bea-real-gdp.v1-draft"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_growth"
+secondary_transformation = "four_quarter_log_growth"
+transformation_version = "us-real-gdp-growth.v1-draft"
+output_unit = "percentage_points_annual_rate"
+model_input_name = "real_gdp_growth"
+model_input_unit = "annualized_quarter_over_quarter_percent"
+
+[[target_panels.targets]]
+target_id = "pce_price_index"
+target_version = "bea-pce-price-index.v1-draft"
+operator_version = "abm-to-bea-pce-price-index.v1-draft"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_inflation"
+secondary_transformation = "four_quarter_log_inflation"
+transformation_version = "us-pce-price-inflation.v1-draft"
+output_unit = "percentage_points_annual_rate"
+model_input_name = "pce_inflation"
+model_input_unit = "annualized_quarter_over_quarter_percent"
+
+[[target_panels.targets]]
+target_id = "unemployment_rate"
+target_version = "bls-unemployment-rate.v1-draft"
+operator_version = "abm-to-bls-unemployment-rate.v1-draft"
+aggregation = "quarterly_average_monthly"
+primary_transformation = "percent_level"
+secondary_transformation = "quarterly_change"
+transformation_version = "us-cps-unemployment-quarterly.v1-draft"
+output_unit = "percentage_points"
+model_input_name = "unemployment_rate"
+model_input_unit = "quarterly_average_percent"
+
+[[target_panels.targets]]
+target_id = "effective_federal_funds_rate"
+target_version = "frb-effective-federal-funds-rate.v1-draft"
+operator_version = "abm-to-frb-effective-federal-funds-rate.v1-draft"
+aggregation = "quarterly_average_daily"
+primary_transformation = "percentage_point_level"
+secondary_transformation = "quarterly_change"
+transformation_version = "us-effr-quarterly-average.v1-draft"
+output_unit = "percentage_points"
+model_input_name = "effective_federal_funds_rate"
+model_input_unit = "quarterly_average_percent"
+
+[[models]]
+model_id = "naive_no_change"
+support_status = "supported"
+family = "random_walk"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source"]
+model_card_artifact_id = "benchmark_model_card"
+
+[models.specification]
+constructor = "NoChangeSpec()"
+forecast_method = "iterated"
+lag_rule = "not_applicable"
+hyperparameter_rule = "none"
+
+[models.specification.parameters]
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "recursive_joint_gaussian_training_first_differences"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "training_residual_covariance"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "closed_form_summary"
+estimation_success_gate = "finite_required_training_moments"
+density_success_gate = "exact_shape_and_all_finite_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "naive_drift"
+support_status = "supported"
+family = "random_walk"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source"]
+model_card_artifact_id = "benchmark_model_card"
+
+[models.specification]
+constructor = "DriftSpec()"
+forecast_method = "iterated"
+lag_rule = "not_applicable"
+hyperparameter_rule = "training_only_mean_first_difference"
+
+[models.specification.parameters]
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "recursive_joint_gaussian_demeaned_training_first_differences"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "training_residual_covariance"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "closed_form_summary"
+estimation_success_gate = "finite_required_training_moments"
+density_success_gate = "exact_shape_and_all_finite_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "naive_historical_mean"
+support_status = "supported"
+family = "random_walk"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source"]
+model_card_artifact_id = "benchmark_model_card"
+
+[models.specification]
+constructor = "HistoricalMeanSpec()"
+forecast_method = "constant_all_horizons"
+lag_rule = "not_applicable"
+hyperparameter_rule = "training_only_sample_mean"
+
+[models.specification.parameters]
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "independent_horizon_joint_gaussian_training_mean_residuals"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "training_residual_covariance"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "closed_form_summary"
+estimation_success_gate = "finite_required_training_moments"
+density_success_gate = "exact_shape_and_all_finite_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "naive_seasonal_4"
+support_status = "supported"
+family = "seasonal_naive"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source"]
+model_card_artifact_id = "benchmark_model_card"
+
+[models.specification]
+constructor = "SeasonalNaiveSpec(4)"
+forecast_method = "iterated"
+lag_rule = "fixed_seasonal_period_4"
+hyperparameter_rule = "fixed_preregistered"
+
+[models.specification.parameters]
+period = 4
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "recursive_joint_gaussian_training_seasonal_differences"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "training_residual_covariance"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "closed_form_summary"
+estimation_success_gate = "finite_required_training_moments"
+density_success_gate = "exact_shape_and_all_finite_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "univariate_ar_p1_constant"
+support_status = "supported"
+family = "ar"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source"]
+model_card_artifact_id = "benchmark_model_card"
+
+[models.specification]
+constructor = "ARSpec(candidate_lags = [1], intercept = true)"
+forecast_method = "iterated"
+lag_rule = "fixed_lag_1"
+hyperparameter_rule = "fixed_preregistered"
+
+[models.specification.parameters]
+candidate_lags = [1]
+intercept = true
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "recursive_target_independent_gaussian_fitted_innovations"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "none"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "least_squares_fixed_lag"
+estimation_success_gate = "each_target_full_rank_fit_with_residual_degrees_of_freedom"
+density_success_gate = "exact_shape_and_all_finite_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "univariate_ar_p4_constant"
+support_status = "supported"
+family = "ar"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source"]
+model_card_artifact_id = "benchmark_model_card"
+
+[models.specification]
+constructor = "ARSpec(candidate_lags = [4], intercept = true)"
+forecast_method = "iterated"
+lag_rule = "fixed_lag_4"
+hyperparameter_rule = "fixed_preregistered"
+
+[models.specification.parameters]
+candidate_lags = [4]
+intercept = true
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "recursive_target_independent_gaussian_fitted_innovations"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "none"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "least_squares_fixed_lag"
+estimation_success_gate = "each_target_full_rank_fit_with_residual_degrees_of_freedom"
+density_success_gate = "exact_shape_and_all_finite_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "univariate_ar_bic_p1-2-3-4-5-6-7-8_constant"
+support_status = "supported"
+family = "ar"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source"]
+model_card_artifact_id = "benchmark_model_card"
+
+[models.specification]
+constructor = "ARSpec(candidate_lags = 1:8, intercept = true)"
+forecast_method = "iterated"
+lag_rule = "target_specific_bic_over_lags_1_through_8"
+hyperparameter_rule = "target_specific_bic_on_common_training_only_window"
+
+[models.specification.parameters]
+candidate_lags = [1, 2, 3, 4, 5, 6, 7, 8]
+intercept = true
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "recursive_target_independent_gaussian_selected_fit_innovations"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "none"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "least_squares_finite_bic_grid"
+estimation_success_gate = "each_target_has_finite_bic_candidate_and_full_rank_selected_fit"
+density_success_gate = "exact_shape_and_all_finite_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "direct_univariate_ar_v1_fixed_p1_constant_joint_aligned_residual_gaussian_v1"
+support_status = "supported"
+family = "ar"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source", "direct_ar_source"]
+model_card_artifact_id = "direct_ar_model_card"
+
+[models.specification]
+constructor = "DirectARSpec(candidate_lags = [1], intercept = true)"
+forecast_method = "horizon_specific_direct_multi_step_ols"
+lag_rule = "fixed_lag_1_for_every_target_and_horizon"
+hyperparameter_rule = "fixed_preregistered_single_candidate_horizon_specific_refit"
+
+[models.specification.parameters]
+candidate_lags = [1]
+intercept = true
+equation_type = "horizon_specific_direct_multi_step_univariate_ols"
+lag_selection_scope = "separate_by_target_and_horizon"
+candidate_comparison_window = "origins_max_candidate_lag_through_T_minus_h_common_response_dates"
+selected_lag_refit_window = "origins_selected_lag_through_T_minus_h"
+selection_tie_break = "smallest_lag"
+information_window = "expanding_origin_only_no_future_target_or_exogenous_data"
+aligned_residual_window = "origins_max_selected_lag_across_horizon_target_through_T_minus_H"
+joint_residual_vector_order = "horizon_major_target_minor"
+residual_covariance_estimator = "column_centered_corrected_full_sample_covariance"
+density_distribution = "joint_zero_mean_gaussian_plugin_added_to_full_H_by_K_point_path"
+coefficient_uncertainty_included = false
+lag_selection_uncertainty_included = false
+covariance_estimation_uncertainty_included = false
+exogenous_policy = "reject_x_train_and_x_future"
+pandemic_special_treatment = false
+elb_special_treatment = false
+comparative_claim = "no_direct_dominance_claim"
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "joint_gaussian_plugin_full_aligned_horizon_by_target_residual_covariance"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "full_aligned_horizon_by_target_residual_covariance"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "horizon_specific_least_squares_finite_lag_grid_and_joint_residual_covariance"
+estimation_success_gate = "every_target_horizon_ols_design_full_rank_with_residual_degrees_of_freedom_and_finite_fit"
+density_success_gate = "aligned_origins_exceed_H_times_K_centered_residual_full_column_rank_covariance_degrees_of_freedom_positive_definite_and_exact_finite_shape_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "direct_univariate_ar_v1_fixed_p4_constant_joint_aligned_residual_gaussian_v1"
+support_status = "supported"
+family = "ar"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source", "direct_ar_source"]
+model_card_artifact_id = "direct_ar_model_card"
+
+[models.specification]
+constructor = "DirectARSpec(candidate_lags = [4], intercept = true)"
+forecast_method = "horizon_specific_direct_multi_step_ols"
+lag_rule = "fixed_lag_4_for_every_target_and_horizon"
+hyperparameter_rule = "fixed_preregistered_single_candidate_horizon_specific_refit"
+
+[models.specification.parameters]
+candidate_lags = [4]
+intercept = true
+equation_type = "horizon_specific_direct_multi_step_univariate_ols"
+lag_selection_scope = "separate_by_target_and_horizon"
+candidate_comparison_window = "origins_max_candidate_lag_through_T_minus_h_common_response_dates"
+selected_lag_refit_window = "origins_selected_lag_through_T_minus_h"
+selection_tie_break = "smallest_lag"
+information_window = "expanding_origin_only_no_future_target_or_exogenous_data"
+aligned_residual_window = "origins_max_selected_lag_across_horizon_target_through_T_minus_H"
+joint_residual_vector_order = "horizon_major_target_minor"
+residual_covariance_estimator = "column_centered_corrected_full_sample_covariance"
+density_distribution = "joint_zero_mean_gaussian_plugin_added_to_full_H_by_K_point_path"
+coefficient_uncertainty_included = false
+lag_selection_uncertainty_included = false
+covariance_estimation_uncertainty_included = false
+exogenous_policy = "reject_x_train_and_x_future"
+pandemic_special_treatment = false
+elb_special_treatment = false
+comparative_claim = "no_direct_dominance_claim"
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "joint_gaussian_plugin_full_aligned_horizon_by_target_residual_covariance"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "full_aligned_horizon_by_target_residual_covariance"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "horizon_specific_least_squares_finite_lag_grid_and_joint_residual_covariance"
+estimation_success_gate = "every_target_horizon_ols_design_full_rank_with_residual_degrees_of_freedom_and_finite_fit"
+density_success_gate = "aligned_origins_exceed_H_times_K_centered_residual_full_column_rank_covariance_degrees_of_freedom_positive_definite_and_exact_finite_shape_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "direct_univariate_ar_v1_bic_p1-2-3-4-5-6-7-8_constant_joint_aligned_residual_gaussian_v1"
+support_status = "supported"
+family = "ar"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source", "direct_ar_source"]
+model_card_artifact_id = "direct_ar_model_card"
+
+[models.specification]
+constructor = "DirectARSpec(candidate_lags = 1:8, intercept = true)"
+forecast_method = "horizon_specific_direct_multi_step_ols"
+lag_rule = "target_and_horizon_specific_bic_over_lags_1_through_8"
+hyperparameter_rule = "bic_on_horizon_specific_common_candidate_window_then_selected_lag_full_window_refit"
+
+[models.specification.parameters]
+candidate_lags = [1, 2, 3, 4, 5, 6, 7, 8]
+intercept = true
+equation_type = "horizon_specific_direct_multi_step_univariate_ols"
+lag_selection_scope = "separate_by_target_and_horizon"
+candidate_comparison_window = "origins_max_candidate_lag_through_T_minus_h_common_response_dates"
+selected_lag_refit_window = "origins_selected_lag_through_T_minus_h"
+selection_tie_break = "smallest_lag"
+information_window = "expanding_origin_only_no_future_target_or_exogenous_data"
+aligned_residual_window = "origins_max_selected_lag_across_horizon_target_through_T_minus_H"
+joint_residual_vector_order = "horizon_major_target_minor"
+residual_covariance_estimator = "column_centered_corrected_full_sample_covariance"
+density_distribution = "joint_zero_mean_gaussian_plugin_added_to_full_H_by_K_point_path"
+coefficient_uncertainty_included = false
+lag_selection_uncertainty_included = false
+covariance_estimation_uncertainty_included = false
+exogenous_policy = "reject_x_train_and_x_future"
+pandemic_special_treatment = false
+elb_special_treatment = false
+comparative_claim = "no_direct_dominance_claim"
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "joint_gaussian_plugin_full_aligned_horizon_by_target_residual_covariance"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "full_aligned_horizon_by_target_residual_covariance"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "horizon_specific_least_squares_finite_lag_grid_and_joint_residual_covariance"
+estimation_success_gate = "every_target_horizon_ols_design_full_rank_with_residual_degrees_of_freedom_and_finite_fit"
+density_success_gate = "aligned_origins_exceed_H_times_K_centered_residual_full_column_rank_covariance_degrees_of_freedom_positive_definite_and_exact_finite_shape_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "beforeit_var_p1_constant"
+support_status = "supported"
+family = "var"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source"]
+model_card_artifact_id = "benchmark_model_card"
+
+[models.specification]
+constructor = "BeforeITVARSpec(lags = 1, intercept = true)"
+forecast_method = "iterated"
+lag_rule = "fixed_lag_1"
+hyperparameter_rule = "fixed_preregistered"
+
+[models.specification.parameters]
+lags = 1
+intercept = true
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "recursive_joint_gaussian_fitted_innovation_covariance"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "full_fitted_innovation_covariance"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "least_squares_fixed_lag"
+estimation_success_gate = "finite_coefficients_covariance_and_forecast"
+density_success_gate = "exact_shape_and_all_finite_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "beforeit_var_p2_constant"
+support_status = "supported"
+family = "var"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source"]
+model_card_artifact_id = "benchmark_model_card"
+
+[models.specification]
+constructor = "BeforeITVARSpec(lags = 2, intercept = true)"
+forecast_method = "iterated"
+lag_rule = "fixed_lag_2"
+hyperparameter_rule = "fixed_preregistered"
+
+[models.specification.parameters]
+lags = 2
+intercept = true
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "recursive_joint_gaussian_fitted_innovation_covariance"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "full_fitted_innovation_covariance"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "least_squares_fixed_lag"
+estimation_success_gate = "finite_coefficients_covariance_and_forecast"
+density_success_gate = "exact_shape_and_all_finite_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "beforeit_var_p3_constant"
+support_status = "supported"
+family = "var"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source"]
+model_card_artifact_id = "benchmark_model_card"
+
+[models.specification]
+constructor = "BeforeITVARSpec(lags = 3, intercept = true)"
+forecast_method = "iterated"
+lag_rule = "fixed_lag_3"
+hyperparameter_rule = "fixed_preregistered"
+
+[models.specification.parameters]
+lags = 3
+intercept = true
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "recursive_joint_gaussian_fitted_innovation_covariance"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "full_fitted_innovation_covariance"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "least_squares_fixed_lag"
+estimation_success_gate = "finite_coefficients_covariance_and_forecast"
+density_success_gate = "exact_shape_and_all_finite_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "bvar_mniw_v1_p1_constant_tight3fc999999999999a_decay3ff0000000000000_own0000000000000000_ivar4059000000000000_iwoff2_iscale3ff0000000000000_floor3e45798ee2308c3a_diffmse_scale"
+support_status = "supported"
+family = "bvar"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "tier1_quarterly_primary_transformations_v1"
+source_artifact_ids = ["benchmark_kernel_source", "bvar_source"]
+model_card_artifact_id = "benchmark_model_card"
+
+[models.specification]
+constructor = "BVARSpec(lags = 1, intercept = true, tightness = 0.2, lag_decay = 1.0, own_lag_mean = 0.0, intercept_variance = 100.0, iw_dof_offset = 2, innovation_scale = 1.0, scale_floor = 1.0e-8)"
+forecast_method = "iterated_posterior_mean_point_and_posterior_predictive_density"
+lag_rule = "fixed_lag_1"
+hyperparameter_rule = "none_all_constructor_fixed_and_model_id_encoded"
+
+[models.specification.parameters]
+lags = 1
+intercept = true
+tightness = 0.2
+lag_decay = 1.0
+own_lag_mean = 0.0
+intercept_variance = 100.0
+iw_dof_offset = 2
+innovation_scale = 1.0
+scale_floor = 1.0e-8
+prior_family = "matrix_normal_inverse_wishart"
+prior_version = "mniw_minnesota_style_v1"
+scale_rule = "training_first_difference_mse_with_floor"
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "observed_effective_federal_funds_rate_no_censoring_or_shadow_rate"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "recursive_mniw_posterior_predictive_joint_parameter_covariance_and_innovation_draws"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = true
+cross_target_dependence = "full_posterior_innovation_covariance_and_coefficient_matrix"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "closed_form_conjugate_posterior"
+estimation_success_gate = "proper_positive_definite_prior_and_posterior_with_finite_forecast"
+density_success_gate = "exact_shape_and_all_finite_or_structured_failure"
+stability_rule = "no_stability_filter_or_replacement_diagnostics_only_when_available"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"
+
+[[models]]
+model_id = "semi_structural_lgssm_v1_quarterly_core4_contract_v1_8dd9b5ddf4875de7cf44569dd3acaa5706bf19f8b34a1020b65afad1772b3715"
+support_status = "supported"
+family = "compact_semi_structural"
+information_track = "common_information"
+products = ["quarterly_unconditional"]
+target_panel_id = "quarterly_core4_contract_v1"
+source_artifact_ids = ["benchmark_kernel_source", "semi_structural_source"]
+model_card_artifact_id = "semi_structural_model_card"
+
+[models.specification]
+constructor = "SemiStructuralSpec()"
+forecast_method = "exact_kalman_filter_and_iterated_state_space_prediction"
+lag_rule = "fixed_quarterly_state_transition"
+hyperparameter_rule = "none_all_parameters_constructor_fixed_and_model_id_digest_bound"
+
+[models.specification.parameters]
+target_contract_version = "quarterly_core4_contract_v1"
+model_class = "semi_structural_not_dsge"
+dsge_model = false
+origin_parameter_fitting = false
+full_posterior_parameter_density = false
+fiscal_block = "not_implemented"
+foreign_block = "not_implemented"
+gap_annualization = 4.0
+potential_growth_mean = 2.0
+potential_growth_persistence = 0.85
+output_gap_persistence = 0.75
+is_slope = 0.12
+natural_unemployment_mean = 4.5
+natural_unemployment_persistence = 0.95
+neutral_rate_mean = 1.0
+neutral_rate_persistence = 0.9
+inflation_anchor_mean = 2.0
+inflation_anchor_persistence = 0.95
+inflation_persistence = 0.65
+phillips_slope = 0.08
+okun_slope = 0.45
+policy_smoothing = 0.75
+taylor_inflation = 1.5
+taylor_output = 0.35
+state_innovation_stddev_diagonal = [0.08, 0.35, 0.05, 0.08, 0.05, 0.2, 0.15]
+measurement_stddev_diagonal = [0.12, 0.08, 0.05, 0.04]
+initial_state_stddev_diagonal = [0.5, 1.0, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0]
+
+[models.transformations]
+target_panel_rule = "use_registered_panel_in_declared_order"
+estimation_input = "registered_primary_transformation"
+inverse_transform = "not_applied_by_benchmark_kernel"
+future_target_policy = "interface_has_no_future_target_field"
+
+[models.estimation_window]
+kind = "expanding"
+minimum_training_quarters = 40
+start_rule = "first_contiguous_complete_case_quarter_available_at_origin"
+end_rule = "latest_eligible_complete_target_quarter_at_or_before_origin"
+missing_data_policy = "fail_origin_no_imputation"
+
+[models.pandemic_elb]
+pandemic_treatment = "include_all_eligible_observations_no_dummy_no_downweighting"
+pandemic_sensitivity_policy = "separately_versioned_prespecified_slices_never_selected_on_rankings"
+elb_treatment = "no_elb_mechanism_observed_effective_federal_funds_rate_only"
+regime_selection = "none"
+
+[models.density]
+required = true
+construction = "fixed_parameter_conditional_posterior_state_predictive_filtered_state_process_and_measurement_uncertainty"
+draw_count_rule = "positive_preregistered_count_required_for_density_scoring"
+seed_rule = "explicit_nonnegative_integer_derived_by_origin_model_path"
+parameter_uncertainty_included = false
+cross_target_dependence = "joint_filtered_state_and_shared_state_transition"
+stochastic_volatility = false
+
+[models.fallback]
+invalid_origin = "reject_before_estimation"
+estimation_failure = "structured_failure_record"
+silent_substitution = "prohibited"
+ranking_failure_policy = "not_ranked_if_any_required_model_origin_failure"
+
+[models.convergence]
+algorithm_class = "exact_linear_gaussian_kalman_filter_fixed_parameters"
+estimation_success_gate = "finite_exact_kalman_updates_positive_definite_innovation_covariance_and_finite_forecast"
+density_success_gate = "exact_shape_and_all_finite_or_structured_failure"
+stability_rule = "constructor_requires_transition_spectral_radius_below_one"
+iterative_convergence = "not_applicable_no_iterative_optimizer_or_mcmc"
+failure_action = "retain_structured_failure_never_impute_or_omit"

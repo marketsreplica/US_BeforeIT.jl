@@ -1,0 +1,373 @@
+prohibited_actions = [
+    "ADMIT_ORIGIN",
+    "APPEND_FORECAST",
+    "APPEND_SCORE",
+    "APPEND_TRUTH",
+    "AUTHENTICATE_PUBLISHER_FROM_LOCAL_HASHES",
+    "CLAIM_CURRENT_STATE",
+    "CLAIM_FINAL_DAILY_STATE",
+    "CLAIM_FIRST_PUBLIC_BYTES",
+    "CLAIM_NO_LATER_CORRECTION",
+    "EMIT_FORECAST",
+    "EXECUTE_MODEL",
+    "LOAD_TRUTH",
+    "MUTATE_SOURCE_INVENTORY",
+    "PROMOTE_MODEL",
+    "WRITE_CAPTURE_OR_RECEIPT",
+]
+
+[artifact]
+schema_version = "beforeit-us-effr-prospective-endpoint-profile.v1"
+contract_id = "beforeit-us-effr-pre-origin-observed-endpoint-model-input.v1"
+status = "CANNOT_RUN"
+canonicalization = "sorted-typed-length-aware-excluding-artifact-content-sha256.v1"
+content_sha256 = "4ed9a0f99c6c8490da35c290ce87c6051a6a1bf08da5eb2ee8ac601f75a4eaa5"
+
+[contract]
+evidence_date = "2026-08-08"
+scope = "isolated_metadata_only_fail_closed_effr_model_input_profile"
+allowed_statuses = ["CANNOT_RUN", "READY_FOR_MODEL_INPUT_PROFILE_SEAL_NO_TRUTH_LOADED"]
+current_expected_status = "CANNOT_RUN"
+ready_status = "READY_FOR_MODEL_INPUT_PROFILE_SEAL_NO_TRUTH_LOADED"
+forecast_seal_status_forbidden = true
+ready_to_score_forbidden = true
+truth_access_forbidden = true
+model_execution_forbidden = true
+filesystem_write_forbidden = true
+network_access_forbidden = true
+source_inventory_mutation_forbidden = true
+origin_admission_forbidden = true
+local_hashes_authenticate_publisher = false
+future_ready_rule = "requires_external_exact-pinned_approval_coverage-lineage_and_successor-retention_receipts"
+
+[estimand]
+estimand_id = "PRE_ORIGIN_OBSERVED_ENDPOINT_VINTAGE"
+role = "MODEL_INPUT_ONLY"
+definition = "latest separately preserved and observed-state-v3-validated EFFR endpoint observation whose complete rate-volume pair finished strictly before the forecast origin cutoff"
+selection_rule = "latest_validated_pair_completion_utc_strictly_before_origin_cutoff"
+status = "DEFINED_NOT_APPROVED"
+approval_required = true
+claim_ceiling = "MARKETS_API_EFFR_ENDPOINT_STATE_OBSERVED_AS_OF_CAPTURE_TIME_ONLY"
+accepted_observation_classes = ["MORNING_WINDOW_ENDPOINT_OBSERVATION", "POST_REVISION_WINDOW_ENDPOINT_OBSERVATION"]
+accepted_transition_claims = ["MARKED_SAME_DAY_REVISION_OBSERVED", "NO_MARKED_REVISION_OBSERVED_AS_OF_SECOND_CAPTURE"]
+first_public_bytes = false
+historical_first_byte = false
+current_state = false
+current_state_derivation_allowed = false
+final_daily_state = false
+no_later_same_day_revision = false
+no_later_correction = false
+rate_volume_pair_atomic = false
+publisher_provenance_authenticated = false
+transport_provenance_authenticated = false
+truth_role_allowed = false
+forecast_output_role_allowed = false
+
+[origin]
+origin_id = "origin.2026q3.prospective-capture-candidate.v2"
+reference_quarter = "2026Q3"
+origin_timestamp_utc = "2026-10-30T14:00:00Z"
+origin_rule = "FIRST_BUSINESS_DAY_AFTER_BEA_ADVANCE_AT_10:00_AMERICA/NEW_YORK"
+endpoint_pair_completion_must_be_strictly_before_origin = true
+admission_status = "PLANNED_NOT_CAPTURED_NOT_ADMITTED"
+
+[coverage]
+schedule_id = "beforeit-us-effr-2026q3-prospective-restart-20260810.v2"
+campaign_id = "frbny_effr_daily_first_state_and_revision_check_restart_20260810"
+q3_endpoint_history_candidate_id = "effr_q3_pre_origin_endpoint_history_candidate"
+q3_endpoint_history_candidate_role = "Q3_ENDPOINT_CAMPAIGN_CANDIDATE_NOT_MODEL_TRAINING_UNIVERSE"
+q3_endpoint_history_candidate_start = "2026-07-01"
+q3_endpoint_history_candidate_end = "2026-10-29"
+q3_endpoint_history_candidate_row_count = 84
+q3_endpoint_history_candidate_calendar_rule = "WEEKDAYS_EXCLUDING_EXACT_2026_07_03_2026_09_07_2026_10_12"
+q3_endpoint_history_candidate_excluded_dates = ["2026-07-03", "2026-09-07", "2026-10-12"]
+q3_endpoint_history_candidate_approved = false
+q3_candidate_establishes_complete_effr_daily_history = false
+q3_candidate_establishes_training_history_sufficiency = false
+exact_q3_candidate_date_set_verification_required = true
+q3_candidate_rate_and_volume_rows_required = true
+q3_candidate_source_receipt_lineage_required = true
+model_input_training_history_selector_start = "UNDECIDED"
+model_input_training_history_selector_start_justification_required = true
+minimum_training_quarters = 60
+core3_revised_geometry_start = "2000Q3"
+daily_history_selector_start_approved = false
+training_history_length_sufficient = false
+campaign_start_date = "2026-08-10"
+first_campaign_end_date = "2026-10-30"
+revision_campaign_end_date = "2026-10-29"
+excluded_dates = ["2026-09-07", "2026-10-12"]
+restart_required_first_observation_count = 58
+restart_required_revision_observation_count = 57
+restart_required_slot_count = 115
+restart_required_complete_pair_count = 57
+restart_role = "NON_FIRST_PUBLIC_ENDPOINT_TRANSITION_DIAGNOSTIC_LINEAGE"
+restart_does_not_establish_daily_history_coverage = true
+restart_does_not_establish_first_public_bytes = true
+october_30_revision_required = false
+cross_campaign_combination_allowed = false
+independent_lineage_verification_required = true
+every_slot_raw_rate_and_volume_hash_required = true
+every_slot_capture_manifest_hash_required = true
+every_slot_observed_state_decision_hash_required = true
+every_slot_external_timestamp_receipt_required = true
+every_slot_durable_replica_manifest_required = true
+
+[methodology]
+methodology_change_effective_date = "2016-03-01"
+pre_post_2016_regime_treatment_required = true
+pre_post_2016_regime_treatment_status = "UNDECIDED_UNAPPROVED"
+methodology_break_may_be_ignored = false
+effr_page_url = "https://www.newyorkfed.org/markets/reference-rates/effr"
+additional_information_url = "https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates"
+local_evidence_binding_id = "observed_state_v3_protocol"
+source_status = "PINNED_VIA_ACCEPTED_OBSERVED_STATE_V3_REMOTE_ASSERTION_NOT_PUBLISHER_AUTHENTICATION"
+
+[parent_supersession]
+parent_requirement_id = "frbny_effr_tier1"
+legacy_profile_ids = ["effr_daily_history", "effr_first_state_manifest", "effr_revision_manifest"]
+candidate_active_leaf_ids = ["effr_model_input_training_history", "effr_q3_pre_origin_endpoint_history_candidate", "effr_restart_morning_endpoint_observation_manifest", "effr_restart_observed_transition_manifest"]
+candidate_mapping_rules = ["effr_daily_history=>effr_model_input_training_history+effr_q3_pre_origin_endpoint_history_candidate", "effr_first_state_manifest=>effr_restart_morning_endpoint_observation_manifest", "effr_revision_manifest=>effr_restart_observed_transition_manifest"]
+required_dispatch_schema = "beforeit-us-prospective-profile-leaf-dispatch.v3"
+semantic_supersession_decision_required = true
+semantic_supersession_decision_status = "MISSING_UNAPPROVED"
+qualified_leaf_dispatch_required = true
+qualified_leaf_dispatch_present = false
+parent_requirement_completion_authorized = false
+this_leaf_alone_satisfies_parent_requirement = false
+legacy_profile_relabeling_allowed = false
+
+[predecessor_missingness]
+predecessor_schedule_id = "beforeit-us-effr-2026q3-prospective-campaign.v1"
+predecessor_planned_slot_count = 117
+august_7_first_state_captured_count = 1
+august_7_first_state_status = "RAW_CAPTURE_COMPLETED_NONADMITTING_ONE_DATE_CONTRACT_INCOMPATIBLE"
+august_7_revision_missed_count = 1
+august_7_revision_status = "OPERATIONAL_MISSINGNESS_WINDOW_MISSED_NO_LATE_REQUEST"
+v1_theoretical_maximum_numerator = 116
+v1_theoretical_maximum_denominator = 117
+predecessor_complete = false
+predecessor_recoverable = false
+predecessor_may_complete_restart = false
+restart_may_complete_predecessor = false
+cross_campaign_relabeling_allowed = false
+old_117_slot_manifest_completion_claim_allowed = false
+
+[approval]
+required_decision = "APPROVED_FOR_MODEL_INPUT_ONLY"
+model_owner_role = "MODEL_OWNER"
+independent_validator_role = "INDEPENDENT_VALIDATOR"
+distinct_owner_validator_required = true
+both_signatures_required = true
+external_receipt_pin_required = true
+self_rehashed_receipt_sufficient = false
+current_status = "MISSING"
+
+[lineage]
+q3_endpoint_history_schema_version = "beforeit-us-effr-q3-endpoint-history-lineage.v1"
+model_input_training_history_schema_version = "beforeit-us-effr-model-input-training-history-lineage.v1"
+restart_diagnostic_schema_version = "beforeit-us-effr-restart-diagnostic-lineage.v1"
+required_verification_status = "INDEPENDENTLY_VERIFIED_COMPLETE_NONSYNTHETIC"
+external_receipt_pin_required = true
+self_rehashed_lineage_sufficient = false
+synthetic_fixture_eligible = false
+minimum_independent_durability_domains = 2
+external_trusted_timestamp_required = true
+durability_domain_independence_verification_required = true
+q3_endpoint_history_manifest_path = "unavailable"
+q3_endpoint_history_manifest_sha256 = "unavailable"
+q3_endpoint_history_status = "MISSING"
+model_input_training_history_manifest_path = "unavailable"
+model_input_training_history_manifest_sha256 = "unavailable"
+model_input_training_history_status = "MISSING"
+restart_diagnostic_manifest_path = "unavailable"
+restart_diagnostic_manifest_sha256 = "unavailable"
+restart_diagnostic_status = "MISSING"
+
+[retention]
+prospective_v2_policy_version = "prospective-durable-retention.v1-draft"
+prospective_v2_retain_until_utc = "2031-10-30T14:00:00Z"
+prospective_v2_origin_plus_mature_truth_months = 60
+maximum_forecast_horizon_quarters = 12
+maximum_forecast_horizon_months = 36
+h12_target_reference_period = "2029Q3"
+h12_target_period_end_utc = "2029-09-30T23:59:59Z"
+mature_truth_lag_months = 60
+mathematical_minimum_retain_until_utc = "2034-09-30T23:59:59Z"
+conservative_custody_cushion_until_utc = "2034-10-30T14:00:00Z"
+operational_custody_rule = "max(mathematical_minimum_retain_until_utc,verified_mature_receipt_completion_utc_plus_successor_audit_policy)"
+successor_post_receipt_audit_policy_status = "UNDEFINED"
+prospective_v2_retention_sufficient = false
+successor_retention_contract_required = true
+successor_retention_contract_path = "unavailable"
+successor_retention_contract_sha256 = "unavailable"
+successor_retention_status = "MISSING"
+
+[source_semantics]
+observed_state_protocol_semantic_sha256 = "33eb8eba8a6399568c0890d86d555cb5177659d62c098522098ca5d6ce21952c"
+prospective_v2_contract_semantic_sha256 = "5d1e7f34eea0470877c7bed096d8b2fb26590f95bd06febb90813faf6063708a"
+restart_v2_schedule_semantic_sha256 = "cae7f463b752ff2c60c78751ca0186712a53fb1732c7970e8bb0e4368d9e477b"
+
+[current_evidence]
+model_owner_approval_present = false
+independent_validator_approval_present = false
+distinct_owner_validator_established = false
+semantic_supersession_decision_present = false
+qualified_leaf_dispatch_present = false
+q3_endpoint_history_lineage_manifest_present = false
+q3_endpoint_history_lineage_independently_verified = false
+q3_endpoint_history_row_count_verified = 0
+q3_endpoint_history_exact_date_set_verified = false
+q3_endpoint_history_rate_volume_rows_verified = false
+model_input_training_history_lineage_manifest_present = false
+model_input_training_history_lineage_independently_verified = false
+daily_history_selector_start_approved = false
+training_history_length_sufficient = false
+pre_post_2016_regime_treatment_approved = false
+restart_diagnostic_lineage_manifest_present = false
+restart_diagnostic_lineage_independently_verified = false
+restart_first_observation_count_verified = 0
+restart_revision_observation_count_verified = 0
+restart_slot_count_verified = 0
+restart_complete_pair_count_verified = 0
+external_timestamp_lineage_complete = false
+durable_replica_lineage_complete = false
+independent_durability_domain_count_verified = 0
+successor_retention_contract_present = false
+full_truth_horizon_retention_covered = false
+verified_mature_receipt_plus_audit_policy_covered = false
+
+[required_conditions]
+model_owner_approval_present = true
+independent_validator_approval_present = true
+distinct_owner_validator_established = true
+semantic_supersession_decision_present = true
+qualified_leaf_dispatch_present = true
+q3_endpoint_history_lineage_manifest_present = true
+q3_endpoint_history_lineage_independently_verified = true
+q3_endpoint_history_exact_date_set_complete = true
+q3_endpoint_history_rate_volume_rows_complete = true
+model_input_training_history_lineage_manifest_present = true
+model_input_training_history_lineage_independently_verified = true
+daily_history_selector_start_approved = true
+training_history_length_sufficient = true
+pre_post_2016_regime_treatment_approved = true
+restart_diagnostic_lineage_manifest_present = true
+restart_diagnostic_lineage_independently_verified = true
+restart_first_observation_coverage_complete = true
+restart_revision_observation_coverage_complete = true
+restart_slot_coverage_complete = true
+restart_pair_coverage_complete = true
+external_timestamp_lineage_complete = true
+durable_replica_lineage_complete = true
+two_independent_durability_domains_verified = true
+successor_retention_contract_present = true
+full_truth_horizon_retention_covered = true
+verified_mature_receipt_plus_audit_policy_covered = true
+
+[gates]
+model_input_profile_ready = false
+source_inventory_mutation_allowed = false
+origin_admissible = false
+forecast_emission_allowed = false
+truth_access_allowed = false
+scoring_allowed = false
+accuracy_evaluation_allowed = false
+promotion_eligible = false
+production_use_allowed = false
+
+[[sources]]
+binding_id = "observed_state_v3_module"
+path = "scripts/us/forecasting/vintages/effr/observed_state_contract/USEFFRObservedStateContractV3.jl"
+sha256 = "3b3040245dd04b800bcdb25d1af0f57c211bf29ce3462f7134418f0263f1f4d6"
+role = "accepted_offline_observed_state_validator"
+
+[[sources]]
+binding_id = "observed_state_v3_protocol"
+path = "scripts/us/forecasting/vintages/effr/observed_state_contract/observed_state_contract_v3.toml"
+sha256 = "d09e7d378b22a36a364cd4b08e7f0c42d7a3804c473e8332a22fbe4d9fc20716"
+role = "accepted_observed_state_semantics"
+
+[[sources]]
+binding_id = "observed_state_v3_tests"
+path = "scripts/us/forecasting/vintages/effr/observed_state_contract/test_effr_observed_state_contract_v3.jl"
+sha256 = "55bfbf5a4b252804f4e3b2e91100c83b8ff98bffbf10eec5bdd3bd83d96ad66c"
+role = "accepted_observed_state_adversarial_tests"
+
+[[sources]]
+binding_id = "observed_state_v3_readme"
+path = "scripts/us/forecasting/vintages/effr/observed_state_contract/README.md"
+sha256 = "4368b69641138bd5701a9fb4d6be382e23d6b02e0e756192fb9c12b124e12e23"
+role = "accepted_observed_state_claim_ceiling"
+
+[[sources]]
+binding_id = "prospective_v2_module"
+path = "scripts/us/forecasting/vintages/prospective/USProspectiveAcquisitionContractV2.jl"
+sha256 = "435df6c4b4de879c0f24d3f9bb9f7504fc6172ae34e94db8cb6ba84282d6e379"
+role = "accepted_selector_complete_prospective_contract_validator"
+
+[[sources]]
+binding_id = "prospective_v2_contract"
+path = "scripts/us/forecasting/vintages/prospective/prospective_2026q3_contract_v2.toml"
+sha256 = "b24ff0c40172d2a23991fbe75c2fe42c6ba6c6c1f5fd46d079ac6d51429bf98f"
+role = "accepted_selector_complete_prospective_requirements"
+
+[[sources]]
+binding_id = "prospective_v2_tests"
+path = "scripts/us/forecasting/vintages/prospective/test_prospective_acquisition_contract_v2.jl"
+sha256 = "4e46ef57fd9b3b26be884175b6594b4f425719fc96944da9b0d9c60db10d1083"
+role = "accepted_prospective_contract_adversarial_tests"
+
+[[sources]]
+binding_id = "prospective_v2_readme"
+path = "scripts/us/forecasting/vintages/prospective/README.md"
+sha256 = "9d51d793ea36f440eec697180a71b221331495766b424d683cb7a1bd1b28e9ad"
+role = "accepted_prospective_contract_claim_ceiling"
+
+[[sources]]
+binding_id = "restart_v2_module"
+path = "scripts/us/forecasting/vintages/effr/campaign_restart_v2/USEFFRCampaignRestartV2.jl"
+sha256 = "5e0873ec7c427c377386bf9bd33c782f39a4735391011cffc7e24a1c67aa7155"
+role = "accepted_restart_schedule_validator"
+
+[[sources]]
+binding_id = "restart_v2_schedule"
+path = "scripts/us/forecasting/vintages/effr/campaign_restart_v2/effr_2026q3_restart_schedule_v2.toml"
+sha256 = "670e5b02b740e9195b768d22e002ee3de49f037efb5f0b1228f0c9482e3e0136"
+role = "accepted_115_slot_schedule"
+
+[[sources]]
+binding_id = "restart_v2_tests"
+path = "scripts/us/forecasting/vintages/effr/campaign_restart_v2/test_effr_campaign_restart_v2.jl"
+sha256 = "0f0df50d5fbc1f1ef666084d5c20cf7e40f5116549ecc1390404959013beea33"
+role = "accepted_restart_schedule_tests"
+
+[[sources]]
+binding_id = "restart_v2_readme"
+path = "scripts/us/forecasting/vintages/effr/campaign_restart_v2/README.md"
+sha256 = "fa7288ef3addd50c4836ec89971e1b002d6940fc42b37bc8010a1773ab4305d6"
+role = "accepted_restart_schedule_claim_ceiling"
+
+[[sources]]
+binding_id = "restart_v4_module"
+path = "scripts/us/forecasting/vintages/effr/recurring_acquisition_restart_v4/USEFFRRecurringAcquisitionRestartV4.jl"
+sha256 = "a7c2e4c092e5e7a17e1bfd4143641a2e97c5566386720630ee06f12066d8b527"
+role = "accepted_nonadmitting_restart_collector_and_offline_evaluator"
+
+[[sources]]
+binding_id = "restart_v4_cli"
+path = "scripts/us/forecasting/vintages/effr/recurring_acquisition_restart_v4/capture_effr_recurring_restart_v4.jl"
+sha256 = "cf3b1eb6eec26f711f5a75c6c3cef7448a782d7c1ad216e79df4d41ca45e0e02"
+role = "accepted_restart_capture_entrypoint"
+
+[[sources]]
+binding_id = "restart_v4_tests"
+path = "scripts/us/forecasting/vintages/effr/recurring_acquisition_restart_v4/test_effr_recurring_acquisition_restart_v4.jl"
+sha256 = "f77f66cbce8ee3d936e9b7fe61d26b449ed4759b4aeeaa9ab74842a7b3c9fda5"
+role = "accepted_restart_collector_adversarial_tests"
+
+[[sources]]
+binding_id = "restart_v4_readme"
+path = "scripts/us/forecasting/vintages/effr/recurring_acquisition_restart_v4/README.md"
+sha256 = "861a43dbae2bc42f3862809fa33145ab8041ffbfbcc0f622359ada0229687d4e"
+role = "accepted_restart_collector_claim_ceiling"

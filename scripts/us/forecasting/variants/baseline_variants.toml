@@ -1,0 +1,136 @@
+schema_version = "beforeit-model-variant-baseline.v1"
+artifact_status = "draft"
+source_baseline_commit = "6030f7558a9956a99465a09e31c51f37df198c90"
+crosswalk_sha256 = "da097ef97ad6510dfed5234df7b14b4b48ad63d62a4f52f6829f70c0e2f6cde6"
+blanket_replication_claims_prohibited = true
+
+[artifact]
+canonicalization = "sorted_typed_v1_excluding_artifact_content_sha256"
+content_sha256 = "1fbdf6fcbeedc07fb9971b7e39c18852f74ace8fb07055b4f1ad2f43dcb29728"
+
+[gate]
+status = "open"
+approval_scope = "crosswalk_and_variant_baseline"
+model_owner = "unassigned"
+model_owner_signature = "unsigned"
+model_owner_signed_at = "unassigned"
+independent_validator = "unassigned"
+independent_validator_signature = "unsigned"
+independent_validator_signed_at = "unassigned"
+schema_validation_is_approval = false
+
+[[change_classes]]
+id = "paper_typo_candidate"
+description = "Printed expression conflicts with surrounding prose or an accounting identity and requires independent adjudication."
+
+[[change_classes]]
+id = "printed_upstream_difference"
+description = "Author or upstream implementation behavior differs from the printed equation, calibration text, or an unspecified allocation detail."
+
+[[change_classes]]
+id = "implementation_convention"
+description = "A consequential numerical, timing, or transformation convention that the paper does not fully define."
+
+[[change_classes]]
+id = "latent_defect"
+description = "Implementation behavior is internally incoherent or language-semantic behavior defeats the intended formula."
+
+[[change_classes]]
+id = "us_fork_addition"
+description = "A U.S. calibration, instrumentation, scenario, model-extension, or publication-layer choice with no literal paper counterpart."
+
+[[variants]]
+id = "printed_paper_reference"
+label = "Printed paper reference"
+source_kind = "reference_document"
+code_revision = "paper_sha256_8fce5fea20d90a361346b32916bf88b680a6ae7e8f835a06ceb9a0aeb7debaf2"
+executable = false
+immutable = true
+validation_status = "reference_only"
+allowed_claim = "reference_only_not_executable"
+price_search = "exp_negative_price"
+capacity_minimum = "uncapped_printed_formulas"
+trade_closure = "measured_input_output_trade_concept"
+product_tax_treatment = "printed_nonzero_product_tax_rates"
+opening_inventories = "zero_opening_firm_inventory"
+external_block = "foreign_euro_area_for_austria"
+exogenous_process = "printed_transitions_with_incomplete_innovation_detail"
+policy_rule = "printed_taylor_equation_without_inferred_regression_restriction"
+agent_scale = "one_to_one_entity_concept"
+calibration_vintages = "austrian_rolling_origin_recalibration"
+growth_process = "log_level_ar_one"
+extensions = ["none_reference_only"]
+forecast_error_calibration = "none_raw_paper_forecast"
+scenario_timing = "not_specified_in_reference"
+
+[[variants]]
+id = "upstream_compatible_6030f75"
+label = "Upstream-compatible behavior pinned at 6030f75"
+source_kind = "repository_checkout"
+code_revision = "6030f7558a9956a99465a09e31c51f37df198c90"
+executable = true
+immutable = true
+validation_status = "historical_unvalidated"
+allowed_claim = "historical_upstream_compatible_behavior_not_paper_equivalence"
+price_search = "exp_negative_two_price"
+capacity_minimum = "capacity_cap_with_vector_min_defect"
+trade_closure = "residual_goods_balance"
+product_tax_treatment = "zero_dynamic_sector_product_tax"
+opening_inventories = "zero_opening_firm_inventory"
+external_block = "country_specific_foreign_area_data"
+exogenous_process = "stochastic_correlated_exogenous_transitions"
+policy_rule = "zero_intercept_taylor_with_pinned_neutral_rate"
+agent_scale = "configurable_scaled_population"
+calibration_vintages = "country_artifact_dependent"
+growth_process = "unguarded_shared_growth_and_log_level_keys"
+extensions = ["base_model_only", "us_opt_ins_disabled"]
+forecast_error_calibration = "disabled_for_upstream_compatible_profile"
+scenario_timing = "period_one_and_final_time_plus_one"
+
+[[variants]]
+id = "reviewed_us_port"
+label = "Reviewed U.S. port configuration"
+source_kind = "configuration_profile"
+code_revision = "6030f7558a9956a99465a09e31c51f37df198c90_reviewed_us_profile"
+executable = true
+immutable = false
+validation_status = "reviewed_unvalidated"
+allowed_claim = "reviewed_us_port_configuration_not_forecast_validated"
+price_search = "exp_negative_two_price"
+capacity_minimum = "capacity_cap_with_vector_min_defect"
+trade_closure = "bea_measured_trade"
+product_tax_treatment = "bea_valuation_bridge_with_zero_dynamic_rates"
+opening_inventories = "negative_discrepancy_as_opening_inventory"
+external_block = "us_series_reused_as_external_area"
+exogenous_process = "stochastic_correlated_exogenous_transitions"
+policy_rule = "zero_intercept_taylor_with_us_proxy_inputs"
+agent_scale = "us_one_e_minus_five"
+calibration_vintages = "current_vintage_recent_us_rows"
+growth_process = "log_level_default_growth_flag_disabled"
+extensions = ["measured_trade", "product_tax_netting", "commodity_inventory", "provenance_ledger", "modelgr_available_off", "canvas_available_off"]
+forecast_error_calibration = "embedded_parameter_and_path_corrections"
+scenario_timing = "period_one_and_final_time_plus_one"
+
+[[variants]]
+id = "corrected_candidate"
+label = "Corrected production candidate"
+source_kind = "working_tree_candidate"
+code_revision = "working_tree_based_on_6030f7558a9956a99465a09e31c51f37df198c90"
+executable = true
+immutable = false
+validation_status = "candidate_unvalidated"
+allowed_claim = "candidate_with_correctness_fixes_not_forecast_validated"
+price_search = "exp_negative_two_price_pending_scored_ablation"
+capacity_minimum = "elementwise_capacity_cap"
+trade_closure = "bea_measured_trade_with_reconciliation_gate"
+product_tax_treatment = "explicit_zero_or_observed_tax_variant_required"
+opening_inventories = "explicit_inventory_or_discrepancy_class_required"
+external_block = "independent_external_block_variant_required"
+exogenous_process = "versioned_stochastic_correlated_transitions"
+policy_rule = "versioned_policy_rule_variant_required"
+agent_scale = "us_one_e_minus_five_pending_scale_ladder"
+calibration_vintages = "bitemporal_structural_and_dynamic_artifacts_required"
+growth_process = "log_level_default_with_base_model_guard"
+extensions = ["elementwise_capacity_fix", "growth_wiring_guard", "calibration_firewall", "measured_trade", "provenance_ledger", "modelgr_separate_variant", "canvas_separate_variant"]
+forecast_error_calibration = "separate_class_h_artifact_raw_retained"
+scenario_timing = "versioned_period_one_and_final_time_plus_one_with_tests"

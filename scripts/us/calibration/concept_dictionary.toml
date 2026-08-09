@@ -1,0 +1,292 @@
+[schema]
+dictionary_id = "beforeit-us-economic-concepts"
+schema_version = "1.0.0"
+scope = "WS-2B structural-parameter and forecasting semantic contract"
+as_of = "2026-08-05"
+
+[sector_contract]
+source_industry_count = 71
+modeled_commodity_count = 68
+source_dimension = "71 BEA summary source industries in Input-Output Table 259"
+modeled_dimension = "68 observed BEA summary commodities; each model firm has one producing-sector index and uses 68 commodity inputs"
+aggregation = "The four BEA retail source industries are aggregated to commodity 4A0; the resulting bridge is 68 commodities by 68 modeled producing sectors"
+concordance = "scripts/us/bea71.toml plus the raw, observed-aggregation, and column-controlled bridge artifacts built by scripts/us/USPipeline.jl"
+status = "provisional: dimensional counts are frozen, while the symmetric commodity-by-producing-sector bridge awaits WS-2C accounting review"
+price_basis = "Current-dollar supply/use identities are reconciled before model ratios; no additive identity is formed from chained-dollar components"
+domestic_boundary = "United States domestic production and uses; imports and exports cross the domestic boundary and are not a second domestic industry"
+
+[[concept]]
+concept_id = "source_industry"
+definition = "A producing-industry column in the BEA 71-industry summary Input-Output system. It is a source classification, not a modeled commodity and not automatically one model sector."
+canonical_unit = "classification member (BEA summary industry)"
+frequency = "annual structural"
+temporal_type = "classification"
+price_basis = "not applicable; values classified by it retain their own price basis"
+seasonal_adjustment = "not applicable"
+boundary = "domestic U.S. establishments classified by primary production activity"
+conversion = "Map through the versioned BEA-71 to model-68 concordance; aggregate four retail industries to 4A0 and retain the source columns for audit."
+status = "provisional"
+tests = ["contract:source_industry_count_71", "planned:review_bea71_concordance"]
+
+[[concept]]
+concept_id = "modeled_commodity"
+definition = "One of 68 BEA summary commodities used as the model product dimension g. The model's symmetric producing-sector dimension also has 68 members, but that equality does not erase the industry-versus-commodity distinction."
+canonical_unit = "classification member (modeled commodity)"
+frequency = "annual structural"
+temporal_type = "classification"
+price_basis = "basic-price production and purchaser-price uses connected by an explicit valuation bridge"
+seasonal_adjustment = "not applicable"
+boundary = "domestic supply and use of the modeled commodity, with trade flows shown separately"
+conversion = "Construct from BEA Table 259 commodity rows and the documented 71-to-68 supply/use bridge."
+status = "provisional"
+tests = ["contract:modeled_commodity_count_68", "planned:commodity_industry_basis_gate"]
+
+[[concept]]
+concept_id = "enterprise"
+definition = "A business organization under common ownership or control. Census SUSB employer-firm counts approximate this concept; an enterprise can operate multiple establishments."
+canonical_unit = "employer enterprises"
+frequency = "annual"
+temporal_type = "period-average active-unit count"
+price_basis = "not applicable"
+seasonal_adjustment = "not seasonally adjusted"
+boundary = "employer businesses in SUSB scope; farms, government, rail, postal, housing, and other exclusions require visible proxies"
+conversion = "Nowcast SUSB enterprise counts by QCEW establishment growth only as an explicit bridge; never relabel establishments or farms as observed enterprises."
+status = "unresolved"
+tests = ["planned:productive_unit_ontology", "planned:firm_size_distribution", "planned:susb_exclusion_sensitivity"]
+
+[[concept]]
+concept_id = "establishment"
+definition = "A single physical location at which business activity is conducted. QCEW counts establishments, which are not interchangeable with SUSB enterprises."
+canonical_unit = "establishments"
+frequency = "quarterly or annual average, source dependent"
+temporal_type = "active-unit count"
+price_basis = "not applicable"
+seasonal_adjustment = "normally not seasonally adjusted in QCEW annual files"
+boundary = "UI-covered workplaces plus explicitly identified coverage exclusions"
+conversion = "Use only as a growth or excluded-sector proxy with a recorded bridge to the enterprise-based model-unit convention."
+status = "provisional"
+tests = ["planned:enterprise_establishment_bridge", "planned:qcew_coverage_check"]
+
+[[concept]]
+concept_id = "job"
+definition = "An employer-worker position counted by payroll data. One person may hold more than one job, so QCEW jobs cannot be added directly to CPS persons."
+canonical_unit = "jobs"
+frequency = "monthly or quarterly, source dependent"
+temporal_type = "pay-period employment flow/control"
+price_basis = "not applicable"
+seasonal_adjustment = "retain the source flag; QCEW annual job shares are not treated as seasonally adjusted"
+boundary = "UI-covered payroll employment"
+conversion = "Use QCEW job shares to distribute the CPS employed-person control; retain both original job totals and the jobs-to-persons scaling factor."
+status = "provisional"
+tests = ["source:jobs_to_people_bridge", "planned:multiple_jobholder_sensitivity"]
+
+[[concept]]
+concept_id = "person"
+definition = "A civilian noninstitutional individual age 16 or older in CPS population, employment, unemployment, and labor-force-status controls."
+canonical_unit = "persons"
+frequency = "monthly observations aggregated to annual or quarterly averages"
+temporal_type = "period-average population state"
+price_basis = "not applicable"
+seasonal_adjustment = "use the documented CPS series flag; do not mix SA and NSA levels without a bridge"
+boundary = "U.S. civilian noninstitutional population age 16 and older"
+conversion = "Average monthly levels over the target period, then apply agent scale and documented integerization only at the model boundary."
+status = "provisional"
+tests = ["source:cps_population_identity", "contract:people_not_jobs"]
+
+[[concept]]
+concept_id = "stock"
+definition = "A balance measured at a point in time, such as deposits, debt, equity, or fixed assets. A stock is not divided by four when a quarterly model is initialized."
+canonical_unit = "level at the stated observation date"
+frequency = "observation-date frequency, commonly quarter end or year end"
+temporal_type = "stock"
+price_basis = "current dollars or current-cost valuation as declared by the source"
+seasonal_adjustment = "normally not seasonally adjusted for Financial Accounts stocks"
+boundary = "sector balance-sheet boundary stated for each series"
+conversion = "Select the eligible origin-date observation; convert currency scale only and never apply the SAAR-to-quarter division."
+status = "provisional"
+tests = ["contract:stock_not_divided_by_four", "source:financial_accounts_frequency"]
+
+[[concept]]
+concept_id = "flow"
+definition = "An amount accrued or transacted over an interval, such as income, tax, consumption, investment, or depreciation."
+canonical_unit = "millions of dollars per stated interval"
+frequency = "annual, quarterly, or monthly"
+temporal_type = "flow"
+price_basis = "current or chained dollars exactly as declared; identities use a coherent current-price basis"
+seasonal_adjustment = "retain source seasonal-adjustment metadata"
+boundary = "institutional and domestic boundary declared for the source line"
+conversion = "Convert an annualized quarterly flow to the actual quarter by dividing by four; do not divide an already-quarterly flow."
+status = "provisional"
+tests = ["contract:flow_frequency_conversion", "planned:stock_flow_ledger"]
+
+[[concept]]
+concept_id = "saar"
+definition = "Seasonally adjusted annual rate: the annualized rate at which a quarterly flow would accumulate if that quarter's pace persisted for a year."
+canonical_unit = "source unit per year at a seasonally adjusted annual rate"
+frequency = "quarterly observation expressed at an annual rate"
+temporal_type = "annualized flow rate"
+price_basis = "inherits the source series' current-dollar, chained-dollar, or index basis"
+seasonal_adjustment = "seasonally adjusted"
+boundary = "inherits the source institutional and geographic boundary"
+conversion = "Divide dollar flow levels by four before supplying a per-quarter calibration value; do not divide rates, indexes, or end-of-period stocks."
+status = "approved"
+tests = ["contract:saar_divide_flow_levels_only", "source:nipa_unit_metadata"]
+
+[[concept]]
+concept_id = "current_price"
+definition = "A nominal value measured using prices of the observation period. Current-price components can form accounting identities when valuation bases match."
+canonical_unit = "millions of current U.S. dollars"
+frequency = "source dependent"
+temporal_type = "stock or flow as separately declared"
+price_basis = "current price"
+seasonal_adjustment = "source dependent"
+boundary = "source dependent"
+conversion = "Align time interval, sector boundary, and basic-versus-purchasers valuation before addition or ratio construction."
+status = "provisional"
+tests = ["planned:current_price_identity_closure", "contract:no_mixed_price_basis"]
+
+[[concept]]
+concept_id = "chain_type_quantity"
+definition = "A BEA chained-dollar level or chain-type quantity index designed for growth measurement. Nonadditivity means component levels do not generally sum to an aggregate identity."
+canonical_unit = "millions of chained dollars or index value, source dependent"
+frequency = "quarterly or annual"
+temporal_type = "volume measure"
+price_basis = "chain-type quantity basis with the source reference year"
+seasonal_adjustment = "source dependent, commonly SAAR for quarterly NIPA levels"
+boundary = "source dependent"
+conversion = "Use official aggregate chained-dollar series, indexes, or contribution-to-growth measures; never create a component accounting identity by summing chained-dollar levels."
+status = "unresolved"
+tests = ["contract:no_additive_chain_identity", "planned:double_deflation_sensitivity"]
+
+[[concept]]
+concept_id = "basic_price"
+definition = "The amount retained by the producer per unit of output, excluding taxes on products and including subsidies on products, before separately invoiced trade and transport margins."
+canonical_unit = "millions of current dollars at basic prices"
+frequency = "annual structural"
+temporal_type = "flow"
+price_basis = "basic price"
+seasonal_adjustment = "not seasonally adjusted"
+boundary = "domestic production"
+conversion = "Connect to purchasers' prices only through the explicit taxes, subsidies, import-duty, and margin valuation ledger."
+status = "provisional"
+tests = ["planned:basic_purchasers_bridge", "planned:tax_ledger_closure"]
+
+[[concept]]
+concept_id = "purchasers_price"
+definition = "The amount paid by the purchaser, including product taxes and margins and excluding deductible taxes, for a delivered commodity."
+canonical_unit = "millions of current dollars at purchasers' prices"
+frequency = "annual structural"
+temporal_type = "flow"
+price_basis = "purchasers price"
+seasonal_adjustment = "not seasonally adjusted"
+boundary = "domestic use plus explicitly identified imports"
+conversion = "Reconcile to basic-price supply with a versioned valuation bridge; never silently zero or double count product taxes."
+status = "unresolved"
+tests = ["planned:valuation_bridge_residual_ledger", "planned:observed_and_zero_tax_variants"]
+
+[[concept]]
+concept_id = "domestic_economy"
+definition = "Production by resident U.S. institutional units and the domestic final and intermediate uses represented in the model."
+canonical_unit = "institutional boundary"
+frequency = "not applicable"
+temporal_type = "boundary"
+price_basis = "not applicable"
+seasonal_adjustment = "not applicable"
+boundary = "United States domestic economy under BEA national-accounts residence rules"
+conversion = "Keep imports, exports, and rest-of-world financial positions as boundary-crossing items; do not assign foreign production to a domestic source industry."
+status = "provisional"
+tests = ["contract:domestic_trade_boundary", "planned:three_approach_gdp_closure"]
+
+[[concept]]
+concept_id = "domestic_export_process"
+definition = "The separate stochastic process governing U.S. real exports in the BeforeIT rest-of-world agent. It represents foreign demand for U.S. output, not the legacy field named ea."
+canonical_unit = "log millions of chained dollars per quarter for estimation; model commodity quantities after anchoring"
+frequency = "quarterly"
+temporal_type = "flow process"
+price_basis = "real export aggregate anchored to the current-price structural composition"
+seasonal_adjustment = "BEA quarterly SAAR input divided by four before level anchoring"
+boundary = "exports from U.S. residents to nonresidents"
+conversion = "Estimate the declared AR variant on U.S. real exports and allocate by c_E_g; keep the domestic-export process distinct from the monetary-policy block."
+status = "unresolved"
+tests = ["planned:ar_level_growth_variant", "contract:export_not_legacy_ea"]
+
+[[concept]]
+concept_id = "legacy_ea_policy_block"
+definition = "A legacy adapter name for the monetary-area GDP and deflator regressors used by the Taylor rule. In the U.S. calibration it intentionally contains U.S. GDP and the U.S. GDP deflator, not euro-area or foreign-demand data."
+canonical_unit = "millions of chained dollars and GDP-deflator ratio"
+frequency = "quarterly"
+temporal_type = "domestic policy regressor series"
+price_basis = "BEA U.S. real GDP and implied U.S. GDP deflator"
+seasonal_adjustment = "BEA quarterly SAAR levels with the appropriate level conversion"
+boundary = "United States domestic economy"
+conversion = "Duplicate the U.S. GDP/deflator panel at the adapter boundary and label every downstream field as domestic_policy_block despite the legacy EA suffix."
+status = "provisional"
+tests = ["contract:legacy_ea_is_us_policy_block", "planned:rename_adapter_fields"]
+
+[[concept]]
+concept_id = "rest_of_world_agent"
+definition = "The model counterparty that buys U.S. exports, supplies U.S. imports, and holds its modeled financial position. It is not identical to the legacy ea policy-regressor block."
+canonical_unit = "modeled counterparty"
+frequency = "quarterly simulation"
+temporal_type = "agent boundary"
+price_basis = "model prices and explicitly anchored trade quantities"
+seasonal_adjustment = "not applicable after model initialization"
+boundary = "all non-U.S. residents consolidated as one counterparty"
+conversion = "Map export and import totals and commodity shares separately; treat the opening D_RoW = 0 position as an assumption, not an observation."
+status = "unresolved"
+tests = ["contract:row_distinct_from_policy_block", "planned:row_financial_position_sensitivity"]
+
+[[assumption]]
+assumption_id = "agent_scale_1e_5"
+description = "Observed enterprise and person controls are multiplied by 1e-5 and integerized, leaving many sectors with one firm."
+affected_concepts = ["enterprise", "person", "job", "establishment"]
+treatment = "Research-only until the preregistered scale ladder demonstrates stability against the next two larger scales."
+uncertainty = "Scale ladder {1e-5,2e-5,5e-5,1e-4,2e-4,1e-3,largest feasible} with seed-based confidence intervals."
+review_status = "unresolved"
+owner = "UNASSIGNED: numerical-validation lead"
+independent_validator = "UNASSIGNED: computational-economics reviewer"
+tests = ["planned:scale_ladder", "planned:matching_and_tail_stability"]
+
+[[assumption]]
+assumption_id = "synthetic_government_and_foreign_counts"
+description = "J is one quarter and L one half of the scaled total firm count; these are matching granularities, not observed entity counts."
+affected_concepts = ["enterprise", "rest_of_world_agent"]
+treatment = "Keep as explicit replication candidates and compare alternative granularities at fixed aggregate government and trade totals."
+uncertainty = "Discrete alternatives defined by scale/matching experiments; no observational standard error is claimed."
+review_status = "unresolved"
+owner = "UNASSIGNED: labor-and-matching calibration lead"
+independent_validator = "UNASSIGNED: agent-scaling reviewer"
+tests = ["planned:J_L_matching_variance", "planned:fixed_total_allocation_invariance"]
+
+[[assumption]]
+assumption_id = "single_bank_credit_instrument"
+description = "Observed nonfinancial business credit-market debt, including debt securities, is mapped onto the model's single bank-loan instrument."
+affected_concepts = ["stock", "domestic_economy"]
+treatment = "Publish the observed debt concept and model-instrument mapping separately; do not call the full observed balance a bank-loan observation."
+uncertainty = "Sensitivity to loan-only and total-credit controls remains to be run."
+review_status = "unresolved"
+owner = "UNASSIGNED: financial-accounts calibration lead"
+independent_validator = "UNASSIGNED: flow-of-funds reviewer"
+tests = ["planned:credit_instrument_bridge", "planned:balance_sheet_sensitivity"]
+
+[[assumption]]
+assumption_id = "opening_row_deposits_zero"
+description = "The rest-of-world agent opens with D_RoW = 0 even though cross-border financial positions are nonzero in observed data."
+affected_concepts = ["rest_of_world_agent", "stock"]
+treatment = "Declare as an initial-condition abstraction and test alternatives before using balance-sheet channels for policy claims."
+uncertainty = "Alternative opening positions from the U.S. international investment position have not yet been propagated."
+review_status = "unresolved"
+owner = "UNASSIGNED: external-accounts calibration lead"
+independent_validator = "UNASSIGNED: balance-of-payments reviewer"
+tests = ["planned:row_opening_position_variant", "planned:external_balance_identity"]
+
+[[assumption]]
+assumption_id = "zero_product_tax_dynamic_variant"
+description = "Observed sector product taxes are retained in curated data but tau_Y_s is zero in the current dynamic parameter artifact."
+affected_concepts = ["basic_price", "purchasers_price", "current_price"]
+treatment = "Maintain named observed-tax and zero-product-tax prototypes; selection is structural and cannot be chosen from held-out forecast scores."
+uncertainty = "Accounting and forecast sensitivity are not yet complete."
+review_status = "unresolved"
+owner = "UNASSIGNED: national-accounts calibration lead"
+independent_validator = "UNASSIGNED: tax-accounting reviewer"
+tests = ["planned:observed_tax_prototype", "planned:zero_tax_prototype", "planned:tax_revenue_no_double_count"]

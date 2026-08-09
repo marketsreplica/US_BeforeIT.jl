@@ -1,0 +1,115 @@
+name: U.S. BLS July 2026 capture rehearsal
+
+on:
+  workflow_dispatch:
+  schedule:
+    # One-shot date is enforced below because GitHub cron has no year field.
+    - cron: '7 12 7 8 *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: us-bls-202607-rehearsal
+  cancel-in-progress: false
+
+jobs:
+  capture-rehearsal:
+    name: Nonadmitting BLS Employment Situation rehearsal
+    runs-on: ubuntu-latest
+    # Setup + an optional pre-window wait + the fixed 15-minute
+    # polling window still leaves time for an always-run artifact upload.
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32 # v3.0.2
+        with:
+          version: '1.10.3'
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ~/.julia
+          key: ${{ runner.os }}-bls-rehearsal-${{ hashFiles('scripts/us/Project.toml', 'scripts/us/Manifest.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-bls-rehearsal-
+            ${{ runner.os }}-us-
+      - name: Instantiate the U.S. forecasting environment
+        id: instantiate
+        continue-on-error: true
+        timeout-minutes: 12
+        run: julia --startup-file=no --project=scripts/us -e 'using Pkg; Pkg.instantiate()'
+      - name: Enforce the one-shot date and wait for the fixed window
+        id: gate
+        if: ${{ always() }}
+        timeout-minutes: 35
+        shell: bash
+        run: |
+          if [[ "$(date -u +%F)" != "2026-08-07" ]]; then
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+            echo "This workflow is inert outside 2026-08-07 UTC."
+            exit 0
+          fi
+          echo "eligible=true" >> "$GITHUB_OUTPUT"
+          target_epoch="$(date -u -d '2026-08-07T12:30:00Z' +%s)"
+          now_epoch="$(date -u +%s)"
+          if (( now_epoch < target_epoch )); then
+            sleep "$((target_epoch - now_epoch))"
+          fi
+      - name: Capture and locally verify the nonadmitting rehearsal
+        id: capture
+        if: ${{ always() && steps.gate.outputs.eligible == 'true' }}
+        continue-on-error: true
+        timeout-minutes: 20
+        env:
+          BLS_REHEARSAL_TRANSACTION_ID: gha-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          mkdir -p artifacts/bls-202607-rehearsal/verification-context
+          cp scripts/us/forecasting/evidence/USBLS202607RehearsalCapture.jl \
+            artifacts/bls-202607-rehearsal/verification-context/
+          cp scripts/us/forecasting/evidence/USBLS202607RehearsalReceipt.jl \
+            artifacts/bls-202607-rehearsal/verification-context/
+          cp scripts/us/forecasting/vintages/prospective/prospective_2026q3_contract_v2.toml \
+            artifacts/bls-202607-rehearsal/verification-context/
+          cp scripts/us/Project.toml scripts/us/Manifest.toml \
+            artifacts/bls-202607-rehearsal/verification-context/
+          cp .github/workflows/us-bls-202607-rehearsal.yml \
+            artifacts/bls-202607-rehearsal/verification-context/
+          sha256sum \
+            artifacts/bls-202607-rehearsal/verification-context/USBLS202607RehearsalCapture.jl \
+            artifacts/bls-202607-rehearsal/verification-context/USBLS202607RehearsalReceipt.jl \
+            artifacts/bls-202607-rehearsal/verification-context/prospective_2026q3_contract_v2.toml \
+            artifacts/bls-202607-rehearsal/verification-context/Project.toml \
+            artifacts/bls-202607-rehearsal/verification-context/Manifest.toml \
+            artifacts/bls-202607-rehearsal/verification-context/us-bls-202607-rehearsal.yml \
+            > artifacts/bls-202607-rehearsal/verification-context/SHA256SUMS.txt
+          {
+            echo "workflow_run_id=${{ github.run_id }}"
+            echo "workflow_run_attempt=${{ github.run_attempt }}"
+            echo "commit_sha=${{ github.sha }}"
+            echo "invoked_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "julia_version=$(julia --version)"
+            echo "project_sha256=$(sha256sum scripts/us/Project.toml | cut -d' ' -f1)"
+            echo "manifest_sha256=$(sha256sum scripts/us/Manifest.toml | cut -d' ' -f1)"
+            echo "instantiate_outcome=${{ steps.instantiate.outcome }}"
+            echo "scope=runner_diagnostic_only_not_origin_evidence"
+          } > artifacts/bls-202607-rehearsal/runner-invocation.txt
+          julia --startup-file=no --project=scripts/us \
+            scripts/us/forecasting/evidence/capture_bls_202607_rehearsal.jl \
+            artifacts/bls-202607-rehearsal
+      - name: Upload success bundle or controlled-failure journals
+        id: upload
+        if: ${{ always() && steps.gate.outputs.eligible == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: us-bls-202607-rehearsal-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/bls-202607-rehearsal/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Surface capture failure after artifact preservation
+        if: ${{ always() && steps.gate.outputs.eligible == 'true' && steps.capture.outcome != 'success' }}
+        run: |
+          if [[ "${{ steps.upload.outcome }}" == "success" ]]; then
+            echo "The rehearsal failed; available runner diagnostics and immutable journals were uploaded."
+          else
+            echo "The rehearsal failed and artifact upload did not succeed."
+          fi
+          exit 1

@@ -1,0 +1,62 @@
+economic_unit = "millions_current_usd_per_quarter"
+fixture_sha256 = "c453fbdb52cec412ffe41a4d6b791dd6e7432319d6276ea62fef10421414462f"
+identity_tolerance = 1.0
+maximum_expenditure_residual = 0.5
+maximum_investment_residual = 0.25
+period_count = 119
+period_end = "2026Q2"
+period_start = "1996Q4"
+schema_version = "beforeit-us-t10105-quarterly-controls.v1"
+transformation = "BEA current-dollar seasonally adjusted annual-rate level divided by four exactly once"
+
+[[series]]
+description = "Gross domestic product"
+id = "nominal_gdp_quarterly"
+line_number = "1"
+series_code = "A191RC"
+[[series]]
+description = "Personal consumption expenditures"
+id = "nominal_household_consumption_quarterly"
+line_number = "2"
+series_code = "DPCERC"
+[[series]]
+description = "Gross private domestic investment"
+id = "nominal_gross_private_domestic_investment_quarterly"
+line_number = "7"
+series_code = "A006RC"
+[[series]]
+description = "Fixed investment"
+id = "nominal_fixed_investment_quarterly"
+line_number = "8"
+series_code = "A007RC"
+[[series]]
+description = "Change in private inventories"
+id = "nominal_inventory_investment_quarterly"
+line_number = "14"
+series_code = "A014RC"
+[[series]]
+description = "Exports"
+id = "nominal_exports_quarterly"
+line_number = "16"
+series_code = "B020RC"
+[[series]]
+description = "Imports"
+id = "nominal_imports_quarterly"
+line_number = "19"
+series_code = "B021RC"
+[[series]]
+description = "Government consumption expenditures and gross investment"
+id = "nominal_government_consumption_and_investment_quarterly"
+line_number = "22"
+series_code = "A822RC"
+
+[source]
+dataset = "NIPA"
+request_id = "T10105-Q-history"
+retrieved_at = "2026-08-04T00:07:40.614"
+source_agency = "U.S. Bureau of Economic Analysis"
+source_byte_count = 1896972
+source_metadata_sha256 = "3e8a0d6e91237e22ee2805ba2abbce6ee746085e395d443e991921a97bee06ba"
+source_sha256 = "a80351ce2daeccd5994caea385c6ee9f5201fa46ce0c4cab3e7fa19fc8dec574"
+status = "APPROVED_ARCHIVED"
+table_id = "T10105"

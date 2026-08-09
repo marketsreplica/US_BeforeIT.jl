@@ -1,0 +1,20 @@
+{
+  "byte_count": 969323,
+  "final_url": "https://www.census.gov/manufacturing/m3/prel/historical_data/histshts/naics/naicsinvp.xlsx",
+  "http_status": 200,
+  "immutable_release_vintage_claimed": false,
+  "request_url": "https://www.census.gov/manufacturing/m3/prel/historical_data/histshts/naics/naicsinvp.xlsx",
+  "retrieved_at_utc": "2026-08-06T16:40:45Z",
+  "schema_version": "beforeit-us-census-m3-source-receipt.v1",
+  "selected_response_headers": {
+    "content-disposition": "inline; filename=\"naicsinvp.xlsx\"",
+    "content-type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "date": "Thu, 06 Aug 2026 16:40:46 GMT",
+    "last-modified": "Tue, 04 Aug 2026 14:00:21 GMT"
+  },
+  "sha256": "74ee0d3b9d4a9673a39f1f4ece28206dcccca6451f48aee63506c61675373538",
+  "source_url_mutability": "OVERWRITTEN_CURRENT_WORKBOOK_URL_NO_RELEASE_VINTAGE_IN_PATH",
+  "workbook_internal_period_hint": "2026/Jun26",
+  "zip_crc_pass": true,
+  "zip_member_count": 10
+}
