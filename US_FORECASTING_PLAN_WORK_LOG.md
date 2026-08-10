@@ -19225,3 +19225,23 @@ already failing at `a55d9ed` on ten pre-existing `scripts/` files; every file to
 the fixed 17.6 % capacity headroom (utilisation 0.856 → 0.943 over six years) and is not a
 multi-year mechanism. Unemployment collapses to ~1 %; `unemployment_rate` stays out of every
 weighted score.
+
+## 2026-08-10 — Poledna-style validation report published as `US_ABM_FORECAST_REPORT.md`
+
+Consolidated the v1 baseline, the bias diagnosis and the v2 result into a single publication-quality
+report at the repository root, structured after Poledna, Miess, Hommes & Rabitsch (EER 2023): model
+and calibration, experimental design, results, causal diagnosis, the repaired specification,
+secondary targets, current outlook, limitations, reproducibility.
+
+Headline: v2 is **1/14 on the headline pair {real_gdp, gdp_deflator} in all three tracks** — weighted
+RMSE ratio 0.830 all-available, 0.829 balanced-h12, 0.796 pandemic-masked, against v1's 0.905 /
+0.894 / 1.272 (5th / 5th / 11th). Secondary pair 1st / 1st / **2nd** — the pandemic-masked loss to
+`univariate_ar_p4` (0.719 vs 0.739) is reported as a loss. Real-GDP bias −1.32/−7.28/−2.94/−2.15/−2.02
+→ −0.03/−0.10/−0.14/−0.12/−0.20 pp; weighted MAE 1.137 → 0.814; real-GDP 90 % coverage 0.654 → 0.929.
+
+Two draft readings were corrected against the data: v1's competitive rank *depended on the COVID
+cells* and v2 carries no such dependence (it wins the calm sample by its widest margin); and the h=2
+−7.3 pp bias was mostly the rationing crash, not the opening-row measurement basis — it collapses to
+−0.10 pp with `burn_in_quarters = 0`, which retires burn-in as a fix. Both open defects (no capital
+accumulation, h ≤ 12 validity only; unemployment collapse) are prominent in the executive summary and
+the limitations register, alongside the mixed-vintage and no-promotion labels.
