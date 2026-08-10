@@ -1,0 +1,3 @@
+variant,origin_index,origin_period,build_period,calibration_date,burn_in_quarters,simulated_quarters,t_prime,t_max,paths_requested,paths_used,paths_failed,calibration_seconds,simulation_seconds
+outlook_v2,102,2025Q4,2025Q4,2025-12-31,0,12,116,2,500,500,0,3.7994351387023926,51.792232036590576
+outlook_v2,103,2026Q1,2026Q1,2026-03-31,0,12,117,1,500,500,0,0.02669501304626465,51.65162396430969

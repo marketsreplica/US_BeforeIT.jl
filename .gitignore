@@ -154,3 +154,7 @@ data/us/db/
 !output/us_forecasting/abm_v2_comparison/**/*.csv
 !output/us_forecasting/abm_v2_comparison_outlook/*.csv
 !output/us_forecasting/commodity_balance_reconciliation/*.csv
+# `manifest.toml` would otherwise be caught by the `Manifest.toml` rule above on
+# case-insensitive filesystems; these are run seals, not Pkg manifests.
+!output/us_forecasting/abm_v2_comparison/**/manifest.toml
+!output/us_forecasting/abm_v2_comparison_outlook/manifest.toml
