@@ -1463,6 +1463,11 @@ function get_params_and_initial_conditions(
         params["use_commodity_balance_inventory"] =
             use_commodity_balance_inventory
     end
+    # Opt-in growth-expectation specification.  Artifacts without the marker keep the
+    # legacy log-level AR(1); see `growth_inflation_expectations`.
+    if calibration_boolean_marker(figaro, "expectation_rw_drift")
+        params["expectation_rw_drift"] = true
+    end
 
     # Sector initial conditions
     N_s = employees
