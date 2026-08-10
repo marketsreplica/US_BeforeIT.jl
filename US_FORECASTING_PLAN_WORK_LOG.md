@@ -19180,3 +19180,48 @@ place; the real_gdp h=2 transient contributes 0.057; the h=4 level error 0.010;
 Monte-Carlo noise 0.0002 at 500 paths, so path count is settled. An unscored
 2026Q1 outlook is also emitted. This is a revised, mixed-vintage diagnostic:
 not real time, origin not admissible, not promotion evidence.
+
+## 2026-08-10 — `beforeit_abm_us_v2`: commodity-balance reconciliation + RW-drift expectations
+
+Branch `claude/abm-v2` off `a55d9ed`, in a dedicated worktree so the concurrent v1 run was untouched.
+
+**Defect.** The opening commodity balance does not clear: modelled uses differ from supply
+(industry output + measured BEA T262 imports) by −70.6 % … +47.6 % per commodity, 42 of 68
+over-demanded. Against the frozen envelope `K_i·κ_i = Y_i/0.85` with replacement-only investment
+(`K_end/K_1 = 1.0000`), v1 ran 12.5 % of gross output under a binding ceiling every quarter, filled
+87 % of export demand, and grew at ~0.
+
+**Fix 1 — `scripts/us/calibration/reconcile_commodity_balance.jl`.** Biproportional (RAS) adjustment
+of the use side at the flow level; coefficients re-derived from the balanced flows and written back
+in the raw pre-bridge basis so the unmodified pipeline reproduces them exactly. `use_explicit_trade`
+stays true — no measured import level is discarded. Zeros preserved, column budgets move < 1e-13,
+artifact re-derives to `max|uses/supply − 1| = 1.0e-13`. `use_commodity_balance_inventory` set false,
+so `S_s` is gone and `S_i(0) = 0`, removing the artifact ↔ `USPipeline.jl:3441` contradiction.
+
+**The one accounting choice.** Uses exceed supply by 1.0104 %; that residual is exactly (to 5.6e-9)
+the artifact's expenditure-minus-production discrepancy (442 933, 1.57 % of GDP) plus capital
+consumption minus non-dwelling GFCF (88 223). RAS needs equal control sums, so v2 anchors on the
+production account and scales the four final-demand aggregates — and `capital_consumption` /
+`gross_capitalformation_dwellings` — by `lambda = 0.983460`. `lambda` is fixed by the accounting
+identity alone, never by a forecast error, and every manifest records it with its semantics.
+
+**Fix 2.** Flag-gated random-walk-with-drift growth expectations (the log-level AR(1) delivered only
+32–63 % of trend). New `expectation_rw_drift` property, set from an artifact marker, default false.
+
+**Gates.** Austria bit-identical with the flag off (3 seeds × 3 series). The v1 column re-run under
+the patched code is bit-identical in all 3 660 cells to the concurrent agent's unpatched 500-path
+run. 61/61 origins, 500/500 paths, 0 failures, 0 non-finite cells. Deflator unchanged (2.019 vs
+2.024 pp over 671 cells). `Pkg.test()` 815 pass / 1 fail — the repo-wide `Format (Runic.jl)` gate,
+already failing at `a55d9ed` on ten pre-existing `scripts/` files; every file touched here is clean.
+
+**Result.** v2 ranks 1/14 on the headline pair {real_gdp, gdp_deflator} in all three tracks
+(weighted RMSE ratio 0.8295 all-available, 0.8292 balanced-h12, 0.7960 pandemic-masked) against v1's
+0.9048 / 0.8938 / 1.2723, and 1/14 on the secondary pair in the first two tracks (0.7156 / 0.7032),
+2/14 pandemic-masked. Real-GDP bias goes from −1.3 / −7.3 / −2.9 / −2.1 / −2.0 pp to −0.03 / −0.10 /
+−0.14 / −0.12 / −0.20 pp at h = 1/2/4/8/12; the weighted MAE ratio, v1's weakest number, 1.1370 →
+0.8135; real-GDP 90 % interval coverage 0.654 → 0.929. Full tables in `RESULTS_V2.md`.
+
+**Open defects reported with the result.** Capital still never accumulates, so v2's growth drains
+the fixed 17.6 % capacity headroom (utilisation 0.856 → 0.943 over six years) and is not a
+multi-year mechanism. Unemployment collapses to ~1 %; `unemployment_rate` stays out of every
+weighted score.

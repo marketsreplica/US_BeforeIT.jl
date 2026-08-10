@@ -20,6 +20,12 @@ Y_e = exp(\\alpha_Y \\cdot \\log(Y_{T^\\prime + t - 1}) + \\beta_Y + \\epsilon_Y
 
 where `alpha_Y`, `beta_Y` and `epsilon_Y` are estimated using the past log-GDP data using the `estimate` function.
 
+When the model property `expectation_rw_drift` is `true` the log-level AR(1) is replaced
+by a random walk with drift, `Y_e = Y_last * exp(mean(diff(log(Y))) + epsilon)`, which
+removes the finite-sample downward bias of the log-level AR(1) on a trending series. The
+property defaults to `false`, so every calibration that does not opt in keeps bit-identical
+behaviour.
+
 The expected inflation rate `pi_e` is calculated as follows:
 
 ```math
@@ -31,7 +37,23 @@ function growth_inflation_expectations(model::AbstractModel)
 
     Y, pi_, T_prime, t = model.agg.Y, model.agg.pi_, model.prop.T_prime, model.agg.t
 
-    lY_e = estimate_next_value(log.(Y[1:(T_prime + t - 1)]))
+    lY = log.(Y[1:(T_prime + t - 1)])
+    lY_e = if model.prop.expectation_rw_drift && length(lY) >= 3
+        # Random-walk-with-drift expectation.  An AR(1) with constant fitted to the
+        # LOG LEVEL of an I(1)-with-drift series is mis-specified: with the
+        # Kendall/Dickey-Fuller small-sample bias on alpha it delivers
+        # gamma_e ~ g * (1 - (1 - alpha) * T / 2), i.e. a fraction of the in-sample
+        # trend that shrinks as the estimation window lengthens.  Pinning alpha = 1 and
+        # taking the drift as the average past log growth is the correctly specified
+        # estimator for the same series and uses past data only.  The innovation is
+        # drawn from the growth-rate residuals, so exactly one Normal variate is
+        # consumed on either branch and matched-seed comparisons stay aligned.
+        dlY = diff(lY)
+        _, _, epsilon_g = estimate(dlY)
+        lY[end] + sum(dlY) / length(dlY) + epsilon_g
+    else
+        estimate_next_value(lY)
+    end
     Y_e = exp(lY_e) # expected GDP
     gamma_e = Y_e / Y[T_prime + t - 1] - 1 # expected growth
 

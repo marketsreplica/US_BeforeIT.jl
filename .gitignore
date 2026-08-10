@@ -158,3 +158,16 @@ data/us/db/
 !output/us_forecasting/abm_revised_comparison*/abm_origin_diagnostics.csv
 !output/us_forecasting/abm_revised_comparison*/failures.csv
 !output/us_forecasting/abm_revised_comparison*/current_outlook.csv
+
+# Scored ABM-vs-benchmark comparison outputs and the commodity-balance
+# reconciliation report. Compact score tables and manifests are versioned so a
+# result can be re-read without re-running the 61-origin ensembles; the ensemble
+# caches themselves are versioned too because they are what makes the scoring
+# and the interval-coverage table reproducible without a re-simulation.
+!output/us_forecasting/abm_v2_comparison/**/*.csv
+!output/us_forecasting/abm_v2_comparison_outlook/*.csv
+!output/us_forecasting/commodity_balance_reconciliation/*.csv
+# `manifest.toml` would otherwise be caught by the `Manifest.toml` rule above on
+# case-insensitive filesystems; these are run seals, not Pkg manifests.
+!output/us_forecasting/abm_v2_comparison/**/manifest.toml
+!output/us_forecasting/abm_v2_comparison_outlook/manifest.toml

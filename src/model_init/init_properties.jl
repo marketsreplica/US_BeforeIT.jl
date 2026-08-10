@@ -204,6 +204,7 @@ Bit.@object mutable struct Properties(Object) <: AbstractProperties
     opening_nominal_fixed_capitalformation_dwellings::Bit.typeFloat
     opening_nominal_exports::Bit.typeFloat
     opening_nominal_imports::Bit.typeFloat
+    expectation_rw_drift::Bool
 end
 
 function Properties(parameters::Dict{String, Any}, initial_conditions)
@@ -295,6 +296,10 @@ function Properties(parameters::Dict{String, Any}, initial_conditions)
         use_opening_macro_controls ? opening_controls.nominal_imports : 0,
     )
 
+    # Growth-expectation specification.  `false` reproduces the legacy log-level AR(1)
+    # exactly, so calibrations that do not register the parameter are unaffected.
+    expectation_rw_drift = Bool(get(parameters, "expectation_rw_drift", false))
+
     return Properties(
         G, T_prime, H_act, H_inact, J, L, I_s, I, H, tau_INC, tau_FIRM, tau_VAT, tau_SIF,
         tau_SIW, tau_EXPORT, tau_CF, tau_G, theta_UB, psi, psi_H, mu, theta_DIV, theta, zeta, zeta_LTV,
@@ -303,6 +308,6 @@ function Properties(parameters::Dict{String, Any}, initial_conditions)
         opening_nominal_government_consumption_and_investment, opening_nominal_capitalformation,
         opening_nominal_fixed_capitalformation, opening_nominal_inventory_investment,
         opening_nominal_fixed_capitalformation_dwellings, opening_nominal_exports,
-        opening_nominal_imports
+        opening_nominal_imports, expectation_rw_drift
     )
 end

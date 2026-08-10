@@ -25,6 +25,10 @@ export ABMVariant,
     HEADLINE_VARIANT,
     BURN_IN_VARIANT,
     OUTLOOK_VARIANT,
+    HEADLINE_V2_VARIANT,
+    OUTLOOK_V2_VARIANT,
+    RECONCILED_CALIBRATION_OBJECT_PATH,
+    ACTIVE_CALIBRATION_PATH,
     simulate_abm_ensembles,
     run_abm_comparison,
     write_abm_comparison,
@@ -50,6 +54,67 @@ const CALIBRATION_OBJECT_PATH = joinpath(
 const BASE_DIAGNOSTIC_PATH = normpath(
     joinpath(@__DIR__, "..", "USRevisedDataBenchmarkDiagnostic.jl"),
 )
+
+# v2 initialises the model from a commodity-balance-reconciled calibration artifact
+# built by `scripts/us/calibration/reconcile_commodity_balance.jl`. The artifact -- not
+# this module -- carries the reconciliation mode and the growth-expectation
+# specification, so the selection is a single path.
+const RECONCILED_CALIBRATION_OBJECT_PATH = joinpath(
+    REPOSITORY_ROOT,
+    "data",
+    "us",
+    "calibration",
+    "US_2024_calibration_object_reconciled.jld2",
+)
+
+# Set by the runner before `simulate_abm_ensembles`; the manifests seal whatever was
+# actually used, never the default.
+const ACTIVE_CALIBRATION_PATH = Ref(CALIBRATION_OBJECT_PATH)
+
+"""
+    calibration_provenance_lines()
+
+TOML lines describing the calibration artifact the run actually used, including the
+reconciliation metadata when the artifact carries it. `lambda` is an explicit accounting
+choice (the artifact's expenditure aggregates are scaled onto its production account) and
+must survive into every manifest.
+"""
+function calibration_provenance_lines()
+    path = ACTIVE_CALIBRATION_PATH[]
+    lines = [
+        "calibration_object_path = \"$(relpath(path, REPOSITORY_ROOT))\"",
+        "calibration_object_sha256 = \"$(sha256_hex(read(path)))\"",
+    ]
+    stored = JLD2.load(path)
+    metadata = get(stored, "metadata", nothing)
+    reconciled = metadata isa AbstractDict && haskey(metadata, "method")
+    push!(lines, "commodity_balance_reconciled = $reconciled")
+    if reconciled
+        push!(lines, "reconciliation_method = \"$(metadata["method"])\"")
+        push!(lines, "reconciliation_mode = \"$(get(metadata, "mode", "unknown"))\"")
+        push!(lines, "reconciliation_rho = $(get(metadata, "rho", NaN))")
+        push!(lines, "reconciliation_lambda = $(get(metadata, "lambda", NaN))")
+        push!(
+            lines,
+            "reconciliation_lambda_semantics = \"explicit accounting choice: the four " *
+                "final-demand aggregates C, G, I and X (and capital_consumption and " *
+                "gross_capitalformation_dwellings, which set the investment budget) are " *
+                "scaled by lambda so the artifact's expenditure aggregates match its " *
+                "production account and the opening commodity balance clears exactly. " *
+                "lambda is fixed by the accounting identity alone and was not chosen with " *
+                "reference to any forecast error.\"",
+        )
+        push!(
+            lines,
+            "growth_expectation_specification = \"$(get(metadata, "expectations", "legacy_ar1_log_level"))\"",
+        )
+        push!(lines, "opening_inventories_from_discrepancy = false")
+        push!(lines, "measured_bea_imports_retained = true")
+    else
+        push!(lines, "growth_expectation_specification = \"legacy_ar1_log_level\"")
+    end
+    return lines
+end
 
 # The five targets the ABM serves with a native operator. `pce_price_index`,
 # `core_pce_price_index` and `payroll_employment` need measurement bridges the
@@ -115,6 +180,26 @@ const OUTLOOK_VARIANT = ABMVariant(
     0,
     500,
 )
+const HEADLINE_V2_VARIANT = ABMVariant(
+    "headline_v2",
+    "beforeit_abm_us_v2_mean",
+    "beforeit_abm_us_v2_median",
+    0,
+    500,
+)
+const OUTLOOK_V2_VARIANT = ABMVariant(
+    "outlook_v2",
+    "beforeit_abm_us_v2_mean",
+    "beforeit_abm_us_v2_median",
+    0,
+    500,
+)
+
+# v2 draws the SAME seed stream as its v1 counterpart, so the v1 -> v2 delta is a
+# matched-seed contrast and not a Monte-Carlo artifact. Only the cache key differs.
+const SEED_STREAM_ALIASES =
+    Dict("headline_v2" => "headline", "outlook_v2" => "outlook")
+seed_stream_name(name::AbstractString) = get(SEED_STREAM_ALIASES, name, String(name))
 
 struct EnsembleSummary
     variant::String
@@ -511,7 +596,7 @@ function simulate_abm_ensembles(
         simulated = SimulatedPath[]
         failed = 0
         for path in 1:paths
-            seed = path_seed(variant.name, origin_period, path)
+            seed = path_seed(seed_stream_name(variant.name), origin_period, path)
             try
                 candidate = simulate_path(
                     parameters,
@@ -830,6 +915,8 @@ function run_abm_comparison(
         diagnostics::Vector{ABMOriginDiagnostic},
         variant::ABMVariant;
         paths::Int,
+        extra_columns::Vector{Tuple{ABMVariant, Vector{EnsembleSummary}}} =
+            Tuple{ABMVariant, Vector{EnsembleSummary}}[],
     )
     BASE.validate_panel(panel)
     base_result = BASE.run_revised_benchmark_diagnostic(panel)
@@ -839,6 +926,14 @@ function run_abm_comparison(
         base_result.forecast_cells,
     )
     append!(forecast_cells, abm_forecast_cells(panel, ensembles, variant))
+    # Additional ABM columns (e.g. the v1 baseline alongside v2) are scored on exactly
+    # the same common cells, so the side-by-side delta cannot be a sample artifact.
+    for (extra_variant, extra_ensembles) in extra_columns
+        append!(
+            forecast_cells,
+            abm_forecast_cells(panel, extra_ensembles, extra_variant),
+        )
+    end
 
     failures = copy(base_result.failures)
     for diagnostic in diagnostics
@@ -861,6 +956,10 @@ function run_abm_comparison(
 
     model_ids =
         [base_result.model_ids; variant.mean_model_id; variant.median_model_id]
+    for (extra_variant, _) in extra_columns
+        push!(model_ids, extra_variant.mean_model_id)
+        push!(model_ids, extra_variant.median_model_id)
+    end
     common_keys = BASE.common_cell_keys(forecast_cells, model_ids)
     common_rows =
         filter(row -> BASE.cell_key(row) in common_keys, forecast_cells)
@@ -1122,7 +1221,7 @@ function write_manifest(path, result::ABMComparisonResult, output_hashes)
         "code_working_tree_clean = $(repository_tree_clean())",
         "comparison_code_sha256 = \"$(sha256_hex(read(abspath(@__FILE__))))\"",
         "base_diagnostic_code_sha256 = \"$(sha256_hex(read(BASE_DIAGNOSTIC_PATH)))\"",
-        "calibration_object_sha256 = \"$(sha256_hex(read(CALIBRATION_OBJECT_PATH)))\"",
+        calibration_provenance_lines()...,
         "julia_project_sha256 = \"$(sha256_hex(read(BASE.PROJECT_PATH)))\"",
         "julia_version = \"$(VERSION)\"",
         "blas_threads = $(BLAS.get_num_threads())",
@@ -1276,7 +1375,7 @@ function write_abm_outlook(
         "abm_origin_used_path_counts = [$(join(getfield.(diagnostics, :paths_used), ", "))]",
         "code_commit_sha = \"$(repository_commit())\"",
         "comparison_code_sha256 = \"$(sha256_hex(read(abspath(@__FILE__))))\"",
-        "calibration_object_sha256 = \"$(sha256_hex(read(CALIBRATION_OBJECT_PATH)))\"",
+        calibration_provenance_lines()...,
         "julia_version = \"$(VERSION)\"",
         "current_outlook_sha256 = \"$(sha256_hex(read(outlook_path)))\"",
     ]
