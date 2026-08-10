@@ -19245,3 +19245,14 @@ cells* and v2 carries no such dependence (it wins the calm sample by its widest 
 −0.10 pp with `burn_in_quarters = 0`, which retires burn-in as a fix. Both open defects (no capital
 accumulation, h ≤ 12 validity only; unemployment collapse) are prominent in the executive summary and
 the limitations register, alongside the mixed-vintage and no-promotion labels.
+
+## 2026-08-10 — LaTeX paper `paper/US_ABM_Forecasting_Paper.pdf` (34 pp)
+
+Typeset the stage-2 result as a Poledna-style paper: model overview, U.S. calibration, a dedicated
+Austria→U.S. difference chapter (valuation bases, industry/commodity axis, single 2024 structural
+row, the trade closure this produced), an 11-entry assumptions register, forecast design, the
+found→diagnosed→repaired→re-scored arc, outlook, limitations, reproducibility appendix.
+Seven matplotlib vector figures regenerate from committed CSVs via `paper/figures_src/make_figures.py`;
+two TikZ diagrams draw the pipeline and the defect mechanism. Compiles with 0 errors, 0 overfull
+boxes, 0 undefined references. Note: the RAS iteration count is 623 per the committed
+reconciliation report, not the 543 quoted in `US_ABM_FORECAST_REPORT.md` §7.1.
