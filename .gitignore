@@ -145,3 +145,12 @@ data/us/db/
 !scripts/us/accounting/fixtures/**/manifest.toml
 !output/us_calibration/*.csv
 !output/us_calibration/*.json
+
+# Scored ABM-vs-benchmark comparison outputs and the commodity-balance
+# reconciliation report. Compact score tables and manifests are versioned so a
+# result can be re-read without re-running the 61-origin ensembles; the ensemble
+# caches themselves are versioned too because they are what makes the scoring
+# and the interval-coverage table reproducible without a re-simulation.
+!output/us_forecasting/abm_v2_comparison/**/*.csv
+!output/us_forecasting/abm_v2_comparison_outlook/*.csv
+!output/us_forecasting/commodity_balance_reconciliation/*.csv
