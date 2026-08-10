@@ -31,7 +31,7 @@ with 42 of 68 commodities over-demanded and 34 off by more than 10 %. This colli
 capacity envelope frozen for all time at `K_i·κ_i = Y_i/0.85`, because investment is replacement-only
 (`K_end/K_1 = 1.0000`, measured). Over-demanded sectors sit permanently against their ceiling,
 under-demanded ones permanently idle, and `min()` is one-sided so the idle capacity never compensates.
-Consequence: **12.5 % of gross output produced under a binding ceiling every quarter**, exports
+Consequence: **12.9–14.4 % of gross output produced under a binding ceiling every quarter (measured range across origins)**, exports
 filling only 87 % of demand, and real growth pinned near zero. This mechanism accounts for **76 %** of
 the −2.75 pp bias. The remaining **24 %** is a growth expectation estimated by OLS AR(1) on the **log
 level** of an I(1)-with-drift series, which delivers only 32–63 % of the in-sample trend — a
@@ -717,7 +717,7 @@ coefficient from the balanced flows and writes them back in the raw pre-valuatio
 * Row controls: `industry_output + imports`. **`use_explicit_trade` stays `true`** — no measured BEA
   import level is discarded.
 * Column controls: the 68 industry intermediate budgets and the four final-demand budgets.
-* Zeros preserved; converged in 543 iterations; column budgets move by `< 1e-13`; the artifact
+* Zeros preserved; converged in 623 iterations (correcting an earlier draft figure of 543; the committed reconciliation_report_rho1.txt is authoritative); column budgets move by `< 1e-13`; the artifact
   re-derives to `max |uses_g/supply_g − 1| = 1.0e-13`.
 * `use_commodity_balance_inventory` set `false`: with the balance clearing there is no signed
   discrepancy to promote into `S_s`, and the reference specification opens with `S_i(0) = 0`. This also
