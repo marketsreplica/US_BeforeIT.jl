@@ -19141,3 +19141,42 @@ No source URL is inferred from the local audit filenames. Body-to-URL/provider
 provenance, transport, custody, logical-v1 compatibility, origin admission,
 model input, scoring, promotion, and production all remain false, and
 qualification remains 0/6.
+
+## 2026-08-10 first-pass ABM versus statistical benchmarks
+
+The U.S. ABM was free-run at all 61 revised-panel benchmark origins
+(2010Q2-2025Q2), 12 quarters each, 500 Monte-Carlo paths per origin, and scored
+against the ten statistical models on identical cells. Historical origins were
+reached by making the calibration artifact's single 2024 annual structural row
+addressable at earlier dates; quarterly initial conditions carry full history.
+Zero origin failures, zero path failures (30,500 of 30,500 paths). Common
+observation counts are 61/60/58/54/50, matching the statistical models, so both
+ABM columns scored COMPLETE_MATCHED rather than unranked.
+
+Two columns come from the same paths: pathwise operators reduced to the ensemble
+mean and to the ensemble median. Weighted cellwise RMSE ratio to the VAR(1)
+anchor on the headline pair {real_gdp, gdp_deflator}: all-available median
+0.9034 (2 of 12) and mean 0.9048 (3 of 12), against 0.8789 for the best
+statistical model, naive_historical_mean; balanced-h12 median 0.8929 and mean
+0.8938. Secondary pair {nominal_gdp, effective_federal_funds_rate}: median
+0.7810 and mean 0.7824. Weighted MAE ratio is 1.13-1.14 against 0.84 for the
+best statistical model, so the ABM avoids large misses but is worse on typical
+quarters.
+
+Three findings qualify that headline. Masking target dates 2020Q1-2021Q4 moves
+the ABM from second to eighth (median, 1.2641) and ninth (mean, 1.2723), losing
+to the anchor, so its standing is substantially earned on pandemic quarters.
+The opening-row transient is a multi-quarter relaxation, not a one-row
+artifact: a one-quarter burn-in relocates it from h=2 to h=1 and worsens the
+ratio to 0.9540, while a four-quarter burn-in drains the h=2 real-GDP bias from
+-7.28 to -2.37 pp but costs short-horizon deflator accuracy, giving 0.9156;
+neither beats no burn-in. unemployment_rate is excluded from every scored table
+because the initial unemployed stock is frozen at 2024, making the h=1 forecast
+nearly constant (sd 0.049 pp) against realized sd 2.115 pp.
+
+Gap ranking for the next iteration: removing the systematic negative bias in
+every cell is worth 0.085 on the weighted ratio and would give 0.8202 and first
+place; the real_gdp h=2 transient contributes 0.057; the h=4 level error 0.010;
+Monte-Carlo noise 0.0002 at 500 paths, so path count is settled. An unscored
+2026Q1 outlook is also emitted. This is a revised, mixed-vintage diagnostic:
+not real time, origin not admissible, not promotion evidence.

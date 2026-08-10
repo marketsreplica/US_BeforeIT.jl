@@ -145,3 +145,16 @@ data/us/db/
 !scripts/us/accounting/fixtures/**/manifest.toml
 !output/us_calibration/*.csv
 !output/us_calibration/*.json
+
+# First-pass ABM vs statistical benchmark diagnostic. The compact score tables,
+# per-origin diagnostics and manifests are versioned; the per-cell forecast files
+# (~3.3 MB each) and the raw per-origin ensemble summaries (~850 KB each) are
+# rebuildable from the driver and stay local.
+!output/us_forecasting/abm_revised_comparison*/manifest.toml
+!output/us_forecasting/abm_revised_comparison*/score_summaries.csv
+!output/us_forecasting/abm_revised_comparison*/relative_scores.csv
+!output/us_forecasting/abm_revised_comparison*/weighted_relative_scores.csv
+!output/us_forecasting/abm_revised_comparison*/monte_carlo_errors.csv
+!output/us_forecasting/abm_revised_comparison*/abm_origin_diagnostics.csv
+!output/us_forecasting/abm_revised_comparison*/failures.csv
+!output/us_forecasting/abm_revised_comparison*/current_outlook.csv
