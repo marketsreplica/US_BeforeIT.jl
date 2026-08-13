@@ -1,0 +1,22 @@
+economic_unit = "millions of current U.S. dollars"
+fixture_cell_count = 6368
+fixture_sha256 = "c4461fbe971d8fb70750ff4cce6bb09e582a024d7cc1f6e8ebd8e3685bab69e0"
+generation_policy = "Regeneration fails unless both raw payload SHA-256 values match the approved accounting-gate artifacts."
+projection = "Every numeric cell and both axis type labels from the approved BEA API payloads; descriptions and API envelope metadata omitted."
+schema_version = "beforeit-us-supply-make-fixture.v1"
+
+[[sources]]
+cell_count = 4640
+request_id = "table_259-2024"
+source_sha256 = "2bdd65f04e1bf31fd66d1e642afd0fb9dda2fd9bb5ba3bacf8db83431be1e918"
+status = "APPROVED_ARCHIVED"
+table_id = "259"
+year = 2024
+[[sources]]
+cell_count = 1728
+request_id = "table_262-2024"
+source_sha256 = "91d6686dce15fe1d96f35f1752382bf1d47d274c067f52febc60ae40014406e8"
+status = "APPROVED_ARCHIVED"
+table_id = "262"
+year = 2024
+

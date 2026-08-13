@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--NSI Web Service v8.19.8.0-->
+<message:Structure xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:structure="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+  <message:Header>
+    <message:ID>IDREF10402</message:ID>
+    <message:Test>false</message:Test>
+    <message:Prepared>2026-08-06T17:14:22.4151821+02:00</message:Prepared>
+    <message:Sender id="Unknown" />
+    <message:Receiver id="Unknown" />
+  </message:Header>
+  <message:Structures>
+    <structure:HierarchicalCodelists>
+      <structure:HierarchicalCodelist id="HCL_VALUATION_SUT" agencyID="OECD.SDD.NAD" version="1.0" isFinal="true">
+        <common:Name xml:lang="en">HCL Valuation SUT</common:Name>
+        <common:Name xml:lang="fr">HCL Valuation SUT</common:Name>
+        <structure:IncludedCodelist alias="CL_VALUATION@OECDSDDNAD@10">
+          <Ref id="CL_VALUATION" version="1.0" agencyID="OECD.SDD.NAD" package="codelist" class="Codelist" />
+        </structure:IncludedCodelist>
+        <structure:Hierarchy id="H" leveled="false">
+          <common:Name xml:lang="en">Hierarchy for CL_VALUATION</common:Name>
+          <structure:HierarchicalCode id="B">
+            <structure:CodelistAliasRef>CL_VALUATION@OECDSDDNAD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="B" />
+            </structure:CodeID>
+          </structure:HierarchicalCode>
+          <structure:HierarchicalCode id="_Z">
+            <structure:CodelistAliasRef>CL_VALUATION@OECDSDDNAD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="_Z" />
+            </structure:CodeID>
+          </structure:HierarchicalCode>
+          <structure:HierarchicalCode id="Y">
+            <structure:CodelistAliasRef>CL_VALUATION@OECDSDDNAD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="Y" />
+            </structure:CodeID>
+          </structure:HierarchicalCode>
+          <structure:HierarchicalCode id="O">
+            <structure:CodelistAliasRef>CL_VALUATION@OECDSDDNAD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="O" />
+            </structure:CodeID>
+          </structure:HierarchicalCode>
+          <structure:HierarchicalCode id="S">
+            <structure:CodelistAliasRef>CL_VALUATION@OECDSDDNAD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="S" />
+            </structure:CodeID>
+          </structure:HierarchicalCode>
+          <structure:HierarchicalCode id="T">
+            <structure:CodelistAliasRef>CL_VALUATION@OECDSDDNAD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="T" />
+            </structure:CodeID>
+          </structure:HierarchicalCode>
+          <structure:HierarchicalCode id="V">
+            <structure:CodelistAliasRef>CL_VALUATION@OECDSDDNAD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="V" />
+            </structure:CodeID>
+          </structure:HierarchicalCode>
+        </structure:Hierarchy>
+      </structure:HierarchicalCodelist>
+    </structure:HierarchicalCodelists>
+  </message:Structures>
+</message:Structure>

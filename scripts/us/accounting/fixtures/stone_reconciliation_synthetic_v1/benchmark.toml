@@ -1,0 +1,165 @@
+schema_version = "beforeit-us-stone-synthetic-benchmark.v1"
+fixture_id = "stone-signed-ledger-noised-v1"
+classification = "SYNTHETIC_NON_EVIDENTIARY_RESEARCH_ONLY"
+description = "Frozen signed six-cell ledger with exact controls, one predetermined cell, one structural zero, a legitimate negative flow, and deliberately unequal reliability. The two noised benchmark cells have a common exact total; their prior variances are 1 and 9, so the lower-confidence cell must absorb nine times the Stone adjustment."
+value_unit = "synthetic_millions_usd"
+price_basis = "PRODUCERS_PRICES"
+noised = true
+masked = false
+production_source = false
+forecast_origin_admissible = false
+model_state_write = false
+
+[[cell]]
+cell_id = "c01_high_confidence"
+row_code = "R01"
+column_code = "C01"
+raw_value = 10.0
+truth_value = 10.5
+reliability_class_id = "source_high_v1"
+covariance_group = ""
+predetermined = false
+structural_zero = false
+cell_state = "MEASURED_NONZERO"
+sign_policy = "PRESERVE_OBSERVED_SIGN"
+negative_economic_type = ""
+benchmark_role = "HIGH_CONFIDENCE_ADJUSTMENT"
+price_basis = "PRODUCERS_PRICES"
+provenance = "FROZEN_SYNTHETIC_NOISE_DESIGN_V1"
+
+[[cell]]
+cell_id = "c02_low_confidence"
+row_code = "R01"
+column_code = "C02"
+raw_value = 20.0
+truth_value = 25.5
+reliability_class_id = "source_low_v1"
+covariance_group = ""
+predetermined = false
+structural_zero = false
+cell_state = "MEASURED_NONZERO"
+sign_policy = "PRESERVE_OBSERVED_SIGN"
+negative_economic_type = ""
+benchmark_role = "LOW_CONFIDENCE_ADJUSTMENT"
+price_basis = "PRODUCERS_PRICES"
+provenance = "FROZEN_SYNTHETIC_NOISE_DESIGN_V1"
+
+[[cell]]
+cell_id = "c03_predetermined"
+row_code = "R01"
+column_code = "C03"
+raw_value = 5.0
+truth_value = 5.0
+reliability_class_id = "predetermined_exact_v1"
+covariance_group = ""
+predetermined = true
+structural_zero = false
+cell_state = "MEASURED_NONZERO"
+sign_policy = "PRESERVE_OBSERVED_SIGN"
+negative_economic_type = ""
+benchmark_role = "PREDETERMINED_CONTROL_CELL"
+price_basis = "PRODUCERS_PRICES"
+provenance = "FROZEN_SYNTHETIC_EXACT_CONTROL_V1"
+
+[[cell]]
+cell_id = "c04_signed_negative"
+row_code = "R02"
+column_code = "C01"
+raw_value = -4.0
+truth_value = -4.0
+reliability_class_id = "source_medium_correlated_v1"
+covariance_group = "signed_pair_source_v1"
+predetermined = false
+structural_zero = false
+cell_state = "MEASURED_NONZERO"
+sign_policy = "PRESERVE_OBSERVED_SIGN"
+negative_economic_type = "INVENTORY_WITHDRAWAL_SYNTHETIC"
+benchmark_role = "LEGITIMATE_SIGNED_FLOW"
+price_basis = "PRODUCERS_PRICES"
+provenance = "FROZEN_SYNTHETIC_SIGN_TEST_V1"
+
+[[cell]]
+cell_id = "c05_structural_zero"
+row_code = "R02"
+column_code = "C02"
+raw_value = 0.0
+truth_value = 0.0
+reliability_class_id = "structural_zero_exact_v1"
+covariance_group = ""
+predetermined = true
+structural_zero = true
+cell_state = "STRUCTURAL_ZERO"
+sign_policy = "PRESERVE_OBSERVED_SIGN"
+negative_economic_type = ""
+benchmark_role = "STRUCTURAL_ZERO"
+price_basis = "PRODUCERS_PRICES"
+provenance = "FROZEN_SYNTHETIC_ZERO_TOPOLOGY_V1"
+
+[[cell]]
+cell_id = "c06_signed_counterpart"
+row_code = "R02"
+column_code = "C03"
+raw_value = 9.0
+truth_value = 9.0
+reliability_class_id = "source_medium_correlated_v1"
+covariance_group = "signed_pair_source_v1"
+predetermined = false
+structural_zero = false
+cell_state = "MEASURED_NONZERO"
+sign_policy = "PRESERVE_OBSERVED_SIGN"
+negative_economic_type = ""
+benchmark_role = "SIGNED_FLOW_COUNTERPART"
+price_basis = "PRODUCERS_PRICES"
+provenance = "FROZEN_SYNTHETIC_SIGN_TEST_V1"
+
+[[control]]
+control_id = "k01_noised_pair_total"
+rhs = 36.0
+cell_ids = ["c01_high_confidence", "c02_low_confidence"]
+coefficients = [1.0, 1.0]
+exact = true
+price_basis = "PRODUCERS_PRICES"
+provenance = "FROZEN_SYNTHETIC_TRUTH_CONTROL_V1"
+
+[[control]]
+control_id = "k02_signed_pair_total"
+rhs = 5.0
+cell_ids = ["c04_signed_negative", "c06_signed_counterpart"]
+coefficients = [1.0, 1.0]
+exact = true
+price_basis = "PRODUCERS_PRICES"
+provenance = "FROZEN_SYNTHETIC_TRUTH_CONTROL_V1"
+
+[[control]]
+control_id = "k03_predetermined_cell"
+rhs = 5.0
+cell_ids = ["c03_predetermined"]
+coefficients = [1.0]
+exact = true
+price_basis = "PRODUCERS_PRICES"
+provenance = "FROZEN_SYNTHETIC_EXACT_CONTROL_V1"
+
+[[control]]
+control_id = "k04_structural_zero"
+rhs = 0.0
+cell_ids = ["c05_structural_zero"]
+coefficients = [1.0]
+exact = true
+price_basis = "PRODUCERS_PRICES"
+provenance = "FROZEN_SYNTHETIC_ZERO_TOPOLOGY_V1"
+
+[[control]]
+control_id = "k05_grand_total_redundant"
+rhs = 46.0
+cell_ids = [
+    "c01_high_confidence",
+    "c02_low_confidence",
+    "c03_predetermined",
+    "c04_signed_negative",
+    "c05_structural_zero",
+    "c06_signed_counterpart",
+]
+coefficients = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+exact = true
+price_basis = "PRODUCERS_PRICES"
+provenance = "FROZEN_SYNTHETIC_REDUNDANT_CONTROL_V1"

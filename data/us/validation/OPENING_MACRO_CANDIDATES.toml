@@ -1,0 +1,151 @@
+build_contract_path = "scripts/us/accounting/opening_macro_candidates.toml"
+build_contract_sha256 = "508e7db1bdc0182f9cf9e8f3bee15a66249fc437aead875931a1bc4c9e3a5d02"
+builder_path = "scripts/us/accounting/build_opening_accounting_candidate.jl"
+builder_sha256 = "f808750861cf7e6f7de117fc84390c514da7380339385e2c394afc69f1d43814"
+byte_reproducibility_scope = "same_frozen_local_execution_envelope_only"
+candidate_count = 2
+classification = "REVISED_CURRENT_VINTAGE_DIAGNOSTIC"
+cross_machine_byte_determinism_claimed = false
+execution_envelope_module_path = "scripts/us/accounting/USJuliaExecutionEnvelope.jl"
+execution_envelope_module_sha256 = "53f5352818ed9ad51fc30d62f88924d1cde5875b96abe50b06f319e41803b295"
+forecast_origin_admissible = false
+information_track = "REVISED_MIXED_VINTAGE_DIAGNOSTIC"
+julia_manifest_path = "scripts/us/Manifest.toml"
+julia_manifest_sha256 = "c2e596cf8452c5b890bb0ef66c05bc72a57fa25ab6f8fe790f8db4600b035263"
+julia_project_path = "scripts/us/Project.toml"
+julia_project_sha256 = "72cec6cb6dc64dc71b9e342890b78afbf8fd66cb97dd8603e4fe905ad137dc1c"
+legacy_artifacts_unchanged = true
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+runtime_source_tree_digest_algorithm = "sha256(sorted_posix_relative_path + NUL + lowercase_file_sha256 + LF)"
+runtime_source_tree_file_count = 57
+runtime_source_tree_path = "src"
+runtime_source_tree_sha256 = "6a071e702694bfebba2f47bd2b03cf96519977868bcee3237f650dadcbaa8055"
+schema_version = "beforeit-us-opening-accounting-candidates-manifest.v1"
+supply_make_reader_path = "scripts/us/accounting/USSupplyMakeDiagnostics.jl"
+supply_make_reader_sha256 = "23e02af263eb65db6782b5a734f46afe845ab89f6a2fa760d8a71057a61a3f84"
+t10105_reader_path = "scripts/us/accounting/UST10105Controls.jl"
+t10105_reader_sha256 = "bed5f489b7096bc94f613a8c36449d386e81bf8fb238aad090a02551b967a47e"
+
+[[candidate]]
+artifact_path = "data/us/accounting/candidates/US_2024Q4_opening_accounting_candidate_v1.jld2"
+artifact_sha256 = "8f42bb7761b31d67defaad9797fa01bc2a39eaf663a2b7c04f7163e13fbdb3d2"
+candidate_id = "structural_2024Q4_opening_accounting_v1"
+classification = "REVISED_CURRENT_VINTAGE_DIAGNOSTIC"
+diagnostic_seed = 20261003
+inventory_stock = "FAIL_MISSING_INDEPENDENT_QUARTER_END_STOCK"
+kind = "structural_diagnostic"
+latent_state_reconciliation = "FAIL"
+maximum_absolute_component_gap = 192676.84386859543
+model_implied_expenditure_residual = -137674.93989291706
+observed_expenditure_residual = 0.25
+opening_macro_control_identity = "PASS_AT_SOURCE_ROUNDING"
+origin_admissible = false
+origin_period = "2024-12-31"
+overall_accounting_promotion = "FAIL"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+semantic_sha256 = "a8bc2d7b08b1e2f8ba9ea1c5b90e3f6b7c9d271d72a713b189de16e076ecd7f0"
+source_expenditure_residual = 0.25
+structural_supply_use = "FAIL"
+unreconciled_commodity_gap_annual_sum = -99596.0625219554
+
+    [candidate.model_implied_values]
+    nominal_exports = 650228.7655078492
+    nominal_fixed_investment = 1.391226326821683e6
+    nominal_gdp = 7.456295500000001e6
+    nominal_government_consumption_and_investment = 1.3113467198494282e6
+    nominal_gross_private_domestic_investment = 1.391226326821683e6
+    nominal_household_consumption = 5.095222033845362e6
+    nominal_imports = 854053.4061314046
+    nominal_inventory_investment = 0.0
+
+    [candidate.model_minus_source]
+    nominal_exports = -161834.98449215083
+    nominal_fixed_investment = 80216.07682168297
+    nominal_gdp = 9.313225746154785e-10
+    nominal_government_consumption_and_investment = 23665.469849428162
+    nominal_gross_private_domestic_investment = 75768.82682168297
+    nominal_household_consumption = 7399.0338453622535
+    nominal_imports = -192676.84386859543
+    nominal_inventory_investment = -4447.25
+
+    [candidate.source_values]
+    nominal_exports = 812063.75
+    nominal_fixed_investment = 1.31101025e6
+    nominal_gdp = 7.4562955e6
+    nominal_government_consumption_and_investment = 1.28768125e6
+    nominal_gross_private_domestic_investment = 1.3154575e6
+    nominal_household_consumption = 5.087823e6
+    nominal_imports = 1.04673025e6
+    nominal_inventory_investment = 4447.25
+[[candidate]]
+artifact_path = "data/us/accounting/candidates/US_2026Q1_opening_accounting_candidate_v1.jld2"
+artifact_sha256 = "38f2eb27690a58f49d235376880148e99f026dbb68bf0b5a72ad4f34fe4f4933"
+candidate_id = "nowcast_2026Q1_opening_accounting_v1"
+classification = "REVISED_CURRENT_VINTAGE_DIAGNOSTIC"
+diagnostic_seed = 20261004
+inventory_stock = "FAIL_MISSING_INDEPENDENT_QUARTER_END_STOCK"
+kind = "current_vintage_nowcast_diagnostic"
+latent_state_reconciliation = "FAIL"
+maximum_absolute_component_gap = 182460.51145266963
+model_implied_expenditure_residual = -147094.19789356343
+observed_expenditure_residual = -0.5
+opening_macro_control_identity = "PASS_AT_SOURCE_ROUNDING"
+origin_admissible = false
+origin_period = "2026-03-31"
+overall_accounting_promotion = "FAIL"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+semantic_sha256 = "97572eb705e562daf861ac67059cde2bb4a543af83f556b2c930d8aae7ba0c92"
+source_expenditure_residual = -0.5
+structural_supply_use = "FAIL"
+unreconciled_commodity_gap_annual_sum = -99596.0625219554
+
+    [candidate.model_implied_values]
+    nominal_exports = 694715.2385473304
+    nominal_fixed_investment = 1.4864093697183332e6
+    nominal_gdp = 7.966430250000002e6
+    nominal_government_consumption_and_investment = 1.4010646677357089e6
+    nominal_gross_private_domestic_investment = 1.4864093697183332e6
+    nominal_household_consumption = 5.443820049901756e6
+    nominal_imports = 912484.8780095635
+    nominal_inventory_investment = 0.0
+
+    [candidate.model_minus_source]
+    nominal_exports = -182460.51145266963
+    nominal_fixed_investment = 70892.11971833324
+    nominal_gdp = 1.862645149230957e-9
+    nominal_government_consumption_and_investment = 46885.91773570888
+    nominal_gross_private_domestic_investment = 77905.36971833324
+    nominal_household_consumption = 35083.04990175646
+    nominal_imports = -169679.87199043646
+    nominal_inventory_investment = 7013.25
+
+    [candidate.source_values]
+    nominal_exports = 877175.75
+    nominal_fixed_investment = 1.41551725e6
+    nominal_gdp = 7.96643025e6
+    nominal_government_consumption_and_investment = 1.35417875e6
+    nominal_gross_private_domestic_investment = 1.408504e6
+    nominal_household_consumption = 5.408737e6
+    nominal_imports = 1.08216475e6
+    nominal_inventory_investment = -7013.25
+
+[execution_envelope]
+architecture = "aarch64"
+blas_thread_count = 1
+blas_vendor = "lbt"
+bounds_check_code = 0
+bounds_check_mode = "auto"
+can_inline_code = 1
+cpu_name = "apple-m1"
+cpu_target = "native"
+fast_math_code = 0
+julia_thread_count = 1
+julia_version = "1.10.3"
+kernel = "Darwin"
+min_opt_level = 0
+opt_level = 2
+platform_triplet = "aarch64-apple-darwin-libgfortran5-cxx11-julia_version+1.10.3"
+polly_code = 1
+startup_file_code = 2
+startup_file_mode = "no"
+word_size = 64

@@ -1,0 +1,262 @@
+accounting_gate_effect = "NONE"
+artifact_tool_version = "2.8.39"
+benchmark_year = 2017
+explicit_numeric_zero_count = 819
+fixture_cell_count = 32443
+fixture_sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
+forecast_origin_admissible = false
+import_workbook_member = "ImportMatrices_After_Redefinitions_Summary.xlsx"
+import_workbook_sha256 = "9246c68288bb593495366288b9d8fd2038cae1ff500855ccd3e5c4377d0d3b25"
+model_state_write = false
+negative_cell_count = 321
+projection_count = 19
+producer_make_workbook_member = "IOMake_After_Redefinitions_PRO_Summary.xlsx"
+producer_make_workbook_sha256 = "073b87c7e52e76fb78ad7ddafb0c2e60f9188fc5a4e56dc0094f4a7ae3f529c6"
+producer_use_workbook_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+producer_use_workbook_sha256 = "9e3791d657909843ce202161bae00cf8a425d7e1bf866cc8a0462810f0ae00c7"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+purchaser_use_workbook_member = "IOUse_After_Redefinitions_PUR_Summary.xlsx"
+purchaser_use_workbook_sha256 = "9d55530ec5cd4688855ef474c779d0dba5f2e1e74d4fcfcdc95cddc64c69262b"
+schema_version = "beforeit-us-after-redefinitions-common-basis-fixture.v1"
+selected_zero_not_shown_count = 16016
+source_metadata_sha256 = "8be9fbef6e2c18a7388cd61bd14312159fc3984d4dbc2c60158e977ee7f0e878"
+source_retrieved_at_utc = "2026-08-06T05:03:02.322Z"
+source_url = "https://apps.bea.gov/industry/release/zip/MAKE-USE-IMPORTS%20(AFTER%20REDEFINITIONS).zip"
+source_zip_byte_count = 8326144
+source_zip_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+status = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+unit = "millions of current dollars"
+use_price_basis_2017_benchmark = "producers and purchasers prices, separate source tables"
+use_price_basis_2024 = "producers prices"
+year = 2024
+
+preservation_policy = "Every projected source cell is retained. BEA ellipsis markers are numeric zero with source_cell_kind=selected_zero_not_shown; published numeric zero remains source_cell_kind=numeric. Negative cells, F030, Other, and Used are not clipped, balanced, allocated, or dropped."
+scientific_role = "Current-vintage common-basis accounting diagnostic. The 2017 purchaser/producer pair is a historical valuation benchmark, not a 2024 allocator and not forecast-origin evidence."
+
+[[projection]]
+cell_count = 1460
+column_count = 20
+column_type = "FinalUse"
+matrix_id = "benchmark_producer_final_use_2017"
+projection_sha256 = "4bc19b6085b3fc3e7e791af9d783adc4ddde1feb3248f62e45d6612ec9f38cd3"
+row_count = 73
+row_type = "Commodity"
+source_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2017!A8:B80", "2017!BW6:CP7", "2017!BW8:CP80"]
+year = 2017
+
+[[projection]]
+cell_count = 1
+column_count = 1
+column_type = "Control"
+matrix_id = "benchmark_producer_grand_output_2017"
+projection_sha256 = "6238ba2b7ee337975af4b6de67d552d4263195f1e85f8442b4929abb6813d7c3"
+row_count = 1
+row_type = "Control"
+source_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2017!CR86"]
+year = 2017
+
+[[projection]]
+cell_count = 5183
+column_count = 71
+column_type = "Industry"
+matrix_id = "benchmark_producer_intermediate_use_2017"
+projection_sha256 = "90e2ebde55a75ccf57ba61ceda120dd64e51077adf8d325c46cad1973d08f795"
+row_count = 73
+row_type = "Commodity"
+source_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2017!A8:B80", "2017!C6:BU7", "2017!C8:BU80"]
+year = 2017
+
+[[projection]]
+cell_count = 1400
+column_count = 20
+column_type = "FinalUse"
+matrix_id = "benchmark_purchaser_final_use_2017"
+projection_sha256 = "fb315aa628c22da80c174f6c4cd4d046b3ae1d678099a233d0ceca31dbcf23fc"
+row_count = 70
+row_type = "Commodity"
+source_member = "IOUse_After_Redefinitions_PUR_Summary.xlsx"
+source_ranges = ["2017!A8:B77", "2017!BW6:CP7", "2017!BW8:CP77"]
+year = 2017
+
+[[projection]]
+cell_count = 1
+column_count = 1
+column_type = "Control"
+matrix_id = "benchmark_purchaser_grand_output_2017"
+projection_sha256 = "8e06e3798bb9c838045741185f80d80800779a06377ae7a762a473fb9dcff028"
+row_count = 1
+row_type = "Control"
+source_member = "IOUse_After_Redefinitions_PUR_Summary.xlsx"
+source_ranges = ["2017!CR83"]
+year = 2017
+
+[[projection]]
+cell_count = 4970
+column_count = 71
+column_type = "Industry"
+matrix_id = "benchmark_purchaser_intermediate_use_2017"
+projection_sha256 = "1c1fbc215923869cbe9893d9bdedb9e1da4229237980720d2c8159706258c5bd"
+row_count = 70
+row_type = "Commodity"
+source_member = "IOUse_After_Redefinitions_PUR_Summary.xlsx"
+source_ranges = ["2017!A8:B77", "2017!C6:BU7", "2017!C8:BU77"]
+year = 2017
+
+[[projection]]
+cell_count = 146
+column_count = 2
+column_type = "Control"
+matrix_id = "import_commodity_controls_2024"
+projection_sha256 = "4cb90198a12d4d3587aabb3a4f8fe0da6a9e34606dcce5344412e49da603b5cb"
+row_count = 73
+row_type = "Commodity"
+source_member = "ImportMatrices_After_Redefinitions_Summary.xlsx"
+source_ranges = ["2024!A8:B80", "2024!BV8:BV80", "2024!CQ8:CQ80"]
+year = 2024
+
+[[projection]]
+cell_count = 1460
+column_count = 20
+column_type = "FinalUse"
+matrix_id = "import_final_use_2024"
+projection_sha256 = "fc9880daed7aafe40c804f969cc6d61c1d08d5d8ed6613ed8bd657fd8d834224"
+row_count = 73
+row_type = "Commodity"
+source_member = "ImportMatrices_After_Redefinitions_Summary.xlsx"
+source_ranges = ["2024!A8:B80", "2024!BW6:CP7", "2024!BW8:CP80"]
+year = 2024
+
+[[projection]]
+cell_count = 5183
+column_count = 71
+column_type = "Industry"
+matrix_id = "import_intermediate_use_2024"
+projection_sha256 = "36151c03db3c3c33fc170324c4ef19805aade5be7f7655b3ea5ff3c91a198443"
+row_count = 73
+row_type = "Commodity"
+source_member = "ImportMatrices_After_Redefinitions_Summary.xlsx"
+source_ranges = ["2024!A8:B80", "2024!C6:BU7", "2024!C8:BU80"]
+year = 2024
+
+[[projection]]
+cell_count = 1460
+column_count = 20
+column_type = "FinalUse"
+matrix_id = "producer_final_use_2024"
+projection_sha256 = "205d6c126efc27ba07e89b262e27f81f9bcb7200d679ce039a5aaa7a889e6fbb"
+row_count = 73
+row_type = "Commodity"
+source_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2024!A8:B80", "2024!BW6:CP7", "2024!BW8:CP80"]
+year = 2024
+
+[[projection]]
+cell_count = 5183
+column_count = 71
+column_type = "Industry"
+matrix_id = "producer_intermediate_use_2024"
+projection_sha256 = "4a8b361fc8c635602df6cedd0f3d7e728933105e37eaddbebabc8ce1925173f4"
+row_count = 73
+row_type = "Commodity"
+source_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2024!A8:B80", "2024!C6:BU7", "2024!C8:BU80"]
+year = 2024
+
+[[projection]]
+cell_count = 5183
+column_count = 73
+column_type = "Commodity"
+matrix_id = "producer_make_2024"
+projection_sha256 = "5c80053d4e1803e05f5ad597daa4f7511e6ab68e4b07c45e48678c09ed8c63d4"
+row_count = 71
+row_type = "Industry"
+source_member = "IOMake_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2024!A8:B78", "2024!C6:BW7", "2024!C8:BW78"]
+year = 2024
+
+[[projection]]
+cell_count = 73
+column_count = 1
+column_type = "Control"
+matrix_id = "producer_make_commodity_output_2024"
+projection_sha256 = "012e85bbb74764355347c4c556a70d34f1385effef21577a2abdda86c34d2833"
+row_count = 73
+row_type = "Commodity"
+source_member = "IOMake_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2024!C6:BW7", "2024!C79:BW79"]
+year = 2024
+
+[[projection]]
+cell_count = 1
+column_count = 1
+column_type = "Control"
+matrix_id = "producer_make_grand_output_2024"
+projection_sha256 = "40e681ab0dd8c8461dcbbcc5b885649fb816db9d0fefdc9d1b8459a739d21cf9"
+row_count = 1
+row_type = "Control"
+source_member = "IOMake_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2024!BX79"]
+year = 2024
+
+[[projection]]
+cell_count = 71
+column_count = 1
+column_type = "Control"
+matrix_id = "producer_make_industry_output_2024"
+projection_sha256 = "9ce864bb432c097172e22f735ab6c659eff9a2d91f34ce6803aea0545de368e0"
+row_count = 71
+row_type = "Industry"
+source_member = "IOMake_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2024!A8:B78", "2024!BX8:BX78"]
+year = 2024
+
+[[projection]]
+cell_count = 219
+column_count = 3
+column_type = "Control"
+matrix_id = "producer_use_commodity_controls_2024"
+projection_sha256 = "ef577965059370abc16db5b339dc357ababe37e52c25b0d1a36c32046db95a6e"
+row_count = 73
+row_type = "Commodity"
+source_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2024!A8:B80", "2024!BV8:BV80", "2024!CQ8:CR80"]
+year = 2024
+
+[[projection]]
+cell_count = 23
+column_count = 23
+column_type = "Control"
+matrix_id = "producer_use_grand_controls_2024"
+projection_sha256 = "58bfe4bda5de0d8725d25ad148dea197cd6a4eb724c1a47e4e6e0da481fbfeef"
+row_count = 1
+row_type = "Control"
+source_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2024!BV81", "2024!BW6:CP7", "2024!BW86:CP86", "2024!CQ85", "2024!CR86"]
+year = 2024
+
+[[projection]]
+cell_count = 213
+column_count = 71
+column_type = "Industry"
+matrix_id = "producer_use_industry_controls_2024"
+projection_sha256 = "efdd23571e57016a1234bf0ddf6924c16a763b626aac8f6ccd16e4acce04d54b"
+row_count = 3
+row_type = "Control"
+source_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2024!C6:BU7", "2024!C81:BU81", "2024!C85:BU86"]
+year = 2024
+
+[[projection]]
+cell_count = 213
+column_count = 71
+column_type = "Industry"
+matrix_id = "producer_value_added_2024"
+projection_sha256 = "81cd3d1443357f1fad597bd329616deaabc15b435960ca2354ad4a8d047e20bb"
+row_count = 3
+row_type = "ValueAdded"
+source_member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+source_ranges = ["2024!A82:B84", "2024!C6:BU7", "2024!C82:BU84"]
+year = 2024

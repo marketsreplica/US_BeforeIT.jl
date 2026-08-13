@@ -1,0 +1,270 @@
+schema_version = "beforeit-us-accounting-gates.v2"
+generated_from_commit = "6030f7558a9956a99465a09e31c51f37df198c90"
+generated_from_commit_role = "review baseline only; the candidate dirty-tree state is bound by explicit artifact, build-contract, builder, and environment hashes"
+evaluation_date = "2026-08-06"
+gate_id = "us_opening_gdp_expenditure"
+gate_status = "FAIL"
+diagnostic_status = "OBSERVATION_LAYER_REPAIRED_LATENT_STATE_FAILED"
+economic_unit = "millions of current U.S. dollars per model quarter"
+formula = "model_implied_nominal_gdp - model_implied_nominal_household_consumption - model_implied_nominal_government_consumption - model_implied_nominal_capitalformation - model_implied_nominal_exports + model_implied_nominal_imports"
+observation_formula = "source_nominal_gdp - source_pce - source_gpdi - source_exports + source_imports - source_government_consumption_and_investment"
+latent_state_formula = "model_implied_nominal_gdp - model_implied_nominal_household_consumption - model_implied_nominal_government_consumption - model_implied_nominal_capitalformation - model_implied_nominal_exports + model_implied_nominal_imports"
+absolute_tolerance = 0.000001
+relative_tolerance = 0.000000000001
+source_rounding_absolute_tolerance = 1.0
+interpretation = "The explicit BEA T10105 observation row passes the published current-dollar identities at source rounding, but the initialized agent state still implies the original expenditure wedge. Source anchoring is an observation adapter, not latent-state or supply/use reconciliation. Simulated quarters after the opening continue to close numerically."
+promotion_effect = "The observation-layer subgate passes. Latent-state reconciliation, structural supply/use and valuation, inventory-stock, full accounting, forecast-skill, and production promotion gates remain failed."
+prohibited_closure = "Do not add the commodity-balance discrepancy to capital formation. It is contaminated by industry/commodity, valuation, excluded-code, and steady-state-capital differences and is not BEA inventory investment."
+next_implementation = "Reconcile the agent state and sector demand vectors to the source controls; complete the make transformation and valuation bridge; retain Other/Used explicitly; and source a nonnegative quarter-end inventory stock independently from the signed inventory-investment flow."
+
+[gate_split]
+observation_layer_gate_id = "us_opening_source_expenditure_identity"
+observation_layer_status = "PASS"
+observation_layer_tolerance_basis = "bea_source_rounding"
+source_rounding_absolute_tolerance = 1.0
+latent_state_gate_id = "us_opening_latent_macro_reconciliation"
+latent_state_status = "FAIL"
+latent_state_tolerance_basis = "model_numeric"
+inventory_stock_gate_id = "us_opening_inventory_stock"
+inventory_stock_status = "MISSING"
+supply_make_valuation_gate_id = "us_supply_make_valuation_closure"
+supply_make_valuation_status = "FAIL"
+full_accounting_gate_id = "us_full_accounting_promotion"
+full_accounting_status = "FAIL"
+promotion_status = "FAIL"
+mapping_evidence_class = "OBSERVATION_ONLY_NOT_APPROVAL"
+information_track = "revised_mixed_vintage_diagnostic"
+origin_admissible = false
+
+[candidate_evidence]
+manifest = "data/us/validation/OPENING_MACRO_CANDIDATES.toml"
+manifest_sha256 = "8f4db3fe2702d504958aeaa6ebe6008beaef9b3e1a8d8aaa669413d0497bfb14"
+build_contract = "scripts/us/accounting/opening_macro_candidates.toml"
+build_contract_sha256 = "508e7db1bdc0182f9cf9e8f3bee15a66249fc437aead875931a1bc4c9e3a5d02"
+builder = "scripts/us/accounting/build_opening_accounting_candidate.jl"
+builder_sha256 = "f808750861cf7e6f7de117fc84390c514da7380339385e2c394afc69f1d43814"
+execution_envelope_module = "scripts/us/accounting/USJuliaExecutionEnvelope.jl"
+execution_envelope_module_sha256 = "53f5352818ed9ad51fc30d62f88924d1cde5875b96abe50b06f319e41803b295"
+candidate_count = 2
+legacy_artifacts_unchanged = true
+byte_rebuild_deterministic = true
+byte_reproducibility_scope = "same_frozen_local_execution_envelope_only"
+cross_machine_byte_determinism_claimed = false
+classification = "REVISED_CURRENT_VINTAGE_DIAGNOSTIC"
+origin_admissible = false
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+
+[[vintages]]
+id = "structural_2024Q4"
+artifact = "data/us/baselines/US_2024Q4_structural.jld2"
+artifact_sha256 = "8d99e47c24e72dc05a8afa561a9b3c27cac6efc63fd046a571cee42e06d5501d"
+artifact_role = "LEGACY_RESEARCH_BASELINE"
+candidate_artifact = "data/us/accounting/candidates/US_2024Q4_opening_accounting_candidate_v1.jld2"
+candidate_artifact_sha256 = "8f42bb7761b31d67defaad9797fa01bc2a39eaf663a2b7c04f7163e13fbdb3d2"
+candidate_semantic_sha256 = "a8bc2d7b08b1e2f8ba9ea1c5b90e3f6b7c9d271d72a713b189de16e076ecd7f0"
+candidate_classification = "REVISED_CURRENT_VINTAGE_DIAGNOSTIC"
+origin_admissible = false
+mapping_approval_effect = "NONE"
+opening_nominal_gdp = 7456295.500000001
+opening_residual = -137674.93989291706
+opening_residual_semantics = "model_implied_latent_diagnostic"
+observed_opening_residual = 0.25
+model_implied_opening_residual = -137674.93989291706
+opening_residual_share_gdp = -0.018464254788844815
+annual_commodity_discrepancy_sum = -531156.3595926869
+inferred_timescale = 0.25919851547761613
+residual_from_commodity_discrepancy = -137674.9398929193
+official_inventory_investment = 4447.25
+official_nipa_identity_residual = 0.25
+source_rounding_absolute_tolerance = 1.0
+diagnostic_seed = 20261003
+maximum_absolute_component_gap = 192676.84386859543
+candidate_unreconciled_commodity_gap_annual_sum = -99596.0625219554
+observation_layer_status = "PASS_AT_SOURCE_ROUNDING"
+latent_state_reconciliation_status = "FAIL"
+inventory_stock_status = "MISSING"
+supply_make_valuation_status = "FAIL"
+overall_accounting_promotion_status = "FAIL"
+simulated_quarters_checked = 4
+simulated_quarters_status = "PASS"
+
+    [vintages.component_comparison]
+    source_nominal_gdp = 7456295.5
+    model_implied_nominal_gdp = 7456295.500000001
+    model_minus_source_nominal_gdp = 0.0000000009313225746154785
+    source_pce = 5087823.0
+    model_implied_pce = 5095222.033845362
+    model_minus_source_pce = 7399.0338453622535
+    source_gpdi = 1315457.5
+    model_implied_gpdi = 1391226.326821683
+    model_minus_source_gpdi = 75768.82682168297
+    source_fixed_investment = 1311010.25
+    model_implied_fixed_investment = 1391226.326821683
+    model_minus_source_fixed_investment = 80216.07682168297
+    source_inventory_investment = 4447.25
+    model_implied_inventory_investment = 0.0
+    model_minus_source_inventory_investment = -4447.25
+    source_exports = 812063.75
+    model_implied_exports = 650228.7655078492
+    model_minus_source_exports = -161834.98449215083
+    source_imports = 1046730.25
+    model_implied_imports = 854053.4061314046
+    model_minus_source_imports = -192676.84386859543
+    source_government_consumption_and_investment = 1287681.25
+    model_implied_government_consumption_field = 1311346.7198494282
+    model_minus_source_government_consumption_and_investment = 23665.469849428162
+    evidence_class = "OBSERVATION_ONLY_CURRENT_VINTAGE_DIAGNOSTIC"
+
+[[vintages]]
+id = "nowcast_2026Q1"
+artifact = "data/us/baselines/US_2026Q1_nowcast.jld2"
+artifact_sha256 = "eb8d28f6b2aef9b36cf294be8906d2d5481f1c8db66ea3d034b1a96f9194b0de"
+artifact_role = "LEGACY_RESEARCH_BASELINE"
+candidate_artifact = "data/us/accounting/candidates/US_2026Q1_opening_accounting_candidate_v1.jld2"
+candidate_artifact_sha256 = "38f2eb27690a58f49d235376880148e99f026dbb68bf0b5a72ad4f34fe4f4933"
+candidate_semantic_sha256 = "97572eb705e562daf861ac67059cde2bb4a543af83f556b2c930d8aae7ba0c92"
+candidate_classification = "REVISED_CURRENT_VINTAGE_DIAGNOSTIC"
+origin_admissible = false
+mapping_approval_effect = "NONE"
+opening_nominal_gdp = 7966430.25
+opening_residual = -147094.1978935653
+opening_residual_semantics = "model_implied_latent_diagnostic"
+observed_opening_residual = -0.5
+model_implied_opening_residual = -147094.19789356343
+opening_residual_share_gdp = -0.01846425478884539
+annual_commodity_discrepancy_sum = -531156.3595926869
+inferred_timescale = 0.2769320092606274
+residual_from_commodity_discrepancy = -147094.1978935631
+official_inventory_investment = -7013.25
+official_nipa_identity_residual = -0.5
+source_rounding_absolute_tolerance = 1.0
+diagnostic_seed = 20261004
+maximum_absolute_component_gap = 182460.51145266963
+candidate_unreconciled_commodity_gap_annual_sum = -99596.0625219554
+observation_layer_status = "PASS_AT_SOURCE_ROUNDING"
+latent_state_reconciliation_status = "FAIL"
+inventory_stock_status = "MISSING"
+supply_make_valuation_status = "FAIL"
+overall_accounting_promotion_status = "FAIL"
+simulated_quarters_checked = 4
+simulated_quarters_status = "PASS"
+
+    [vintages.component_comparison]
+    source_nominal_gdp = 7966430.25
+    model_implied_nominal_gdp = 7966430.250000002
+    model_minus_source_nominal_gdp = 0.000000001862645149230957
+    source_pce = 5408737.0
+    model_implied_pce = 5443820.049901756
+    model_minus_source_pce = 35083.04990175646
+    source_gpdi = 1408504.0
+    model_implied_gpdi = 1486409.3697183332
+    model_minus_source_gpdi = 77905.36971833324
+    source_fixed_investment = 1415517.25
+    model_implied_fixed_investment = 1486409.3697183332
+    model_minus_source_fixed_investment = 70892.11971833324
+    source_inventory_investment = -7013.25
+    model_implied_inventory_investment = 0.0
+    model_minus_source_inventory_investment = 7013.25
+    source_exports = 877175.75
+    model_implied_exports = 694715.2385473304
+    model_minus_source_exports = -182460.51145266963
+    source_imports = 1082164.75
+    model_implied_imports = 912484.8780095635
+    model_minus_source_imports = -169679.87199043646
+    source_government_consumption_and_investment = 1354178.75
+    model_implied_government_consumption_field = 1401064.6677357089
+    model_minus_source_government_consumption_and_investment = 46885.91773570888
+    evidence_class = "OBSERVATION_ONLY_CURRENT_VINTAGE_DIAGNOSTIC"
+
+[source_artifacts]
+bea_io_table_259_sha256 = "2bdd65f04e1bf31fd66d1e642afd0fb9dda2fd9bb5ba3bacf8db83431be1e918"
+bea_io_table_262_sha256 = "91d6686dce15fe1d96f35f1752382bf1d47d274c067f52febc60ae40014406e8"
+bea_nipa_t10105_sha256 = "a80351ce2daeccd5994caea385c6ee9f5201fa46ce0c4cab3e7fa19fc8dec574"
+bea_nipa_t10105_metadata_sha256 = "3e8a0d6e91237e22ee2805ba2abbce6ee746085e395d443e991921a97bee06ba"
+t10105_controls_fixture_sha256 = "c453fbdb52cec412ffe41a4d6b791dd6e7432319d6276ea62fef10421414462f"
+supply_make_fixture_sha256 = "c4461fbe971d8fb70750ff4cce6bb09e582a024d7cc1f6e8ebd8e3685bab69e0"
+source_status = "APPROVED_ARCHIVED"
+
+[commodity_discrepancy]
+status = "LEGACY_REJECTED_PROXY"
+formula = "industry_indexed_output + imports - intermediate_use - household_use - government_use - capital_use - exports"
+annual_sum = -531156.3595926869
+positive_sector_count = 26
+positive_sum = 3127185.254003384
+negative_sector_count = 42
+negative_sum = -3658341.6135960715
+opening_identity = "opening_gdp_expenditure_residual = inferred_timescale * annual_sum"
+inventory_stock_construction = "S_s = inferred_timescale * positive_part(-sector_discrepancy)"
+inventory_flow_treatment = "No inventory-investment flow from NIPA T10105 or BEA F030 enters opening nominal capital formation."
+candidate_treatment = "The candidate removes S_s and every inventory-named discrepancy alias. This legacy ledger remains evidence for the latent-state failure and for controlled comparisons only."
+
+[candidate_commodity_diagnostic]
+status = "UNRECONCILED_DIAGNOSTIC_NOT_CLOSURE"
+formula = "table_262_t007_domestic_commodity_output + measured_imports - modeled_commodity_uses"
+annual_sum = -99596.0625219554
+economic_unit = "annual millions of current U.S. dollars"
+commodity_output_basis = "BEA_TABLE_262_T007_COMMODITY_BASIC_PRICE"
+industry_output_basis = "BEA_TABLE_259_T018_INDUSTRY_BASIC_PRICE"
+closure_applied = false
+mapped_to_inventory_flow = false
+mapped_to_inventory_stock = false
+inventory_named_alias_present = false
+discrepancy_derived_s_s_present = false
+interpretation = "Replacing industry output with code-keyed T007 is necessary but insufficient. The remaining signed gap is retained without balancing while valuation, margins, product taxes, Other/Used, and behavioral demand are reconciled."
+
+[official_inventory_control]
+table = "BEA Input-Output Table 259"
+series = "F030"
+modeled_68_rows = 43555.0
+used_code = 9992.0
+other_code = 0.0
+published_total = 53546.0
+component_rounding_difference = 1.0
+correlation_with_commodity_discrepancy = -0.037109
+same_sign_nonzero_sector_count = 6
+largest_discrepancy_sectors_with_zero_f030 = 12
+l2_norm_ratio_discrepancy_to_f030 = 88.18
+conclusion = "The commodity discrepancy is not a defensible proxy for inventory investment."
+
+[diagnostic_decomposition]
+unit = "annual millions of current U.S. dollars"
+rounding_tolerance = 0.001
+diagnostic_basic_price_f030 = 30325.767
+supply_mapping = -431561.297
+intermediate_use_construction = 710285.959
+household_use_rescaling = 209067.582
+government_use_rescaling = -59795.967
+capital_use_construction = -590516.411
+export_use_rescaling = -398837.607
+published_cell_and_ratio_rounding = -124.385
+total = -531156.359
+
+[supply_mapping_decomposition]
+unit = "annual millions of current U.S. dollars"
+industry_output_minus_commodity_output = 19731.0
+intermediate_product_tax_netting = -451292.297
+output_control_rounding = 1.0
+import_adjustment = -1.0
+total = -431561.297
+positive_industry_commodity_reallocation = 2598240.0
+negative_industry_commodity_reallocation = -2578509.0
+correlation_with_commodity_discrepancy = 0.879204
+univariate_r_squared = 0.773
+
+[excluded_codes]
+policy = "Other and Used must remain explicit closure accounts or use a separately governed allocation bridge."
+intermediate_uplift_into_modeled_bridge = 305953.0
+official_other_plus_used_intermediate_use = 305951.0
+rounding_difference = 2.0
+
+[required_repairs]
+items = [
+    "origin_vintage_t10105_macro_component_anchors_for_each_forecast_origin",
+    "latent_agent_state_and_sector_demand_reconciliation_to_macro_controls",
+    "signed_inventory_investment_separate_from_nonnegative_inventory_stock",
+    "table_262_t007_supply_make_bridge",
+    "full_margin_transport_product_tax_valuation_bridge_or_consistent_purchasers_prices",
+    "explicit_other_and_used_closure_accounts",
+    "observed_gpdi_versus_steady_state_replacement_investment_decision",
+    "quarterly_sector_inventory_flow_allocation",
+]

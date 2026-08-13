@@ -1,0 +1,234 @@
+schema_version = "beforeit-us-oecd-sut-source-axis-valuation-diagnostic.v2"
+classification = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+forecast_origin_admissible = false
+model_state_write = false
+accounting_gate_effect = "NONE"
+forecast_score_effect = "NONE"
+source_year = 2024
+sdmx_version = "2.0"
+source_reference_area = "USA"
+source_frequency = "A"
+source_price_base = "V"
+source_unit_measure = "XDC"
+source_unit_multiplier = "6"
+source_currency = "USD"
+source_decimals = "2"
+source_observation_status = "A"
+source_confidentiality_status = "F"
+rounding_tolerance_hundredths_million_usd = 1
+
+generator_path = "scripts/us/accounting/oecd_valuation/generate_oecd_source_axis_fixture.py"
+generator_sha256 = "e6690b200017f9b2c06cb1f9cc3fd210b73a1b1552902c03d8baac3603be6fde"
+project_path = "scripts/us/Project.toml"
+project_sha256 = "72cec6cb6dc64dc71b9e342890b78afbf8fd66cb97dd8603e4fe905ad137dc1c"
+julia_manifest_path = "scripts/us/Manifest.toml"
+julia_manifest_sha256 = "c2e596cf8452c5b890bb0ef66c05bc72a57fa25ab6f8fe790f8db4600b035263"
+
+fixture_path = "scripts/us/accounting/oecd_valuation/fixtures/oecd_sut_usa_2024_v2"
+fixture_manifest_sha256 = "62a1f77cc89d1ba735d1ba9e366ff553e132f741de8cac19b42b419247b8367a"
+fixture_cells_sha256 = "25531db1941cbc00dc8294e31322cc5c425a4ff0365d0f517850a3538176b5a4"
+fixture_axis_codes_sha256 = "29d56d85154e9bb9317f999576869ea071cd1ca8858baa81c8921d52b6da52f6"
+fixture_source_totals_sha256 = "e10c53d53148005cdf0fc8c396f19bf911bd48ea93b9a21843c6dd72d94f537f"
+fixture_identity_evaluations_sha256 = "30a1dcce1f87283b051bec4ea1e5ea1e5944deb721773463f6d3fb6c15fa3e8e"
+fixture_nonbasic_quarantine_sha256 = "3691a589f1678e4aa19f4db0ab9b0545aa7dfc128983a54e9d2df85f1fc7fdc4"
+fixture_source_receipts_sha256 = "695b683fd6709b9e5cf4225999773bdc5ecb0b4f7bb1a6dec956cba7fa88b083"
+source_bundle_sha256 = "b202aa776874eb712a207f9be6f312a12c5d73ed367db881c32f7bb81936a1f7"
+raw_response_path = "scripts/us/accounting/oecd_valuation/raw/oecd_sut_usa_2024_v2"
+source_response_count = 25
+source_axis_cell_count = 10675
+axis_code_count = 245
+t1610_nonbasic_quarantine_count = 245
+
+bea_fixture_path = "scripts/us/accounting/fixtures/bea_2024_approved"
+bea_fixture_sha256 = "c4461fbe971d8fb70750ff4cce6bb09e582a024d7cc1f6e8ebd8e3685bab69e0"
+bea_manifest_sha256 = "564a99ec2011b2566b8951e9eecb4737c0bfbc88f1e077b1eaf596af9894575c"
+bea_table_id = "262"
+bea_total_row_code = "T017"
+
+valuation_identity = "T1600 = T1610[B] + T1620 + T1630"
+tax_identity = "T1630 = T1633 - T1634"
+missing_component_arithmetic = "A published identity is evaluated only when every required component is present. Any absent component yields NOT_EVALUABLE_SOURCE_MISSING with no numeric residual. Absence is never substituted as zero."
+structural_zero_policy = "Only an explicit source observation of numeric zero is SOURCE_EXPLICIT_ZERO. The archived OECD metadata supplies no separate structural-zero designation for absent component tuples."
+cross_source_rounding_bound_policy = "For independently nearest-rounded published terms, twice the maximum rounding error in hundredths of a million dollars equals the sum over terms of each published resolution in hundredths. A residual r is within rounding only when 2*abs(r) is no greater than that component-specific bound."
+source_total_policy = "Use the published TU/_Z/_T control cell for each table. Never sum aggregate and descendant rows together."
+combined_margin_policy = "T1620 remains the combined trade-plus-transport margin. No split is attempted."
+mapping_policy = "Every CPA08/ISIC4 to BEA or model mapping is NOT_RUN_BLOCKED."
+allocation_policy = "No proportional, residual, Used, Other, or label-based allocation is permitted."
+scientific_role = "Hermetic current-vintage source-axis diagnostic for OECD valuation identities and BEA total-control comparisons. It does not write model state, satisfy an accounting gate, admit an origin, or contribute a forecast score."
+source_dataset_url = "https://www.oecd.org/en/data/datasets/supply-and-use-tables.html"
+source_api_documentation_url = "https://www.oecd.org/en/data/insights/data-explainers/2024/09/api.html"
+source_terms_url = "https://www.oecd.org/en/about/terms-conditions.html"
+source_attribution = "OECD (2026), Supply and Use Tables, OECD Data Explorer (accessed 2026-08-06)."
+
+component_order = [
+    "purchasers",
+    "basic",
+    "combined_margin",
+    "net_product_tax",
+    "gross_product_tax",
+    "subsidy_magnitude",
+]
+table_order = ["T1600", "T1610", "T1620", "T1630", "T1633", "T1634"]
+promotion_blockers = [
+    "CURRENT_VINTAGE_RETRIEVAL_ONLY_NOT_REAL_TIME_ORIGIN",
+    "OECD_TO_BEA_CPA08_ISIC4_MAPPING_NOT_RUN",
+    "OECD_TO_MODEL_MAPPING_NOT_RUN",
+    "T1620_TRADE_TRANSPORT_SPLIT_NOT_RUN",
+    "OBSERVED_PRODUCT_TAX_FISCAL_RECEIPT_SCOPE_NOT_RECONCILED",
+    "ZERO_TAX_DYNAMIC_TRANSITION_NOT_RUN",
+    "USED_COMPONENT_MAPPING_NOT_RUN",
+    "OTHER_COMPONENT_MAPPING_NOT_RUN",
+    "OECD_BEA_150_33_BILLION_PP_BP_RESIDUAL_DUBIOUS",
+    "OECD_BEA_COMBINED_MARGIN_OUTSIDE_DERIVED_ROUNDING_BOUND_DUBIOUS",
+    "NO_MODEL_STATE_WRITE",
+    "NO_ACCOUNTING_GATE_EFFECT",
+    "NO_FORECAST_ORIGIN_OR_SCORE_EFFECT",
+]
+prohibited_operations = [
+    "AGGREGATE_AND_DESCENDANT_DOUBLE_COUNT",
+    "PROPORTIONAL_ALLOCATION",
+    "LABEL_PERMUTATION",
+    "SIGN_REVERSAL",
+    "COMPENSATED_CELL_SWAP",
+    "USED_OR_OTHER_ABSORPTION",
+    "SAME_ID_DIFFERENT_SPECIFICATION",
+]
+
+[table_spec.T1600]
+component = "purchasers"
+dataflow = "DF_USEPP"
+valuation = "O"
+meaning = "Use at purchasers' prices"
+
+[table_spec.T1610]
+component = "basic"
+dataflow = "DF_USEBP"
+valuation = "B"
+meaning = "Use at basic prices"
+
+[table_spec.T1620]
+component = "combined_margin"
+dataflow = "DF_VALUATION"
+valuation = "O"
+meaning = "Combined trade and transport margins"
+
+[table_spec.T1630]
+component = "net_product_tax"
+dataflow = "DF_VALUATION"
+valuation = "O"
+meaning = "Taxes less subsidies on products"
+
+[table_spec.T1633]
+component = "gross_product_tax"
+dataflow = "DF_VALUATION"
+valuation = "O"
+meaning = "Taxes on products"
+
+[table_spec.T1634]
+component = "subsidy_magnitude"
+dataflow = "DF_VALUATION"
+valuation = "O"
+meaning = "Subsidies on products, recorded as a positive magnitude"
+
+[bea_controls_hundredths_million_usd]
+purchasers = 5441809200
+basic = 5340776800
+combined_margin = -100
+net_product_tax = 101032600
+gross_product_tax = 109968200
+subsidy_magnitude = 8935600
+
+[expected_cross_source_residuals_hundredths_million_usd]
+purchasers = 15033035
+basic = 15032881
+combined_margin = 96
+net_product_tax = -42
+gross_product_tax = -34
+subsidy_magnitude = 7
+
+[cross_source_rounding_bounds.purchasers]
+oecd_term_codes = ["T1600"]
+oecd_term_count = 1
+oecd_term_resolution_hundredths_million_usd = 1
+bea_term_codes = ["T016"]
+bea_term_count = 1
+bea_term_resolution_hundredths_million_usd = 100
+derived_rounding_bound_twice_hundredths_million_usd = 101
+
+[cross_source_rounding_bounds.basic]
+oecd_term_codes = ["T1610"]
+oecd_term_count = 1
+oecd_term_resolution_hundredths_million_usd = 1
+bea_term_codes = ["T013"]
+bea_term_count = 1
+bea_term_resolution_hundredths_million_usd = 100
+derived_rounding_bound_twice_hundredths_million_usd = 101
+
+[cross_source_rounding_bounds.combined_margin]
+oecd_term_codes = ["T1620"]
+oecd_term_count = 1
+oecd_term_resolution_hundredths_million_usd = 1
+bea_term_codes = ["T014"]
+bea_term_count = 1
+bea_term_resolution_hundredths_million_usd = 100
+derived_rounding_bound_twice_hundredths_million_usd = 101
+
+[cross_source_rounding_bounds.net_product_tax]
+oecd_term_codes = ["T1630"]
+oecd_term_count = 1
+oecd_term_resolution_hundredths_million_usd = 1
+bea_term_codes = ["T015"]
+bea_term_count = 1
+bea_term_resolution_hundredths_million_usd = 100
+derived_rounding_bound_twice_hundredths_million_usd = 101
+
+[cross_source_rounding_bounds.gross_product_tax]
+oecd_term_codes = ["T1633"]
+oecd_term_count = 1
+oecd_term_resolution_hundredths_million_usd = 1
+bea_term_codes = ["TOP", "MDTY"]
+bea_term_count = 2
+bea_term_resolution_hundredths_million_usd = 100
+derived_rounding_bound_twice_hundredths_million_usd = 201
+
+[cross_source_rounding_bounds.subsidy_magnitude]
+oecd_term_codes = ["T1634"]
+oecd_term_count = 1
+oecd_term_resolution_hundredths_million_usd = 1
+bea_term_codes = ["SUB"]
+bea_term_count = 1
+bea_term_resolution_hundredths_million_usd = 100
+derived_rounding_bound_twice_hundredths_million_usd = 101
+
+[[tax_candidates]]
+id = "oecd_usa_2024_observed_tax_source_axis"
+tax_mode = "OBSERVED"
+tax_source_axis_policy = "OECD_T1630_SOURCE_AXIS"
+dynamic_net_product_tax_total_hundredths_million_usd = 101032558
+allocation_applied = false
+observed_sidecar_sha256 = "25531db1941cbc00dc8294e31322cc5c425a4ff0365d0f517850a3538176b5a4"
+fiscal_receipt_status = "NOT_RUN_BLOCKED"
+margin_split_status = "NOT_RUN_BLOCKED"
+model_mapping_status = "NOT_RUN_BLOCKED"
+model_state_write = false
+accounting_gate_effect = "NONE"
+forecast_origin_admissible = false
+forecast_score_effect = "NONE"
+specification_sha256 = "dd38a8a94dbcbe361b78dfcbd601131991c8d0562a774783797888088f28206d"
+
+[[tax_candidates]]
+id = "oecd_usa_2024_zero_tax_source_axis"
+tax_mode = "ZERO"
+tax_source_axis_policy = "EXPLICIT_DYNAMIC_ZERO_WITH_IMMUTABLE_OBSERVED_SIDECAR"
+dynamic_net_product_tax_total_hundredths_million_usd = 0
+allocation_applied = false
+observed_sidecar_sha256 = "25531db1941cbc00dc8294e31322cc5c425a4ff0365d0f517850a3538176b5a4"
+fiscal_receipt_status = "NOT_RUN_BLOCKED"
+margin_split_status = "NOT_RUN_BLOCKED"
+model_mapping_status = "NOT_RUN_BLOCKED"
+model_state_write = false
+accounting_gate_effect = "NONE"
+forecast_origin_admissible = false
+forecast_score_effect = "NONE"
+specification_sha256 = "b63393185fe6287f27adcaab2f62c54415955718053af666011a404c902518da"

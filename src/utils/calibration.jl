@@ -51,6 +51,190 @@ function calibration_boolean_marker(figaro, key)
     return value
 end
 
+const OPENING_MACRO_DATA_KEYS = (
+    "nominal_gdp_quarterly",
+    "nominal_household_consumption_quarterly",
+    "nominal_government_consumption_and_investment_quarterly",
+    "nominal_gross_private_domestic_investment_quarterly",
+    "nominal_fixed_investment_quarterly",
+    "nominal_inventory_investment_quarterly",
+    "nominal_exports_quarterly",
+    "nominal_imports_quarterly",
+)
+
+"""
+    calibration_opening_macro_controls(
+        figaro,
+        data,
+        quarterly_idx,
+        fixed_dwellings_share,
+    )
+
+Materialize the current-price opening observation only for calibration
+artifacts that explicitly opt in. The source GDP and investment identities
+are validated by `validated_opening_macro_controls`; signed inventory
+investment is retained as a flow and is never converted into an opening
+inventory stock.
+"""
+function calibration_opening_macro_controls(
+        figaro,
+        data,
+        quarterly_idx,
+        fixed_dwellings_share,
+    )
+    calibration_boolean_marker(
+        figaro,
+        "use_opening_macro_controls",
+    ) || return nothing
+    quarterly_idx isa Integer && quarterly_idx >= 1 ||
+        error("opening macro controls require a valid quarterly index")
+    isfinite(fixed_dwellings_share) &&
+        0 <= fixed_dwellings_share <= 1 ||
+        error("opening fixed-dwelling share must be between zero and one")
+    for key in OPENING_MACRO_DATA_KEYS
+        haskey(data, key) ||
+            error("Opening macro calibration is missing data[\"$key\"]")
+        length(data[key]) >= quarterly_idx ||
+            error("Opening macro calibration series $key is too short")
+    end
+
+    source = get(figaro, "opening_macro_control_source", nothing)
+    source isa AbstractString && !isempty(strip(source)) ||
+        error("Opening macro calibration requires a nonempty source")
+    unit = get(figaro, "opening_macro_control_unit", nothing)
+    unit == OPENING_MACRO_CONTROL_UNIT ||
+        error(
+        "Opening macro calibration must use $OPENING_MACRO_CONTROL_UNIT",
+    )
+    tolerance = get(
+        figaro,
+        "opening_macro_control_absolute_tolerance",
+        nothing,
+    )
+    tolerance isa Real ||
+        error("Opening macro calibration requires a numeric tolerance")
+
+    value(key) = data[key][quarterly_idx]
+    fixed_investment = value("nominal_fixed_investment_quarterly")
+    controls = Dict{String, Any}(
+        "use_opening_macro_controls" => true,
+        "opening_macro_control_source" => String(source),
+        "opening_macro_control_unit" => String(unit),
+        "opening_macro_control_absolute_tolerance" => Float64(tolerance),
+        "opening_nominal_gdp" => value("nominal_gdp_quarterly"),
+        "opening_nominal_household_consumption" =>
+            value("nominal_household_consumption_quarterly"),
+        "opening_nominal_government_consumption_and_investment" =>
+            value(
+            "nominal_government_consumption_and_investment_quarterly",
+        ),
+        "opening_nominal_capitalformation" =>
+            value(
+            "nominal_gross_private_domestic_investment_quarterly",
+        ),
+        "opening_nominal_fixed_capitalformation" => fixed_investment,
+        "opening_nominal_inventory_investment" =>
+            value("nominal_inventory_investment_quarterly"),
+        "opening_nominal_fixed_capitalformation_dwellings" =>
+            fixed_dwellings_share * fixed_investment,
+        "opening_nominal_exports" => value("nominal_exports_quarterly"),
+        "opening_nominal_imports" => value("nominal_imports_quarterly"),
+    )
+    validated_opening_macro_controls(controls)
+    return controls
+end
+
+"""
+    explicit_calibration_commodity_output(figaro, annual_idx, sector_count)
+
+Read a code-keyed domestic commodity-output vector from a calibration
+artifact that explicitly opts into the source-aware path. The accompanying
+codes and valuation-basis label are mandatory: equal vector lengths do not
+make industry output and commodity output interchangeable.
+
+Artifacts without `use_explicit_commodity_output = true` retain the legacy
+country-adapter behavior and return `nothing`.
+"""
+function explicit_calibration_commodity_output(
+        figaro,
+        annual_idx,
+        sector_count,
+    )
+    calibration_boolean_marker(
+        figaro,
+        "use_explicit_commodity_output",
+    ) || return nothing
+    output_key = "domestic_commodity_output_basic_price"
+    codes_key = "commodity_output_codes"
+    industry_codes_key = "industry_output_codes"
+    basis_key = "commodity_output_basis"
+    haskey(figaro, output_key) ||
+        error(
+        "Explicit commodity-output calibration requested without " *
+            "figaro[\"$output_key\"]",
+    )
+    haskey(figaro, codes_key) ||
+        error(
+        "Explicit commodity-output calibration requested without " *
+            "figaro[\"$codes_key\"]",
+    )
+    haskey(figaro, basis_key) ||
+        error(
+        "Explicit commodity-output calibration requested without " *
+            "figaro[\"$basis_key\"]",
+    )
+    haskey(figaro, industry_codes_key) ||
+        error(
+        "Explicit commodity-output calibration requested without " *
+            "figaro[\"$industry_codes_key\"]",
+    )
+    figaro[basis_key] == "BEA_TABLE_262_T007_COMMODITY_BASIC_PRICE" ||
+        error(
+        "Explicit commodity output has an unsupported economic basis: " *
+            repr(figaro[basis_key]),
+    )
+
+    output = vec(figaro[output_key][:, annual_idx])
+    length(output) == sector_count ||
+        error(
+        "Explicit commodity-output vector has $(length(output)) sectors; " *
+            "expected $sector_count",
+    )
+    all(isfinite, output) ||
+        error("Explicit commodity-output vector contains nonfinite values")
+    all(output .>= zero(eltype(output))) ||
+        error("Explicit commodity-output vector contains negative values")
+
+    raw_codes = figaro[codes_key]
+    raw_codes isa AbstractVector ||
+        error("Explicit commodity-output codes must be a vector")
+    codes = String.(raw_codes)
+    length(codes) == sector_count ||
+        error(
+        "Explicit commodity-output code vector has $(length(codes)) sectors; " *
+            "expected $sector_count",
+    )
+    all(code -> !isempty(code) && code == strip(code), codes) ||
+        error("Explicit commodity-output codes contain blank or padded labels")
+    length(unique(codes)) == sector_count ||
+        error("Explicit commodity-output codes must be unique")
+    raw_industry_codes = figaro[industry_codes_key]
+    raw_industry_codes isa AbstractVector ||
+        error("Explicit industry-output codes must be a vector")
+    industry_codes = String.(raw_industry_codes)
+    length(industry_codes) == sector_count ||
+        error(
+        "Explicit industry-output code vector has " *
+            "$(length(industry_codes)) sectors; expected $sector_count",
+    )
+    codes == industry_codes ||
+        error(
+        "Explicit commodity output is not aligned by code with the " *
+            "model industry axis",
+    )
+    return output
+end
+
 """
     explicit_calibration_trade_vectors(figaro, annual_idx, sector_count)
 
@@ -255,58 +439,114 @@ function apply_valuation_bridge(
 end
 
 """
-    commodity_balance_diagnostics(output, imports, modeled_uses)
+    commodity_balance_diagnostics(
+        domestic_commodity_output,
+        imports,
+        modeled_uses,
+    )
 
-Return a signed inventory/statistical-discrepancy vector that closes the
-commodity identity `output + imports = modeled_uses + discrepancy`.
-Positive entries are inventory accumulation; negative entries are an initial
-inventory draw or other statistical supply.
+Return the signed, unreconciled difference
+`domestic_commodity_output + imports - modeled_uses`.
+
+This diagnostic is not an observed inventory flow or stock. In the current
+U.S. adapter it mixes industry/commodity, valuation, excluded-code, and
+steady-state-use differences. It deliberately exposes neither an
+inventory-named alias nor a mechanically zero residual: those legacy fields
+are created only inside the explicitly opted-in inventory initializer.
 """
-function commodity_balance_diagnostics(output, imports, modeled_uses)
-    sector_count = length(output)
+function commodity_balance_diagnostics(
+        domestic_commodity_output,
+        imports,
+        modeled_uses,
+    )
+    sector_count = length(domestic_commodity_output)
     length(imports) == sector_count ||
         error("Commodity imports and output have different sector counts")
     length(modeled_uses) == sector_count ||
         error("Commodity uses and output have different sector counts")
-    all(isfinite, output) || error("Commodity output contains nonfinite values")
+    all(isfinite, domestic_commodity_output) ||
+        error("Commodity output contains nonfinite values")
     all(isfinite, imports) || error("Commodity imports contain nonfinite values")
     all(isfinite, modeled_uses) ||
         error("Commodity uses contain nonfinite values")
-    all(output .>= zero(eltype(output))) ||
+    all(
+        domestic_commodity_output .>=
+            zero(eltype(domestic_commodity_output)),
+    ) ||
         error("Commodity output contains negative values")
     all(imports .>= zero(eltype(imports))) ||
         error("Commodity imports contain negative values")
     all(modeled_uses .>= zero(eltype(modeled_uses))) ||
         error("Commodity uses contain negative values")
 
-    supply = vec(output) .+ vec(imports)
+    output = vec(domestic_commodity_output)
+    supply = output .+ vec(imports)
     uses = vec(modeled_uses)
-    inventory_statistical_discrepancy = supply .- uses
-    residual = supply .- uses .- inventory_statistical_discrepancy
-    all(isfinite, inventory_statistical_discrepancy) ||
-        error("Commodity inventory/statistical discrepancy is nonfinite")
-    all(iszero, residual) ||
-        error("Commodity inventory/statistical discrepancy did not close")
+    unreconciled_gap = supply .- uses
+    residual_after_gap = supply .- uses .- unreconciled_gap
+    all(isfinite, unreconciled_gap) ||
+        error("Unreconciled commodity gap is nonfinite")
+    all(iszero, residual_after_gap) ||
+        error("Commodity-gap arithmetic is internally inconsistent")
     return (;
+        domestic_commodity_output = output,
         supply,
         uses,
-        inventory_statistical_discrepancy,
-        residual,
+        unreconciled_gap,
+        closure_applied = false,
+        interpretation = :unreconciled_commodity_measurement_gap,
+    )
+end
+
+"""
+    legacy_commodity_balance_diagnostics(
+        domestic_commodity_output,
+        imports,
+        modeled_uses,
+    )
+
+Compatibility adapter for callers that still require the former
+inventory-named alias and arithmetic residual. New source-aware code must use
+`commodity_balance_diagnostics` so an unreconciled measurement gap cannot be
+mistaken for observed inventory investment or evidence of economic closure.
+"""
+function legacy_commodity_balance_diagnostics(
+        domestic_commodity_output,
+        imports,
+        modeled_uses,
+    )
+    diagnostic = commodity_balance_diagnostics(
+        domestic_commodity_output,
+        imports,
+        modeled_uses,
+    )
+    return merge(
+        diagnostic,
+        (;
+            inventory_statistical_discrepancy =
+                diagnostic.unreconciled_gap,
+            residual =
+                diagnostic.supply -
+                diagnostic.uses -
+                diagnostic.unreconciled_gap,
+        ),
     )
 end
 
 """
     opening_inventory_from_discrepancy(discrepancy, timescale)
 
-Convert annual signed inventory/statistical discrepancies into quarterly
-opening inventory. Only a negative discrepancy requires stock on hand:
-positive discrepancies represent accumulation during the calibrated period.
+Legacy candidate bridge from an annual commodity-balance discrepancy to a
+nonnegative opening stock. This is a numerical initialization rule, not an
+empirically validated stock/flow mapping. U.S. forecast variants must keep it
+separate from signed NIPA inventory investment and retain the failed accounting
+gate until the supply/make, valuation, and inventory-stock bridges are repaired.
 """
 function opening_inventory_from_discrepancy(discrepancy, timescale)
     isfinite(timescale) ||
-        error("Commodity-balance inventory timescale is nonfinite")
+        error("Legacy discrepancy-stock timescale is nonfinite")
     timescale >= zero(timescale) ||
-        error("Commodity-balance inventory timescale is negative")
+        error("Legacy discrepancy-stock timescale is negative")
     all(isfinite, discrepancy) ||
         error("Commodity-balance discrepancy contains nonfinite values")
     opening_inventory = timescale .* Bit.pos(-vec(discrepancy))
@@ -315,6 +555,67 @@ function opening_inventory_from_discrepancy(discrepancy, timescale)
     all(opening_inventory .>= zero(eltype(opening_inventory))) ||
         error("Opening sector inventory contains negative values")
     return opening_inventory
+end
+
+"""
+    store_commodity_balance_diagnostics!(
+        initial_conditions,
+        diagnostic;
+        codes = nothing,
+        initialize_inventory = false,
+        timescale = nothing,
+    )
+
+Persist the source-aware commodity diagnostic without treating its signed gap
+as an observed flow or stock. `initialize_inventory=true` exists only for
+legacy country adapters; source-aware U.S. artifacts leave it false and
+therefore do not emit `S_s` or any inventory-labeled discrepancy field.
+"""
+function store_commodity_balance_diagnostics!(
+        initial_conditions,
+        diagnostic;
+        codes = nothing,
+        initialize_inventory = false,
+        timescale = nothing,
+    )
+    diagnostic.closure_applied === false ||
+        error("Commodity diagnostic unexpectedly applied a closure")
+    initial_conditions["domestic_commodity_output_g"] =
+        diagnostic.domestic_commodity_output
+    initial_conditions["commodity_supply_g"] = diagnostic.supply
+    initial_conditions["modeled_commodity_uses_g"] = diagnostic.uses
+    initial_conditions["unreconciled_commodity_gap_g"] =
+        diagnostic.unreconciled_gap
+    initial_conditions["commodity_balance_closure_applied"] = false
+    if codes !== nothing
+        string_codes = String.(codes)
+        length(string_codes) == length(diagnostic.unreconciled_gap) ||
+            error(
+            "Commodity diagnostic code vector has the wrong sector count",
+        )
+        length(unique(string_codes)) == length(string_codes) ||
+            error("Commodity diagnostic codes must be unique")
+        initial_conditions["commodity_output_codes"] = string_codes
+    end
+
+    if initialize_inventory
+        timescale === nothing &&
+            error(
+            "Legacy discrepancy inventory initialization needs a timescale",
+        )
+        discrepancy = diagnostic.unreconciled_gap
+        initial_conditions["commodity_balance_supply_s"] =
+            diagnostic.supply
+        initial_conditions["commodity_balance_modeled_uses_s"] =
+            diagnostic.uses
+        initial_conditions["inventory_statistical_discrepancy_s"] =
+            discrepancy
+        initial_conditions["commodity_balance_residual_s"] =
+            diagnostic.supply - diagnostic.uses - discrepancy
+        initial_conditions["S_s"] =
+            opening_inventory_from_discrepancy(discrepancy, timescale)
+    end
+    return initial_conditions
 end
 
 """
@@ -664,10 +965,10 @@ function get_params_and_initial_conditions(
     # NOTE: capital_consumption is NOT included because operating_surplus (B2A3G) is
     # already GROSS — it includes CFC (P51C). Adding CFC again would double-count.
     # Verified: FIGARO D1 + D29X39 + B2A3G matches GDP B1G within 0.06% for Austria.
-    output =
+    industry_output =
         sum(intermediate_consumption, dims = 1)' .+ taxes_products .+ taxes_production .+ compensation_employees .+
         operating_surplus
-    output = output[:, 1]
+    industry_output = industry_output[:, 1]
 
     ## If fixed_assets and dwellings are given on industry-level
     if size(calibration_data["fixed_assets"])[1] == G &
@@ -683,8 +984,8 @@ function get_params_and_initial_conditions(
         dwellings_eu7 = calibration_data["dwellings_eu7"][:, T_calibration]
         nominal_nace64_output_eu7 = calibration_data["nominal_nace64_output_eu7"][:, T_calibration]
         fixed_assets_other_than_dwellings =
-            (fixed_assets - dwellings) * ((fixed_assets_eu7 - dwellings_eu7) ./ nominal_nace64_output_eu7 .* output) /
-            sum((fixed_assets_eu7 - dwellings_eu7) ./ nominal_nace64_output_eu7 .* output, dims = 1)
+            (fixed_assets - dwellings) * ((fixed_assets_eu7 - dwellings_eu7) ./ nominal_nace64_output_eu7 .* industry_output) /
+            sum((fixed_assets_eu7 - dwellings_eu7) ./ nominal_nace64_output_eu7 .* industry_output, dims = 1)
     end
 
     # ## OR [2025-09-15 Mo]: capital_consumption is already computed in
@@ -700,7 +1001,9 @@ function get_params_and_initial_conditions(
         # ITALY_CALIBRATION format: need to compute sectoral capital_consumption
         nace64_capital_consumption = calibration_data["nace64_capital_consumption"][:, T_calibration]
         nominal_nace64_output = calibration_data["nominal_nace64_output"][:, T_calibration]
-        capital_consumption = nace64_capital_consumption ./ nominal_nace64_output .* output
+        capital_consumption =
+            nace64_capital_consumption ./ nominal_nace64_output .*
+            industry_output
     end
 
     unemployment_rate_quarterly = data["unemployment_rate_quarterly"][T_calibration_exo]
@@ -753,6 +1056,14 @@ function get_params_and_initial_conditions(
         (gross_capitalformation_dwellings - taxes_products_capitalformation_dwellings) * fixed_capitalformation /
         sum(fixed_capitalformation)
     fixed_capital_formation_other_than_dwellings = fixed_capitalformation - capitalformation_dwellings
+    fixed_dwellings_share =
+        sum(capitalformation_dwellings) / sum(fixed_capitalformation)
+    opening_macro_controls = calibration_opening_macro_controls(
+        figaro,
+        data,
+        T_calibration_exo,
+        fixed_dwellings_share,
+    )
     firm_capital_formation =
         fixed_capital_formation_other_than_dwellings *
         sum(capital_consumption) /
@@ -771,19 +1082,41 @@ function get_params_and_initial_conditions(
                 government_consumption +
                 firm_capital_formation +
                 capitalformation_dwellings +
-                exports - output
+                exports - industry_output
         )
     end
     domestic_exports = Bit.pos(exports - reexports)
+    diagnose_commodity_balance =
+        calibration_boolean_marker(
+        figaro,
+        "diagnose_commodity_balance",
+    )
     use_commodity_balance_inventory =
         calibration_boolean_marker(
         figaro,
         "use_commodity_balance_inventory",
     )
-    commodity_balance = if use_commodity_balance_inventory
+    commodity_balance_enabled =
+        diagnose_commodity_balance || use_commodity_balance_inventory
+    explicit_commodity_output =
+        explicit_calibration_commodity_output(
+        figaro,
+        T_calibration,
+        G,
+    )
+    commodity_output = if explicit_commodity_output === nothing
+        use_commodity_balance_inventory ? industry_output : nothing
+    else
+        explicit_commodity_output
+    end
+    commodity_balance = if commodity_balance_enabled
         calibration_boolean_marker(figaro, "use_explicit_trade") ||
             error(
-            "Commodity-balance inventory requires explicit measured trade",
+            "Commodity-balance diagnostics require explicit measured trade",
+        )
+        commodity_output === nothing &&
+            error(
+            "Commodity-balance diagnostics require explicit commodity output",
         )
         modeled_commodity_uses =
             vec(sum(intermediate_consumption, dims = 2)) +
@@ -793,7 +1126,7 @@ function get_params_and_initial_conditions(
             capitalformation_dwellings +
             domestic_exports
         commodity_balance_diagnostics(
-            output,
+            commodity_output,
             imports,
             modeled_commodity_uses,
         )
@@ -862,9 +1195,11 @@ function get_params_and_initial_conditions(
     # ================= Sector parameters & tax/policy rates ==================
     # Sector parameters
     I_s = firms
-    alpha_s = timescale * output ./ employees
-    beta_s = output ./ sum(intermediate_consumption, dims = 1)'
-    kappa_s = timescale * output ./ fixed_assets_other_than_dwellings / omega
+    alpha_s = timescale * industry_output ./ employees
+    beta_s = industry_output ./ sum(intermediate_consumption, dims = 1)'
+    kappa_s =
+        timescale * industry_output ./ fixed_assets_other_than_dwellings /
+        omega
     delta_s = timescale * capital_consumption ./ fixed_assets_other_than_dwellings / omega
     replace!(delta_s, NaN => 0.0)
     w_s = timescale * wages ./ employees
@@ -877,8 +1212,8 @@ function get_params_and_initial_conditions(
     # Floor zero-productivity sectors (see MIN_PRODUCTIVITY definition at top of file).
     alpha_s = max.(alpha_s, MIN_PRODUCTIVITY)
     kappa_s = max.(kappa_s, MIN_PRODUCTIVITY)
-    tau_Y_s = taxes_products ./ output
-    tau_K_s = taxes_production ./ output
+    tau_Y_s = taxes_products ./ industry_output
+    tau_K_s = taxes_production ./ industry_output
     # Handle NaN for sectors with zero output
     replace!(tau_Y_s, NaN => 0.0)
     replace!(tau_K_s, NaN => 0.0)
@@ -916,7 +1251,7 @@ function get_params_and_initial_conditions(
     # This matches how BeforeIT will compute profits in init_firms.jl
     # The key insight is that BeforeIT uses this formula for allocating deposits,
     # so we must use the same formula to calibrate theta_DIV and tau_FIRM correctly.
-    Y_s = timescale * output
+    Y_s = timescale * industry_output
     pi_bar_s = 1 .- (1 .+ tau_SIF) .* w_s ./ alpha_s .- delta_s ./ kappa_s .- 1 ./ beta_s .- tau_K_s .- tau_Y_s
     replace!(pi_bar_s, NaN => 0.0)
     replace!(pi_bar_s, Inf => 0.0)
@@ -1119,8 +1454,19 @@ function get_params_and_initial_conditions(
     if use_product_tax_netting
         params["use_product_tax_netting"] = true
     end
-    if use_commodity_balance_inventory
-        params["use_commodity_balance_inventory"] = true
+    if commodity_balance_enabled
+        # This registered parameter records whether the diagnostic gap was
+        # actually promoted into the legacy opening-inventory initializer.
+        # `diagnose_commodity_balance` is an adapter/build marker, not a model
+        # parameter, so persisting it would silently change the calibrated
+        # parameter registry.
+        params["use_commodity_balance_inventory"] =
+            use_commodity_balance_inventory
+    end
+    # Opt-in growth-expectation specification.  Artifacts without the marker keep the
+    # legacy log-level AR(1); see `growth_inflation_expectations`.
+    if calibration_boolean_marker(figaro, "expectation_rw_drift")
+        params["expectation_rw_drift"] = true
     end
 
     # Sector initial conditions
@@ -1141,7 +1487,7 @@ function get_params_and_initial_conditions(
 
     # Initial conditions
     Y =
-        timescale * sum(output) .* data["real_gdp_quarterly"][T_estimation_exo:T_calibration_exo] ./
+        timescale * sum(industry_output) .* data["real_gdp_quarterly"][T_estimation_exo:T_calibration_exo] ./
         data["real_gdp_quarterly"][T_calibration_exo]
     pi = diff(log.(data["gdp_deflator_quarterly"][(T_estimation_exo - 1):T_calibration_exo]))
     Y_EA = ea["real_gdp_quarterly"][T_calibration_exo]
@@ -1173,7 +1519,7 @@ function get_params_and_initial_conditions(
     ]
 
     # data series needed for CANVAS
-    Y_EA_series = timescale * sum(output) .* ea["real_gdp_quarterly"][T_estimation_exo:T_calibration_exo] ./ ea["real_gdp_quarterly"][T_calibration_exo]
+    Y_EA_series = timescale * sum(industry_output) .* ea["real_gdp_quarterly"][T_estimation_exo:T_calibration_exo] ./ ea["real_gdp_quarterly"][T_calibration_exo]
     pi_EA_series = diff(log.(ea["gdp_deflator_quarterly"][(T_estimation_exo - 1):T_calibration_exo]))
     r_bar_series = (data["euribor"][T_estimation_exo:T_calibration_exo] .+ 1.0) .^ (1.0 / 4.0) .- 1
 
@@ -1205,6 +1551,9 @@ function get_params_and_initial_conditions(
         "r_bar_series" => r_bar_series
     )
 
+    opening_macro_controls === nothing ||
+        merge!(initial_conditions, opening_macro_controls)
+
     if use_product_tax_netting
         initial_conditions["observed_intermediate_product_taxes_s"] =
             observed_taxes_products
@@ -1218,19 +1567,14 @@ function get_params_and_initial_conditions(
             sum(government_consumption)
     end
 
-    if use_commodity_balance_inventory
-        discrepancy =
-            commodity_balance.inventory_statistical_discrepancy
-        initial_conditions["commodity_balance_supply_s"] =
-            commodity_balance.supply
-        initial_conditions["commodity_balance_modeled_uses_s"] =
-            commodity_balance.uses
-        initial_conditions["inventory_statistical_discrepancy_s"] =
-            discrepancy
-        initial_conditions["commodity_balance_residual_s"] =
-            commodity_balance.residual
-        initial_conditions["S_s"] =
-            opening_inventory_from_discrepancy(discrepancy, timescale)
+    if commodity_balance_enabled
+        store_commodity_balance_diagnostics!(
+            initial_conditions,
+            commodity_balance;
+            codes = get(figaro, "commodity_output_codes", nothing),
+            initialize_inventory = use_commodity_balance_inventory,
+            timescale = timescale,
+        )
     end
 
     # Add initial growth rates for domestic variables if using growth-rate AR(1)

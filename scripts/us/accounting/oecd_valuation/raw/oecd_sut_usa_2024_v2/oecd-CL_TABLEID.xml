@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--NSI Web Service v8.19.8.0-->
+<message:Structure xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:structure="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+  <message:Header>
+    <message:ID>IDREF10252</message:ID>
+    <message:Test>false</message:Test>
+    <message:Prepared>2026-08-06T17:14:43.8910816+02:00</message:Prepared>
+    <message:Sender id="Unknown" />
+    <message:Receiver id="Unknown" />
+  </message:Header>
+  <message:Structures>
+    <structure:Codelists>
+      <structure:Codelist id="CL_TABLEID" agencyID="OECD.SDD.NAD" version="1.0" isFinal="true">
+        <common:Name xml:lang="en">NA Table IDs</common:Name>
+        <structure:Code id="PSD">
+          <common:Name xml:lang="en">Table PSD - Public sector debt</common:Name>
+          <common:Name xml:lang="fr">Tableau PSD - Dette du secteur public</common:Name>
+        </structure:Code>
+        <structure:Code id="R15_FIN_SF">
+          <common:Name xml:lang="en">G-20 recommendation 15 framework - financial stocks and flows</common:Name>
+        </structure:Code>
+        <structure:Code id="R15_NONFIN_S">
+          <common:Name xml:lang="en">G-20 recommendation 15 framework - stocks of non-financial assets</common:Name>
+        </structure:Code>
+        <structure:Code id="R15_NONFIN_T">
+          <common:Name xml:lang="en">G-20 recommendation 15 framework - non-financial transactions</common:Name>
+        </structure:Code>
+        <structure:Code id="T01GDP">
+          <common:Name xml:lang="en">Table 01GDP - GDP, components and breakdowns</common:Name>
+        </structure:Code>
+        <structure:Code id="T01EMP">
+          <common:Name xml:lang="en">Table 01EMP - Employment and breakdown by industry and population</common:Name>
+        </structure:Code>
+        <structure:Code id="T0101">
+          <common:Name xml:lang="en">Table 0101 - Gross value added at basic prices and gross domestic product at market prices</common:Name>
+          <common:Name xml:lang="fr">Tableau 0101  - Valeur ajoutée brute aux prix de base et produit intérieur brut aux prix du marché</common:Name>
+        </structure:Code>
+        <structure:Code id="T0101T0103">
+          <common:Name xml:lang="en">Tables 0101, 0102 and 0103</common:Name>
+          <common:Name xml:lang="fr">Tableaux 0101, 0102 et 0103</common:Name>
+        </structure:Code>
+        <structure:Code id="T0102">
+          <common:Name xml:lang="en">Table 0102 - GDP identity from the expenditure side</common:Name>
+          <common:Name xml:lang="fr">Tableau 0102 - PIB selon l'approche de la dépense</common:Name>
+        </structure:Code>
+        <structure:Code id="T0103">
+          <common:Name xml:lang="en">Table 0103 - GDP identity from the income side</common:Name>
+          <common:Name xml:lang="fr">Tableau 0103 - PIB selon l'approche des revenus</common:Name>
+        </structure:Code>
+        <structure:Code id="T0107">
+          <common:Name xml:lang="en">Table 0107 - Disposable income, saving, net lending / borrowing</common:Name>
+          <common:Name xml:lang="fr">Tableau 0107 - Revenu disponible, épagne, capacité ou besoin de financement</common:Name>
+        </structure:Code>
+        <structure:Code id="T0110">
+          <common:Name xml:lang="en">Table 0110 - Population and employment</common:Name>
+          <common:Name xml:lang="fr">Tableau 0110 - Population et emploi</common:Name>
+        </structure:Code>
+        <structure:Code id="T0111">
+          <common:Name xml:lang="en">Table 0111 - Employment by industry</common:Name>
+          <common:Name xml:lang="fr">Tableau 0111 - Emploi par activité</common:Name>
+        </structure:Code>
+        <structure:Code id="T0117">
+          <common:Name xml:lang="en">Table 0117 - Final consumption expenditure of households by durability</common:Name>
+          <common:Name xml:lang="fr">Tableau 0117 - Dépenses de consommation finale des ménages par durabilité</common:Name>
+        </structure:Code>
+        <structure:Code id="T0117_0501_0502">
+          <common:Name xml:lang="en">Tables 0117, 0501 and 0502</common:Name>
+          <common:Name xml:lang="fr">Tableaux 0117, 0501, 0502</common:Name>
+        </structure:Code>
+        <structure:Code id="T0119">
+          <common:Name xml:lang="en">Table 0119 - Simplified non-financial accounts by institutional sector</common:Name>
+          <common:Name xml:lang="fr">Tableau 0119 - Comptes non financiers simplifiés par secteur institutionel</common:Name>
+        </structure:Code>
+        <structure:Code id="T0120">
+          <common:Name xml:lang="en">Table 0120 - Exports of goods (fob) and services by Member States of the EU / third countries.</common:Name>
+        </structure:Code>
+        <structure:Code id="T0121">
+          <common:Name xml:lang="en">Table 0121 - Imports of goods (fob) and services by Member States of the EU/third countries</common:Name>
+        </structure:Code>
+        <structure:Code id="T0199">
+          <common:Name xml:lang="en">Table 01xx - Source from various table 01 sub-tables</common:Name>
+        </structure:Code>
+        <structure:Code id="T0200">
+          <common:Name xml:lang="en">Table 0200 - Main aggregates of general government</common:Name>
+          <common:Name xml:lang="fr">Tableau 0200 - Principaux agrégats des adminstrations publiques</common:Name>
+        </structure:Code>
+        <structure:Code id="T0301">
+          <common:Name xml:lang="en">Table 0301- Output and income</common:Name>
+          <common:Name xml:lang="fr">Tableau 0301 - Production et revenu</common:Name>
+        </structure:Code>
+        <structure:Code id="T0302">
+          <common:Name xml:lang="en">Table 0302 - Capital formation</common:Name>
+          <common:Name xml:lang="fr">Tableau 0302 - Formation de capital</common:Name>
+        </structure:Code>
+        <structure:Code id="T0302_2200">
+          <common:Name xml:lang="en">Tables 0302 and 2200</common:Name>
+          <common:Name xml:lang="fr">Tableau 0302 et 2200</common:Name>
+        </structure:Code>
+        <structure:Code id="T0303">
+          <common:Name xml:lang="en">Table 0303 - Employment</common:Name>
+          <common:Name xml:lang="fr">Tableau 0303 - Emploi</common:Name>
+        </structure:Code>
+        <structure:Code id="T0501">
+          <common:Name xml:lang="en">Table 0501 - Final consumption expenditure of households by purpose</common:Name>
+          <common:Name xml:lang="fr">Tableau 0501 - Dépenses de consommation finale des ménages par fonction</common:Name>
+        </structure:Code>
+        <structure:Code id="T0502">
+          <common:Name xml:lang="en">Table 0502 - Final consumption expenditure of households</common:Name>
+          <common:Name xml:lang="fr">Tableau 0502 - Dépenses de consommation finale des ménages</common:Name>
+        </structure:Code>
+        <structure:Code id="T0610">
+          <common:Name xml:lang="en">Table 0610 - Financial accounts by sector (transactions), consolidated</common:Name>
+          <common:Name xml:lang="fr">Tableau 0610 - Comptes financiers par secteur (transactions), consolidés</common:Name>
+        </structure:Code>
+        <structure:Code id="T0611">
+          <common:Name xml:lang="en">Table 0611 - Other change in volume accounts, consolidated</common:Name>
+          <common:Name xml:lang="fr">Tableau 0611 - Comptes des autres changements en volume, consolidés</common:Name>
+        </structure:Code>
+        <structure:Code id="T0612">
+          <common:Name xml:lang="en">Table 0612 - Revaluation of financial instruments accounts, consolidated</common:Name>
+          <common:Name xml:lang="fr">Tableau 0612 - Comptes de réevaluation, consolidés</common:Name>
+        </structure:Code>
+        <structure:Code id="T0620">
+          <common:Name xml:lang="en">Table 0620 - Financial accounts by sector (transactions), non-consolidated</common:Name>
+          <common:Name xml:lang="fr">Tableau 0620 - Comptes financiers par secteur (transactions), non consolidés</common:Name>
+        </structure:Code>
+        <structure:Code id="T0621">
+          <common:Name xml:lang="en">Table 0621 - Other change in volume accounts, non-consolidated</common:Name>
+          <common:Name xml:lang="fr">Tableau 0621 - Comptes des autres changements en volume, non consolidés</common:Name>
+        </structure:Code>
+        <structure:Code id="T0622">
+          <common:Name xml:lang="en">Table 0622 - Revaluation of financial instruments accounts, non-consolidated</common:Name>
+          <common:Name xml:lang="fr">Tableau 0622 - Comptes de réevaluation, non consolidés</common:Name>
+        </structure:Code>
+        <structure:Code id="T0625">
+          <common:Name xml:lang="en">Table 0625 - Financial accounts by sector (transactions), counterpart information, non-consolidated</common:Name>
+          <common:Name xml:lang="fr">Tableau 0625 - Comptes financiers par secteur (transactions), y compris les informations sur les contreparties, non consolidés</common:Name>
+        </structure:Code>
+        <structure:Code id="T0710">
+          <common:Name xml:lang="en">Table 0710 - Balance sheets for financial assets and liabilities (stocks), consolidated</common:Name>
+          <common:Name xml:lang="fr">Tableau 0710 - Comptes de patrimoine financier (stocks), consolidés</common:Name>
+        </structure:Code>
+        <structure:Code id="T0720">
+          <common:Name xml:lang="en">Table 0720 - Balance sheets for financial assets and liabilities (stocks), non-consolidated</common:Name>
+          <common:Name xml:lang="fr">Tableau 0720 - Comptes de patrimoine financier (stocks), non consolidés</common:Name>
+        </structure:Code>
+        <structure:Code id="T0725">
+          <common:Name xml:lang="en">Table 0725 - Balance sheets for financial assets and liabilities (stocks), counterpart information, non-consolidated</common:Name>
+          <common:Name xml:lang="fr">Tableau 0725 - Comptes de patrimoine financier (stocks), y compris les informations sur les contreparties, non consolidés</common:Name>
+        </structure:Code>
+        <structure:Code id="T0800">
+          <common:Name xml:lang="en">Table 0800 - Non-financial accounts by sector - annual</common:Name>
+          <common:Name xml:lang="fr">Tableau 0800 - Comptes non financiers par secteurs - annuels</common:Name>
+        </structure:Code>
+        <structure:Code id="T0801">
+          <common:Name xml:lang="en">Table 0801 - Non-financial accounts by sector - quarterly</common:Name>
+          <common:Name xml:lang="fr">Tableau 0801 - Comptes non financiers par secteurs - trimestriels</common:Name>
+        </structure:Code>
+        <structure:Code id="T0801SA">
+          <common:Name xml:lang="en">Table 0801SA - QSA Quarterly sector accounts: seasonally adjusted and volume data</common:Name>
+          <common:Name xml:lang="fr">Tableau 0801SA - CTS Comptes trimestriels par secteur : ajustés des variations saisonnières et données en volume</common:Name>
+        </structure:Code>
+        <structure:Code id="T0900">
+          <common:Name xml:lang="en">Table 0900 - Detailed tax and social contribution receipts by type of tax or social contribution and receiving sub-sector including the list of taxes and social contributions according to national classification</common:Name>
+          <common:Name xml:lang="fr">Tableau 0900 - Impôts et cotisations sociales</common:Name>
+        </structure:Code>
+        <structure:Code id="T0999">
+          <common:Name xml:lang="en">Table 0999 - Questionnaire NTL - Detailed list of taxes and social contributions according to national classification</common:Name>
+        </structure:Code>
+        <structure:Code id="T1001">
+          <common:Name xml:lang="en">Table 1001 - Tables by region (NUTS II)</common:Name>
+        </structure:Code>
+        <structure:Code id="T1002">
+          <common:Name xml:lang="en">Table 1002 - Tables by industry and by region (NUTS II)</common:Name>
+        </structure:Code>
+        <structure:Code id="T1100">
+          <common:Name xml:lang="en">Table 1100 - General Government expenditure by function</common:Name>
+          <common:Name xml:lang="fr">Tableau 1100 - Dépenses des adminstrations publiques par fonction</common:Name>
+        </structure:Code>
+        <structure:Code id="T1200">
+          <common:Name xml:lang="en">Table 1200 - Tables by industry, A6 and by region (NUTS III)</common:Name>
+        </structure:Code>
+        <structure:Code id="T1300">
+          <common:Name xml:lang="en">Table 1300 - Households accounts by region (NUTS II)</common:Name>
+        </structure:Code>
+        <structure:Code id="T1500">
+          <common:Name xml:lang="en">Table 1500 - Supply table at basic prices, including a transformation into purchasers' prices</common:Name>
+          <common:Name xml:lang="fr">Tableau 1500 - Tableau des ressources aux prix de base et son passage aux prix d'acquisition</common:Name>
+        </structure:Code>
+        <structure:Code id="T1600">
+          <common:Name xml:lang="en">Table 1600 - Use Table at purchasers' prices</common:Name>
+          <common:Name xml:lang="fr">Tableau 1600 - Tableau des emplois aux prix d'acquisition</common:Name>
+        </structure:Code>
+        <structure:Code id="T1601">
+          <common:Name xml:lang="en">Table 1601 - Use table for domestic input at purchasers' prices</common:Name>
+          <common:Name xml:lang="fr">Tableau 1601 - Tableau des emplois de la production intérieure aux prix d'acquisition</common:Name>
+        </structure:Code>
+        <structure:Code id="T1602">
+          <common:Name xml:lang="en">Table 1602 - Use table for imports at purchasers' prices</common:Name>
+          <common:Name xml:lang="fr">Tableau 1612 -Tableau des emplois des importations aux prix d'acquisition</common:Name>
+        </structure:Code>
+        <structure:Code id="T1610">
+          <common:Name xml:lang="en">Table 1610 - Use table at basic prices</common:Name>
+          <common:Name xml:lang="fr">Tableau 1610 - Tableau des emplois aux prix de base</common:Name>
+        </structure:Code>
+        <structure:Code id="T1611">
+          <common:Name xml:lang="en">Table 1611 - Use table for domestic input at basic prices</common:Name>
+          <common:Name xml:lang="fr">Tableau 1611 - Tableau des emplois de la production intérieure aux prix de base</common:Name>
+        </structure:Code>
+        <structure:Code id="T1612">
+          <common:Name xml:lang="en">Table 1612 - Use table for imports at basic prices</common:Name>
+          <common:Name xml:lang="fr">Tableau 1612 -Tableau des emplois des importations aux prix de base</common:Name>
+        </structure:Code>
+        <structure:Code id="T1620">
+          <common:Name xml:lang="en">Table 1620 - Trade and transport margins</common:Name>
+          <common:Name xml:lang="fr">Tableau 1620 - Marges commerciales et de transport</common:Name>
+        </structure:Code>
+        <structure:Code id="T1630">
+          <common:Name xml:lang="en">Table 1630 - Taxes less subsidies on products</common:Name>
+          <common:Name xml:lang="fr">Tableau 1630 - Impôts moins subventions sur les produits</common:Name>
+        </structure:Code>
+        <structure:Code id="T1631">
+          <common:Name xml:lang="en">Table 1631 - Taxes less subsidies on products - excluding VAT</common:Name>
+          <common:Name xml:lang="fr">Tableau 1631- Impôts moins subventions sur les produits à l'exception de la TVA</common:Name>
+        </structure:Code>
+        <structure:Code id="T1632">
+          <common:Name xml:lang="en">Table 1632 - Value added tax</common:Name>
+          <common:Name xml:lang="fr">Tableau 1632 - Taxe sur la valeur ajoutée</common:Name>
+        </structure:Code>
+        <structure:Code id="T1633">
+          <common:Name xml:lang="en">Table 1633 - Taxes on products</common:Name>
+          <common:Name xml:lang="fr">Tableau 1633 - Impôts sur les produits</common:Name>
+        </structure:Code>
+        <structure:Code id="T1634">
+          <common:Name xml:lang="en">Table 1634 - Subsidies on products</common:Name>
+          <common:Name xml:lang="fr">Tableau 1634  - Subventions sur les produits.</common:Name>
+        </structure:Code>
+        <structure:Code id="T1700">
+          <common:Name xml:lang="en">Table 1700 - Symmetric Input-output table (product*product)</common:Name>
+        </structure:Code>
+        <structure:Code id="T1750">
+          <common:Name xml:lang="en">Table 1700 - Symmetric Input-output table (industry*industry)</common:Name>
+        </structure:Code>
+        <structure:Code id="T1800">
+          <common:Name xml:lang="en">Table 1800 - Symmetric Input-output table for domestic production (product*product)</common:Name>
+        </structure:Code>
+        <structure:Code id="T1850">
+          <common:Name xml:lang="en">Table 1850 - Symmetric Input-output table for domestic production (industry*industry)</common:Name>
+        </structure:Code>
+        <structure:Code id="T1900">
+          <common:Name xml:lang="en">Table 1900 - Symmetric Input-output table for imports (product*product)</common:Name>
+        </structure:Code>
+        <structure:Code id="T1950">
+          <common:Name xml:lang="en">Table 1950 - Symmetric Input-output table for imports (industry*industry)</common:Name>
+        </structure:Code>
+        <structure:Code id="T2000">
+          <common:Name xml:lang="en">Table 2000 - Cross-classification of fixed assets by industry and by asset</common:Name>
+        </structure:Code>
+        <structure:Code id="T2200">
+          <common:Name xml:lang="en">Table 2200 - Cross-classification of gross fixed capital formation by industry and by asset</common:Name>
+        </structure:Code>
+        <structure:Code id="T2500">
+          <common:Name xml:lang="en">Table 2500 - Quarterly non-financial accounts for general government</common:Name>
+        </structure:Code>
+        <structure:Code id="T2600">
+          <common:Name xml:lang="en">Table 2600 - Balance sheets for non-financial assets</common:Name>
+        </structure:Code>
+        <structure:Code id="T2700">
+          <common:Name xml:lang="en">Table 2700 - Quarterly financial accounts of general government</common:Name>
+        </structure:Code>
+        <structure:Code id="T2800">
+          <common:Name xml:lang="en">Table 2800 - Quarterly government debt (Maastricht debt)</common:Name>
+        </structure:Code>
+        <structure:Code id="T2899">
+          <common:Name xml:lang="en">Table 2899 - Quarterly intergovernmental lending by counter-party government</common:Name>
+        </structure:Code>
+        <structure:Code id="T2900">
+          <common:Name xml:lang="en">Table 2900 - Pension schemes in social insurance: base case</common:Name>
+          <common:Name xml:lang="fr">Tableau 2900 - Régime de pensions d'assurance sociale</common:Name>
+        </structure:Code>
+        <structure:Code id="T2901">
+          <common:Name xml:lang="en">Table 2901 - Pension schemes in social insurance: sensitivity analysis 1</common:Name>
+        </structure:Code>
+        <structure:Code id="T2902">
+          <common:Name xml:lang="en">Table 2902 - Pension schemes in social insurance: sensitivity analysis 2</common:Name>
+        </structure:Code>
+        <structure:Code id="T7HH">
+          <common:Name xml:lang="en">Table 7HH - Households' financial assets and liabilities</common:Name>
+          <common:Name xml:lang="fr">Tableau 7HH - Actifs financiers and passifs des ménages</common:Name>
+        </structure:Code>
+        <structure:Code id="T7II">
+          <common:Name xml:lang="en">Table 7II - Institutional investors' assets and liabilities</common:Name>
+          <common:Name xml:lang="fr">Tableau 7II - Actifs et passifs des investisseurs institutionnels.</common:Name>
+        </structure:Code>
+        <structure:Code id="TSB720">
+          <common:Name xml:lang="en">Table SB720 - Non-bank financial intermediation (financial stocks), non-consolidated</common:Name>
+          <common:Name xml:lang="fr">Tableau SB720 - Intermédiation financière non bancaire (stocks financiers), non consolidés</common:Name>
+        </structure:Code>
+        <structure:Code id="T001">
+          <common:Name xml:lang="en">Table 001 - Exchange rates and PPPs</common:Name>
+          <common:Name xml:lang="fr">Tableau 001 - Taux de change et PPA</common:Name>
+        </structure:Code>
+        <structure:Code id="T750">
+          <common:Name xml:lang="en">Government debt in nominal values, consolidated</common:Name>
+        </structure:Code>
+      </structure:Codelist>
+    </structure:Codelists>
+  </message:Structures>
+</message:Structure>

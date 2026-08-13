@@ -1,0 +1,118 @@
+schema_version = "beforeit-us-after-redefinitions-final-use-envelope.v1"
+classification = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+forecast_origin_admissible = false
+model_state_write = false
+accounting_gate_effect = "NONE"
+source_year = 2024
+price_basis = "producers prices"
+
+after_redefinitions_fixture_sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
+after_redefinitions_manifest_sha256 = "ff555043829e5d12ba787ba9ad7d58ef4f0d2ee306740d6847bdfec800935030"
+after_redefinitions_source_zip_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+model_mapping_sha256 = "546b3dc15cbb194210ce564a44626b146551b161ca0ce5ffb90a8a5261b4553c"
+sector_mapping_sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+valuation_envelope_contract_sha256 = "110f82037e45e1de3ce4f5a1df2b7982d064e90a9323f255c7441452fa6d2ede"
+
+final_use_codes = [
+    "F010",
+    "F02S",
+    "F02E",
+    "F02N",
+    "F02R",
+    "F030",
+    "F040",
+    "F050",
+    "F06C",
+    "F06S",
+    "F06E",
+    "F06N",
+    "F07C",
+    "F07S",
+    "F07E",
+    "F07N",
+    "F10C",
+    "F10S",
+    "F10E",
+    "F10N",
+]
+category_codes = [
+    "household_consumption",
+    "private_fixed_investment",
+    "inventory_change",
+    "exports",
+    "imports_accounting_offset",
+    "government_consumption",
+    "government_gross_investment",
+]
+value_added_codes = ["V001", "V002", "V003"]
+value_added_semantics = [
+    "compensation of employees",
+    "taxes on production and imports less subsidies",
+    "gross operating surplus",
+]
+
+gdp_identity = "published final uses = published value added = published output - published intermediate use"
+closure_policy = "USED_OTHER_SEPARATE_UNALLOCATED"
+inventory_policy = "F030_SIGNED_FLOW_NOT_STOCK"
+import_policy = "F050_SIGNED_ACCOUNTING_OFFSET_NOT_MODEL_IMPORT_VECTOR"
+observed_tax_variant_policy = "CONTROL_ONLY_NOT_USE_CELL_ALLOCATED"
+zero_tax_variant_policy = "POLICY_COUNTERFACTUAL_NOT_OBSERVATION"
+
+legacy_scalar_bridge_method = "T013_OVER_T016_COMMODITY_RATIO_WITH_PROPORTIONAL_RECIPIENT_RESCALE"
+legacy_scalar_bridge_status = "REJECTED_NOT_CELL_IDENTIFIED"
+cell_level_valuation_allocation_status = "MISSING"
+final_use_adjustment_applied = false
+closure_allocation_applied = false
+inventory_stock_mapping_applied = false
+import_boundary_selected = false
+legacy_scalar_bridge_applied = false
+balancing_applied = false
+clipping_applied = false
+
+scientific_role = "Source-aware producer-price final-use, value-added, GDP-approach, and closure envelope. It partitions every published final-use column without changing a cell and records why the 68-sector model adapter remains blocked."
+
+[[final_use_category]]
+code = "household_consumption"
+source_columns = ["F010"]
+semantics = "Personal consumption expenditures."
+
+[[final_use_category]]
+code = "private_fixed_investment"
+source_columns = ["F02S", "F02E", "F02N", "F02R"]
+semantics = "Private fixed investment in structures, equipment, intellectual property products, and residential fixed investment."
+
+[[final_use_category]]
+code = "inventory_change"
+source_columns = ["F030"]
+semantics = "Signed annual change in private inventories; a flow, not a quarter-end stock."
+
+[[final_use_category]]
+code = "exports"
+source_columns = ["F040"]
+semantics = "Exports of goods and services at producers prices."
+
+[[final_use_category]]
+code = "imports_accounting_offset"
+source_columns = ["F050"]
+semantics = "Signed imports accounting offset embedded in the producer-price final-use table; not a nonnegative model import-demand vector."
+
+[[final_use_category]]
+code = "government_consumption"
+source_columns = ["F06C", "F07C", "F10C"]
+semantics = "Federal defense, federal nondefense, and state/local consumption expenditures."
+
+[[final_use_category]]
+code = "government_gross_investment"
+source_columns = [
+    "F06S",
+    "F06E",
+    "F06N",
+    "F07S",
+    "F07E",
+    "F07N",
+    "F10S",
+    "F10E",
+    "F10N",
+]
+semantics = "Federal defense, federal nondefense, and state/local gross investment."

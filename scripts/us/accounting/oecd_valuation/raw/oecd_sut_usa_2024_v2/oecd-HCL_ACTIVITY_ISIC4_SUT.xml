@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--NSI Web Service v8.19.8.0-->
+<message:Structure xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:structure="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+  <message:Header>
+    <message:ID>IDREF10246</message:ID>
+    <message:Test>false</message:Test>
+    <message:Prepared>2026-08-06T17:14:15.0762052+02:00</message:Prepared>
+    <message:Sender id="Unknown" />
+    <message:Receiver id="Unknown" />
+  </message:Header>
+  <message:Structures>
+    <structure:HierarchicalCodelists>
+      <structure:HierarchicalCodelist id="HCL_ACTIVITY_ISIC4_SUT" agencyID="OECD.SDD.NAD" version="1.0" isFinal="true">
+        <common:Name xml:lang="en">HCL Activity for SUT</common:Name>
+        <common:Name xml:lang="fr">HCL Activité SUT</common:Name>
+        <structure:IncludedCodelist alias="CL_ACTIVITY_ISIC4@OECD@10">
+          <Ref id="CL_ACTIVITY_ISIC4" version="1.0" agencyID="OECD" package="codelist" class="Codelist" />
+        </structure:IncludedCodelist>
+        <structure:Hierarchy id="H" leveled="false">
+          <common:Name xml:lang="en">Hierarchy for CL_ACTIVITY_ISIC4</common:Name>
+          <structure:HierarchicalCode id="_T">
+            <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="_T" />
+            </structure:CodeID>
+            <structure:HierarchicalCode id="A">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="A" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="A01">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="A01" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="A02">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="A02" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="A03">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="A03" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="B">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="B" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="B05">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="B05" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="B06">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="B06" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="B07">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="B07" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="B08">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="B08" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="B09">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="B09" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="C">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="C" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="C10T12">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C10T12" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="C10">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="C10" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="C11">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="C11" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="C12">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="C12" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C13T15">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C13T15" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="C13">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="C13" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="C14">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="C14" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="C15">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="C15" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C16">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C16" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C17">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C17" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C18">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C18" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C19">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C19" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C20">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C20" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C21">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C21" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C22">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C22" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C23">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C23" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C24">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C24" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C25">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C25" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C26">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C26" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C27">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C27" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C28">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C28" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C29">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C29" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C30">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C30" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C31_32">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C31_32" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="C31">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="C31" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="C32">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="C32" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="C33">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="C33" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="D">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="D" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="D35">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="D35" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="E">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="E" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="E36">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="E36" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="E37T39">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="E37T39" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="E37">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="E37" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="E38">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="E38" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="E39">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="E39" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="F">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="F" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="F41">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="F41" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="F42">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="F42" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="F43">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="F43" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="G">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="G" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="G45">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="G45" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="G46">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="G46" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="G47">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="G47" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="H">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="H" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="H49">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="H49" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="H50">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="H50" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="H51">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="H51" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="H52">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="H52" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="H53">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="H53" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="I">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="I" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="I55">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="I55" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="I56">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="I56" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="J">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="J" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="J58">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="J58" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="J59_60">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="J59_60" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="J59">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="J59" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="J60">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="J60" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="J61">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="J61" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="J62_63">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="J62_63" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="J62">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="J62" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="J63">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="J63" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="K">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="K" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="K64">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="K64" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="K65">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="K65" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="K66">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="K66" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="L">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="L" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="L68A">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="L68A" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="L68B">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="L68B" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="M">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="M" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="M69_70">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="M69_70" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="M69">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="M69" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="M70">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="M70" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="M71">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="M71" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="M72">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="M72" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="M73">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="M73" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="M74_75">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="M74_75" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="M74">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="M74" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="M75">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="M75" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="N">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="N" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="N77">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="N77" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="N78">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="N78" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="N79">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="N79" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="N80T82">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="N80T82" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="N80">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="N80" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="N81">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="N81" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="N82">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="N82" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="O">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="O" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="O84">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="O84" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="P">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="P" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="P85">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="P85" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="Q">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="Q" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="Q86">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="Q86" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="Q87_88">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="Q87_88" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="Q87">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="Q87" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="Q88">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="Q88" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="R">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="R" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="R90T92">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="R90T92" />
+                </structure:CodeID>
+                <structure:HierarchicalCode id="R90">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="R90" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="R91">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="R91" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+                <structure:HierarchicalCode id="R92">
+                  <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                  <structure:CodeID>
+                    <Ref id="R92" />
+                  </structure:CodeID>
+                </structure:HierarchicalCode>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="R93">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="R93" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="S">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="S" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="S94">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="S94" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="S95">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="S95" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="S96">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="S96" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="T">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="T" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="T97">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="T97" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+              <structure:HierarchicalCode id="T98">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="T98" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="U">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="U" />
+              </structure:CodeID>
+              <structure:HierarchicalCode id="U99">
+                <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+                <structure:CodeID>
+                  <Ref id="U99" />
+                </structure:CodeID>
+              </structure:HierarchicalCode>
+            </structure:HierarchicalCode>
+            <structure:HierarchicalCode id="_X">
+              <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+              <structure:CodeID>
+                <Ref id="_X" />
+              </structure:CodeID>
+            </structure:HierarchicalCode>
+          </structure:HierarchicalCode>
+          <structure:HierarchicalCode id="_Z">
+            <structure:CodelistAliasRef>CL_ACTIVITY_ISIC4@OECD@10</structure:CodelistAliasRef>
+            <structure:CodeID>
+              <Ref id="_Z" />
+            </structure:CodeID>
+          </structure:HierarchicalCode>
+        </structure:Hierarchy>
+      </structure:HierarchicalCodelist>
+    </structure:HierarchicalCodelists>
+  </message:Structures>
+</message:Structure>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--NSI Web Service v8.19.8.0-->
+<message:Structure xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:structure="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+  <message:Header>
+    <message:ID>IDREF10409</message:ID>
+    <message:Test>false</message:Test>
+    <message:Prepared>2026-08-06T17:14:45.5020232+02:00</message:Prepared>
+    <message:Sender id="Unknown" />
+    <message:Receiver id="Unknown" />
+  </message:Header>
+  <message:Structures>
+    <structure:Codelists>
+      <structure:Codelist id="CL_CONF_STATUS" agencyID="SDMX" version="1.2" isFinal="true">
+        <common:Name xml:lang="en">Confidentiality Status</common:Name>
+        <common:Name xml:lang="fr">Statut de confidentialité</common:Name>
+        <structure:Code id="F">
+          <common:Name xml:lang="en">Free (free for publication)</common:Name>
+          <common:Name xml:lang="fr">Libre (libre pour publication)</common:Name>
+          <common:Description xml:lang="en">Used for observations without any special sensitivity considerations and which can thus be freely shared. Usually, source organisations provide information and guidance on general requirements for re-dissemination  (like mentioning the source) either on their websites or in their paper publications. In some institutional environments the term "unclassified" is used in a sense that still denotes implied restrictions in the circulation of information. If this is the case, the organisations concerned may probably consider that "free" (value F) is not the appropriate tag for this kind of "unclassified" category and that "Not for publication, restricted for internal use only" (value N) may be more appropriate.</common:Description>
+        </structure:Code>
+        <structure:Code id="N">
+          <common:Name xml:lang="en">Not for publication, restricted for internal use only</common:Name>
+          <common:Name xml:lang="fr">Non destiné à la publication, réservé à un usage interne uniquement</common:Name>
+          <common:Description xml:lang="en">Used to denote observations that are restricted for internal use only within organisations. This code may be accompanied with an additional observation-level attribute: CONF_REDIST which defines the secondary recipient(s) to whom the sender allows the primary recipient to forward confidential data.</common:Description>
+        </structure:Code>
+        <structure:Code id="C">
+          <common:Name xml:lang="en">Confidential statistical information</common:Name>
+          <common:Name xml:lang="fr">Information statistique confidentielle</common:Name>
+          <common:Description xml:lang="en">Confidential statistical information (primary confidentiality) due to identifiable respondents. Measures also should be taken to prevent not only direct access, but also indirect deduction or calculation by other users and parties, probably by considering and treating additional observations as "confidential" (secondary confidentiality management).</common:Description>
+        </structure:Code>
+        <structure:Code id="D">
+          <common:Name xml:lang="en">Secondary confidentiality set by the sender, not for publication</common:Name>
+          <common:Name xml:lang="fr">Confidentialité secondaire définie par l'expéditeur, non destinée à la publication</common:Name>
+          <common:Description xml:lang="en">Used by the sender of the data to flag (beyond the confidential statistical information) additional observations in the dataset so that the receiver knows that he/she should suppress these observations in subsequent stages of processing (especially dissemination) in order to prevent third parties to indirectly deduct the observations that are genuinely flagged with "C".</common:Description>
+        </structure:Code>
+        <structure:Code id="S">
+          <common:Name xml:lang="en">Secondary confidentiality set and managed by the receiver, not for publication</common:Name>
+          <common:Name xml:lang="fr">Confidentialité secondaire définie et gérée par le destinataire, pas pour publication</common:Name>
+          <common:Description xml:lang="en">If senders do not manage the secondary confidentiality in their data and/or there are also other countries' data involved (with the intention to eventually compile a regional-wide aggregate that is going to be published), the value "S" is used by the receiver to flag additional suppressed observations (within sender's data and/or within the datasets of other senders) in subsequent stages of processing (especially, dissemination) in order to prevent third parties to indirectly deduct the observations that were genuinely flagged with "C" by the sender.</common:Description>
+        </structure:Code>
+        <structure:Code id="A">
+          <common:Name xml:lang="en">Primary confidentiality due to small counts</common:Name>
+          <common:Name xml:lang="fr">Confidentialité primaire en raison des petits comptes</common:Name>
+          <common:Description xml:lang="en">A cell is flagged as confidential if less than m units ("too few units") contribute to the total of that cell. The limits of what constitutes "small counts" can vary across statistical domains, countries, etc.</common:Description>
+        </structure:Code>
+        <structure:Code id="O">
+          <common:Name xml:lang="en">Primary confidentiality due to dominance by one unit</common:Name>
+          <common:Name xml:lang="fr">Confidentialité primaire due à la dominance d'une unité</common:Name>
+          <common:Description xml:lang="en">Used when one unit accounts for more than x % of the total of a cell. The value of x can vary across statistical domains or countries, be influenced by legislation, etc.</common:Description>
+        </structure:Code>
+        <structure:Code id="T">
+          <common:Name xml:lang="en">Primary confidentiality due to dominance by two units</common:Name>
+          <common:Name xml:lang="fr">Confidentialité primaire due à la dominance de deux unités</common:Name>
+          <common:Description xml:lang="en">Used when two units account for more than x % of the total of a cell. The value of x can vary across statistical domains or countries, be influenced by legislation, etc.</common:Description>
+        </structure:Code>
+        <structure:Code id="G">
+          <common:Name xml:lang="en">Primary confidentiality due to dominance by one or two units</common:Name>
+          <common:Name xml:lang="fr">Confidentialité primaire due à la dominance d'une ou deux unités</common:Name>
+          <common:Description xml:lang="en">Used when one or two units account(s) for more than x % of the total of a cell. The value of x can vary across statistical domains or countries, be influenced by legislation, etc.</common:Description>
+        </structure:Code>
+        <structure:Code id="M">
+          <common:Name xml:lang="en">Primary confidentiality due to data declared confidential based on other measures of concentration</common:Name>
+          <common:Name xml:lang="fr">Confidentialité primaire due aux données déclarées confidentielles sur la base d'autres mesures de concentration</common:Name>
+          <common:Description xml:lang="en">Cells declared confidential using mathematical definitions of sensitive cells, e.g. p-percent, p/q or (n,k) rules.</common:Description>
+        </structure:Code>
+        <structure:Code id="E">
+          <common:Name xml:lang="en">Not for publication, restricted for internal use only (equivalent to the code N) until the embargo time elapses; Free for publication (equivalent to the code F) after the embargo time elapses.</common:Name>
+          <common:Name xml:lang="fr">Non destiné à la publication, réservé à un usage interne uniquement (équivalent au code N) jusqu'à l'expiration du délai d'embargo ; Libre de publication (équivalent au code F) après l'expiration du délai d'embargo.</common:Name>
+          <common:Description xml:lang="en">Used for embargoed data. The embargo time has to be specified in the EMBARGO_TIME attribute. This code may be accompanied with an additional observation-level attribute: CONF_REDIST which defines the secondary recipient(s) to whom the sender allows the primary recipient to forward confidential data.</common:Description>
+        </structure:Code>
+      </structure:Codelist>
+    </structure:Codelists>
+  </message:Structures>
+</message:Structure>

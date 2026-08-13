@@ -14,9 +14,23 @@
     # confront results between julia and matlab code
 
     data = model.data
+    julia_only_accounting_fields =
+        Set([:nominal_inventory_investment, :real_inventory_investment])
+    matlab_fields_t1 = Set(Symbol.(keys(output_t1)))
+    @test setdiff(
+        Set(fieldnames(typeof(data))),
+        union(matlab_fields_t1, Set([:collection_time])),
+    ) == julia_only_accounting_fields
+    @test data.nominal_inventory_investment ≈
+        data.nominal_capitalformation .-
+        data.nominal_fixed_capitalformation
+    @test data.real_inventory_investment ≈
+        data.real_capitalformation .-
+        data.real_fixed_capitalformation
     for fieldname in fieldnames(typeof(data))
         julia_output = getfield(data, fieldname)
         fieldname == :collection_time && continue
+        fieldname in julia_only_accounting_fields && continue
         julia_output = fieldname in [:nominal_sector_gva, :real_sector_gva] ? reduce(hcat, julia_output)' : julia_output
         matlab_output = output_t1[string(fieldname)]
         # need to remove the first step of the julia output since
@@ -41,9 +55,21 @@
 
     # confront results between julia and matlab code
     data = model.data
+    matlab_fields_t5 = Set(Symbol.(keys(output_t5)))
+    @test setdiff(
+        Set(fieldnames(typeof(data))),
+        union(matlab_fields_t5, Set([:collection_time])),
+    ) == julia_only_accounting_fields
+    @test data.nominal_inventory_investment ≈
+        data.nominal_capitalformation .-
+        data.nominal_fixed_capitalformation
+    @test data.real_inventory_investment ≈
+        data.real_capitalformation .-
+        data.real_fixed_capitalformation
     for fieldname in fieldnames(typeof(data))
         julia_output = getfield(data, fieldname)
         fieldname == :collection_time && continue
+        fieldname in julia_only_accounting_fields && continue
         julia_output = fieldname in [:nominal_sector_gva, :real_sector_gva] ? reduce(hcat, julia_output)' : julia_output
         matlab_output = output_t5[string(fieldname)]
 

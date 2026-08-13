@@ -1,0 +1,93 @@
+schema_version = "beforeit-us-after-redefinitions-producer-price-adapter-candidate.v1"
+classification = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+artifact_role = "TYPED_CALIBRATION_ADAPTER_CANDIDATE_ONLY"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+source_year = 2024
+source_frequency = "annual"
+unit = "millions USD"
+price_basis = "producers prices"
+model_commodity_count = 68
+model_industry_count = 68
+closure_codes = ["Used", "Other"]
+
+candidate_materialized = true
+runtime_calibration_admissible = false
+calibration_dictionary_write = false
+figaro_dictionary_write = false
+parameter_write = false
+initial_conditions_write = false
+model_state_write = false
+forecast_origin_admissible = false
+accounting_gate_effect = "NONE"
+
+after_redefinitions_fixture_sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
+after_redefinitions_manifest_sha256 = "ff555043829e5d12ba787ba9ad7d58ef4f0d2ee306740d6847bdfec800935030"
+after_redefinitions_source_zip_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+model_mapping_sha256 = "546b3dc15cbb194210ce564a44626b146551b161ca0ce5ffb90a8a5261b4553c"
+sector_mapping_sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+valuation_envelope_contract_sha256 = "110f82037e45e1de3ce4f5a1df2b7982d064e90a9323f255c7441452fa6d2ede"
+final_use_envelope_contract_sha256 = "b4e3969a52618b4e462b8e468ada784dda85cae86550fb27659d2afbb4cbb2be"
+supply_fixture_sha256 = "c4461fbe971d8fb70750ff4cce6bb09e582a024d7cc1f6e8ebd8e3685bab69e0"
+supply_manifest_sha256 = "564a99ec2011b2566b8951e9eecb4737c0bfbc88f1e077b1eaf596af9894575c"
+table_262_source_sha256 = "91d6686dce15fe1d96f35f1752382bf1d47d274c067f52febc60ae40014406e8"
+methodology_pdf_sha256 = "535627e5e44f8461c0a04410f4a05c55d47f2e325d9473cb2df06e5d3e6b271d"
+methodology_receipt_sha256 = "b4b210be3c364415473f1ef407ed7ea6e9edc2b299bd1058c1658b0ebb3b91ac"
+
+intermediate_policy = "DIRECT_PRODUCER_PRICE_CORE_WITH_SEPARATE_CLOSURE_NO_RAKE"
+closure_policy = "USED_OTHER_SEPARATE_UNALLOCATED"
+scrap_transform_policy = "BEA_NONSCRAP_TRANSFORMATION_REQUIRED_NOT_APPLIED"
+other_boundary_policy = "OTHER_NONCOMPARABLE_IMPORTS_AND_ROW_ADJUSTMENT_BOUNDARY_UNSELECTED"
+inventory_policy = "F030_SIGNED_ANNUAL_FLOW_NO_STOCK_EMISSION"
+import_policy = "F050_SIGNED_OFFSET_AND_IMPUTED_IMPORT_EVIDENCE_NO_MODEL_IMPORT_VECTOR"
+tax_policy = "OBSERVED_AND_ZERO_CONTROLS_UNSELECTED_NO_RUNTIME_TAX_EMISSION"
+value_added_policy = "V001_V002_V003_RETAINED_WITHOUT_RUNTIME_TAX_SPLIT"
+government_policy = "CONSUMPTION_AND_GROSS_INVESTMENT_RETAINED_SEPARATELY"
+residential_policy = "F02R_RETAINED_WITHOUT_DWELLING_STOCK_MAPPING"
+negative_cell_policy = "PRESERVE"
+explicit_mask_policy = "PRESERVE_NUMERIC_ZERO_VS_SELECTED_ZERO"
+legacy_scalar_bridge_policy = "OMITTED_REJECTED_NOT_CELL_IDENTIFIED"
+
+valuation_bridge_applied = false
+tax_allocation_applied = false
+tax_variant_selected = false
+closure_allocation_applied = false
+inventory_stock_mapping_applied = false
+import_boundary_selected = false
+government_boundary_selected = false
+residential_stock_mapping_applied = false
+annual_to_quarter_mapping_applied = false
+raking_applied = false
+balancing_applied = false
+clipping_applied = false
+
+forbidden_runtime_keys = [
+    "purchasers_to_basic_price",
+    "use_product_tax_netting",
+    "imports",
+    "reexports",
+    "S_s",
+    "allocated_product_taxes",
+    "government_total",
+    "FIGARO",
+    "parameters",
+    "initial_conditions",
+    "model_state",
+]
+
+scientific_role = "Byte-pinned, code-keyed producer-price calibration candidate that preserves the 68-sector core, the Used/Other closure sidecar, signed annual inventory and import evidence, and unselected tax controls without emitting runtime calibration state."
+
+[[closure_account]]
+code = "Used"
+methodology_role = "SCRAP_USED_AND_SECONDHAND_GOODS_COMMODITY_ONLY_BYPRODUCT_AND_FINAL_USE_SALES_ACCOUNT"
+ordinary_model_commodity = false
+ordinary_model_producer_industry = false
+runtime_state_mapping_status = "UNRESOLVED"
+methodology_pdf_pages = [98, 214, 223, 224, 225]
+
+[[closure_account]]
+code = "Other"
+methodology_role = "NONCOMPARABLE_IMPORTS_AND_REST_OF_WORLD_ADJUSTMENT_COMPOSITE"
+ordinary_model_commodity = false
+ordinary_model_producer_industry = false
+runtime_state_mapping_status = "UNRESOLVED"
+methodology_pdf_pages = [123, 124]

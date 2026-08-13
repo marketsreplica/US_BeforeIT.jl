@@ -1,0 +1,3272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--NSI Web Service v8.19.8.0-->
+<message:Structure xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:structure="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+  <message:Header>
+    <message:ID>IDREF10682</message:ID>
+    <message:Test>false</message:Test>
+    <message:Prepared>2026-08-06T17:14:43.4821521+02:00</message:Prepared>
+    <message:Sender id="Unknown" />
+    <message:Receiver id="Unknown" />
+  </message:Header>
+  <message:Structures>
+    <structure:Codelists>
+      <structure:Codelist id="CL_TRANSACTION" agencyID="OECD.SDD.NAD" version="1.0" isFinal="true">
+        <common:Name xml:lang="en">Stocks, transactions, other flows</common:Name>
+        <structure:Code id="_X">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">10000</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Unspecified</common:Name>
+          <common:Name xml:lang="fr">Non spécifié</common:Name>
+        </structure:Code>
+        <structure:Code id="_Z">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">10010</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Not applicable</common:Name>
+          <common:Name xml:lang="fr">Non applicable</common:Name>
+        </structure:Code>
+        <structure:Code id="B1GQ">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">10</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Gross domestic product</common:Name>
+          <common:Name xml:lang="fr">Produit intérieur brut</common:Name>
+        </structure:Code>
+        <structure:Code id="P3T5">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">20</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Domestic demand</common:Name>
+          <common:Name xml:lang="fr">Demande intérieure</common:Name>
+          <structure:Parent>
+            <Ref id="B1GQ" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P3">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">30</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Final consumption expenditure</common:Name>
+          <common:Name xml:lang="fr">Dépense de consommation finale</common:Name>
+          <common:Description xml:lang="en">P3=P31+P32</common:Description>
+          <common:Description xml:lang="fr">P3=P31+P32</common:Description>
+          <structure:Parent>
+            <Ref id="B1GQ" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P31">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">40</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Individual consumption expenditure</common:Name>
+          <common:Name xml:lang="fr">Dépense de consommation individuelle</common:Name>
+          <structure:Parent>
+            <Ref id="P3" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P3S13">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">50</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">General government final consumption expenditure</common:Name>
+          <common:Name xml:lang="fr">Dépense de consommation finale des administrations publiques</common:Name>
+          <structure:Parent>
+            <Ref id="P3" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P32">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">60</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Collective consumption expenditure</common:Name>
+          <common:Name xml:lang="fr">Dépense de consommation collective</common:Name>
+          <structure:Parent>
+            <Ref id="P3" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P41">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">70</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Actual individual consumption</common:Name>
+          <common:Name xml:lang="fr">Consommation individuelle effective</common:Name>
+          <structure:Parent>
+            <Ref id="B1GQ" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P5">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">80</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Gross capital formation</common:Name>
+          <common:Name xml:lang="fr">Formation brute de capital</common:Name>
+          <structure:Parent>
+            <Ref id="B1GQ" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P51G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">90</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Gross fixed capital formation</common:Name>
+          <common:Name xml:lang="fr">Formation brute de capital fixe</common:Name>
+          <structure:Parent>
+            <Ref id="P5" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="B1G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">100</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Value added, gross</common:Name>
+          <common:Name xml:lang="fr">Valeur ajoutée, brute</common:Name>
+          <structure:Parent>
+            <Ref id="B1GQ" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="D1">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">110</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Compensation of employees</common:Name>
+          <common:Name xml:lang="fr">Rémunération des salariés</common:Name>
+        </structure:Code>
+        <structure:Code id="D11">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">120</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Wages and salaries</common:Name>
+          <common:Name xml:lang="fr">Salaires et traitements bruts</common:Name>
+        </structure:Code>
+        <structure:Code id="D12">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">130</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Employers' social contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales à la charge des employeurs</common:Name>
+        </structure:Code>
+        <structure:Code id="B2A3G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">140</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Operating surplus and mixed income, gross</common:Name>
+          <common:Name xml:lang="fr">Excédent d'exploitation et revenu mixte, brut</common:Name>
+          <structure:Parent>
+            <Ref id="B1GQ" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="D21X31">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">150</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes less subsidies on products</common:Name>
+          <common:Name xml:lang="fr">Impôts moins subventions sur les produits</common:Name>
+          <structure:Parent>
+            <Ref id="B1GQ" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="D2X3">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">160</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on production and imports less subsidies</common:Name>
+          <common:Name xml:lang="fr">Impôts sur la production et les importations moins les subventions</common:Name>
+          <structure:Parent>
+            <Ref id="B1GQ" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="D2">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">170</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on production and imports</common:Name>
+          <common:Name xml:lang="fr">Impôts sur la production et les importations</common:Name>
+          <structure:Parent>
+            <Ref id="D2X3" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="D2_D5_D91_D611_D613">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">171</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total tax receipts and actual social contributions</common:Name>
+          <common:Name xml:lang="fr">Total des impôts et des cotisations sociales</common:Name>
+          <common:Description xml:lang="en">D2+D5+D91+D611+D613</common:Description>
+          <common:Description xml:lang="fr">D2+D5+D91+D611+D613</common:Description>
+        </structure:Code>
+        <structure:Code id="D3">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">180</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Subsidies on production and imports</common:Name>
+          <common:Name xml:lang="fr">Subventions sur la production et les importations</common:Name>
+          <structure:Parent>
+            <Ref id="D2X3" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P5M">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">190</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Changes in inventories and acquisitions less disposals of valuables</common:Name>
+          <common:Name xml:lang="fr">Variation des stocks et acquisitions moins cessions d'objets de valeur</common:Name>
+          <common:Description xml:lang="en">P5M=P52+P53</common:Description>
+          <common:Description xml:lang="fr">P5M=P52+P53</common:Description>
+          <structure:Parent>
+            <Ref id="P5" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P52">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">200</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Changes in inventories</common:Name>
+          <common:Name xml:lang="fr">Variation des stocks</common:Name>
+          <structure:Parent>
+            <Ref id="P5M" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P53">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">210</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Acquisitions less disposals of valuables</common:Name>
+          <common:Name xml:lang="fr">Acquisitions moins cessions d'objets de valeur</common:Name>
+          <structure:Parent>
+            <Ref id="P5M" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="D21">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">220</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on products</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les produits</common:Name>
+          <structure:Parent>
+            <Ref id="D21X31" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="D31">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">230</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Subsidies on products</common:Name>
+          <common:Name xml:lang="fr">Subventions sur les produits</common:Name>
+          <structure:Parent>
+            <Ref id="D21X31" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="B11">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">240</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">External balance of goods and services</common:Name>
+          <common:Name xml:lang="fr">Solde des échanges extérieurs de biens et services</common:Name>
+          <structure:Parent>
+            <Ref id="B1GQ" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P6">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">250</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Exports of goods and services</common:Name>
+          <common:Name xml:lang="fr">Exportations de biens et de services</common:Name>
+          <structure:Parent>
+            <Ref id="B11" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P61">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">260</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Exports of goods</common:Name>
+          <common:Name xml:lang="fr">Exportations de biens</common:Name>
+          <structure:Parent>
+            <Ref id="P6" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P62">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">270</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Exports of services</common:Name>
+          <common:Name xml:lang="fr">Exportations de services</common:Name>
+          <structure:Parent>
+            <Ref id="P6" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P7">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">280</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Imports of goods and services</common:Name>
+          <common:Name xml:lang="fr">Importations de biens et de services</common:Name>
+          <structure:Parent>
+            <Ref id="B11" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P71">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">290</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Imports of goods</common:Name>
+          <common:Name xml:lang="fr">Importations de biens</common:Name>
+          <structure:Parent>
+            <Ref id="P7" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="P72">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">300</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Imports of services</common:Name>
+          <common:Name xml:lang="fr">Importations de services</common:Name>
+          <structure:Parent>
+            <Ref id="P7" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="YA0">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">310</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Statistical discrepancy (expenditure approach)</common:Name>
+          <common:Name xml:lang="fr">Divergence statistique (approche de la dépense)</common:Name>
+          <structure:Parent>
+            <Ref id="B1GQ" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="YA1">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">320</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Statistical discrepancy (production approach)</common:Name>
+          <common:Name xml:lang="fr">Divergence statistique (approche de la production)</common:Name>
+          <structure:Parent>
+            <Ref id="B1GQ" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="YA2">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">330</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Statistical discrepancy (income approach)</common:Name>
+          <common:Name xml:lang="fr">Divergence statistique (approche du revenu)</common:Name>
+        </structure:Code>
+        <structure:Code id="B101">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">340</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Changes in net worth due to saving and capital transfers</common:Name>
+          <common:Name xml:lang="fr">Variations de la valeur nette dues à l'épargne et aux transferts en capital</common:Name>
+        </structure:Code>
+        <structure:Code id="B12">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">350</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Current external balance</common:Name>
+          <common:Name xml:lang="fr">Solde des opérations courantes avec l'extérieur</common:Name>
+        </structure:Code>
+        <structure:Code id="B1GXP119">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">360</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Value added, gross, excluding FISIM</common:Name>
+          <common:Name xml:lang="fr">Valeur ajoutée, brute, à l'exclusion des SIFIM</common:Name>
+          <common:Description xml:lang="en">only required if FISIM are not allocated</common:Description>
+        </structure:Code>
+        <structure:Code id="B1N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">370</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Value added, net</common:Name>
+          <common:Name xml:lang="fr">Valeur ajoutée, nette</common:Name>
+        </structure:Code>
+        <structure:Code id="B1NQ">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">380</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net domestic product at market prices</common:Name>
+          <common:Name xml:lang="fr">Produit intérieur net au prix du marché</common:Name>
+        </structure:Code>
+        <structure:Code id="B2A3N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">390</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Operating surplus and mixed income, net</common:Name>
+          <common:Name xml:lang="fr">Excédent d'exploitation et revenu mixte, net</common:Name>
+        </structure:Code>
+        <structure:Code id="B2G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">400</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Operating surplus, gross</common:Name>
+          <common:Name xml:lang="fr">Excédent d'exploitation, brut</common:Name>
+          <structure:Parent>
+            <Ref id="B2A3G" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="B2N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">410</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Operating surplus, net</common:Name>
+          <common:Name xml:lang="fr">Excédent d'exploitation, net</common:Name>
+        </structure:Code>
+        <structure:Code id="B3G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">420</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Mixed income, gross</common:Name>
+          <common:Name xml:lang="fr">Revenu mixte, brut</common:Name>
+          <structure:Parent>
+            <Ref id="B2A3G" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="B4G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">430</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Entrepreneurial income, gross</common:Name>
+          <common:Name xml:lang="fr">Revenu d'entreprise, brut</common:Name>
+        </structure:Code>
+        <structure:Code id="B5G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">440</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Balance of primary incomes, gross / National income, gross</common:Name>
+          <common:Name xml:lang="fr">Solde des revenus primaires, brut / Revenu national, brut</common:Name>
+        </structure:Code>
+        <structure:Code id="B5N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">450</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Balance of primary incomes, net / National income, net</common:Name>
+          <common:Name xml:lang="fr">Solde des revenus primaires, net / Revenu national, net</common:Name>
+        </structure:Code>
+        <structure:Code id="B6G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">460</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Disposable income, gross</common:Name>
+          <common:Name xml:lang="fr">Revenu disponible, brut</common:Name>
+        </structure:Code>
+        <structure:Code id="B6N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">470</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Disposable income, net</common:Name>
+          <common:Name xml:lang="fr">Revenu disponible, net</common:Name>
+        </structure:Code>
+        <structure:Code id="B7G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">480</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Adjusted disposable income, gross</common:Name>
+          <common:Name xml:lang="fr">Revenu disponible ajusté, brut</common:Name>
+        </structure:Code>
+        <structure:Code id="B7N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">490</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Adjusted disposable income, net</common:Name>
+          <common:Name xml:lang="fr">Revenu disponible ajusté, net</common:Name>
+        </structure:Code>
+        <structure:Code id="B8G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">500</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Saving, gross</common:Name>
+          <common:Name xml:lang="fr">Epargne, brute</common:Name>
+        </structure:Code>
+        <structure:Code id="B8N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">510</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Saving, net</common:Name>
+          <common:Name xml:lang="fr">Epargne, nette</common:Name>
+        </structure:Code>
+        <structure:Code id="B9">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">520</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net lending (+) / net borrowing (-)</common:Name>
+          <common:Name xml:lang="fr">Capacité / besoin de financement</common:Name>
+        </structure:Code>
+        <structure:Code id="B90">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">530</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net worth</common:Name>
+          <common:Name xml:lang="fr">Valeur nette</common:Name>
+        </structure:Code>
+        <structure:Code id="B9F">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">540</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net financial transactions</common:Name>
+          <common:Name xml:lang="fr">Opérations financières nettes</common:Name>
+        </structure:Code>
+        <structure:Code id="B9FX9">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">550</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Discrepancy between the financial and non-financial net lending / borrowing</common:Name>
+          <common:Name xml:lang="fr">Divergence entre la capacité / le besoin de financement des comptes financiers et non financiers</common:Name>
+        </structure:Code>
+        <structure:Code id="BF90">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">560</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net financial worth</common:Name>
+          <common:Name xml:lang="fr">Valeur nette financière</common:Name>
+        </structure:Code>
+        <structure:Code id="BF90A">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">570</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net financial worth adjusted for pension liabilities</common:Name>
+          <common:Name xml:lang="fr">Valeur nette financière ajustée des engagements de retraite</common:Name>
+          <common:Description xml:lang="en">BF90A=BF90+F6M</common:Description>
+          <common:Description xml:lang="fr">BF90A=BF90+F6M</common:Description>
+        </structure:Code>
+        <structure:Code id="D211">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">580</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Value added type taxes</common:Name>
+          <common:Name xml:lang="fr">Taxes du type TVA</common:Name>
+        </structure:Code>
+        <structure:Code id="D212">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">590</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes and duties on imports excluding Value Added Tax</common:Name>
+          <common:Name xml:lang="fr">Impôts et droits sur les importations, à l'exclusion de la TVA</common:Name>
+        </structure:Code>
+        <structure:Code id="D2121">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">600</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Import duties</common:Name>
+          <common:Name xml:lang="fr">Droits sur les importations</common:Name>
+        </structure:Code>
+        <structure:Code id="D2122">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">610</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on imports excluding Value Added Tax and duties</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les importations à l'exclusion de la TVA et des droits sur les importations</common:Name>
+        </structure:Code>
+        <structure:Code id="D2122A">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">620</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Levies on imported agricultural products</common:Name>
+          <common:Name xml:lang="fr">Prélèvements sur les produits agricoles importés</common:Name>
+        </structure:Code>
+        <structure:Code id="D2122B">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">630</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Monetary compensatory amounts on imports</common:Name>
+          <common:Name xml:lang="fr">Montants compensatoires monétaires prélevés à l'importation</common:Name>
+        </structure:Code>
+        <structure:Code id="D2122C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">640</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Excise duties</common:Name>
+          <common:Name xml:lang="fr">Droits d'accise</common:Name>
+        </structure:Code>
+        <structure:Code id="D2122D">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">650</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">General sales taxes</common:Name>
+          <common:Name xml:lang="fr">Impôts généraux sur les ventes</common:Name>
+        </structure:Code>
+        <structure:Code id="D2122E">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">660</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on specific services</common:Name>
+          <common:Name xml:lang="fr">Impôts sur des services déterminés</common:Name>
+        </structure:Code>
+        <structure:Code id="D2122F">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">670</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Profits of import monopolies</common:Name>
+          <common:Name xml:lang="fr">Bénéfices des monopoles sur l'importation</common:Name>
+        </structure:Code>
+        <structure:Code id="D214">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">680</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on products except Value Added Tax, import and export taxes</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les produits à l'exclusion de TVA et des impôts sur les importations et les exportations</common:Name>
+        </structure:Code>
+        <structure:Code id="D214A">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">690</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Excise duties and consumption taxes</common:Name>
+          <common:Name xml:lang="fr">Droits d'accise et impôts de consommation</common:Name>
+        </structure:Code>
+        <structure:Code id="D214B">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">700</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Stamp taxes</common:Name>
+          <common:Name xml:lang="fr">Droits de timbre</common:Name>
+        </structure:Code>
+        <structure:Code id="D214C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">710</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on financial and capital transactions</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les opérations financières et les opérations en capital</common:Name>
+        </structure:Code>
+        <structure:Code id="D214D">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">720</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Car registration taxes</common:Name>
+          <common:Name xml:lang="fr">Taxes à l'immatriculation des véhicules</common:Name>
+        </structure:Code>
+        <structure:Code id="D214E">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">730</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on entertainment</common:Name>
+          <common:Name xml:lang="fr">Taxes sur les spectacles et divertissements</common:Name>
+        </structure:Code>
+        <structure:Code id="D214F">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">740</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on lotteries, gambling and betting</common:Name>
+          <common:Name xml:lang="fr">Taxes sur les loteries, les jeux et les paris</common:Name>
+        </structure:Code>
+        <structure:Code id="D214G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">750</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on insurance premiums</common:Name>
+          <common:Name xml:lang="fr">Taxes sur les primes d'assurance</common:Name>
+        </structure:Code>
+        <structure:Code id="D214H">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">760</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other taxes on specific services</common:Name>
+          <common:Name xml:lang="fr">Autres taxes sur des services déterminés</common:Name>
+        </structure:Code>
+        <structure:Code id="D214I">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">770</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">General sales or turnover taxes</common:Name>
+          <common:Name xml:lang="fr">Impôts généraux sur les ventes ou le chiffre d'affaires</common:Name>
+        </structure:Code>
+        <structure:Code id="D214J">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">780</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Profits of fiscal monopolies</common:Name>
+          <common:Name xml:lang="fr">Bénéfices des monopoles fiscaux</common:Name>
+        </structure:Code>
+        <structure:Code id="D214K">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">790</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Export duties and monetary compensatory amounts collected on exports</common:Name>
+          <common:Name xml:lang="fr">Droits sur les exportations et montants compensatoires monétaires prélevés à l'exportation</common:Name>
+        </structure:Code>
+        <structure:Code id="D214L">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">800</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other taxes on products n.e.c.</common:Name>
+          <common:Name xml:lang="fr">Autres impôts sur les produits n.c.a.</common:Name>
+        </structure:Code>
+        <structure:Code id="D29">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">810</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other taxes on production</common:Name>
+          <common:Name xml:lang="fr">Autres impôts sur la production</common:Name>
+        </structure:Code>
+        <structure:Code id="D29A">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">820</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on land, buildings or other structures</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les terrains, bâtiments et autres constructions</common:Name>
+        </structure:Code>
+        <structure:Code id="D29B">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">830</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on the use of fixed assets</common:Name>
+          <common:Name xml:lang="fr">Impôts sur l'utilisation d'actifs fixes</common:Name>
+        </structure:Code>
+        <structure:Code id="D29C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">840</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total wage bill and payroll taxes</common:Name>
+          <common:Name xml:lang="fr">Impôts sur la masse salariale ou les effectifs employés</common:Name>
+        </structure:Code>
+        <structure:Code id="D29D">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">850</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on international transactions</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les transactions internationales</common:Name>
+        </structure:Code>
+        <structure:Code id="D29E">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">860</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Business and professional licences</common:Name>
+          <common:Name xml:lang="fr">Autorisations d'exercer des activités commerciales ou professionnelles</common:Name>
+        </structure:Code>
+        <structure:Code id="D29F">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">870</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on pollution</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les émissions polluantes</common:Name>
+        </structure:Code>
+        <structure:Code id="D29G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">880</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Under-compensation of Value Added Tax (flat rate system)</common:Name>
+          <common:Name xml:lang="fr">Sous-compensation de la TVA (régime forfaitaire)</common:Name>
+        </structure:Code>
+        <structure:Code id="D29H">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">890</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other taxes on production n.e.c.</common:Name>
+          <common:Name xml:lang="fr">Autres impôts sur la production n.c.a.</common:Name>
+        </structure:Code>
+        <structure:Code id="D29X39">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">900</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other taxes less other subsidies on production</common:Name>
+          <common:Name xml:lang="fr">Autres impôts moins autres subventions sur la production</common:Name>
+        </structure:Code>
+        <structure:Code id="D39">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">910</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other subsidies on production</common:Name>
+          <common:Name xml:lang="fr">Autres subventions sur la production</common:Name>
+        </structure:Code>
+        <structure:Code id="D4">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">920</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Property income</common:Name>
+          <common:Name xml:lang="fr">Revenus de la propriété</common:Name>
+        </structure:Code>
+        <structure:Code id="D41">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">930</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Interest</common:Name>
+          <common:Name xml:lang="fr">Intérêts</common:Name>
+        </structure:Code>
+        <structure:Code id="D41G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">940</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Interest before FISIM allocation</common:Name>
+          <common:Name xml:lang="fr">Intérêts à payer (y compris SIFIM)</common:Name>
+        </structure:Code>
+        <structure:Code id="D42">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">950</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Distributed income of corporations</common:Name>
+          <common:Name xml:lang="fr">Revenus distribués des sociétés</common:Name>
+        </structure:Code>
+        <structure:Code id="D421">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">960</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Dividends</common:Name>
+          <common:Name xml:lang="fr">Dividendes</common:Name>
+        </structure:Code>
+        <structure:Code id="D422">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">970</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Withdrawals from income of quasi-corporations</common:Name>
+          <common:Name xml:lang="fr">Prélèvements sur le revenu des quasi-sociétés</common:Name>
+        </structure:Code>
+        <structure:Code id="D43">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">980</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Reinvested earnings on FDI (excluding IF)</common:Name>
+          <common:Name xml:lang="fr">Bénéfices réinvestis d'investissements directs étrangers</common:Name>
+        </structure:Code>
+        <structure:Code id="D44">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">990</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other investment income</common:Name>
+          <common:Name xml:lang="fr">Autres revenus d'investissements</common:Name>
+        </structure:Code>
+        <structure:Code id="D441">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1000</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Investment income attributable to insurance policyholders</common:Name>
+          <common:Name xml:lang="fr">Revenus d'investissements attribués aux assurés</common:Name>
+        </structure:Code>
+        <structure:Code id="D442">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1010</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Investment income payable on pension entitlements</common:Name>
+          <common:Name xml:lang="fr">Revenus d'investissements à payer sur les droits de pension</common:Name>
+        </structure:Code>
+        <structure:Code id="D443">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1020</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Investment income attributable to collective investment fund share holders</common:Name>
+          <common:Name xml:lang="fr">Revenus d'investissements attribués aux détenteurs de parts de fonds d'investissement</common:Name>
+        </structure:Code>
+        <structure:Code id="D45">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1030</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Rent</common:Name>
+          <common:Name xml:lang="fr">Loyers</common:Name>
+        </structure:Code>
+        <structure:Code id="D4N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1040</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Property income other than interest</common:Name>
+          <common:Name xml:lang="fr">Revenus de la propriété autres que intérêts</common:Name>
+          <common:Description xml:lang="en">D4N=D42+D43+D44+D45</common:Description>
+          <common:Description xml:lang="fr">D4N=D42+D43+D44+D45</common:Description>
+        </structure:Code>
+        <structure:Code id="D5">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1050</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Current taxes on income, wealth, etc.</common:Name>
+          <common:Name xml:lang="fr">Impôts courants sur le revenu, le patrimoine, etc.</common:Name>
+        </structure:Code>
+        <structure:Code id="D51">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1060</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on income</common:Name>
+          <common:Name xml:lang="fr">Impôts sur le revenu</common:Name>
+        </structure:Code>
+        <structure:Code id="D51A">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1070</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on individual or household income excluding holding gains</common:Name>
+          <common:Name xml:lang="fr">Impôts sur le revenu des personnes physiques ou des ménages non compris les gains de détention</common:Name>
+        </structure:Code>
+        <structure:Code id="D51B">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1080</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on the income or profits of corporations excluding holding gains</common:Name>
+          <common:Name xml:lang="fr">Impôts sur le revenu ou les bénéfices des sociétés non compris les gains de détention</common:Name>
+        </structure:Code>
+        <structure:Code id="D51C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1090</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on holding gains</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les gains de détention</common:Name>
+        </structure:Code>
+        <structure:Code id="D51C1">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1100</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on individual or household holding gains</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les gains de détention des personnes physiques ou des ménages</common:Name>
+        </structure:Code>
+        <structure:Code id="D51C2">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1110</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on holding gains of corporations</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les gains de détention des sociétés</common:Name>
+        </structure:Code>
+        <structure:Code id="D51C3">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1120</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other taxes on holding gains n.e.c.</common:Name>
+          <common:Name xml:lang="fr">Autres impôts sur les gains de détention n.c.a.</common:Name>
+        </structure:Code>
+        <structure:Code id="D51D">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1130</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on winnings from lottery or gambling</common:Name>
+          <common:Name xml:lang="fr">Taxes sur les gains des loteries et des paris</common:Name>
+        </structure:Code>
+        <structure:Code id="D51E">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1140</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other taxes on income n.e.c.</common:Name>
+          <common:Name xml:lang="fr">Autres impôts sur le revenu n.c.a.</common:Name>
+        </structure:Code>
+        <structure:Code id="D51M">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1150</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on individual or household income including holding gains</common:Name>
+          <common:Name xml:lang="fr">Impôts sur le revenu des personnes physiques ou des ménages y compris les gains de détention</common:Name>
+          <common:Description xml:lang="en">D51M=D51A+D51C1</common:Description>
+          <common:Description xml:lang="fr">D51M=D51A+D51C1</common:Description>
+        </structure:Code>
+        <structure:Code id="D51O">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1160</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on the income or profits of corporations including holding gains</common:Name>
+          <common:Name xml:lang="fr">Impôts sur le revenu des sociétés y compris les gains de détention</common:Name>
+          <common:Description xml:lang="en">D51O=D51B+D51C2</common:Description>
+          <common:Description xml:lang="fr">D51O=D51B+D51C2</common:Description>
+        </structure:Code>
+        <structure:Code id="D59">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1170</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other current taxes</common:Name>
+          <common:Name xml:lang="fr">Autres impôts courants</common:Name>
+        </structure:Code>
+        <structure:Code id="D59A">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1180</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Current taxes on capital</common:Name>
+          <common:Name xml:lang="fr">Impôts courants sur le capital</common:Name>
+        </structure:Code>
+        <structure:Code id="D59B">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1190</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Poll taxes</common:Name>
+          <common:Name xml:lang="fr">Impôts de capitation</common:Name>
+        </structure:Code>
+        <structure:Code id="D59C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1200</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Expenditure taxes</common:Name>
+          <common:Name xml:lang="fr">Impôts sur la dépense</common:Name>
+        </structure:Code>
+        <structure:Code id="D59D">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1210</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Payments by households for licences</common:Name>
+          <common:Name xml:lang="fr">Paiements effectués par les ménages en vue de l’obtention de licences</common:Name>
+        </structure:Code>
+        <structure:Code id="D59E">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1220</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on international transactions</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les transactions internationales</common:Name>
+        </structure:Code>
+        <structure:Code id="D59F">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1230</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other current taxes n.e.c.</common:Name>
+          <common:Name xml:lang="fr">Autres impôts courants n.c.a.</common:Name>
+        </structure:Code>
+        <structure:Code id="D6">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1240</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Social contributions and social benefits</common:Name>
+          <common:Name xml:lang="fr">Cotisations et prestations sociales</common:Name>
+        </structure:Code>
+        <structure:Code id="D61">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1250</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net social contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales nettes</common:Name>
+        </structure:Code>
+        <structure:Code id="D611">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1260</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Employers' actual social contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives à la charge des employeurs</common:Name>
+          <common:Description xml:lang="en">D611= D121</common:Description>
+          <common:Description xml:lang="fr">D611= D121</common:Description>
+        </structure:Code>
+        <structure:Code id="D6111">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1270</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Employers' actual pension contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations de pension effectives à la charge des employeurs</common:Name>
+          <common:Description xml:lang="en">D6111= D1211</common:Description>
+          <common:Description xml:lang="fr">D6111= D1211</common:Description>
+        </structure:Code>
+        <structure:Code id="D6112">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1280</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Employers' actual non-pension contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations effectives autres que de pension à la charge des employeurs</common:Name>
+          <common:Description xml:lang="en">D6112 = D1212</common:Description>
+          <common:Description xml:lang="fr">D6112 = D1212</common:Description>
+        </structure:Code>
+        <structure:Code id="D611C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1290</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Compulsory employers' actual social contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives obligatoires à la charge des employeurs</common:Name>
+        </structure:Code>
+        <structure:Code id="D611V">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1300</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Voluntary employers' actual social contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives volontaires des employeurs</common:Name>
+        </structure:Code>
+        <structure:Code id="D612">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1310</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Employers' imputed social contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales imputées à la charge des employeurs</common:Name>
+          <common:Description xml:lang="en">D612 = D122</common:Description>
+          <common:Description xml:lang="fr">D612 = D122</common:Description>
+        </structure:Code>
+        <structure:Code id="D6121">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1320</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Employers' imputed pension contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations de pension imputées à la charge des employeurs</common:Name>
+          <common:Description xml:lang="en">D6121 = D1221</common:Description>
+          <common:Description xml:lang="fr">D6121 = D1221</common:Description>
+        </structure:Code>
+        <structure:Code id="D6122">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1330</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Employers' imputed non-pension contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations imputées autres que de pension à la charge des employeurs</common:Name>
+          <common:Description xml:lang="en">D6122 = D1222</common:Description>
+          <common:Description xml:lang="fr">D6122 = D1222</common:Description>
+        </structure:Code>
+        <structure:Code id="D613">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1340</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Households' actual social contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives à la charge des ménages</common:Name>
+        </structure:Code>
+        <structure:Code id="D613CE_VE">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1341</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Employees' social contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales à la charge des salariés</common:Name>
+          <common:Description xml:lang="en">D613CE+D613VE</common:Description>
+          <common:Description xml:lang="fr">D613CE+D613VE</common:Description>
+        </structure:Code>
+        <structure:Code id="D613VE">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1342</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Voluntary employees' social contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives volontaires des salariés</common:Name>
+        </structure:Code>
+        <structure:Code id="D613CSN_VSN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1343</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Social contributions by self- and non-employed persons</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales à la charge des travailleurs indépendants et des personnes n'occupant pas d'emploi</common:Name>
+          <common:Description xml:lang="en">D613CSN+D613VSN</common:Description>
+          <common:Description xml:lang="fr">D613CSN+D613VSN</common:Description>
+        </structure:Code>
+        <structure:Code id="D613CSN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1344</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Compulsory social contributions by self- and non-employed persons</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales obligatoires à la charge des travailleurs indépendants et des personnes n'occupant pas d'emploi</common:Name>
+        </structure:Code>
+        <structure:Code id="D613VSN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1345</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Voluntary social contributions by self- and non-employed persons</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives volontaires à la charge des travailleurs indépendants et des personnes n'occupant pas d'emploi</common:Name>
+        </structure:Code>
+        <structure:Code id="D6131">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1350</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Households' actual pension contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations de pension effectives à la charge des ménages</common:Name>
+        </structure:Code>
+        <structure:Code id="D6132">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1360</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Households' actual non-pension contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations effectives autres que de pension à la charge des ménages</common:Name>
+        </structure:Code>
+        <structure:Code id="D613C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1370</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Compulsory households' actual social contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives obligatoires à la charge des ménages</common:Name>
+        </structure:Code>
+        <structure:Code id="D613CE">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1380</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Compulsory employees' actual social contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives obligatoires à la charge des salariés</common:Name>
+        </structure:Code>
+        <structure:Code id="D613CN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1390</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Compulsory actual social contributions by the non-employed</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives obligatoires à la charge des personnes n'occupant pas d'emploi</common:Name>
+        </structure:Code>
+        <structure:Code id="D613CS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1400</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Compulsory actual social contributions by the self-employed</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives obligatoires à la charge des travailleurs indépendants</common:Name>
+        </structure:Code>
+        <structure:Code id="D613V">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1410</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Voluntary households' actual social contributions</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives volontaires des ménages</common:Name>
+        </structure:Code>
+        <structure:Code id="D614">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1420</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Households' social contribution supplements</common:Name>
+          <common:Name xml:lang="fr">Suppléments de cotisations sociales à la charge des ménages</common:Name>
+        </structure:Code>
+        <structure:Code id="D6141">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1430</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Households' pension contribution supplements</common:Name>
+          <common:Name xml:lang="fr">Suppléments de cotisations de pension à la charge des ménages</common:Name>
+        </structure:Code>
+        <structure:Code id="D6142">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1440</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Households' non-pension contribution supplements</common:Name>
+          <common:Name xml:lang="fr">Suppléments de cotisations autres que de pension à la charge des ménages</common:Name>
+        </structure:Code>
+        <structure:Code id="D619">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1450</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other (actuarial) change of pension entitlements in social security pension schemes</common:Name>
+          <common:Name xml:lang="fr">Autre changement (actuariel) des droits à pension dans le cadre de régimes de pension de la sécurité sociale</common:Name>
+        </structure:Code>
+        <structure:Code id="D61N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1460</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Actual social contributions from employers and households</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives des employeurs et des ménages</common:Name>
+          <common:Description xml:lang="en">D61N=D611+D613</common:Description>
+          <common:Description xml:lang="fr">D61N=D611+D613</common:Description>
+        </structure:Code>
+        <structure:Code id="D61SC">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1470</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Social insurance scheme service charges (-)</common:Name>
+          <common:Name xml:lang="fr">Rémunération du service des régimes d'assurance sociale (-)</common:Name>
+        </structure:Code>
+        <structure:Code id="D62">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1480</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Social benefits other than social transfers in kind</common:Name>
+          <common:Name xml:lang="fr">Prestations sociales autres que transferts sociaux en nature</common:Name>
+        </structure:Code>
+        <structure:Code id="D62_63">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1490</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Social benefits and social transfers in kind</common:Name>
+          <common:Name xml:lang="fr">Prestations sociales et transferts sociaux en nature</common:Name>
+          <common:Description xml:lang="en">D62_63=D62+D63</common:Description>
+          <common:Description xml:lang="fr">D62_63=D62+D63</common:Description>
+        </structure:Code>
+        <structure:Code id="D63">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1500</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Social transfers in kind</common:Name>
+          <common:Name xml:lang="fr">Transferts sociaux en nature</common:Name>
+        </structure:Code>
+        <structure:Code id="D631">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1510</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Social transfers in kind - non-market production</common:Name>
+          <common:Name xml:lang="fr">Transferts sociaux en nature - production non marchande</common:Name>
+        </structure:Code>
+        <structure:Code id="D632">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1520</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Social transfers in kind - purchased market production</common:Name>
+          <common:Name xml:lang="fr">Transferts sociaux en nature - production marchande achetée</common:Name>
+        </structure:Code>
+        <structure:Code id="D6L">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1530</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Social contributions and social benefits, other than social transfer in kind</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales et prestations sociales, autres que transferts sociaux en nature</common:Name>
+          <common:Description xml:lang="en">D6L=D61+D62</common:Description>
+          <common:Description xml:lang="fr">D6L=D61+D62</common:Description>
+        </structure:Code>
+        <structure:Code id="D6M">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1540</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Social benefits other than social transfers in kind and social transfers in kind, purchased market production</common:Name>
+          <common:Name xml:lang="fr">Prestations et transferts sociaux en nature, production marchande</common:Name>
+          <common:Description xml:lang="en">D6M=D62+D632</common:Description>
+          <common:Description xml:lang="fr">D6M=D62+D632</common:Description>
+        </structure:Code>
+        <structure:Code id="D7">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1550</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other current transfers</common:Name>
+          <common:Name xml:lang="fr">Autres transferts courants</common:Name>
+        </structure:Code>
+        <structure:Code id="D71">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1560</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net non-life insurance premiums</common:Name>
+          <common:Name xml:lang="fr">Primes nettes d'assurance-dommages</common:Name>
+        </structure:Code>
+        <structure:Code id="D72">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1570</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Non-life insurance claims</common:Name>
+          <common:Name xml:lang="fr">Indemnités d'assurance-dommages</common:Name>
+        </structure:Code>
+        <structure:Code id="D73">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1580</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Current transfers within general government</common:Name>
+          <common:Name xml:lang="fr">Transferts courants entre administrations publiques</common:Name>
+        </structure:Code>
+        <structure:Code id="D74">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1590</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Current international cooperation</common:Name>
+          <common:Name xml:lang="fr">Coopération internationale courante</common:Name>
+        </structure:Code>
+        <structure:Code id="D75">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1600</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Miscellaneous current transfers</common:Name>
+          <common:Name xml:lang="fr">Transferts courants divers</common:Name>
+        </structure:Code>
+        <structure:Code id="D751">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1610</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Current transfers to NPISHs</common:Name>
+          <common:Name xml:lang="fr">Transferts courants aux ISBLSM</common:Name>
+        </structure:Code>
+        <structure:Code id="D76">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1620</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Value Added Tax and gross national income - based EU own resources</common:Name>
+          <common:Name xml:lang="fr">Ressources propres de l'UE basées sur la TVA et le revenu national brut</common:Name>
+          <common:Description xml:lang="en">D76 = D761+D762+D763</common:Description>
+          <common:Description xml:lang="fr">D76 = D761+D762+D763</common:Description>
+        </structure:Code>
+        <structure:Code id="D7N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1630</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Current international cooperation, miscellaneous current transfers and Value Added Tax and gross national income - based EU own resources</common:Name>
+          <common:Name xml:lang="fr">Coopération internationale courante, transferts courants divers et ressources propres de l'UE basées sur la TVA et le revenu national brut</common:Name>
+          <common:Description xml:lang="en">D7N=D74+D75+D76</common:Description>
+          <common:Description xml:lang="fr">D7N=D74+D75+D76</common:Description>
+        </structure:Code>
+        <structure:Code id="D8">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1640</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Adjustment for the change in pension entitlements</common:Name>
+          <common:Name xml:lang="fr">Ajustement pour variation des droits à pension</common:Name>
+        </structure:Code>
+        <structure:Code id="D81">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1650</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Transfer of pension entitlements between schemes</common:Name>
+          <common:Name xml:lang="fr">Transfert de droits à pension entre régimes</common:Name>
+        </structure:Code>
+        <structure:Code id="D82">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1660</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Change in entitlements due to negotiated changes in scheme structure</common:Name>
+          <common:Name xml:lang="fr">Modification des droits en raison de changements négociés dans la structure du régime</common:Name>
+        </structure:Code>
+        <structure:Code id="D9">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1670</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Capital transfers</common:Name>
+          <common:Name xml:lang="fr">Transferts en capital</common:Name>
+        </structure:Code>
+        <structure:Code id="D91">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1680</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Capital taxes</common:Name>
+          <common:Name xml:lang="fr">Impôts en capital</common:Name>
+        </structure:Code>
+        <structure:Code id="D91A">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1690</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on capital transfers</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les transferts en capital</common:Name>
+        </structure:Code>
+        <structure:Code id="D91B">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1700</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Capital levies</common:Name>
+          <common:Name xml:lang="fr">Prélèvements sur le capital</common:Name>
+        </structure:Code>
+        <structure:Code id="D91C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1710</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other capital taxes n.e.c.</common:Name>
+          <common:Name xml:lang="fr">Autres impôts en capital n.c.a.</common:Name>
+        </structure:Code>
+        <structure:Code id="D92">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1720</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Investment grants</common:Name>
+          <common:Name xml:lang="fr">Aides à l'investissement</common:Name>
+        </structure:Code>
+        <structure:Code id="D99">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1730</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other capital transfers</common:Name>
+          <common:Name xml:lang="fr">Autres transferts en capital</common:Name>
+        </structure:Code>
+        <structure:Code id="D995">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1740</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Capital transfers from general government to relevant sectors representing taxes and social contributions assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Transferts en capital des administrations publiques vers les secteurs concernés correspondant à des impôts et contributions sociales notifiés mais non susceptible d'être perçus</common:Name>
+        </structure:Code>
+        <structure:Code id="D995A">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1750</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on products assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Impôts sur les produits dus non recouvrables</common:Name>
+        </structure:Code>
+        <structure:Code id="D995B">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1760</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other taxes on production assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Autres impôts sur la production dus non recouvrables</common:Name>
+        </structure:Code>
+        <structure:Code id="D995C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1770</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taxes on income assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Impôts sur le revenu dus non recouvrables</common:Name>
+        </structure:Code>
+        <structure:Code id="D995D">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1780</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other current taxes assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Autres impôts courants dus non recouvrables</common:Name>
+        </structure:Code>
+        <structure:Code id="D995E">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1790</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Employers actual social contributions assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives à la charge des employeurs dues non recouvrables</common:Name>
+        </structure:Code>
+        <structure:Code id="D995F">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1800</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Households' actual social contributions assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives à la charge des ménages dues non recouvrables</common:Name>
+        </structure:Code>
+        <structure:Code id="D995FE">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1810</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Employees' actual social contributions assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives à la charge des salariés dues non recouvrables</common:Name>
+        </structure:Code>
+        <structure:Code id="D995FN_D995FS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1811</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Social contributions by self- and non-employed persons assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives à la charge des travailleurs indépendants et des personnes n'occupant pas d'emploi dues non recouvrables</common:Name>
+          <common:Description xml:lang="en">D995FN+D995FS</common:Description>
+          <common:Description xml:lang="fr">D995FN+D995FS</common:Description>
+        </structure:Code>
+        <structure:Code id="D995FN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1820</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Actual social contributions by non-employed persons assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives à la charge des personnes n'occupant pas d'emploi dues non recouvrables</common:Name>
+          <structure:Parent>
+            <Ref id="D995FN_D995FS" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="D995FS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1830</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Actual social contributions by self-employed persons assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales effectives à la charge des travailleurs indépendants dues non recouvrables</common:Name>
+          <structure:Parent>
+            <Ref id="D995FN_D995FS" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="D995G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1840</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Capital taxes assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Impôts en capital dus non recouvrables</common:Name>
+        </structure:Code>
+        <structure:Code id="D9N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1850</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other capital transfers and investment grants</common:Name>
+          <common:Name xml:lang="fr">Autres transferts en capital et aides à l'investissement</common:Name>
+          <common:Description xml:lang="en">D9N=D92+D99</common:Description>
+          <common:Description xml:lang="fr">D9N=D92+D99</common:Description>
+        </structure:Code>
+        <structure:Code id="EMP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1860</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total employment</common:Name>
+          <common:Name xml:lang="fr">Emploi total</common:Name>
+        </structure:Code>
+        <structure:Code id="F">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1870</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Transactions in financial assets and liabilities</common:Name>
+          <common:Name xml:lang="fr">Opérations sur actifs et passifs financiers</common:Name>
+        </structure:Code>
+        <structure:Code id="K">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1880</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Changes in positions other than transactions</common:Name>
+          <common:Name xml:lang="fr">Variations de positions autres que les transactions</common:Name>
+        </structure:Code>
+        <structure:Code id="K5">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1890</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other changes in volume not elsewhere classified</common:Name>
+          <common:Name xml:lang="fr">Autres changements de volume non classés ailleurs</common:Name>
+        </structure:Code>
+        <structure:Code id="K7">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1900</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Revaluations / Nominal holding gains and losses</common:Name>
+          <common:Name xml:lang="fr">Réévaluations / Gains et pertes nominaux de détention</common:Name>
+        </structure:Code>
+        <structure:Code id="KA">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1910</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other changes excluding revaluations</common:Name>
+          <common:Name xml:lang="fr">Autres variations hors réévaluations</common:Name>
+        </structure:Code>
+        <structure:Code id="LE">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1920</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Closing balance sheet/positions/stocks</common:Name>
+          <common:Name xml:lang="fr">Bilan de clôture/positions/stocks</common:Name>
+        </structure:Code>
+        <structure:Code id="LS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1930</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Opening balance sheet/positions/stocks</common:Name>
+          <common:Name xml:lang="fr">Bilan d'ouverture/positions/stocks</common:Name>
+        </structure:Code>
+        <structure:Code id="NP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1940</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Acquisitions less disposals of non-financial non-produced assets</common:Name>
+          <common:Name xml:lang="fr">Acquisitions moins cessions d'actifs non financiers non produits</common:Name>
+        </structure:Code>
+        <structure:Code id="ODA">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1950</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total tax receipts</common:Name>
+          <common:Name xml:lang="fr">Total des recettes fiscales</common:Name>
+          <common:Description xml:lang="en">ODA=D2+D5+D91</common:Description>
+          <common:Description xml:lang="fr">ODA=D2+D5+D91</common:Description>
+        </structure:Code>
+        <structure:Code id="ODC">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1960</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total receipts from taxes and net social contributions (including imputed social contributions) after deduction of amounts assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Produit total des impôts et cotisations sociales nettes (y compris cotisations sociales imputées), après déduction des montants dus non recouvrables</common:Name>
+          <common:Description xml:lang="en">ODC=D2+D5+D91+D61-D995</common:Description>
+          <common:Description xml:lang="fr">ODC=D2+D5+D91+D61-D995</common:Description>
+        </structure:Code>
+        <structure:Code id="ODD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1970</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Tax burden corresponding to total receipts from taxes and compulsory social contributions after deduction of amounts assessed but unlikely to be collected</common:Name>
+          <common:Name xml:lang="fr">Charges fiscales correspondant au produit total des impôts et cotisations sociales obligatoires après déduction des montants dus non recouvrables</common:Name>
+          <common:Description xml:lang="en">ODD=D2+D5+D91+D61-D612-D611V-D613V-D995</common:Description>
+          <common:Description xml:lang="fr">ODD=D2+D5+D91+D61-D612-D611V-D613V-D995</common:Description>
+        </structure:Code>
+        <structure:Code id="OEC">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1980</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Intermediate consumption, Other taxes on production, Current taxes on income, wealth, etc., Adjustment for the change in pension entitlements</common:Name>
+          <common:Name xml:lang="fr">Consommation intermédiaire, autres impôts sur la production, Impôts sur le revenu et ajustement pour variation des droits à pension</common:Name>
+          <common:Description xml:lang="en">OEC=P2+D29+D5+D8</common:Description>
+          <common:Description xml:lang="fr">OEC=P2+D29+D5+D8</common:Description>
+        </structure:Code>
+        <structure:Code id="OED">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1990</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other taxes on production, Current taxes on income, wealth, etc., Adjustment for the change in pension entitlements</common:Name>
+          <common:Name xml:lang="fr">Autres impôts sur la production, Impôts sur le revenu et ajustement pour variation des droits à pension.</common:Name>
+          <common:Description xml:lang="en">OED=D29+D5+D8</common:Description>
+          <common:Description xml:lang="fr">OED=D29+D5+D8</common:Description>
+        </structure:Code>
+        <structure:Code id="OTE">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2000</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total government expenditure</common:Name>
+          <common:Name xml:lang="fr">Total des dépenses des administrations publiques</common:Name>
+        </structure:Code>
+        <structure:Code id="OTEK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2010</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total expenditure other than Compensation of employees, Social benefits and social transfers in kind for products supplied to HH via market producers, Intermediate consumption and Gross fixed capital formation</common:Name>
+          <common:Name xml:lang="fr">Dépenses totales autres que la rémunération des salariés, les prestations sociales et les transferts sociaux en nature pour les produits fournis aux ménages via les producteurs marchands, la consommation intermédiaire et la formation brute de capital fixe</common:Name>
+          <common:Description xml:lang="en">OTEK=OTE-D1-D6O-P51-P2</common:Description>
+          <common:Description xml:lang="fr">OTEK=OTE-D1-D6O-P51-P2</common:Description>
+        </structure:Code>
+        <structure:Code id="OTGL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2020</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Trading gain or loss</common:Name>
+          <common:Name xml:lang="fr">Gains ou pertes d'échange</common:Name>
+        </structure:Code>
+        <structure:Code id="OTR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2030</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total government revenue</common:Name>
+          <common:Name xml:lang="fr">Total des recettes des administrations publiques</common:Name>
+        </structure:Code>
+        <structure:Code id="OTTM">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2040</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Trade and transport margins</common:Name>
+          <common:Name xml:lang="fr">Marges commerciales et de transport</common:Name>
+        </structure:Code>
+        <structure:Code id="OTTM1">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2050</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Trade margins</common:Name>
+          <common:Name xml:lang="fr">Marges commerciales</common:Name>
+        </structure:Code>
+        <structure:Code id="OTTM2">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2060</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Transport margins</common:Name>
+          <common:Name xml:lang="fr">Marges de transport</common:Name>
+        </structure:Code>
+        <structure:Code id="P1">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2070</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Output</common:Name>
+          <common:Name xml:lang="fr">Production</common:Name>
+        </structure:Code>
+        <structure:Code id="P11">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2080</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Market output</common:Name>
+          <common:Name xml:lang="fr">Production marchande</common:Name>
+        </structure:Code>
+        <structure:Code id="P119">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2090</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Financial Intermediation Services Indirectly Measured (FISIM)</common:Name>
+          <common:Name xml:lang="fr">Services d'intermédiation financière indirectement mesurés (SIFIM)</common:Name>
+        </structure:Code>
+        <structure:Code id="P12">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2100</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Output for own final use</common:Name>
+          <common:Name xml:lang="fr">Production pour usage final propre</common:Name>
+        </structure:Code>
+        <structure:Code id="P13">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2110</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Non-market output</common:Name>
+          <common:Name xml:lang="fr">Production non marchande</common:Name>
+        </structure:Code>
+        <structure:Code id="P131">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2120</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Payments for other non-market output</common:Name>
+          <common:Name xml:lang="fr">Paiements au titre de la production non marchande</common:Name>
+        </structure:Code>
+        <structure:Code id="P132">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2130</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Other non-market output, n.e.c.</common:Name>
+          <common:Name xml:lang="fr">Autre production non marchande, n.c.a.</common:Name>
+        </structure:Code>
+        <structure:Code id="P1M">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2140</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Market output and output for own final use</common:Name>
+          <common:Name xml:lang="fr">Production marchande et production pour usage final propre</common:Name>
+          <common:Description xml:lang="en">P1M=P1-P131</common:Description>
+          <common:Description xml:lang="fr">P1M=P1-P131</common:Description>
+        </structure:Code>
+        <structure:Code id="P1O">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2150</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Market output, output for own final use and payments for other non-market output</common:Name>
+          <common:Name xml:lang="fr">Production marchande, production pour usage final propre et paiements pour autre production non marchande</common:Name>
+          <common:Description xml:lang="en">P1O=P11+P12+P131</common:Description>
+          <common:Description xml:lang="fr">P1O=P11+P12+P131</common:Description>
+        </structure:Code>
+        <structure:Code id="P2">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2160</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Intermediate consumption</common:Name>
+          <common:Name xml:lang="fr">Consommation intermédiaire</common:Name>
+        </structure:Code>
+        <structure:Code id="P311">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2170</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Final consumption expenditure of durable goods</common:Name>
+          <common:Name xml:lang="fr">Dépenses de consommation finale de biens durables</common:Name>
+        </structure:Code>
+        <structure:Code id="P312">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2180</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Final consumption expenditure of semi-durable goods</common:Name>
+          <common:Name xml:lang="fr">Dépenses de consommation finale de biens semi-durables</common:Name>
+        </structure:Code>
+        <structure:Code id="P313">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2190</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Final consumption expenditure of non-durable goods</common:Name>
+          <common:Name xml:lang="fr">Dépenses de consommation finale de biens non-durables</common:Name>
+        </structure:Code>
+        <structure:Code id="P314">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2200</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Final consumption expenditure of services</common:Name>
+          <common:Name xml:lang="fr">Dépenses de consommation finale de services</common:Name>
+        </structure:Code>
+        <structure:Code id="P31K">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2210</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Final consumption expenditure of semi-durable goods, non-durable goods, and services</common:Name>
+          <common:Name xml:lang="fr">Dépenses de consommation finale de biens semi-durables, de biens non-durables et de services</common:Name>
+          <common:Description xml:lang="en">P31K=P312+P313+P314</common:Description>
+          <common:Description xml:lang="fr">P31K=P312+P313+P314</common:Description>
+        </structure:Code>
+        <structure:Code id="P3T6">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2220</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total demand</common:Name>
+          <common:Name xml:lang="fr">Demande totale</common:Name>
+        </structure:Code>
+        <structure:Code id="P51C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2230</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Consumption of fixed capital</common:Name>
+          <common:Name xml:lang="fr">Consommation de capital fixe</common:Name>
+        </structure:Code>
+        <structure:Code id="P51N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2240</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net fixed capital formation</common:Name>
+          <common:Name xml:lang="fr">Formation nette de capital fixe</common:Name>
+        </structure:Code>
+        <structure:Code id="P5L">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2250</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Gross capital formation and acquisitions less disposals of non-produced assets</common:Name>
+          <common:Name xml:lang="fr">Formation brute de capital et Acquisitions moins cessions d'actifs non produits</common:Name>
+          <common:Description xml:lang="en">P5+NP</common:Description>
+          <common:Description xml:lang="fr">P5+NP</common:Description>
+        </structure:Code>
+        <structure:Code id="P5N">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2260</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net capital formation</common:Name>
+          <common:Name xml:lang="fr">Formation nette de capital</common:Name>
+        </structure:Code>
+        <structure:Code id="P61B">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2270</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Export on second hand goods</common:Name>
+          <common:Name xml:lang="fr">Exportations de biens d'occasion</common:Name>
+        </structure:Code>
+        <structure:Code id="P61C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2280</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Merchanting</common:Name>
+          <common:Name xml:lang="fr">Négoce international</common:Name>
+        </structure:Code>
+        <structure:Code id="P62F">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2290</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Exports of FISIM</common:Name>
+          <common:Name xml:lang="fr">Exportations de SIFIM</common:Name>
+        </structure:Code>
+        <structure:Code id="P6A">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2300</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Re-exports</common:Name>
+          <common:Name xml:lang="fr">Réexportations</common:Name>
+        </structure:Code>
+        <structure:Code id="P72F">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2310</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Imports of FISIM</common:Name>
+          <common:Name xml:lang="fr">Importations de SIFIM</common:Name>
+        </structure:Code>
+        <structure:Code id="POP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2320</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total population</common:Name>
+          <common:Name xml:lang="fr">Population totale</common:Name>
+        </structure:Code>
+        <structure:Code id="PTOT">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2330</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Term of trade</common:Name>
+          <common:Name xml:lang="fr">Termes de l'échange</common:Name>
+          <common:Description xml:lang="en">(P6.V/P6.L)/(P7.V/P7.L)*100</common:Description>
+          <common:Description xml:lang="fr">(P6.V/P6.L)/(P7.V/P7.L)*100</common:Description>
+        </structure:Code>
+        <structure:Code id="SAL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2340</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Employees</common:Name>
+          <common:Name xml:lang="fr">Emploi salarié</common:Name>
+          <structure:Parent>
+            <Ref id="EMP" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="SELF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2350</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Self employed</common:Name>
+          <common:Name xml:lang="fr">Emploi indépendant</common:Name>
+          <structure:Parent>
+            <Ref id="EMP" />
+          </structure:Parent>
+        </structure:Code>
+        <structure:Code id="TR1">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2360</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total resources production account</common:Name>
+          <common:Name xml:lang="fr">Ressources totales, compte de production</common:Name>
+        </structure:Code>
+        <structure:Code id="TR211">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2370</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total resources generation of income account</common:Name>
+          <common:Name xml:lang="fr">Ressources totales, compte d'exploitation</common:Name>
+        </structure:Code>
+        <structure:Code id="TR212">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2380</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total resources allocation of primary income account</common:Name>
+          <common:Name xml:lang="fr">Ressources totales, compte d'affectation des revenus primaires</common:Name>
+        </structure:Code>
+        <structure:Code id="TR22">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2390</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total resources secondary distribution of income account</common:Name>
+          <common:Name xml:lang="fr">Ressources totales, compte de distribution secondaire du revenu</common:Name>
+        </structure:Code>
+        <structure:Code id="TR241">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2400</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total resources use of disposable income account</common:Name>
+          <common:Name xml:lang="fr">Ressources totales, compte d'utilisation du revenu disponible</common:Name>
+        </structure:Code>
+        <structure:Code id="TR311">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2410</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total change in liabilities and net worth, change in net worth due to saving and capital transfers account</common:Name>
+          <common:Name xml:lang="fr">Variation totale des passifs et de la valeur nette due à l'épargne et aux transferts en capitaux</common:Name>
+        </structure:Code>
+        <structure:Code id="TR312">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2420</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total change in liabilities and net worth, acquisitions of non-financial assets accounts</common:Name>
+          <common:Name xml:lang="fr">Variation totale des passifs et de la valeur nette, acquisition d'actifs non financiers</common:Name>
+        </structure:Code>
+        <structure:Code id="TS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2430</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total supply</common:Name>
+          <common:Name xml:lang="fr">Total des ressources</common:Name>
+        </structure:Code>
+        <structure:Code id="TU">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2440</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total use</common:Name>
+          <common:Name xml:lang="fr">Total des emplois</common:Name>
+        </structure:Code>
+        <structure:Code id="TU1">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2450</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total uses production account</common:Name>
+          <common:Name xml:lang="fr">Emplois totaux, compte de production</common:Name>
+        </structure:Code>
+        <structure:Code id="TU211">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2460</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total uses generation of income account</common:Name>
+          <common:Name xml:lang="fr">Emplois totaux, compte d'exploitation</common:Name>
+        </structure:Code>
+        <structure:Code id="TU212">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2470</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total uses allocation of primary income account</common:Name>
+          <common:Name xml:lang="fr">Emplois totaux, compte d'affectation des revenus primaires</common:Name>
+        </structure:Code>
+        <structure:Code id="TU22">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2480</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total uses secondary distribution of income account</common:Name>
+          <common:Name xml:lang="fr">Emplois totaux, compte de distribution secondaire du revenu</common:Name>
+        </structure:Code>
+        <structure:Code id="TU241">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2490</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total uses use of disposable income account</common:Name>
+          <common:Name xml:lang="fr">Emplois totaux, compte d'utilisation du revenu disponible</common:Name>
+        </structure:Code>
+        <structure:Code id="TU311">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2500</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total change in assets, change in net worth due to saving and capital transfers account</common:Name>
+          <common:Name xml:lang="fr">Variation totale des actifs et de la valeur nette due à l'épargne et aux transferts en capitaux</common:Name>
+        </structure:Code>
+        <structure:Code id="TU312">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2510</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Total change in assets, acquisitions of non-financial assets accounts</common:Name>
+          <common:Name xml:lang="fr">Variation totale des actifs, acquisition d'actifs non financiers</common:Name>
+        </structure:Code>
+        <structure:Code id="P3_P51G">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2520</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Final domestic demand excluding inventories</common:Name>
+          <common:Name xml:lang="fr">Demande intérieure finale hors stocks</common:Name>
+        </structure:Code>
+        <structure:Code id="P33">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2530</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Direct purchases abroad by residents</common:Name>
+          <common:Name xml:lang="fr">Achats directs à l’étranger par des résidents</common:Name>
+        </structure:Code>
+        <structure:Code id="P7ADJ">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2540</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">CIF/FOB adjustment on imports</common:Name>
+          <common:Name xml:lang="fr">Ajustement CAF/FAB sur les importations</common:Name>
+        </structure:Code>
+        <structure:Code id="P3S15">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2550</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">NPISHs final consumption expenditure</common:Name>
+          <common:Name xml:lang="fr">Dépense de consommation finale des ISBL</common:Name>
+        </structure:Code>
+        <structure:Code id="D612_D614">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2560</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Imputed social contributions from employers and households</common:Name>
+          <common:Name xml:lang="fr">Cotisations sociales imputées des employeurs et des ménages</common:Name>
+          <common:Description xml:lang="en">D612+D614</common:Description>
+          <common:Description xml:lang="fr">D612+D614</common:Description>
+        </structure:Code>
+        <structure:Code id="P34">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2570</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Domestic purchases by non-residents</common:Name>
+          <common:Name xml:lang="fr">Achats sur le territoire national par des non-résidents</common:Name>
+        </structure:Code>
+        <structure:Code id="P51CB">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2580</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Consumption of fixed capital, capital account</common:Name>
+          <common:Name xml:lang="fr">Consommation de capital fixe, compte de capital</common:Name>
+        </structure:Code>
+        <structure:Code id="B1GQXOTGL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2590</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Gross domestic income</common:Name>
+          <common:Name xml:lang="fr">Revenu intérieur brut</common:Name>
+          <common:Description xml:lang="en">B1GQXOTGL =B1GQ-OTGL</common:Description>
+        </structure:Code>
+        <structure:Code id="PPP_B1GQ">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2600</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Purchasing Power Parities for GDP</common:Name>
+          <common:Name xml:lang="fr">Parités de pouvoir d'achat du PIB</common:Name>
+        </structure:Code>
+        <structure:Code id="PPP_P31S14">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2610</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Purchasing Power Parities for household final consumption expenditure</common:Name>
+          <common:Name xml:lang="fr">Parités de pouvoir d'achat des dépenses de consommation finale des ménages</common:Name>
+        </structure:Code>
+        <structure:Code id="PPP_P41">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2620</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Purchasing Power Parities for actual individual consumption</common:Name>
+          <common:Name xml:lang="fr">Parités de pouvoir d'achat de la consommation individuelle effective</common:Name>
+        </structure:Code>
+        <structure:Code id="EXC_A">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2630</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Exchange rates, average</common:Name>
+          <common:Name xml:lang="fr">Taux de change, moyenne sur la période</common:Name>
+        </structure:Code>
+        <structure:Code id="B5N_POP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2640</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Balance of primary incomes, net / National income, net, per capita</common:Name>
+          <common:Name xml:lang="fr">Solde des revenus primaires, net / Revenu national, net, par tête</common:Name>
+        </structure:Code>
+        <structure:Code id="EXC_E">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2650</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Exchange rates, end of period</common:Name>
+          <common:Name xml:lang="fr">Taux de change, fin de période</common:Name>
+        </structure:Code>
+        <structure:Code id="B1GQ_POP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2660</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Gross domestic product, per capita</common:Name>
+          <common:Name xml:lang="fr">Produit intérieur brut, par tête</common:Name>
+        </structure:Code>
+        <structure:Code id="P3_POP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2670</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Final consumption expenditure, per capita</common:Name>
+          <common:Name xml:lang="fr">Dépenses de consommation finale, par tête</common:Name>
+        </structure:Code>
+        <structure:Code id="P31_POP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2680</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Individual consumption expenditure, per capita</common:Name>
+          <common:Name xml:lang="fr">Dépenses de consommation individuelle, par tête</common:Name>
+        </structure:Code>
+        <structure:Code id="P41_POP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2690</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Actual individual consumption, per capita</common:Name>
+          <common:Name xml:lang="fr">Consommation individuelle effective, par tête</common:Name>
+        </structure:Code>
+        <structure:Code id="P31NC">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2700</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Final consumption expenditure of residents on the territory and abroad</common:Name>
+          <common:Name xml:lang="fr">Dépense de consommation finale des résidents sur le territoire et à l'étranger</common:Name>
+        </structure:Code>
+        <structure:Code id="P31DC">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2710</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Final consumption expenditure of residents and non-residents on the territory</common:Name>
+          <common:Name xml:lang="fr">Dépense de consommation finale des résidents et non-résidents sur le territoire économique</common:Name>
+        </structure:Code>
+        <structure:Code id="P3S14DC">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2720</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Households final consumption expenditure domestic concept</common:Name>
+          <common:Name xml:lang="fr">Dépense de consommation finale des ménages sur le territoire économique</common:Name>
+        </structure:Code>
+        <structure:Code id="B5N_R">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2730</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Real balance of primary incomes, net / Real national income, net</common:Name>
+          <common:Name xml:lang="fr">Solde réel des revenus primaires, net/ Revenu national réel, net</common:Name>
+        </structure:Code>
+        <structure:Code id="IN1C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2740</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Primary income receivable from the rest of the world</common:Name>
+          <common:Name xml:lang="fr">Revenus primaires à recevoir du reste du monde</common:Name>
+        </structure:Code>
+        <structure:Code id="B6G_POP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2750</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Disposable income, gross, per capita</common:Name>
+          <common:Name xml:lang="fr">Revenu disponible, brut, par tête</common:Name>
+        </structure:Code>
+        <structure:Code id="IN1D">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2760</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Primary income payable to the rest of the world</common:Name>
+          <common:Name xml:lang="fr">Revenus primaires à payer au reste du monde</common:Name>
+        </structure:Code>
+        <structure:Code id="B7G_POP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2770</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Adjusted disposable income, gross, per capita</common:Name>
+          <common:Name xml:lang="fr">Revenu disponible ajusté, brut, par tête</common:Name>
+        </structure:Code>
+        <structure:Code id="IN1B">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2780</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net primary income from the rest of the world</common:Name>
+          <common:Name xml:lang="fr">Revenus primaires nets à recevoir du reste du monde</common:Name>
+        </structure:Code>
+        <structure:Code id="B6N_R">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2790</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Real household disposable income, net</common:Name>
+          <common:Name xml:lang="fr">Revenu disponible réel des ménages, net</common:Name>
+        </structure:Code>
+        <structure:Code id="IN21C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2800</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Current transfers receivable from the rest of the world</common:Name>
+          <common:Name xml:lang="fr">Transferts courants à recevoir du reste du monde</common:Name>
+        </structure:Code>
+        <structure:Code id="B7N_R">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2810</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Real household adjusted disposable income, net</common:Name>
+          <common:Name xml:lang="fr">Revenu disponible ajusté réel des ménages, net</common:Name>
+        </structure:Code>
+        <structure:Code id="IN21D">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2820</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Current transfers payable to the rest of the world</common:Name>
+          <common:Name xml:lang="fr">Transferts courants à payer au reste du monde</common:Name>
+        </structure:Code>
+        <structure:Code id="D91_OTHR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2830</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Capital taxes and other revenues</common:Name>
+          <common:Name xml:lang="fr">Impôts sur le capital et autres recettes</common:Name>
+        </structure:Code>
+        <structure:Code id="IN21B">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2840</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net current transfers from the rest of the world</common:Name>
+          <common:Name xml:lang="fr">Transferts courants nets à recevoir du reste du monde</common:Name>
+        </structure:Code>
+        <structure:Code id="B8G_POP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2850</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Saving, gross, per capita</common:Name>
+          <common:Name xml:lang="fr">Epargne, brute, par tête</common:Name>
+        </structure:Code>
+        <structure:Code id="D9C">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2860</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Capital transfers receivable from the rest of the world</common:Name>
+          <common:Name xml:lang="fr">Transferts en capital reçus du reste du monde</common:Name>
+        </structure:Code>
+        <structure:Code id="B5G_POP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2870</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Balance of primary incomes, gross / National income, gross, per capita</common:Name>
+          <common:Name xml:lang="fr">Solde des revenus primaires, brut / Revenu national, brut, par tête</common:Name>
+        </structure:Code>
+        <structure:Code id="D9D">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2880</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Capital transfers payable to the rest of the world</common:Name>
+          <common:Name xml:lang="fr">Transferts en capital versés au reste du monde</common:Name>
+        </structure:Code>
+        <structure:Code id="D61SC_P">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2890</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Pension scheme service charges (-)</common:Name>
+          <common:Name xml:lang="fr">Rémunération du service des régimes de retraite (-)</common:Name>
+        </structure:Code>
+        <structure:Code id="D9B">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2900</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Net capital transfers from the rest of the world</common:Name>
+          <common:Name xml:lang="fr">Transferts en capital nets reçus du reste du monde</common:Name>
+        </structure:Code>
+        <structure:Code id="SA1">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2910</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Production account</common:Name>
+          <common:Name xml:lang="fr">Compte de production</common:Name>
+        </structure:Code>
+        <structure:Code id="SA2">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2920</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Generation of income account</common:Name>
+          <common:Name xml:lang="fr">Compte d'exploitation</common:Name>
+        </structure:Code>
+        <structure:Code id="SA3_SA4">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2930</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Distribution of income accounts</common:Name>
+          <common:Name xml:lang="fr">Compte de distribution du revenu</common:Name>
+        </structure:Code>
+        <structure:Code id="SA3">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2940</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Allocation of primary income account</common:Name>
+          <common:Name xml:lang="fr">Compte d'affectation des revenus primaires</common:Name>
+        </structure:Code>
+        <structure:Code id="SA4">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2950</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Secondary distribution of income account</common:Name>
+          <common:Name xml:lang="fr">Compte de distribution secondaire du revenu</common:Name>
+        </structure:Code>
+        <structure:Code id="SA5">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2960</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Use of disposable income account</common:Name>
+          <common:Name xml:lang="fr">Compte d'utilisation du revenu disponible</common:Name>
+        </structure:Code>
+        <structure:Code id="SA6">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2970</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Capital account</common:Name>
+          <common:Name xml:lang="fr">Compte de capital</common:Name>
+        </structure:Code>
+        <structure:Code id="SA61">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2980</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Changes in net worth due to saving and capital transfers account</common:Name>
+          <common:Name xml:lang="fr">Compte des variations de la valeur nette dues à l'épargne et aux transferts de capitaux</common:Name>
+        </structure:Code>
+        <structure:Code id="SA62">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2990</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Acquisition of non-financial assets account</common:Name>
+          <common:Name xml:lang="fr">Compte d'acquisition d'actifs non financiers</common:Name>
+        </structure:Code>
+      </structure:Codelist>
+    </structure:Codelists>
+  </message:Structures>
+</message:Structure>

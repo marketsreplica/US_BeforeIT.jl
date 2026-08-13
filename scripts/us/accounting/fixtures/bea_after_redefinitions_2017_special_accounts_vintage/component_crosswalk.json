@@ -1,0 +1,38 @@
+{
+  "mappings": [
+    {
+      "detail_codes": [
+        "S00401",
+        "S00402"
+      ],
+      "detail_labels": [
+        "Scrap",
+        "Used and secondhand goods"
+      ],
+      "summary_code": "Used",
+      "summary_label": "Scrap, used and secondhand goods"
+    },
+    {
+      "detail_codes": [
+        "S00300",
+        "S00900"
+      ],
+      "detail_labels": [
+        "Noncomparable imports",
+        "Rest of the world adjustment"
+      ],
+      "summary_code": "Other",
+      "summary_label": "Noncomparable imports and rest-of-the-world adjustment"
+    }
+  ],
+  "schema_version": "beforeit-us-bea-special-component-crosswalk.v1",
+  "source_accessed_on": "2026-08-06",
+  "source_agency": "U.S. Bureau of Economic Analysis",
+  "source_document_byte_count": 219021,
+  "source_document_pdf_index": 14,
+  "source_document_printed_page": 15,
+  "source_document_sha256": "c14a23ec44327fe8d8eb5d0e511234bbb30a3dccc5141087b1da6a5c4dd1c024",
+  "source_document_title": "Preview of the 2018 Comprehensive Update of the Industry Economic Accounts",
+  "source_document_url": "https://apps.bea.gov/scb/issues/2018/08-august/pdf/0818-industry-tables.pdf",
+  "source_table_title": "Appendix A. Industries and Commodities in the Industry Economic Accounts"
+}

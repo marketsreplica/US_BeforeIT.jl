@@ -1,0 +1,90 @@
+schema_version = "beforeit-us-after-redefinitions-generic-industry-transform-diagnostic.v1"
+classification = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+artifact_role = "REJECTED_GENERIC_INDUSTRY_TRANSFORM_DIAGNOSTIC_ONLY"
+promotion_status = "REJECTED_NOT_RUNTIME_ADMISSIBLE"
+source_year = 2024
+source_frequency = "annual"
+unit = "millions USD"
+price_basis = "producers prices"
+source_commodity_count = 73
+source_industry_count = 71
+model_industry_count = 68
+final_use_count = 20
+closure_codes = ["Used", "Other"]
+
+official_market_share_fixture_sha256 = "d4df6c610caaca42a9579a4c868efbee6d5f5842467f392bd6a0e75ac8cd748e"
+official_market_share_manifest_sha256 = "a225951d7ec03aaaaa97f5cc02e58b862e00918dbd31cc35093d80f9dde8c35d"
+official_market_share_source_zip_sha256 = "e9b9ac6b45bc0385aeb7c21f38ffbcf3eab2e92c0ecadecc43b11ab6dd104eae"
+official_market_share_source_metadata_sha256 = "f3f57a7209f7c6d9b0f76b041f17ae78e9da1d8644dbd7d6815471e740abfaca"
+official_direct_workbook_sha256 = "2e128bc5a51e7a12854e9a58afd5ebaca2e384e80abe113fd4274179628b3439"
+official_market_share_workbook_sha256 = "57c858ae61fa02d6f5b419d265a695318386ec21078ac24d0622f2001aca89d2"
+after_redefinitions_fixture_sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
+after_redefinitions_manifest_sha256 = "ff555043829e5d12ba787ba9ad7d58ef4f0d2ee306740d6847bdfec800935030"
+after_redefinitions_source_zip_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+model_mapping_sha256 = "546b3dc15cbb194210ce564a44626b146551b161ca0ce5ffb90a8a5261b4553c"
+sector_mapping_sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+producer_price_adapter_contract_sha256 = "de524df56ad47fb1f26534019386b27f1fc45ebc927bda5f39c3ad812259cf58"
+methodology_pdf_sha256 = "535627e5e44f8461c0a04410f4a05c55d47f2e325d9473cb2df06e5d3e6b271d"
+methodology_receipt_sha256 = "b4b210be3c364415473f1ef407ed7ea6e9edc2b299bd1058c1658b0ebb3b91ac"
+
+source_transform_formula = "Z_71 = D_official * U_producer"
+final_use_transform_formula = "Y_71 = D_official * F_producer"
+post_transform_aggregation_formula = "Z_68 = A * Z_71 * transpose(A); Y_68 = A * Y_71"
+orientation = "D_official[industry,commodity] * use[commodity,recipient]"
+aggregation_order = "TRANSFORM_SOURCE_AXES_THEN_AGGREGATE_INDUSTRIES"
+market_share_source = "OFFICIAL_PUBLISHED_IXC_MS_SUMMARY_NOT_RECOMPUTED"
+market_share_substitution_policy = "MAKE_DERIVED_D_RETAINED_AS_NONINTERCHANGEABILITY_WITNESS_ONLY"
+negative_cell_policy = "PRESERVE_AND_LEDGER"
+rounding_policy = "PRESERVE_PUBLISHED_VALUES_AND_LEDGER_DRIFT"
+explicit_mask_policy = "DERIVED_TRANSFORMS_HAVE_NO_PUBLISHED_CELL_MASK"
+closure_policy = "USED_OTHER_TRANSFORMED_ONLY_TO_EXPOSE_GENERIC_D_FAILURE"
+cross_archive_release_identity = "NOT_EXTERNALLY_BOUND"
+cross_archive_application_status = "ARITHMETIC_DIAGNOSTIC_ONLY"
+
+diagnostic_transform_applied = true
+runtime_transform_selected = false
+runtime_calibration_admissible = false
+calibration_dictionary_write = false
+parameter_write = false
+initial_conditions_write = false
+model_state_write = false
+forecast_origin_admissible = false
+accounting_gate_effect = "NONE"
+nonscrap_transform_applied = false
+used_final_sales_supply_adjustment_applied = false
+other_boundary_selected = false
+balancing_applied = false
+normalization_applied = false
+clipping_applied = false
+raking_applied = false
+
+scientific_role = "Exact application of the separately published BEA industry-by-commodity market-share matrix to current-vintage producer-price intermediate and final use, followed by industry aggregation, solely to document why the generic transform is not an admissible runtime mapping."
+
+promotion_blockers = [
+    "GENERIC_MARKET_SHARE_TRANSFORM_DIAGNOSTIC_ONLY",
+    "MULTI_ARCHIVE_RELEASE_IDENTITY_NOT_EXTERNALLY_BOUND",
+    "USED_SCRAP_NONSCRAP_TRANSFORMATION_NOT_APPLIED",
+    "USED_FINAL_USE_SALES_SUPPLY_TREATMENT_NOT_IMPLEMENTED",
+    "OTHER_NONCOMPARABLE_IMPORT_ROW_BOUNDARY_NOT_SELECTED",
+    "OTHER_GENERIC_D_ASSIGNMENT_TO_GFGN_NOT_ADMISSIBLE",
+    "TRANSFORMED_ROWS_ARE_INDUSTRIES_NOT_MODEL_COMMODITIES",
+    "NEGATIVE_TRANSFORMED_CELL_POLICY_NOT_APPROVED",
+    "PUBLISHED_MARKET_SHARE_ROUNDING_DRIFT_RETAINED",
+    "OFFICIAL_D_AND_MAKE_D_ARE_NOT_INTERCHANGEABLE",
+    "RUNTIME_INDUSTRY_TRANSFORMATION_NOT_SELECTED",
+    "PRODUCER_PRICE_ADAPTER_CONTRACT_REMAINS_NON_RUNTIME",
+]
+
+[[closure_account]]
+code = "Used"
+methodology_role = "SCRAP_USED_AND_SECONDHAND_GOODS_COMMODITY_ONLY_BYPRODUCT_AND_FINAL_USE_SALES_ACCOUNT"
+ordinary_model_commodity = false
+ordinary_model_producer_industry = false
+methodology_pdf_pages = [98, 214, 223, 224, 225]
+
+[[closure_account]]
+code = "Other"
+methodology_role = "NONCOMPARABLE_IMPORTS_AND_REST_OF_WORLD_ADJUSTMENT_COMPOSITE"
+ordinary_model_commodity = false
+ordinary_model_producer_industry = false
+methodology_pdf_pages = [123, 124]

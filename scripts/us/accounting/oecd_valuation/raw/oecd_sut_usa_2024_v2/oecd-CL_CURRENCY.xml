@@ -1,0 +1,2636 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--NSI Web Service v8.19.8.0-->
+<message:Structure xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:structure="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common">
+  <message:Header>
+    <message:ID>IDREF10685</message:ID>
+    <message:Test>false</message:Test>
+    <message:Prepared>2026-08-06T17:14:45.082564+02:00</message:Prepared>
+    <message:Sender id="Unknown" />
+    <message:Receiver id="Unknown" />
+  </message:Header>
+  <message:Structures>
+    <structure:Codelists>
+      <structure:Codelist id="CL_CURRENCY" agencyID="OECD" version="1.1" isFinal="true">
+        <common:Name xml:lang="en">Codelist for Currency</common:Name>
+        <structure:Code id="AED">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">10</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">10</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">United Arab Emirates dirham</common:Name>
+          <common:Name xml:lang="fr">Dirham émirati</common:Name>
+        </structure:Code>
+        <structure:Code id="AFN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">20</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">20</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Afghani</common:Name>
+          <common:Name xml:lang="fr">Afghani</common:Name>
+        </structure:Code>
+        <structure:Code id="ALL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">30</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">30</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Lek</common:Name>
+          <common:Name xml:lang="fr">Lek</common:Name>
+        </structure:Code>
+        <structure:Code id="AMD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">40</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">40</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Armenian dram</common:Name>
+          <common:Name xml:lang="fr">Dram arménien</common:Name>
+        </structure:Code>
+        <structure:Code id="ANG">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">50</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">50</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Netherlands Antillian guilder</common:Name>
+          <common:Name xml:lang="fr">Florin des Antilles</common:Name>
+        </structure:Code>
+        <structure:Code id="AOA">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">60</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">60</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Kwanza</common:Name>
+          <common:Name xml:lang="fr">Kwanza</common:Name>
+        </structure:Code>
+        <structure:Code id="ARS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">70</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">70</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Argentine peso</common:Name>
+          <common:Name xml:lang="fr">Peso argentin</common:Name>
+        </structure:Code>
+        <structure:Code id="AUD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">80</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">80</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Australian dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar australien</common:Name>
+        </structure:Code>
+        <structure:Code id="AWG">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">90</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">90</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Aruban guilder</common:Name>
+          <common:Name xml:lang="fr">Florin d'Aruba</common:Name>
+        </structure:Code>
+        <structure:Code id="AZN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">100</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">100</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Azerbaijanian manat</common:Name>
+          <common:Name xml:lang="fr">Manat azerbaïdjanais</common:Name>
+        </structure:Code>
+        <structure:Code id="BAM">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">110</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">110</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Bosnia and Herzegovina convertible mark</common:Name>
+          <common:Name xml:lang="fr">Mark bosniaque convertible</common:Name>
+        </structure:Code>
+        <structure:Code id="BBD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">120</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">120</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Barbados dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar de la Barbade</common:Name>
+        </structure:Code>
+        <structure:Code id="BDT">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">130</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">130</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Taka</common:Name>
+          <common:Name xml:lang="fr">Taka</common:Name>
+        </structure:Code>
+        <structure:Code id="BGN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">140</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">140</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Bulgarian lev</common:Name>
+          <common:Name xml:lang="fr">Lev bulgare</common:Name>
+        </structure:Code>
+        <structure:Code id="BHD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">150</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">150</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Bahraini dinar</common:Name>
+          <common:Name xml:lang="fr">Dinar de Bahreïn</common:Name>
+        </structure:Code>
+        <structure:Code id="BIF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">160</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">160</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Burundi franc</common:Name>
+          <common:Name xml:lang="fr">Franc de Burundi</common:Name>
+        </structure:Code>
+        <structure:Code id="BMD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">170</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">170</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Bermudian dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar des Bermudes</common:Name>
+        </structure:Code>
+        <structure:Code id="BND">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">180</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">180</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Brunei dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar de Brunéi</common:Name>
+        </structure:Code>
+        <structure:Code id="BOB">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">190</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">190</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Boliviano</common:Name>
+          <common:Name xml:lang="fr">Boliviano</common:Name>
+        </structure:Code>
+        <structure:Code id="BOV">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">200</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">200</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Mvdol</common:Name>
+          <common:Name xml:lang="fr">Mvdol</common:Name>
+        </structure:Code>
+        <structure:Code id="BRL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">210</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">210</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Brazilian real</common:Name>
+          <common:Name xml:lang="fr">Réal brésilien</common:Name>
+        </structure:Code>
+        <structure:Code id="BSD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">220</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">220</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Bahamian dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar des Bahamas</common:Name>
+        </structure:Code>
+        <structure:Code id="BTN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">230</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">230</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Ngultrum</common:Name>
+          <common:Name xml:lang="fr">Ngultrum</common:Name>
+        </structure:Code>
+        <structure:Code id="BWP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">240</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">240</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Pula</common:Name>
+          <common:Name xml:lang="fr">Pula</common:Name>
+        </structure:Code>
+        <structure:Code id="BYN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">250</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">250</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Belarussian ruble</common:Name>
+          <common:Name xml:lang="fr">Rouble biélorusse</common:Name>
+        </structure:Code>
+        <structure:Code id="BZD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">260</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">260</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Belize dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar de Bélize</common:Name>
+        </structure:Code>
+        <structure:Code id="CAD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">270</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">270</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Canadian dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar canadien</common:Name>
+        </structure:Code>
+        <structure:Code id="CDF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">280</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">280</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Congolese franc</common:Name>
+          <common:Name xml:lang="fr">Franc congolais</common:Name>
+        </structure:Code>
+        <structure:Code id="CENT">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">290</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">290</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Euro cent</common:Name>
+          <common:Name xml:lang="fr">Centime d'euro</common:Name>
+        </structure:Code>
+        <structure:Code id="CFA">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">300</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">300</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">CFA franc</common:Name>
+          <common:Name xml:lang="fr">Franc CFA</common:Name>
+        </structure:Code>
+        <structure:Code id="CHE">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">310</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">310</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">WIR euro</common:Name>
+          <common:Name xml:lang="fr">Euro WIR</common:Name>
+        </structure:Code>
+        <structure:Code id="CHF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">320</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">320</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Swiss franc</common:Name>
+          <common:Name xml:lang="fr">Franc suisse</common:Name>
+        </structure:Code>
+        <structure:Code id="CHW">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">330</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">330</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">WIR franc</common:Name>
+          <common:Name xml:lang="fr">Franc WIR</common:Name>
+        </structure:Code>
+        <structure:Code id="CLF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">340</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">340</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Unidad de formento (UF)</common:Name>
+          <common:Name xml:lang="fr">Unidad de Formento (UF)</common:Name>
+        </structure:Code>
+        <structure:Code id="CLP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">350</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">350</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Chilean peso</common:Name>
+          <common:Name xml:lang="fr">Peso chilien</common:Name>
+        </structure:Code>
+        <structure:Code id="CNY">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">360</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">360</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Chinese yuan renminbi</common:Name>
+          <common:Name xml:lang="fr">Yuan ren-min-bi</common:Name>
+        </structure:Code>
+        <structure:Code id="COP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">370</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">370</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Colombian peso</common:Name>
+          <common:Name xml:lang="fr">Peso colombien</common:Name>
+        </structure:Code>
+        <structure:Code id="CRC">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">380</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">380</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Costa Rican colon</common:Name>
+          <common:Name xml:lang="fr">Côlon de Costa Rica</common:Name>
+        </structure:Code>
+        <structure:Code id="CUP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">390</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">390</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Cuban peso</common:Name>
+          <common:Name xml:lang="fr">Peso cubain</common:Name>
+        </structure:Code>
+        <structure:Code id="CVE">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">400</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">400</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Cape Verde escudo</common:Name>
+          <common:Name xml:lang="fr">Escudo du Cap-Vert</common:Name>
+        </structure:Code>
+        <structure:Code id="CZK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">410</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">410</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Czech koruna</common:Name>
+          <common:Name xml:lang="fr">Couronne tchèque</common:Name>
+        </structure:Code>
+        <structure:Code id="DJF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">420</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">420</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Djibouti franc</common:Name>
+          <common:Name xml:lang="fr">Franc de Djibouti</common:Name>
+        </structure:Code>
+        <structure:Code id="DKK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">430</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">430</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Danish krone</common:Name>
+          <common:Name xml:lang="fr">Couronne danoise</common:Name>
+        </structure:Code>
+        <structure:Code id="DOP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">440</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">440</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Dominican peso</common:Name>
+          <common:Name xml:lang="fr">Peso dominicain</common:Name>
+        </structure:Code>
+        <structure:Code id="DZD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">450</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">450</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Algerian dinar</common:Name>
+          <common:Name xml:lang="fr">Dinar algérien</common:Name>
+        </structure:Code>
+        <structure:Code id="EGP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">460</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">460</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Egyptian pound</common:Name>
+          <common:Name xml:lang="fr">Livre égyptienne</common:Name>
+        </structure:Code>
+        <structure:Code id="ERN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">470</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">470</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Nakfa</common:Name>
+          <common:Name xml:lang="fr">Nakfa</common:Name>
+        </structure:Code>
+        <structure:Code id="ETB">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">480</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">480</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Ethiopian birr</common:Name>
+          <common:Name xml:lang="fr">Birr éthiopien</common:Name>
+        </structure:Code>
+        <structure:Code id="EUR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">490</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">490</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Euro</common:Name>
+          <common:Name xml:lang="fr">Euro</common:Name>
+        </structure:Code>
+        <structure:Code id="FJD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">500</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">500</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Fiji dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar des Fidji</common:Name>
+        </structure:Code>
+        <structure:Code id="FKP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">510</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">510</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Falkland Islands pound</common:Name>
+          <common:Name xml:lang="fr">Livre de Falkland</common:Name>
+        </structure:Code>
+        <structure:Code id="GBP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">520</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">520</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Pound sterling</common:Name>
+          <common:Name xml:lang="fr">Livre sterling</common:Name>
+        </structure:Code>
+        <structure:Code id="GEL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">530</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">530</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Lari</common:Name>
+          <common:Name xml:lang="fr">Lari</common:Name>
+        </structure:Code>
+        <structure:Code id="GHS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">540</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">540</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Ghana cedi</common:Name>
+          <common:Name xml:lang="fr">Cedi ghanéen</common:Name>
+        </structure:Code>
+        <structure:Code id="GIP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">550</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">550</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Gibraltar pound</common:Name>
+          <common:Name xml:lang="fr">Livre de Gibraltar</common:Name>
+        </structure:Code>
+        <structure:Code id="GMD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">560</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">560</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Dalasi</common:Name>
+          <common:Name xml:lang="fr">Dalasie</common:Name>
+        </structure:Code>
+        <structure:Code id="GNF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">570</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">570</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Guinea franc</common:Name>
+          <common:Name xml:lang="fr">Franc guinéen</common:Name>
+        </structure:Code>
+        <structure:Code id="GTQ">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">580</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">580</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Quetzal</common:Name>
+          <common:Name xml:lang="fr">Quetzal</common:Name>
+        </structure:Code>
+        <structure:Code id="GYD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">590</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">590</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Guyana dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar de Guyane</common:Name>
+        </structure:Code>
+        <structure:Code id="HKD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">600</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">600</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Hong Kong dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar de Hong-Kong</common:Name>
+        </structure:Code>
+        <structure:Code id="HNL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">610</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">610</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Lempira</common:Name>
+          <common:Name xml:lang="fr">Lempira</common:Name>
+        </structure:Code>
+        <structure:Code id="HRK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">620</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">620</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Croatian kuna</common:Name>
+          <common:Name xml:lang="fr">Kuna croate</common:Name>
+        </structure:Code>
+        <structure:Code id="HTG">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">630</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">630</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Gourde</common:Name>
+          <common:Name xml:lang="fr">Gourde</common:Name>
+        </structure:Code>
+        <structure:Code id="HUF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">640</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">640</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Forint</common:Name>
+          <common:Name xml:lang="fr">Forint</common:Name>
+        </structure:Code>
+        <structure:Code id="IDR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">650</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">650</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Rupiah</common:Name>
+          <common:Name xml:lang="fr">Rupiah</common:Name>
+        </structure:Code>
+        <structure:Code id="ILS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">660</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">660</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">New Israeli sheqel</common:Name>
+          <common:Name xml:lang="fr">Sheqel</common:Name>
+        </structure:Code>
+        <structure:Code id="IMP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">670</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">670</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Isle of Man pounds</common:Name>
+          <common:Name xml:lang="fr">Livres de l'île de Man</common:Name>
+        </structure:Code>
+        <structure:Code id="INR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">680</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">680</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Indian rupee</common:Name>
+          <common:Name xml:lang="fr">Roupie indienne</common:Name>
+        </structure:Code>
+        <structure:Code id="IQD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">690</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">690</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Iraqi dinar</common:Name>
+          <common:Name xml:lang="fr">Dinar iraquien</common:Name>
+        </structure:Code>
+        <structure:Code id="IRR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">700</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">700</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Iranian rial</common:Name>
+          <common:Name xml:lang="fr">Rial iranien</common:Name>
+        </structure:Code>
+        <structure:Code id="ISK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">710</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">710</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Iceland krona</common:Name>
+          <common:Name xml:lang="fr">Couronne islandaise</common:Name>
+        </structure:Code>
+        <structure:Code id="JMD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">720</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">720</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Jamaican dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar jamaïcain</common:Name>
+        </structure:Code>
+        <structure:Code id="JOD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">730</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">730</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Jordanian dinar</common:Name>
+          <common:Name xml:lang="fr">Dinar jordanien</common:Name>
+        </structure:Code>
+        <structure:Code id="JPY">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">740</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">740</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Yen</common:Name>
+          <common:Name xml:lang="fr">Yen</common:Name>
+        </structure:Code>
+        <structure:Code id="KES">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">750</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">750</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Kenyan shilling</common:Name>
+          <common:Name xml:lang="fr">Shilling du Kénya</common:Name>
+        </structure:Code>
+        <structure:Code id="KGS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">760</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">760</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Som</common:Name>
+          <common:Name xml:lang="fr">Somme</common:Name>
+        </structure:Code>
+        <structure:Code id="KHR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">770</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">770</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Riel</common:Name>
+          <common:Name xml:lang="fr">Riel</common:Name>
+        </structure:Code>
+        <structure:Code id="KMF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">780</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">780</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Comoro franc</common:Name>
+          <common:Name xml:lang="fr">Franc des Comores</common:Name>
+        </structure:Code>
+        <structure:Code id="KPW">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">790</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">790</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">North Korean won</common:Name>
+          <common:Name xml:lang="fr">Won de la Corée du Nord</common:Name>
+        </structure:Code>
+        <structure:Code id="KRW">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">800</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">800</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Won</common:Name>
+          <common:Name xml:lang="fr">Won</common:Name>
+        </structure:Code>
+        <structure:Code id="KWD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">810</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">810</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Kuwaiti dinar</common:Name>
+          <common:Name xml:lang="fr">Dinar koweïtien</common:Name>
+        </structure:Code>
+        <structure:Code id="KYD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">820</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">820</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Cayman Islands dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar des îles Caïmans</common:Name>
+        </structure:Code>
+        <structure:Code id="KZT">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">830</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">830</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Tenge</common:Name>
+          <common:Name xml:lang="fr">Tenge</common:Name>
+        </structure:Code>
+        <structure:Code id="LAK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">840</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">840</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Kip</common:Name>
+          <common:Name xml:lang="fr">Kip</common:Name>
+        </structure:Code>
+        <structure:Code id="LBP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">850</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">850</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Lebanese pound</common:Name>
+          <common:Name xml:lang="fr">Livre libanaise</common:Name>
+        </structure:Code>
+        <structure:Code id="LKR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">860</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">860</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Sri Lanka rupee</common:Name>
+          <common:Name xml:lang="fr">Roupie de Sri Lanka</common:Name>
+        </structure:Code>
+        <structure:Code id="LRD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">870</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">870</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Liberian dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar libérien</common:Name>
+        </structure:Code>
+        <structure:Code id="LSL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">880</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">880</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Loti</common:Name>
+          <common:Name xml:lang="fr">Loti</common:Name>
+        </structure:Code>
+        <structure:Code id="LYD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">890</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">890</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Libyan dinar</common:Name>
+          <common:Name xml:lang="fr">Dinar libyen</common:Name>
+        </structure:Code>
+        <structure:Code id="MAD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">900</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">900</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Moroccan dirham</common:Name>
+          <common:Name xml:lang="fr">Dirham marocain</common:Name>
+        </structure:Code>
+        <structure:Code id="MDL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">910</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">910</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Moldovan leu</common:Name>
+          <common:Name xml:lang="fr">Leu de Moldave</common:Name>
+        </structure:Code>
+        <structure:Code id="MGA">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">920</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">920</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Malagasy ariary</common:Name>
+          <common:Name xml:lang="fr">Ariary malgache</common:Name>
+        </structure:Code>
+        <structure:Code id="MKD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">930</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">930</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Denar</common:Name>
+          <common:Name xml:lang="fr">Denar</common:Name>
+        </structure:Code>
+        <structure:Code id="MMK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">940</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">940</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Kyat</common:Name>
+          <common:Name xml:lang="fr">Kyats</common:Name>
+        </structure:Code>
+        <structure:Code id="MNT">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">950</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">950</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Tugrik</common:Name>
+          <common:Name xml:lang="fr">Tugrik</common:Name>
+        </structure:Code>
+        <structure:Code id="MOP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">960</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">960</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Pataca</common:Name>
+          <common:Name xml:lang="fr">Pataca</common:Name>
+        </structure:Code>
+        <structure:Code id="MRO">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">970</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">970</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Ouguiya</common:Name>
+          <common:Name xml:lang="fr">Ouguiya</common:Name>
+        </structure:Code>
+        <structure:Code id="MUR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">980</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">980</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Mauritius rupee</common:Name>
+          <common:Name xml:lang="fr">Roupie mauricienne</common:Name>
+        </structure:Code>
+        <structure:Code id="MVR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">990</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">990</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Rufiyaa</common:Name>
+          <common:Name xml:lang="fr">Rufiyaa</common:Name>
+        </structure:Code>
+        <structure:Code id="MWK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1000</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1000</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Malawian kwacha</common:Name>
+          <common:Name xml:lang="fr">Kwacha malawien</common:Name>
+        </structure:Code>
+        <structure:Code id="MXN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1010</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1010</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Mexican peso</common:Name>
+          <common:Name xml:lang="fr">Peso mexicain</common:Name>
+        </structure:Code>
+        <structure:Code id="MXV">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1020</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1020</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Mexican unidad de inversion (UDI)</common:Name>
+          <common:Name xml:lang="fr">Mexican unidad de inversion (UDI)</common:Name>
+        </structure:Code>
+        <structure:Code id="MYR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1030</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1030</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Malaysian ringgit</common:Name>
+          <common:Name xml:lang="fr">Ringgit de Malaisie</common:Name>
+        </structure:Code>
+        <structure:Code id="MZN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1040</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1040</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Metical</common:Name>
+          <common:Name xml:lang="fr">Metical</common:Name>
+        </structure:Code>
+        <structure:Code id="NAD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1050</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1050</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Namibia dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar namibien</common:Name>
+        </structure:Code>
+        <structure:Code id="NGN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1060</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1060</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Naira</common:Name>
+          <common:Name xml:lang="fr">Naira</common:Name>
+        </structure:Code>
+        <structure:Code id="NIO">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1070</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1070</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Cordoba oro</common:Name>
+          <common:Name xml:lang="fr">Cordoba oro</common:Name>
+        </structure:Code>
+        <structure:Code id="NOK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1080</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1080</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Norwegian krone</common:Name>
+          <common:Name xml:lang="fr">Couronne norvégienne</common:Name>
+        </structure:Code>
+        <structure:Code id="NPR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1090</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1090</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Nepalese rupee</common:Name>
+          <common:Name xml:lang="fr">Roupie népalaise</common:Name>
+        </structure:Code>
+        <structure:Code id="NZD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1100</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1100</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">New Zealand dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar néo-zélandais</common:Name>
+        </structure:Code>
+        <structure:Code id="OMR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1110</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1110</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Rial Omani</common:Name>
+          <common:Name xml:lang="fr">Rial Omani</common:Name>
+        </structure:Code>
+        <structure:Code id="PAB">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1120</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1120</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Balboa</common:Name>
+          <common:Name xml:lang="fr">Balboa</common:Name>
+        </structure:Code>
+        <structure:Code id="PEN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1130</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1130</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Peruvian sol</common:Name>
+          <common:Name xml:lang="fr">Sol péruvien</common:Name>
+        </structure:Code>
+        <structure:Code id="PGK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1140</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1140</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Kina</common:Name>
+          <common:Name xml:lang="fr">Kina</common:Name>
+        </structure:Code>
+        <structure:Code id="PHP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1150</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1150</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Philippine peso</common:Name>
+          <common:Name xml:lang="fr">Peso philippin</common:Name>
+        </structure:Code>
+        <structure:Code id="PKR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1160</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1160</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Pakistan rupee</common:Name>
+          <common:Name xml:lang="fr">Roupie pakistanaise</common:Name>
+        </structure:Code>
+        <structure:Code id="PLN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1170</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1170</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Zloty</common:Name>
+          <common:Name xml:lang="fr">Zloty</common:Name>
+        </structure:Code>
+        <structure:Code id="PYG">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1180</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1180</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Guarani</common:Name>
+          <common:Name xml:lang="fr">Guarani</common:Name>
+        </structure:Code>
+        <structure:Code id="QAR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1190</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1190</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Qatari rial</common:Name>
+          <common:Name xml:lang="fr">Riyal du Qatar</common:Name>
+        </structure:Code>
+        <structure:Code id="RON">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1200</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1200</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Romanian leu</common:Name>
+          <common:Name xml:lang="fr">Leu roumain</common:Name>
+        </structure:Code>
+        <structure:Code id="RSD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1210</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1210</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Serbian dinar</common:Name>
+          <common:Name xml:lang="fr">Dinar serbe</common:Name>
+        </structure:Code>
+        <structure:Code id="RUB">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1220</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1220</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Russian ruble</common:Name>
+          <common:Name xml:lang="fr">Rouble russe</common:Name>
+        </structure:Code>
+        <structure:Code id="RWF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1230</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1230</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Rwanda franc</common:Name>
+          <common:Name xml:lang="fr">Franc du Rwanda</common:Name>
+        </structure:Code>
+        <structure:Code id="SAR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1240</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1240</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Saudi riyal</common:Name>
+          <common:Name xml:lang="fr">Riyal saoudien</common:Name>
+        </structure:Code>
+        <structure:Code id="SBD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1250</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1250</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Solomon Islands dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar des îles Salomon</common:Name>
+        </structure:Code>
+        <structure:Code id="SCR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1260</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1260</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Seychelles rupee</common:Name>
+          <common:Name xml:lang="fr">Roupie de Seychelles</common:Name>
+        </structure:Code>
+        <structure:Code id="SDG">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1270</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1270</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Sudanese pound</common:Name>
+          <common:Name xml:lang="fr">Livre soudanaise</common:Name>
+        </structure:Code>
+        <structure:Code id="SEK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1280</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1280</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Swedish krona</common:Name>
+          <common:Name xml:lang="fr">Couronne suédoise</common:Name>
+        </structure:Code>
+        <structure:Code id="SGD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1290</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1290</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Singapore dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar de Singapour</common:Name>
+        </structure:Code>
+        <structure:Code id="SHP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1300</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1300</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Saint Helena pound</common:Name>
+          <common:Name xml:lang="fr">Livre de Sainte-Hélène</common:Name>
+        </structure:Code>
+        <structure:Code id="SLL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1310</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1310</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Leone</common:Name>
+          <common:Name xml:lang="fr">Leone</common:Name>
+        </structure:Code>
+        <structure:Code id="SOS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1320</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1320</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Somali shilling</common:Name>
+          <common:Name xml:lang="fr">Shilling Somalien</common:Name>
+        </structure:Code>
+        <structure:Code id="SPL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1330</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1330</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Seborga luigini</common:Name>
+          <common:Name xml:lang="fr">Seborga luigini</common:Name>
+        </structure:Code>
+        <structure:Code id="SRD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1340</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1340</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Surinam dollar</common:Name>
+          <common:Name xml:lang="fr">Florin du Suriname</common:Name>
+        </structure:Code>
+        <structure:Code id="SSP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1350</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1350</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">South-Sudanese pound</common:Name>
+          <common:Name xml:lang="fr">Livre sud-soudanaise</common:Name>
+        </structure:Code>
+        <structure:Code id="STD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1360</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1360</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Dobra</common:Name>
+          <common:Name xml:lang="fr">Dobra</common:Name>
+        </structure:Code>
+        <structure:Code id="SVC">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1370</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1370</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">El Salvador colon</common:Name>
+          <common:Name xml:lang="fr">Colon salvadorien</common:Name>
+        </structure:Code>
+        <structure:Code id="SYP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1380</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1380</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Syrian pound</common:Name>
+          <common:Name xml:lang="fr">Livre syrienne</common:Name>
+        </structure:Code>
+        <structure:Code id="SZL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1390</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1390</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Lilangeni</common:Name>
+          <common:Name xml:lang="fr">Lilangeni</common:Name>
+        </structure:Code>
+        <structure:Code id="THB">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1400</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1400</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Thai bhat</common:Name>
+          <common:Name xml:lang="fr">Bhat thaïlandais</common:Name>
+        </structure:Code>
+        <structure:Code id="TJS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1410</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1410</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Somoni</common:Name>
+          <common:Name xml:lang="fr">Somoni</common:Name>
+        </structure:Code>
+        <structure:Code id="TMT">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1420</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1420</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Turkmen manat</common:Name>
+          <common:Name xml:lang="fr">Manat turkmène</common:Name>
+        </structure:Code>
+        <structure:Code id="TND">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1430</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1430</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Tunisian dinar</common:Name>
+          <common:Name xml:lang="fr">Dinar tunisien</common:Name>
+        </structure:Code>
+        <structure:Code id="TOP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1440</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1440</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Tongan paanga</common:Name>
+          <common:Name xml:lang="fr">Panga des Tonga</common:Name>
+        </structure:Code>
+        <structure:Code id="TRY">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1450</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1450</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Turkish lira</common:Name>
+          <common:Name xml:lang="fr">Livre turque</common:Name>
+        </structure:Code>
+        <structure:Code id="TTD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1460</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1460</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Trinidad and Tobago dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar de Trinité et de Tobago</common:Name>
+        </structure:Code>
+        <structure:Code id="TWD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1470</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1470</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">New Taiwan dollar</common:Name>
+          <common:Name xml:lang="fr">Nouveau dollar de Taïwan</common:Name>
+        </structure:Code>
+        <structure:Code id="TZS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1480</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1480</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Tanzanian shilling</common:Name>
+          <common:Name xml:lang="fr">Shilling tanzanien</common:Name>
+        </structure:Code>
+        <structure:Code id="UAH">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1490</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1490</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Hryvnia</common:Name>
+          <common:Name xml:lang="fr">Hryvnia</common:Name>
+        </structure:Code>
+        <structure:Code id="UGX">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1500</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1500</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Uganda shilling</common:Name>
+          <common:Name xml:lang="fr">Shilling ougandais</common:Name>
+        </structure:Code>
+        <structure:Code id="USD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1510</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1510</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">US dollar</common:Name>
+          <common:Name xml:lang="fr">Dollars des États-Unis</common:Name>
+        </structure:Code>
+        <structure:Code id="USN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1520</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1520</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">US dollar (next day)</common:Name>
+          <common:Name xml:lang="fr">Dollars des États-Unis (lendemain)</common:Name>
+        </structure:Code>
+        <structure:Code id="USS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1530</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1530</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">US dollar (same day)</common:Name>
+          <common:Name xml:lang="fr">Dollars des États-Unis (même jour)</common:Name>
+        </structure:Code>
+        <structure:Code id="UYI">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1540</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1540</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Uruguay peso en unidades indexadas</common:Name>
+          <common:Name xml:lang="fr">Uruguay Peso en unidades indexadas</common:Name>
+        </structure:Code>
+        <structure:Code id="UYU">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1550</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1550</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Uruguayan peso</common:Name>
+          <common:Name xml:lang="fr">Peso uruguayen</common:Name>
+        </structure:Code>
+        <structure:Code id="UZS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1560</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1560</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Uzbekistan sum</common:Name>
+          <common:Name xml:lang="fr">Soum ouzbek</common:Name>
+        </structure:Code>
+        <structure:Code id="VES">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1570</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1570</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Bolivar soberano</common:Name>
+          <common:Name xml:lang="fr">Bolívar souverain</common:Name>
+        </structure:Code>
+        <structure:Code id="VND">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1580</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1580</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Dong</common:Name>
+          <common:Name xml:lang="fr">Dong</common:Name>
+        </structure:Code>
+        <structure:Code id="VUV">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1590</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1590</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Vatu</common:Name>
+          <common:Name xml:lang="fr">Vatu</common:Name>
+        </structure:Code>
+        <structure:Code id="WST">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1600</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1600</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Tala</common:Name>
+          <common:Name xml:lang="fr">Tala</common:Name>
+        </structure:Code>
+        <structure:Code id="XAF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1610</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1610</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">CFA franc - BEAC</common:Name>
+          <common:Name xml:lang="fr">Franc CFA - BEAC</common:Name>
+        </structure:Code>
+        <structure:Code id="XAG">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1620</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1620</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Silver</common:Name>
+          <common:Name xml:lang="fr">Argent</common:Name>
+        </structure:Code>
+        <structure:Code id="XAU">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1630</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1630</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Gold</common:Name>
+          <common:Name xml:lang="fr">Or</common:Name>
+        </structure:Code>
+        <structure:Code id="XCD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1640</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1640</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">East Caribbean dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar des Caraïbes orientales</common:Name>
+        </structure:Code>
+        <structure:Code id="XDC">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1650</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1650</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">National currency</common:Name>
+          <common:Name xml:lang="fr">Monnaie nationale</common:Name>
+        </structure:Code>
+        <structure:Code id="XDR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1660</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1660</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Special Drawing Rights</common:Name>
+          <common:Name xml:lang="fr">Droits de tirage spéciaux</common:Name>
+        </structure:Code>
+        <structure:Code id="XEU">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1670</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1670</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">European Currency Unit (ECU)</common:Name>
+          <common:Name xml:lang="fr">Unité de compte européenne (ECU)</common:Name>
+        </structure:Code>
+        <structure:Code id="XOF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1680</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1680</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">CFA Franc - BCEAO</common:Name>
+          <common:Name xml:lang="fr">Franc CFA - BCEAO</common:Name>
+        </structure:Code>
+        <structure:Code id="XPF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1690</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1690</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">CFP franc</common:Name>
+          <common:Name xml:lang="fr">Franc CFP</common:Name>
+        </structure:Code>
+        <structure:Code id="YER">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1700</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1700</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Yemeni rial</common:Name>
+          <common:Name xml:lang="fr">Rial yéménite</common:Name>
+        </structure:Code>
+        <structure:Code id="ZAR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1710</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1710</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Rand</common:Name>
+          <common:Name xml:lang="fr">Rand</common:Name>
+        </structure:Code>
+        <structure:Code id="ZMW">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1720</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1720</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Kwacha</common:Name>
+          <common:Name xml:lang="fr">Kwacha zambien</common:Name>
+        </structure:Code>
+        <structure:Code id="ADF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1730</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1730</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Andorran franc (1-1 peg to the French franc)</common:Name>
+          <common:Name xml:lang="fr">Franc andorran (1-1 rattachement au franc français)</common:Name>
+        </structure:Code>
+        <structure:Code id="ADP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1740</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1740</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Andorran peseta (1-1 peg to the Spanish peseta)</common:Name>
+          <common:Name xml:lang="fr">Peseta andorrane (1-1 rattachement à la peseta espagnole)</common:Name>
+        </structure:Code>
+        <structure:Code id="AFA">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1750</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1750</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Afghanistan afghani (old)</common:Name>
+          <common:Name xml:lang="fr">Afghan afghani (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="AON">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1760</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1760</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Angolan kwanza (old)</common:Name>
+          <common:Name xml:lang="fr">Kwanza angolais (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="AOR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1770</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1770</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Angolan kwanza readjustado (old)</common:Name>
+          <common:Name xml:lang="fr">Kwanza angolais réajusté (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="ATS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1780</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1780</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Austrian schilling</common:Name>
+          <common:Name xml:lang="fr">Schilling autrichien</common:Name>
+        </structure:Code>
+        <structure:Code id="AZM">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1790</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1790</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Azerbaijanian manat (old)</common:Name>
+          <common:Name xml:lang="fr">Manat azerbaïdjanais (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="BEF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1800</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1800</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Belgian franc</common:Name>
+          <common:Name xml:lang="fr">Franc belge</common:Name>
+        </structure:Code>
+        <structure:Code id="BEL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1810</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1810</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Belgian franc (financial)</common:Name>
+          <common:Name xml:lang="fr">Franc belge (financier)</common:Name>
+        </structure:Code>
+        <structure:Code id="BGL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1820</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1820</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Bulgarian lev (old)</common:Name>
+          <common:Name xml:lang="fr">Lev bulgare (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="BYB">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1830</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1830</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Belarussian ruble (old)</common:Name>
+          <common:Name xml:lang="fr">Rouble biélorusse (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="BYR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1840</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1840</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Belarus ruble</common:Name>
+          <common:Name xml:lang="fr">Rouble biélorusse</common:Name>
+        </structure:Code>
+        <structure:Code id="COU">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1850</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1850</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Unidad de Valor real</common:Name>
+          <common:Name xml:lang="fr">Unité de valeur réelle</common:Name>
+        </structure:Code>
+        <structure:Code id="CSD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1860</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1860</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Serbian dinar (old)</common:Name>
+          <common:Name xml:lang="fr">Dinar de Serbie-et-Montenégro (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="CYP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1870</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1870</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Cypriot pound</common:Name>
+          <common:Name xml:lang="fr">Livre cypriote</common:Name>
+        </structure:Code>
+        <structure:Code id="DEM">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1880</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1880</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">German mark</common:Name>
+          <common:Name xml:lang="fr">Mark allemand</common:Name>
+        </structure:Code>
+        <structure:Code id="ECS">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1890</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1890</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Ecuador sucre (old)</common:Name>
+          <common:Name xml:lang="fr">Equateur sucre (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="ECV">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1900</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1900</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Unidad de valor constante</common:Name>
+          <common:Name xml:lang="fr">Unité de valeur constante</common:Name>
+        </structure:Code>
+        <structure:Code id="EEK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1910</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1910</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Estonian kroon</common:Name>
+          <common:Name xml:lang="fr">Couronne d'Estonie</common:Name>
+        </structure:Code>
+        <structure:Code id="ESP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1920</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1920</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Spanish peseta</common:Name>
+          <common:Name xml:lang="fr">Peseta espagnole</common:Name>
+        </structure:Code>
+        <structure:Code id="FIM">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1930</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1930</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Finnish markka</common:Name>
+          <common:Name xml:lang="fr">Mark finlandais</common:Name>
+        </structure:Code>
+        <structure:Code id="FRF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1940</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1940</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">French franc</common:Name>
+          <common:Name xml:lang="fr">Franc français</common:Name>
+        </structure:Code>
+        <structure:Code id="GGP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1950</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1950</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Guernsey pounds</common:Name>
+          <common:Name xml:lang="fr">Livres de Guernesey</common:Name>
+        </structure:Code>
+        <structure:Code id="GHC">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1960</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1960</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Ghanaian cedi (old)</common:Name>
+          <common:Name xml:lang="fr">Cédi ghanéen (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="GRD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1970</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1970</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Greek drachma</common:Name>
+          <common:Name xml:lang="fr">Drachme grecque</common:Name>
+        </structure:Code>
+        <structure:Code id="GWP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1980</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1980</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Guinea-Bissau peso</common:Name>
+          <common:Name xml:lang="fr">Peso de la Guinée-Bissau</common:Name>
+        </structure:Code>
+        <structure:Code id="HKQ">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">1990</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">1990</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Hong Kong dollar (old)</common:Name>
+          <common:Name xml:lang="fr">Dollar de Hong Kong (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="IEP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2000</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2000</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Irish pound</common:Name>
+          <common:Name xml:lang="fr">Livre irlandaise</common:Name>
+        </structure:Code>
+        <structure:Code id="ITL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2010</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2010</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Italian lira</common:Name>
+          <common:Name xml:lang="fr">Lire italienne</common:Name>
+        </structure:Code>
+        <structure:Code id="JEP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2020</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2020</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Jersey pounds</common:Name>
+          <common:Name xml:lang="fr">Livres de Jersey</common:Name>
+        </structure:Code>
+        <structure:Code id="LTL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2030</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2030</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Lithuanian litas</common:Name>
+          <common:Name xml:lang="fr">Litas lituanien</common:Name>
+        </structure:Code>
+        <structure:Code id="LUF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2040</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2040</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Luxembourg franc</common:Name>
+          <common:Name xml:lang="fr">Franc luxembourgeois</common:Name>
+        </structure:Code>
+        <structure:Code id="LVL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2050</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2050</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Latvian lats</common:Name>
+          <common:Name xml:lang="fr">Lats lettons</common:Name>
+        </structure:Code>
+        <structure:Code id="MGF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2060</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2060</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Malagasy franc</common:Name>
+          <common:Name xml:lang="fr">Franc malgache</common:Name>
+        </structure:Code>
+        <structure:Code id="MTL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2070</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2070</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Maltese lira</common:Name>
+          <common:Name xml:lang="fr">Livre maltaise</common:Name>
+        </structure:Code>
+        <structure:Code id="MXP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2080</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2080</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Mexican peso (old)</common:Name>
+          <common:Name xml:lang="fr">Peso mexicain (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="MZM">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2090</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2090</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Mozambique metical (old)</common:Name>
+          <common:Name xml:lang="fr">Metical mozambicain (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="NLG">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2100</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2100</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Netherlands guilder</common:Name>
+          <common:Name xml:lang="fr">Florin des Pays-Bas</common:Name>
+        </structure:Code>
+        <structure:Code id="PLZ">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2110</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2110</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Polish zloty (old)</common:Name>
+          <common:Name xml:lang="fr">Zloty polonais (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="PTE">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2120</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2120</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Portugese escudo (old)</common:Name>
+          <common:Name xml:lang="fr">Escudo portugais (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="ROL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2130</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2130</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Romanian leu (old)</common:Name>
+          <common:Name xml:lang="fr">Leu roumain (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="RUR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2140</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2140</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Russian ruble (old)</common:Name>
+          <common:Name xml:lang="fr">Rouble russe (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="SDD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2150</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2150</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Sudanese dinar (old)</common:Name>
+          <common:Name xml:lang="fr">Dinar soudanais (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="SDP">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2160</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2160</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">First sudanese pound</common:Name>
+          <common:Name xml:lang="fr">Première livre soudanaise</common:Name>
+        </structure:Code>
+        <structure:Code id="SIT">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2170</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2170</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Slovenian tolar</common:Name>
+          <common:Name xml:lang="fr">Tolar slovène</common:Name>
+        </structure:Code>
+        <structure:Code id="SKK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2180</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2180</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Slovak koruna</common:Name>
+          <common:Name xml:lang="fr">Couronne slovaque</common:Name>
+        </structure:Code>
+        <structure:Code id="SRG">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2190</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2190</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Suriname guilder (old)</common:Name>
+          <common:Name xml:lang="fr">Florin du Suriname (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="TJR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2200</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2200</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Tajikistan ruble (old)</common:Name>
+          <common:Name xml:lang="fr">Rouble tadjik (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="TMM">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2210</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2210</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Turkmenistan manat (old)</common:Name>
+          <common:Name xml:lang="fr">Manat Turkméne (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="TPE">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2220</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2220</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">East Timor escudo (old)</common:Name>
+          <common:Name xml:lang="fr">Escudo du Timor oriental (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="TRL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2230</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2230</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Turkish lira (old)</common:Name>
+          <common:Name xml:lang="fr">Livre turque (ancienne)</common:Name>
+        </structure:Code>
+        <structure:Code id="TVD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2240</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2240</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Tuvalu dollars</common:Name>
+          <common:Name xml:lang="fr">Dollar des Tuvalu</common:Name>
+        </structure:Code>
+        <structure:Code id="VEB">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2250</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2250</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Venezuela bolivar (old)</common:Name>
+          <common:Name xml:lang="fr">Bolivar vénézuélien (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="VEF">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2260</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2260</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Bolivar fuerte</common:Name>
+          <common:Name xml:lang="fr">Bolivar vénézuélien</common:Name>
+        </structure:Code>
+        <structure:Code id="XFO">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2270</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2270</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Gold-franc</common:Name>
+          <common:Name xml:lang="fr">Franc or</common:Name>
+        </structure:Code>
+        <structure:Code id="XFU">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2280</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2280</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">UIC-franc</common:Name>
+          <common:Name xml:lang="fr">Franc UIC</common:Name>
+        </structure:Code>
+        <structure:Code id="YUM">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2290</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2290</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Yugoslav dinar (old)</common:Name>
+          <common:Name xml:lang="fr">Dinar yougoslave (ancien)</common:Name>
+        </structure:Code>
+        <structure:Code id="ZMK">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2300</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2300</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Zambian kwacha</common:Name>
+          <common:Name xml:lang="fr">Kwacha zambien</common:Name>
+        </structure:Code>
+        <structure:Code id="ZWD">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2310</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2310</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Zimbabwe dollar</common:Name>
+          <common:Name xml:lang="fr">Dollar du Zimbabwe</common:Name>
+        </structure:Code>
+        <structure:Code id="ZWL">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2320</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2320</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Fourth zimbabwe dollar</common:Name>
+          <common:Name xml:lang="fr">Quatrième dollar du Zimbabwe</common:Name>
+        </structure:Code>
+        <structure:Code id="ZWN">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2330</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2330</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Zimbabwe dollars (old)</common:Name>
+          <common:Name xml:lang="fr">Dollar du Zimbabwéens (anciens)</common:Name>
+        </structure:Code>
+        <structure:Code id="ZWR">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2340</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2340</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Third zimbabwe dollar</common:Name>
+          <common:Name xml:lang="fr">Troisième dollar du Zimbabwe</common:Name>
+        </structure:Code>
+        <structure:Code id="_TXXDC">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2350</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2350</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">All currencies except national currency</common:Name>
+          <common:Name xml:lang="fr">Toutes les devises hors la monnaie nationale</common:Name>
+        </structure:Code>
+        <structure:Code id="_T">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2360</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2360</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">All currencies</common:Name>
+          <common:Name xml:lang="fr">Toutes les devises</common:Name>
+        </structure:Code>
+        <structure:Code id="_Z">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2370</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2370</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Not applicable</common:Name>
+          <common:Name xml:lang="fr">N'est pas applicable</common:Name>
+        </structure:Code>
+        <structure:Code id="_X">
+          <common:Annotations>
+            <common:Annotation id="@SDMX">
+              <common:AnnotationType>ORDER</common:AnnotationType>
+              <common:AnnotationText xml:lang="en">2380</common:AnnotationText>
+              <common:AnnotationText xml:lang="fr">2380</common:AnnotationText>
+            </common:Annotation>
+          </common:Annotations>
+          <common:Name xml:lang="en">Unspecified</common:Name>
+          <common:Name xml:lang="fr">Non spécifié</common:Name>
+        </structure:Code>
+      </structure:Codelist>
+    </structure:Codelists>
+  </message:Structures>
+</message:Structure>

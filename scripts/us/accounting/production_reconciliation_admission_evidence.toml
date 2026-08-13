@@ -1,0 +1,301 @@
+schema_version = "beforeit-us-production-reconciliation-admission-evidence-contract.v1"
+contract_id = "us-ws2c-production-reconciliation-admission-evidence-v1"
+classification = "CURRENT_VINTAGE_SOLVER_ADMISSION_EVIDENCE_NOT_APPROVAL"
+artifact_role = "DISPLAY_SEMANTICS_RESIDUAL_LINEAGE_AND_UNCERTAINTY_EVIDENCE"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+scientific_scope = "Authenticate BEA display-token semantics, compute display-level control residuals under explicit primary and counterfactual policies, materialize the raw-source observation loading, overlay exact literature-backed negative-cell sign domains, and materialize a zero-extra-likelihood domestic-use difference sidecar whose raw residual is null whenever either parent lineage contains a selected-zero source leaf. Register valuation/import boundaries and revision/dependence evidence without recipient-level margin or tax allocation, structural-zero approval, statistical reliability weights, covariance parameters, solver inputs, reconciliation, model-state writes, origin admission, or forecast scores."
+as_of_date = "2026-08-06"
+
+candidate_problem_scope_hash = "scope1:9b41bd41ba5ba7f421aac0a3244cd58bf663fef36dcd507628af4d009cb69088"
+candidate_problem_hash = "problem1:07607869be848a0016e5de1ea861b6350593369b92f973eac8b417648803a3d3"
+candidate_ledger_contract_sha256 = "12bc6cd1d514d9a2224cbfe709ebb3b1d1944bc6fdcf804f209690d0c69313a0"
+display_semantics_fixture_sha256 = "3091d35ae9a7268ee9025e8c242392c0eb45f757b9a1e3331bc872526df1de5e"
+display_semantics_manifest_sha256 = "74d869aa36636487a8acd13b9eb15d942e83e274f86ace852dbde1519b4f26ff"
+display_semantics_generator_sha256 = "c92ae3b41397cf42e9da634e1025e91e930e760d2467e65a32e5ea61aca02350"
+
+solver_admissible = false
+solver_invocation_count = 0
+solver_input_cell_count = 0
+solver_input_control_count = 0
+approved_exact_control_count = 0
+approved_structural_zero_count = 0
+numerical_reliability_receipt_count = 0
+numerical_covariance_receipt_count = 0
+adjustment_record_count = 0
+forecast_origin_admissible = false
+promotion_ready = false
+model_state_write = false
+accounting_gate_effect = "NONE"
+forecast_score_effect = "NONE"
+
+promotion_blockers = [
+    "NEAREST_INTEGER_ROUNDING_RULE_NOT_SOURCE_CERTIFIED",
+    "DISPLAY_RESOLUTION_ENVELOPE_IS_NOT_STATISTICAL_UNCERTAINTY",
+    "SOURCE_STRUCTURAL_ZERO_EVIDENCE_INCOMPLETE",
+    "CELL_LEVEL_NEGATIVE_ECONOMIC_TYPES_INCOMPLETE",
+    "USED_OTHER_2024_COMPONENT_AND_SERVICE_BRIDGE_UNRESOLVED",
+    "IMPORT_BOUNDARY_NOT_SELECTED",
+    "RECIPIENT_LEVEL_VALUATION_TAX_MARGIN_BRIDGE_INCOMPLETE",
+    "PRODUCTION_RELIABILITY_CLASSES_NOT_APPROVED",
+    "PRODUCTION_COVARIANCE_MODEL_NOT_APPROVED",
+    "REVISION_PANEL_NOT_MATERIALIZED",
+    "EXACT_CONTROL_SET_NOT_INDEPENDENTLY_APPROVED",
+    "PRODUCTION_SOLVER_ADMISSION_NOT_APPROVED",
+    "CURRENT_VINTAGE_NOT_FORECAST_ORIGIN_ELIGIBLE",
+]
+
+[display_policy]
+primary_scenario_id = "AUTHENTICATED_RELEASE_SCOPED_DISPLAY_ZERO"
+counterfactual_scenario_id = "WORKBOOK_LOCAL_NOTE_ONLY_COUNTERFACTUAL"
+producer_selected_ellipsis_source_semantics = "BEA_ZERO_VALUE_NOT_SHOWN"
+producer_selected_ellipsis_published_value_millions = 0.0
+producer_selected_ellipsis_underlying_exactness = "UNKNOWN"
+producer_selected_ellipsis_structural_zero_status = "NOT_ESTABLISHED"
+producer_selected_ellipsis_variance_status = "NOT_ESTABLISHED"
+import_selected_ellipsis_primary_semantics = "PUBLISHED_ZERO_UNDER_PINNED_RELEASE_SCOPED_ITABLE_AND_WORKBOOK_COORDINATE_CORROBORATION"
+import_selected_ellipsis_counterfactual_semantics = "UNRESOLVED_IF_EVIDENCE_IS_ARTIFICIALLY_RESTRICTED_TO_SAME_WORKBOOK_NOTES"
+raw_token_preservation = "REQUIRED_DISTINCT_FROM_NUMERIC_ZERO"
+blank_missing_suppressed_inheritance = "FORBIDDEN"
+
+[display_resolution_sensitivity]
+enabled_for_diagnostics = true
+assumption_id = "ASSUMPTION_NEAREST_INTEGER_MILLION_V1"
+display_increment_millions = 1.0
+half_width_per_raw_display_millions = 0.5
+interval_rule = "POINT_RESIDUAL_PLUS_OR_MINUS_HALF_INCREMENT_TIMES_SUM_ABSOLUTE_RAW_SOURCE_LOADING"
+source_certified_rounding_rule = false
+confidence_interval = false
+probability_distribution = "NONE"
+variance_from_rounding = "NONE"
+solver_weight_effect = "NONE"
+
+[revision_evidence]
+current_release_id = "BEA_INDUSTRY_ANNUAL_2025_09_25"
+current_release_date = "2025-09-25"
+current_archive_url = "https://apps.bea.gov/HistData/Files/Releases/Industry/2025/GDP_by_Industry/Q2/Annual_September-25-2025/MAKE-USE-IMPORTS%20(AFTER%20REDEFINITIONS).zip"
+current_archive_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+earlier_release_id = "BEA_INDUSTRY_ANNUAL_2024_09_26"
+earlier_release_date = "2024-09-26"
+earlier_archive_url = "https://apps.bea.gov/HistData/Files/Releases/Industry/2024/GDP_by_Industry/Q2/Annual_September-26-2024/AllTablesIO.zip"
+earlier_archive_sha256 = "ab316fa88157f8a96270334b1a6afa664fcf39a6c94f9c8e4ad061d930e81918"
+earlier_producer_use_member = "IOUse_After_Redefinitions_PRO_1997-2023_Summary.xlsx"
+earlier_producer_use_sha256 = "2acc6de8a152dffc0eb39317b79c7098f1fea89948935000798a9adafb015c49"
+earlier_producer_make_member = "IOMake_After_Redefinitions_PRO_1997-2023_Summary.xlsx"
+earlier_producer_make_sha256 = "6a459b3414ef9b941a2209dec60440e22d2b1cc70a925a9e4e8c5cc99941af42"
+common_reference_year_candidate = 2023
+archive_hashes_verified_during_development = true
+checked_in_revision_cell_fixture = false
+revision_pair_status = "SOURCE_ARCHIVES_IDENTIFIED_CELL_PANEL_NOT_MATERIALIZED"
+realized_2024_revision_observation_count = 0
+
+[implementation]
+module_path = "scripts/us/accounting/USProductionReconciliationAdmissionEvidence.jl"
+module_hash_policy = "SHA256_AFTER_REPLACING_SINGLE_APPROVED_CONTRACT_HASH_LITERAL_WITH_64_ZEROES"
+module_normalized_sha256 = "1d018797ea50ee19d223f2c1ed1f4a647231a16ff1cda013a0f18283f5ab3710"
+runner_path = "scripts/us/accounting/run_production_reconciliation_admission_evidence.jl"
+runner_sha256 = "d2f1eeb6beacbd3dfe5fa1fc5cd3fd2476c2137bc0025a1358d7045d4c269b15"
+
+[expected]
+candidate_cell_count = 17422
+candidate_control_count = 924
+candidate_identity_count = 346
+published_control_count = 578
+source_lineage_member_count = 19428
+target_loading_owner_count = 17422
+measured_control_loading_owner_count = 578
+observation_loading_owner_count = 18000
+observation_loading_count = 19428
+target_multi_source_owner_count = 456
+measured_control_multi_source_owner_count = 8
+producer_selected_zero_source_leaf_count = 6979
+import_selected_zero_source_leaf_count = 4102
+release_marker_receipt_count = 2
+valuation_import_boundary_count = 6
+domestic_use_point_count = 6160
+domestic_use_raw_evaluable_count = 2480
+domestic_f050_diagnostic_count = 70
+primary_evaluable_identity_count = 346
+primary_nonevaluable_identity_count = 0
+primary_zero_residual_identity_count = 144
+primary_nonzero_residual_identity_count = 202
+primary_evaluable_published_count = 578
+primary_nonevaluable_published_count = 0
+primary_zero_residual_published_count = 234
+primary_nonzero_residual_published_count = 344
+primary_within_sensitivity_count = 924
+counterfactual_evaluable_identity_count = 276
+counterfactual_nonevaluable_identity_count = 70
+counterfactual_zero_residual_identity_count = 113
+counterfactual_nonzero_residual_identity_count = 163
+counterfactual_evaluable_published_count = 446
+counterfactual_nonevaluable_published_count = 132
+counterfactual_zero_residual_published_count = 144
+counterfactual_nonzero_residual_published_count = 302
+counterfactual_within_sensitivity_count = 722
+identity_maximum_absolute_residual_millions = 7
+published_maximum_absolute_residual_millions = 27
+negative_cell_count = 129
+source_unresolved_negative_cell_count = 23
+literature_supported_negative_cell_count = 16
+source_mechanically_typed_negative_cell_count = 106
+component_unresolved_signed_cell_count = 12
+unresolved_negative_cell_count = 7
+candidate_dependence_group_count = 17
+revision_vintage_receipt_count = 2
+numerical_reliability_receipt_count = 0
+numerical_covariance_receipt_count = 0
+solver_input_cell_count = 0
+solver_input_control_count = 0
+approved_exact_control_count = 0
+approved_structural_zero_count = 0
+adjustment_record_count = 0
+
+[[artifact]]
+artifact_id = "candidate_ledger_contract"
+path = "scripts/us/accounting/production_reconciliation_candidate_ledger.toml"
+sha256 = "12bc6cd1d514d9a2224cbfe709ebb3b1d1944bc6fdcf804f209690d0c69313a0"
+role = "AUTHENTICATED_PRODUCTION_LEDGER_CONTRACT"
+
+[[artifact]]
+artifact_id = "display_semantics_fixture"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_display_semantics_approved/display_semantics.csv"
+sha256 = "3091d35ae9a7268ee9025e8c242392c0eb45f757b9a1e3331bc872526df1de5e"
+role = "AUTHENTICATED_SOURCE_NOTE_AND_TOKEN_RECORDS"
+
+[[artifact]]
+artifact_id = "display_semantics_manifest"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_display_semantics_approved/manifest.toml"
+sha256 = "74d869aa36636487a8acd13b9eb15d942e83e274f86ace852dbde1519b4f26ff"
+role = "DISPLAY_SEMANTICS_SOURCE_RECEIPT"
+
+[[artifact]]
+artifact_id = "display_semantics_generator"
+path = "scripts/us/accounting/generate_after_redefinitions_display_semantics_fixture.mjs"
+sha256 = "c92ae3b41397cf42e9da634e1025e91e930e760d2467e65a32e5ea61aca02350"
+role = "ARTIFACT_TOOL_EXTRACTION_GENERATOR"
+
+[[artifact]]
+artifact_id = "itable_marker_receipt"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_display_semantics_approved/itable_marker_receipt.json"
+sha256 = "b861625aaa54c6cce5d0bd0eaaef0ec874f23afc39d0ce1a15d76b36fa098957"
+role = "BEA_ITABLE_REQUEST_RESPONSE_AND_COORDINATE_CORROBORATION_RECEIPT"
+
+[[artifact]]
+artifact_id = "itable_canonical_grid"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_display_semantics_approved/itable_canonical_common_basis_grid.csv"
+sha256 = "2a7c2eb3a809ff9b2e9805569692a095adf590a959017d99911e7f11450ab4e8"
+role = "BEA_ITABLE_FULL_COMMON_BASIS_TOKEN_VALUE_AND_SEMANTIC_COMPARISON_GRID"
+
+[[artifact]]
+artifact_id = "itable_marker_generator"
+path = "scripts/us/accounting/generate_bea_itable_display_semantics_receipt.mjs"
+sha256 = "d95e734603dc1d309987c6468e58d90fed7e626494f2ea38e7ed7e3fcd5acd1b"
+role = "BEA_ITABLE_LIVE_AND_SAVED_RESPONSE_RECEIPT_GENERATOR"
+
+[[artifact]]
+artifact_id = "itable_marker_test"
+path = "scripts/us/accounting/test_bea_itable_display_semantics_receipt.mjs"
+sha256 = "c4628bfaf43dac2c23ac088419e1a3a2a5c7a6b03a9bc1a71c4c1c1fc1064f26"
+role = "OFFLINE_DETERMINISTIC_RECEIPT_AND_COORDINATE_VERIFIER"
+
+[[artifact]]
+artifact_id = "negative_cell_semantics_fixture"
+path = "scripts/us/accounting/fixtures/bea_2024_negative_cell_semantics_approved/negative_cell_semantics.csv"
+sha256 = "fdf867edacd59b086bcbbdeb637d0b007515392379c298f2bc8ac83db22dbd0d"
+role = "EXACT_CELL_LEVEL_LITERATURE_BACKED_SIGN_DOMAIN_OVERLAY"
+
+[[artifact]]
+artifact_id = "negative_cell_semantics_manifest"
+path = "scripts/us/accounting/fixtures/bea_2024_negative_cell_semantics_approved/manifest.toml"
+sha256 = "1c886a99c50c9dce339c360dc6e6880725d152ec2a6a64a18db220566cbdcfa1"
+role = "NEGATIVE_CELL_SOURCE_SCOPE_AND_FAIL_CLOSED_POLICY"
+
+[[artifact]]
+artifact_id = "valuation_envelope_contract"
+path = "scripts/us/accounting/after_redefinitions_valuation_envelope.toml"
+sha256 = "110f82037e45e1de3ce4f5a1df2b7982d064e90a9323f255c7441452fa6d2ede"
+role = "UPSTREAM_COMMODITY_VALUATION_COMPONENT_AND_RECIPIENT_ALLOCATION_BOUNDARY"
+
+[[artifact]]
+artifact_id = "final_use_envelope_contract"
+path = "scripts/us/accounting/after_redefinitions_final_use_envelope.toml"
+sha256 = "b4e3969a52618b4e462b8e468ada784dda85cae86550fb27659d2afbb4cbb2be"
+role = "UPSTREAM_FINAL_USE_IMPORT_INVENTORY_AND_CLOSURE_BOUNDARY"
+
+[[literature]]
+literature_id = "BEA_ARCHIVED_AFTER_REDEFINITIONS_2025"
+title = "BEA Make-Use-Imports After Redefinitions archived annual release"
+url = "https://apps.bea.gov/HistData/Files/Releases/Industry/2025/GDP_by_Industry/Q2/Annual_September-25-2025/MAKE-USE-IMPORTS%20(AFTER%20REDEFINITIONS).zip"
+role = "CONTROLLING_SOURCE_NOTES_DISPLAY_TOKENS_AND_RELEASE_BYTES"
+
+[[literature]]
+literature_id = "BEA_INPUT_OUTPUT_GUIDE"
+title = "Guide to the Interactive Industry Input-Output Accounts Tables"
+url = "https://www.bea.gov/resources/guide-interactive-industry-input-output-accounts-tables"
+role = "CURRENT_TABLE_CONCEPTS_IMPORT_AND_PRODUCER_PRICE_SEMANTICS"
+
+[[literature]]
+literature_id = "BEA_RASSIER_2007"
+title = "Implementing a Reconciliation and Balancing Model in the U.S. Industry Accounts"
+url = "https://www.bea.gov/sites/default/files/papers/WP2007-5.pdf"
+role = "SOURCE_SPECIFIC_RELIABILITY_AND_COVARIANCE_CAUTION"
+
+[[literature]]
+literature_id = "BEA_CHEN_2006"
+title = "A Balanced System of Industry Accounts for the U.S. and Structural Distribution of Statistical Discrepancy"
+url = "https://www.bea.gov/sites/default/files/papers/WP2006-8.pdf"
+role = "GLS_RECONCILIATION_AND_STATISTICAL_DISCREPANCY_DISTRIBUTION"
+
+[[literature]]
+literature_id = "BEA_GDP_GDI_REVISIONS_2024"
+title = "An Analysis of Revisions to GDP and GDI"
+url = "https://apps.bea.gov/scb/issues/2024/08-august/0824-revisions-to-gdp-gdi.htm"
+role = "LATER_MINUS_EARLIER_REVISION_MEASURES"
+
+[[literature]]
+literature_id = "BEA_INTERNATIONAL_RELIABILITY_2024"
+title = "Reliability of the International Economic Accounts"
+url = "https://apps.bea.gov/scb/issues/2024/12-december/1224-reliability-international-accounts.htm"
+role = "REGIME_HOMOGENEITY_AND_SIGNED_NET_SCALING"
+
+[[literature]]
+literature_id = "UN_SUT_IOT_HANDBOOK_2018"
+title = "Handbook on Supply, Use and Input-Output Tables with Extensions and Applications"
+url = "https://unstats.un.org/unsd/nationalaccount/docs/SUT_IOT_HB_Final_Cover.pdf"
+role = "ROUNDING_RELIABILITY_BALANCING_AND_DOCUMENTATION_PRACTICE"
+
+[[literature]]
+literature_id = "SMITH_WEALE_SATCHELL_1998"
+title = "Measurement Error with Accounting Constraints"
+url = "https://doi.org/10.1111/1467-937X.00037"
+role = "LATENT_ACCOUNTING_DATA_INTERVALS_SERIAL_DEPENDENCE_AND_SPECIFICATION_TESTS"
+
+[[literature]]
+literature_id = "BEA_IO_CONCEPTS_METHODS_2006"
+title = "Concepts and Methods of the U.S. Input-Output Accounts"
+url = "https://www.bea.gov/sites/default/files/papers/WP2006-6.pdf"
+role = "USED_GOODS_SCRAP_NONCOMPARABLE_IMPORTS_ROW_ADJUSTMENTS_AND_IMPORT_MATRIX_METHODS"
+
+[[literature]]
+literature_id = "BEA_NIPA_HANDBOOK_CHAPTER_7"
+title = "NIPA Handbook Chapter 7 Change in Private Inventories"
+url = "https://www.bea.gov/resources/methodologies/nipa-handbook/pdf/chapter-07.pdf"
+role = "ADDITIONS_LESS_WITHDRAWALS_SIGNED_INVENTORY_FLOW"
+
+[[literature]]
+literature_id = "SNA_2008"
+title = "System of National Accounts 2008"
+url = "https://unstats.un.org/unsd/nationalaccount/docs/SNA2008.pdf"
+role = "ACQUISITIONS_LESS_DISPOSALS_AND_USED_ASSET_TRANSFER_SIGN_CONVENTION"
+
+[[literature]]
+literature_id = "BEA_INDUSTRY_CLASSIFICATION_2018"
+title = "Industry Economic Accounts Results of the 2018 Comprehensive Update"
+url = "https://apps.bea.gov/scb/issues/2018/08-august/pdf/0818-industry-tables.pdf"
+role = "USED_AND_OTHER_SUMMARY_TO_DETAILED_SPECIAL_ACCOUNT_CROSSWALK"
+
+[[literature]]
+literature_id = "OECD_SUPPLY_USE_TABLES"
+title = "OECD Supply and Use Tables"
+url = "https://www.oecd.org/en/data/datasets/supply-and-use-tables.html"
+role = "INDEPENDENT_SOURCE_AXIS_VALUATION_CHALLENGER_NOT_BEA_RECIPIENT_BRIDGE"

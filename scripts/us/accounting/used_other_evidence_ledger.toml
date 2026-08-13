@@ -1,0 +1,508 @@
+schema_version = "beforeit-us-used-other-evidence-ledger-contract.v1"
+contract_id = "us-used-other-evidence-ledger-v1"
+classification = "VINTAGE_SEPARATED_ACCOUNTING_EVIDENCE_NOT_ORIGIN_ELIGIBLE"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+scientific_role = "Fail-closed evidence and decision ledger for BEA special commodities. It preserves the pinned 2017 detailed and summary special-account cells and the pinned 2024 summary Used/Other cells as separate vintages. It tests only code-keyed source reconstruction and source-supported transfer/output semantics. It does not allocate 2024 composites, project 2017 shares, infer producers or agents from source placements, allocate dealer or transport services, absorb closure accounts into the model core, or write model state, gates, origins, or scores."
+source_mask_policy = "Preserve numeric, native blank, native ellipsis, selected-zero-not-shown, explicit numeric zero, and signed value as separate fields. A blank, ellipsis, or selected-zero marker materializes as zero only in the source projection and is never relabeled as an explicit or structural zero."
+vintage_policy = "2017 detailed S00401/S00402/S00300/S00900, 2017 independently rounded summary Used/Other, and 2024 summary Used/Other are separate evidence namespaces. No share, sign pattern, placement, or component weight crosses vintages."
+component_policy = "The four 2017 detailed codes are typed as mixed scrap supply/disposal, existing-good or asset transfer, noncomparable-import boundary item, and rest-of-world final-use reclassification. S00401 make/output is current-production byproduct evidence while its negative final use is final-user or existing-asset scrap disposal; those channels remain distinct. Summary Used and Other remain unresolved composites."
+mapping_policy = "All reconstruction is code keyed. Human-readable labels, signs, sparsity, source make placements, and account names cannot select a core sector, model agent, government producer, or rest-of-world behavior."
+transfer_output_policy = "For a same-boundary existing-good transfer, the seller-negative and purchaser-positive values reclassify use and create no output of the underlying good. Only separately observed current transaction services can add output. The 2017 S00402 controls support the underlying-transfer test; service amounts are unobserved here."
+dealer_transport_policy = "Trade services related to used goods, waste, and scrap and freight services on those items require separately identified service observations. No percentage margin or transport allocation is inferred from the net special row."
+forecast_origin_admissible = false
+promotion_ready = false
+model_state_write = false
+accounting_gate_effect = "NONE"
+forecast_score_write = false
+
+[detail_vintage_scope]
+source_endpoint = "https://apps.bea.gov/industry/release/zip/MAKE-USE-IMPORTS%20(AFTER%20REDEFINITIONS).zip"
+source_zip_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+source_zip_byte_count = 8326144
+source_http_last_modified = "Thu, 25 Sep 2025 12:30:06 GMT"
+producer_detail_workbooks = ["IOUse_After_Redefinitions_PRO_Detail.xlsx", "IOMake_After_Redefinitions_PRO_Detail.xlsx"]
+producer_detail_sheet_names = ["NAICS Codes", "2007", "2012", "2017"]
+producer_summary_workbooks = ["IOUse_After_Redefinitions_PRO_Summary.xlsx", "IOMake_After_Redefinitions_PRO_Summary.xlsx"]
+producer_summary_year_span = "1997_THROUGH_2024"
+latest_detail_year = 2017
+latest_summary_year = 2024
+newer_than_2017_detail_available = false
+finding = "The exact current after-redefinitions archive has producer detail sheets for 2007, 2012, and 2017 only, while its producer summary workbooks extend through 2024. It therefore contains no 2022 or 2024 detailed S00401/S00402/S00300/S00900 split."
+allocation_effect = "NONE"
+
+[expected]
+observation_count = 4162
+observation_2017_count = 3644
+observation_2017_detail_count = 3312
+observation_2017_summary_count = 332
+observation_2024_summary_count = 518
+numeric_cell_count = 952
+native_blank_count = 2748
+native_ellipsis_count = 188
+selected_zero_not_shown_count = 3210
+explicit_numeric_zero_count = 66
+negative_cell_count = 56
+component_count = 4
+source_check_count = 35
+decision_count = 9
+blocked_decision_count = 9
+literature_count = 13
+newer_than_2017_detail_vintage_count = 0
+projected_2017_share_count = 0
+dealer_margin_allocation_count = 0
+transport_service_allocation_count = 0
+component_allocation_2024_count = 0
+core_absorption_count = 0
+model_absorption_count = 0
+government_producer_inference_count = 0
+row_behavior_inference_count = 0
+model_state_write_count = 0
+gate_effect_count = 0
+origin_admissible_output_count = 0
+forecast_score_write_count = 0
+
+[[artifact]]
+artifact_id = "special_2017_cells"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_2017_special_accounts_vintage/cells.csv"
+sha256 = "bb871c471b5bdc3dfea709749359717705167eff7e929bd9a2cc9071a21751e1"
+role = "PINNED_2017_DETAIL_AND_SUMMARY_SOURCE_CELLS"
+
+[[artifact]]
+artifact_id = "special_2017_manifest"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_2017_special_accounts_vintage/manifest.toml"
+sha256 = "2432fecb0aa9ada6fe1dfc33aa51d17888df66676290c34a14bdb97e1aa3c31f"
+role = "PINNED_2017_SOURCE_MANIFEST"
+
+[[artifact]]
+artifact_id = "special_component_crosswalk"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_2017_special_accounts_vintage/component_crosswalk.json"
+sha256 = "da7cba1018448321e6401dbe08614b73b3f0d9e65dfbd902a22b49cb95124ee0"
+role = "PINNED_OFFICIAL_CODE_CROSSWALK_RECEIPT"
+
+[[artifact]]
+artifact_id = "special_source_acquisition_receipt"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_2017_special_accounts_vintage/source_acquisition_receipt.json"
+sha256 = "8be9fbef6e2c18a7388cd61bd14312159fc3984d4dbc2c60158e977ee7f0e878"
+role = "PINNED_CURRENT_AFTER_REDEFINITIONS_ARCHIVE_RECEIPT"
+
+[[artifact]]
+artifact_id = "after_redefinitions_workbook_sheet_inventory"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_detail_scope_approved/workbook_sheet_inventory.toml"
+sha256 = "133057426f8221e468417ad1276cce82887847a6c9d07c7208fd48ebc75262c4"
+role = "PINNED_ARCHIVE_DERIVED_WORKBOOK_SHEET_SCOPE"
+
+[[artifact]]
+artifact_id = "common_basis_2024_cells"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_common_basis_approved/cells.csv"
+sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
+role = "PINNED_2024_SUMMARY_SOURCE_CELLS"
+
+[[artifact]]
+artifact_id = "common_basis_2024_manifest"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_common_basis_approved/manifest.toml"
+sha256 = "ff555043829e5d12ba787ba9ad7d58ef4f0d2ee306740d6847bdfec800935030"
+role = "PINNED_2024_SOURCE_MANIFEST"
+
+[[artifact]]
+artifact_id = "model_core_mapping"
+path = "scripts/us/accounting/after_redefinitions_model_core_mapping.toml"
+sha256 = "546b3dc15cbb194210ce564a44626b146551b161ca0ce5ffb90a8a5261b4553c"
+role = "REVIEWED_CLOSURE_BOUNDARY_MAPPING"
+
+[[artifact]]
+artifact_id = "model_sector_mapping"
+path = "scripts/us/bea71.toml"
+sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+role = "REVIEWED_MODEL_CORE_AXIS"
+
+[[artifact]]
+artifact_id = "bea_io_methods_pdf"
+path = "scripts/us/accounting/fixtures/bea_io_concepts_methods_2006_approved/Concepts_and_Methods_US_IO_Accounts_2006.pdf"
+sha256 = "535627e5e44f8461c0a04410f4a05c55d47f2e325d9473cb2df06e5d3e6b271d"
+role = "APPROVED_SEMANTIC_METHOD_SOURCE"
+
+[[artifact]]
+artifact_id = "bea_io_methods_receipt"
+path = "scripts/us/accounting/fixtures/bea_io_concepts_methods_2006_approved/receipt.toml"
+sha256 = "b4b210be3c364415473f1ef407ed7ea6e9edc2b299bd1058c1658b0ebb3b91ac"
+role = "APPROVED_SEMANTIC_METHOD_SOURCE_RECEIPT"
+
+[[artifact]]
+artifact_id = "scripts_us_project"
+path = "scripts/us/Project.toml"
+sha256 = "72cec6cb6dc64dc71b9e342890b78afbf8fd66cb97dd8603e4fe905ad137dc1c"
+role = "REPRODUCIBILITY_ENVIRONMENT"
+
+[[artifact]]
+artifact_id = "scripts_us_manifest"
+path = "scripts/us/Manifest.toml"
+sha256 = "c2e596cf8452c5b890bb0ef66c05bc72a57fa25ab6f8fe790f8db4600b035263"
+role = "REPRODUCIBILITY_ENVIRONMENT"
+
+[[component]]
+component_code = "S00401"
+label = "Scrap"
+aggregate_code = "Used"
+economic_type = "MIXED_SCRAP_CURRENT_BYPRODUCT_AND_EXISTING_ASSET_DISPOSAL"
+source_use_role = "SIGNED_MIXED_CURRENT_BYPRODUCT_AND_FINAL_USER_SCRAP_SUPPLY_USE"
+source_make_role = "PUBLISHED_CURRENT_BYPRODUCT_OUTPUT_PLACEMENTS_ACROSS_ORDINARY_INDUSTRIES"
+literature_ids = ["bea_used_scrap_treatment", "bea_scrap_byproduct_transform", "un_byproduct_definition", "sna_scrap_disposal"]
+observed_2017_intermediate_millions = 30485.0
+observed_2017_final_use_millions = -19722.0
+observed_2017_output_millions = 10763.0
+observed_2017_output_cell_kind = "numeric"
+observed_2017_make_placement_count = 79
+observed_2017_make_placement_sum_millions = 10761.0
+current_production_output = true
+existing_asset_transfer = true
+import_boundary = false
+reclassification = false
+structural_zero_claimed = false
+source_make_placement_is_producer_inference = false
+allocation_2024_status = "NOT_RUN_BLOCKED"
+runtime_target_namespace = ""
+mapping_applied = false
+
+[[component]]
+component_code = "S00402"
+label = "Used and secondhand goods"
+aggregate_code = "Used"
+economic_type = "EXISTING_GOOD_OR_ASSET_TRANSFER"
+source_use_role = "SIGNED_EXISTING_GOOD_TRANSFER_RECLASSIFICATION"
+source_make_role = "NO_NONZERO_2017_MAKE_PLACEMENT_UNDERLYING_GOOD_NOT_CURRENT_OUTPUT"
+literature_ids = ["bea_used_scrap_treatment", "sna_existing_asset_transfer", "esa_existing_goods_transfer"]
+observed_2017_intermediate_millions = 27562.0
+observed_2017_final_use_millions = -27562.0
+observed_2017_output_millions = 0.0
+observed_2017_output_cell_kind = "blank"
+observed_2017_make_placement_count = 0
+observed_2017_make_placement_sum_millions = 0.0
+current_production_output = false
+existing_asset_transfer = true
+import_boundary = false
+reclassification = true
+structural_zero_claimed = false
+source_make_placement_is_producer_inference = false
+allocation_2024_status = "NOT_RUN_BLOCKED"
+runtime_target_namespace = ""
+mapping_applied = false
+
+[[component]]
+component_code = "S00300"
+label = "Noncomparable imports"
+aggregate_code = "Other"
+economic_type = "IMPORT_BOUNDARY_NONCOMPARABLE_SERVICES_OR_RIGHTS"
+source_use_role = "DIRECT_IMPORT_ALLOCATION_TO_INTERMEDIATE_AND_FINAL_USES"
+source_make_role = "NO_NONZERO_2017_DOMESTIC_MAKE_PLACEMENT_IMPORT_BOUNDARY"
+literature_ids = ["bea_noncomparable_imports_and_row", "oecd_valuation_and_import_split"]
+observed_2017_intermediate_millions = 142489.0
+observed_2017_final_use_millions = -142489.0
+observed_2017_output_millions = 0.0
+observed_2017_output_cell_kind = "blank"
+observed_2017_make_placement_count = 0
+observed_2017_make_placement_sum_millions = 0.0
+current_production_output = false
+existing_asset_transfer = false
+import_boundary = true
+reclassification = false
+structural_zero_claimed = false
+source_make_placement_is_producer_inference = false
+allocation_2024_status = "NOT_RUN_BLOCKED"
+runtime_target_namespace = ""
+mapping_applied = false
+
+[[component]]
+component_code = "S00900"
+label = "Rest of the world adjustment"
+aggregate_code = "Other"
+economic_type = "FINAL_USE_RESIDENCE_RECLASSIFICATION_ADJUSTMENT"
+source_use_role = "OFFSETTING_FINAL_USE_RESIDENCE_RECLASSIFICATION"
+source_make_role = "PUBLISHED_SOURCE_ACCOUNTING_PLACEMENT_NOT_PRODUCER_IDENTIFICATION"
+literature_ids = ["bea_noncomparable_imports_and_row", "esa_existing_goods_transfer"]
+observed_2017_intermediate_millions = 0.0
+observed_2017_final_use_millions = 3468.0
+observed_2017_output_millions = 3468.0
+observed_2017_output_cell_kind = "numeric"
+observed_2017_make_placement_count = 1
+observed_2017_make_placement_sum_millions = 3468.0
+current_production_output = false
+existing_asset_transfer = false
+import_boundary = true
+reclassification = true
+structural_zero_claimed = false
+source_make_placement_is_producer_inference = false
+allocation_2024_status = "NOT_RUN_BLOCKED"
+runtime_target_namespace = ""
+mapping_applied = false
+
+[[decision]]
+decision_id = "dealer_service_allocation"
+status = "NOT_RUN_BLOCKED"
+blocker = "No vintage-matched dealer, auction, repair, or ownership-transfer service cells are identified for Used."
+required_evidence = "Code-keyed current-vintage service observations with seller, purchaser, service producer, valuation, and double-entry counterparts."
+literature_ids = ["sna_existing_asset_transfer", "un_used_scrap_trade_services"]
+mapping_applied = false
+output_emitted = false
+target_namespace = ""
+
+[[decision]]
+decision_id = "transport_service_allocation"
+status = "NOT_RUN_BLOCKED"
+blocker = "The special rows do not identify separately invoiced freight services; UN guidance excludes freight on used goods, waste, and scrap from transport-margin valuation matrices."
+required_evidence = "Code-keyed current-vintage transport-service observations by payer, mode, product or asset class, and use."
+literature_ids = ["un_used_scrap_transport_services", "esa_trade_transport_valuation"]
+mapping_applied = false
+output_emitted = false
+target_namespace = ""
+
+[[decision]]
+decision_id = "used_2024_component_allocation"
+status = "NOT_RUN_BLOCKED"
+blocker = "The 2024 summary account does not identify S00401 versus S00402."
+required_evidence = "A vintage-matched official 2024 detailed decomposition or an independently governed direct component source."
+literature_ids = ["bea_official_component_crosswalk", "bea_used_scrap_treatment"]
+mapping_applied = false
+output_emitted = false
+target_namespace = ""
+
+[[decision]]
+decision_id = "other_2024_component_allocation"
+status = "NOT_RUN_BLOCKED"
+blocker = "The 2024 summary account does not identify S00300 versus S00900."
+required_evidence = "A vintage-matched official 2024 detailed decomposition with complete final-use and import counterparts."
+literature_ids = ["bea_official_component_crosswalk", "bea_noncomparable_imports_and_row"]
+mapping_applied = false
+output_emitted = false
+target_namespace = ""
+
+[[decision]]
+decision_id = "project_2017_component_shares_to_2024"
+status = "NOT_RUN_BLOCKED"
+blocker = "A different benchmark vintage is not evidence of 2024 component weights."
+required_evidence = "None: cross-vintage share projection is prohibited by this contract; a direct 2024 component source is required instead."
+literature_ids = ["bea_official_component_crosswalk", "oecd_valuation_and_import_split"]
+mapping_applied = false
+output_emitted = false
+target_namespace = ""
+
+[[decision]]
+decision_id = "label_based_core_or_model_absorption"
+status = "NOT_RUN_BLOCKED"
+blocker = "Used and Other labels are composites and do not identify any core sector, model commodity, or behavioral agent."
+required_evidence = "A code-keyed economic transition with explicit counterpart, valuation, and ownership semantics."
+literature_ids = ["bea_official_component_crosswalk", "un_byproduct_definition", "sna_existing_asset_transfer"]
+mapping_applied = false
+output_emitted = false
+target_namespace = ""
+
+[[decision]]
+decision_id = "s00900_government_producer_inference"
+status = "NOT_RUN_BLOCKED"
+blocker = "The 2017 S00600/GFGN make entry is a source accounting placement, not identification of a technological or behavioral government producer."
+required_evidence = "Producing-unit methodology and complete nonfinancial and financial counterparts that independently identify a producer."
+literature_ids = ["bea_noncomparable_imports_and_row"]
+mapping_applied = false
+output_emitted = false
+target_namespace = ""
+
+[[decision]]
+decision_id = "other_as_row_behavior_or_zero_cash"
+status = "NOT_RUN_BLOCKED"
+blocker = "Other combines imported transactions with an offsetting residence reclassification; neither the label nor a balanced total establishes a rest-of-world agent or zero-cash operator."
+required_evidence = "Transaction-level resident/nonresident counterparts and cash/GDP double-entry controls."
+literature_ids = ["bea_noncomparable_imports_and_row", "oecd_valuation_and_import_split"]
+mapping_applied = false
+output_emitted = false
+target_namespace = ""
+
+[[decision]]
+decision_id = "runtime_state_gate_origin_or_score_write"
+status = "NOT_RUN_BLOCKED"
+blocker = "This ledger is semantic and current-vintage accounting evidence only."
+required_evidence = "A separately approved behavioral transition and forecast-origin contract outside this ledger."
+literature_ids = ["bea_official_component_crosswalk"]
+mapping_applied = false
+output_emitted = false
+target_namespace = ""
+
+[[literature]]
+literature_id = "bea_official_component_crosswalk"
+authority = "U.S. Bureau of Economic Analysis"
+title = "Preview of the 2018 Comprehensive Update of the Industry Economic Accounts"
+version = "Survey of Current Business, August 2018"
+url = "https://apps.bea.gov/scb/issues/2018/08-august/pdf/0818-industry-tables.pdf"
+locator = "Appendix A, printed page 15, PDF page 15"
+document_sha256 = "c14a23ec44327fe8d8eb5d0e511234bbb30a3dccc5141087b1da6a5c4dd1c024"
+accessed_on = "2026-08-06"
+source_fact = "The official classification maps S00401 and S00402 to Used, and S00300 and S00900 to Other."
+project_decision = "Use codes and the official crosswalk; never infer component content from a summary label."
+uncertainty = "The crosswalk defines composition but not current-vintage component weights."
+test_ids = ["2017_used_t001_reconstruction", "2017_other_t001_reconstruction", "used_2024_component_allocation"]
+
+[[literature]]
+literature_id = "bea_current_archive_detail_scope"
+authority = "U.S. Bureau of Economic Analysis"
+title = "Input-Output After Redefinitions Make-Use-Imports archive"
+version = "Exact archive retrieved 2026-08-06; HTTP Last-Modified Thu, 25 Sep 2025 12:30:06 GMT"
+url = "https://apps.bea.gov/industry/release/zip/MAKE-USE-IMPORTS%20(AFTER%20REDEFINITIONS).zip"
+locator = "IOUse_After_Redefinitions_PRO_Detail.xlsx and IOMake_After_Redefinitions_PRO_Detail.xlsx workbook sheet lists; compared with the corresponding Summary workbook sheet lists"
+document_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+accessed_on = "2026-08-06"
+source_fact = "The producer detail workbooks contain NAICS Codes, 2007, 2012, and 2017 sheets only; the producer summary workbooks extend through 2024."
+project_decision = "Record zero newer-than-2017 detailed vintages in this exact endpoint and leave every 2024 component allocation blocked."
+uncertainty = "The endpoint is mutable in place; the finding applies to the pinned bytes and retrieval receipt, not to a future BEA release."
+test_ids = ["newer_than_2017_detail_vintage_absence", "used_2024_component_allocation", "other_2024_component_allocation"]
+
+[[literature]]
+literature_id = "bea_used_scrap_treatment"
+authority = "U.S. Bureau of Economic Analysis"
+title = "Concepts and Methods of the U.S. Input-Output Accounts"
+version = "September 2006, updated March 2009"
+url = "https://www.bea.gov/sites/default/files/papers/WP2006-6.pdf"
+locator = "Chapter 6, printed pages 6-5 through 6-6; Chapter 12, printed pages 12-3 through 12-4"
+document_sha256 = "535627e5e44f8461c0a04410f4a05c55d47f2e325d9473cb2df06e5d3e6b271d"
+accessed_on = "2026-08-06"
+source_fact = "Used goods were produced in earlier periods, have no current producing industry, and are recorded through signed uses; current-period margins are separate output. Scrap from final use adds available supply without current output by the disposing final user."
+project_decision = "Test the S00402 signed transfer and zero underlying output. For S00401, keep current byproduct make/output distinct from final-user or existing-asset scrap disposal and do not invent a Used producer."
+uncertainty = "The source does not identify dealer, repair, auction, or transport services in the special row."
+test_ids = ["2017_s00402_use_output_identity", "2017_s00402_make_placement_count", "dealer_service_allocation"]
+
+[[literature]]
+literature_id = "bea_noncomparable_imports_and_row"
+authority = "U.S. Bureau of Economic Analysis"
+title = "Concepts and Methods of the U.S. Input-Output Accounts"
+version = "September 2006, updated March 2009"
+url = "https://www.bea.gov/sites/default/files/papers/WP2006-6.pdf"
+locator = "Chapter 7, printed pages 7-9 through 7-12, especially tables 7.4 through 7.6"
+document_sha256 = "535627e5e44f8461c0a04410f4a05c55d47f2e325d9473cb2df06e5d3e6b271d"
+accessed_on = "2026-08-06"
+source_fact = "Noncomparable imports are directly allocated imported services or rights. The rest-of-world adjustment makes offsetting changes among PCE, government, exports, and imports to align I-O commodity treatment with NIPA expenditure concepts."
+project_decision = "Keep S00300 in an import boundary and S00900 as an accounting reclassification with complete counterparts; do not treat either as domestic technology or zero cash."
+uncertainty = "The 2024 summary Other row does not reveal the two component amounts."
+test_ids = ["2017_s00300_use_output_identity", "2017_s00900_use_output_identity", "other_2024_component_allocation"]
+
+[[literature]]
+literature_id = "bea_scrap_byproduct_transform"
+authority = "U.S. Bureau of Economic Analysis"
+title = "Concepts and Methods of the U.S. Input-Output Accounts"
+version = "September 2006, updated March 2009"
+url = "https://www.bea.gov/sites/default/files/papers/WP2006-6.pdf"
+locator = "Chapter 12, printed page 12-12"
+document_sha256 = "535627e5e44f8461c0a04410f4a05c55d47f2e325d9473cb2df06e5d3e6b271d"
+accessed_on = "2026-08-06"
+source_fact = "BEA describes scrap as a byproduct that is not produced on demand and applies a nonscrap-ratio adjustment when deriving requirements tables."
+project_decision = "Current-production scrap may have ordinary-industry make placements, but the scrap transform does not explain used-asset transfers or transaction services."
+uncertainty = "The method is for analytical requirements-table transformation, not a 2024 component estimator."
+test_ids = ["2017_s00401_make_to_output", "project_2017_component_shares_to_2024"]
+
+[[literature]]
+literature_id = "sna_existing_asset_transfer"
+authority = "United Nations, European Commission, IMF, OECD, and World Bank"
+title = "System of National Accounts 2008"
+version = "2008 SNA"
+url = "https://unstats.un.org/unsd/nationalaccount/docs/SNA2008.pdf"
+locator = "Paragraphs 10.38 through 10.42 and 14.101 through 14.105"
+document_sha256 = "854883ffc5769747480561c78ba4099ec40257ca8f44d91a85f654b5e715a9b6"
+accessed_on = "2026-08-06"
+source_fact = "A resident seller records a negative acquisition and a resident purchaser a positive acquisition; the underlying transfer cancels economy-wide except for ownership-transfer costs. Cross-border movable assets and changes of purpose require their own counterparts."
+project_decision = "Preserve seller, purchaser, residence, purpose, and services; only the same-boundary underlying transfer has zero new product output."
+uncertainty = "The BEA summary row does not identify units, residence, asset classes, or transfer costs."
+test_ids = ["2017_s00402_use_output_identity", "dealer_service_allocation", "label_based_core_or_model_absorption"]
+
+[[literature]]
+literature_id = "sna_scrap_disposal"
+authority = "United Nations, European Commission, IMF, OECD, and World Bank"
+title = "System of National Accounts 2008"
+version = "2008 SNA"
+url = "https://unstats.un.org/unsd/nationalaccount/docs/SNA2008.pdf"
+locator = "Paragraphs 14.106 through 14.109"
+document_sha256 = "854883ffc5769747480561c78ba4099ec40257ca8f44d91a85f654b5e715a9b6"
+accessed_on = "2026-08-06"
+source_fact = "An existing asset sold as scrap is negative capital formation for the disposer and intermediate consumption for the processor; scrap-merchant services can be large relative to the acquired scrap value."
+project_decision = "Do not merge end-of-life asset disposal, current-production scrap, and merchant services."
+uncertainty = "The 2017 special row does not identify asset class or merchant service amounts."
+test_ids = ["2017_s00401_use_output_identity", "dealer_service_allocation"]
+
+[[literature]]
+literature_id = "esa_existing_goods_transfer"
+authority = "Eurostat"
+title = "European System of Accounts 2010"
+version = "ESA 2010, ISBN 978-92-79-31242-7"
+url = "https://ec.europa.eu/eurostat/documents/3859598/5925693/KS-02-13-269-EN.PDF.pdf/44cd9d01-bc64-40e5-bd40-d17df0c69334?t=1414781932000"
+locator = "Chapter 9, paragraph 9.47"
+document_sha256 = "9569393aefd24d7fed20e55f30e68850148004e45c70dd5af4eda73214349858"
+accessed_on = "2026-08-06"
+source_fact = "Existing goods are negative expenditure for the seller and positive expenditure for the purchaser; transaction costs are uses of services rather than part of the reclassification."
+project_decision = "Treat S00402 as a signed transfer witness only at the aggregate 2017 boundary and leave services separately blocked."
+uncertainty = "The source rule does not supply U.S. component magnitudes or a 2024 allocation."
+test_ids = ["2017_s00402_use_output_identity", "dealer_service_allocation"]
+
+[[literature]]
+literature_id = "un_byproduct_definition"
+authority = "United Nations"
+title = "Handbook on Supply and Use Tables and Input-Output Tables with Extensions and Applications"
+version = "United Nations 2018"
+url = "https://unstats.un.org/unsd/nationalaccount/docs/SUT_IOT_HB_Final_Cover.pdf"
+locator = "Paragraphs 2.70 through 2.72 and 12.26 through 12.28"
+document_sha256 = "1f7a882552e35ef12ff837d02b9a650d9afff12913e82fd68e700ff05d1e192e"
+accessed_on = "2026-08-06"
+source_fact = "Byproducts are necessarily produced with principal products, and extra principal output can create byproduct output without corresponding byproduct demand."
+project_decision = "Use S00401 make placements as current-production byproduct evidence while retaining its final-use supply/disposal as a distinct existing-good channel; do not treat the whole row as ordinary on-demand technology."
+uncertainty = "Byproduct transformation choice is analytical and does not identify a current-vintage split."
+test_ids = ["2017_s00401_make_to_output", "label_based_core_or_model_absorption"]
+
+[[literature]]
+literature_id = "un_used_scrap_trade_services"
+authority = "United Nations"
+title = "Handbook on Supply and Use Tables and Input-Output Tables with Extensions and Applications"
+version = "United Nations 2018"
+url = "https://unstats.un.org/unsd/nationalaccount/docs/SUT_IOT_HB_Final_Cover.pdf"
+locator = "Paragraphs 7.60 through 7.64, especially paragraph 7.63"
+document_sha256 = "1f7a882552e35ef12ff837d02b9a650d9afff12913e82fd68e700ff05d1e192e"
+accessed_on = "2026-08-06"
+source_fact = "Trade services related to used goods, waste, and scrap are non-margin trade-service output and do not form part of the standard valuation matrices."
+project_decision = "Do not infer a dealer percentage margin from the net Used row; require separate service evidence."
+uncertainty = "No corresponding 2017 or 2024 service cells are identified in this ledger."
+test_ids = ["dealer_service_allocation"]
+
+[[literature]]
+literature_id = "un_used_scrap_transport_services"
+authority = "United Nations"
+title = "Handbook on Supply and Use Tables and Input-Output Tables with Extensions and Applications"
+version = "United Nations 2018"
+url = "https://unstats.un.org/unsd/nationalaccount/docs/SUT_IOT_HB_Final_Cover.pdf"
+locator = "Box 7.2 and paragraphs 7.98 through 7.114, especially paragraphs 7.98, 7.112, and 7.113"
+document_sha256 = "1f7a882552e35ef12ff837d02b9a650d9afff12913e82fd68e700ff05d1e192e"
+accessed_on = "2026-08-06"
+source_fact = "Freight on used goods, scrap, and waste is not a transport margin in the valuation matrix, and transport costs are not plausibly proportional to product value."
+project_decision = "Keep separately invoiced transport as current service output and block any allocation from the special-row value."
+uncertainty = "Payer, mode, route, and service value are not observed in the special-account fixtures."
+test_ids = ["transport_service_allocation"]
+
+[[literature]]
+literature_id = "esa_trade_transport_valuation"
+authority = "Eurostat"
+title = "European System of Accounts 2010"
+version = "ESA 2010, ISBN 978-92-79-31242-7"
+url = "https://ec.europa.eu/eurostat/documents/3859598/5925693/KS-02-13-269-EN.PDF.pdf/44cd9d01-bc64-40e5-bd40-d17df0c69334?t=1414781932000"
+locator = "Chapter 9, paragraphs 9.38 through 9.42"
+document_sha256 = "9569393aefd24d7fed20e55f30e68850148004e45c70dd5af4eda73214349858"
+accessed_on = "2026-08-06"
+source_fact = "Trade and transport valuation depends on invoicing and distribution channels; separately purchased transport is a service use, while other transport may be in basic price or trade margin."
+project_decision = "Do not classify or allocate transport from the label Used or from the net special-row value."
+uncertainty = "The special-account fixtures contain no transaction-level invoicing evidence."
+test_ids = ["transport_service_allocation"]
+
+[[literature]]
+literature_id = "oecd_valuation_and_import_split"
+authority = "OECD and European Union"
+title = "Handbook on Extended Supply and Use Tables and Extended Input-Output Tables"
+version = "OECD/EU 2025, DOI 10.1787/e9fdcf85-en"
+url = "https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/04/handbook-on-extended-supply-and-use-tables-and-extended-input-output-tables_d85a746f/e9fdcf85-en.pdf"
+locator = "Chapter 3, steps 4 and 5, printed pages 79 through 83"
+document_sha256 = "24977fee60bc617af82e34c7f63ec5a57cb0c61018eaeefc59e02210439d1bd1"
+accessed_on = "2026-08-06"
+source_fact = "Valuation tables should be extended with relevant distribution-channel or survey evidence, and import use is split from domestic use before deriving the domestic table."
+project_decision = "Keep service valuation, imports, and domestic technology separate; do not use 2017 proportions as a 2024 substitute."
+uncertainty = "The handbook supplies a compilation framework, not the missing U.S. recipient or component cells."
+test_ids = ["project_2017_component_shares_to_2024", "other_2024_component_allocation"]

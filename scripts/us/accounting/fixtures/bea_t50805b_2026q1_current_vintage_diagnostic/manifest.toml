@@ -1,0 +1,46 @@
+accounting_gate_effect = "NONE"
+annual_rate_division_applied = false
+api_production_time_utc = "2026-08-06T02:44:47.180Z"
+classification = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+duplicate_policy = "PRESERVE_PUBLISHED_DUPLICATES; ADDRESS_BY_LINE; NEVER_SUM_ALL_STOCK_ROWS"
+duplicate_rows_double_counted = false
+duplicate_rows_preserved = true
+excluded_line_numbers = [25, 26, 27, 28, 29]
+fixture_row_count = 29
+fixture_sha256 = "43ee3f1764c3505f1f752b8115206113dc14d145d412d6b232be7d1656b4d7f4"
+flow_conversion_applied = false
+forecast_origin_admissible = false
+holder_to_commodity_bridge_applied = false
+holder_to_model_sector_mapping_applied = false
+inventory_stage_decomposition_applied = false
+last_revised = "July 30, 2026"
+latent_state_reconciliation_applied = false
+model_inventory_vector_emitted = false
+model_state_write_authorized = false
+projection = "All 29 published 2026Q1 rows, selectors, descriptions, units, values, note references, and explicit stock/exclusion roles."
+promotion_blockers = ["CURRENT_VINTAGE_NOT_FIRST_RELEASE_ORIGIN_EVIDENCE", "NO_HOLDER_TO_MODEL_SECTOR_MAPPING", "NO_HOLDER_TO_COMMODITY_BRIDGE", "NO_END_OF_QUARTER_PRICE_TO_MODEL_VALUATION_BRIDGE", "NO_INVENTORY_STAGE_DECOMPOSITION", "NO_STAGE_TO_MODEL_STOCK_SCOPE_BRIDGE", "NO_LATENT_STATE_RECONCILIATION"]
+promotion_ready = false
+published_ratio_rounding_tolerance = 0.005
+published_rounding_unit_millions = 1.0
+reference_period = "2026Q1"
+retrieval_completed_at_utc = "2026-08-06T02:50:58.965Z"
+schema_version = "beforeit-us-bea-inventory-stock-diagnostic.v1"
+source_byte_count = 44627
+source_content_fingerprint_sha256 = "e141b2edd846e8046af278b33e9fe3951e6416e03c41d953351b1784bc916ab1"
+source_metadata_sha256 = "8c06cc9ff25b0c13af8bd40cf594b6b6b1073a97ffd4cf344f76365f1cf0bb97"
+source_sha256 = "428eb140bc2977b78d65f55da0470e9d1eab2d75b2bba4ef021a4f1014bdefbe"
+source_wire_byte_count = 44641
+stage_to_model_stock_scope_bridge_applied = false
+stock_line_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+stock_time_semantics = "END_OF_QUARTER_LEVEL_NOT_AN_ANNUAL_RATE"
+table_name = "T50805B"
+valuation_basis = "CURRENT_DOLLARS_AT_RESPECTIVE_END_OF_QUARTER_PRICES"
+valuation_bridge_applied = false
+wire_payload_archived = false
+
+[source_notes]
+end_of_quarter = "1. Inventories are as of the end of the quarter. The quarter-to-quarter change in inventories calculated from current-dollar inventories in this table is not the current-dollar change in private inventories component of GDP. The former is the difference between two inventory stocks, each valued at its respective end-of-quarter prices. The latter is the change in the physical volume of inventories valued at average prices of the quarter. In addition, changes calculated from this table are at quarterly rates, whereas, the change in private inventories is stated at annual rates."
+final_sales = "2. Quarterly totals at monthly rates. Final sales of domestic business equals final sales of domestic product less gross output of general government, gross value added of nonprofit institutions, compensation paid to domestic workers, and imputed rental of owner-occupied nonfarm housing. It includes a small amount of final sales by farm and by government enterprises."
+naics = "Note. Estimates in this table are based on the North American Industry Classification System (NAICS)."
+table = "Table 5.8.5B. Private Inventories and Domestic Final Sales by Industry [Billions of dollars] - LastRevised: July 30, 2026"
+

@@ -1,0 +1,244 @@
+schema_version = "beforeit-us-production-reconciliation-candidate-ledger-contract.v1"
+contract_id = "us-ws2c-production-reconciliation-candidate-ledger-v1"
+classification = "CURRENT_VINTAGE_CANDIDATE_LEDGER_NOT_SOLVER_ADMITTED"
+artifact_role = "AUTHENTICATED_PRODUCTION_SCHEMA_AND_LINEAGE_CANDIDATE"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+scientific_scope = "Materialize the authenticated 2024 BEA after-redefinitions producer-price and imputed-import source cells, published margins, canonical lineage, and semantic overlays without synthetic benchmark fields, reliability claims, covariance weights, exact-control approvals, solver admission, balancing, model-state writes, origin admission, or forecast scores."
+
+target_country = "USA"
+target_reference_period = "CALENDAR_YEAR_2024"
+target_frequency = "ANNUAL"
+target_time_basis = "CALENDAR_YEAR_ACCOUNTING_FLOW"
+target_stock_flow_class = "FLOW"
+target_currency = "USD"
+target_unit = "MILLIONS_CURRENT_DOLLARS"
+target_price_basis = "PRODUCERS_PRICES"
+target_axis = "BEA_AFTER_REDEFINITIONS_68_CORE_PLUS_EXPLICIT_USED_OTHER_CLOSURE"
+problem_scope_hash = "scope1:9b41bd41ba5ba7f421aac0a3244cd58bf663fef36dcd507628af4d009cb69088"
+
+source_fixture_sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
+source_manifest_sha256 = "ff555043829e5d12ba787ba9ad7d58ef4f0d2ee306740d6847bdfec800935030"
+source_zip_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+source_metadata_sha256 = "8be9fbef6e2c18a7388cd61bd14312159fc3984d4dbc2c60158e977ee7f0e878"
+model_mapping_sha256 = "546b3dc15cbb194210ce564a44626b146551b161ca0ce5ffb90a8a5261b4553c"
+sector_mapping_sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+producer_adapter_contract_sha256 = "de524df56ad47fb1f26534019386b27f1fc45ebc927bda5f39c3ad812259cf58"
+inventory_evidence_contract_sha256 = "a82f6dd0be400f323d9630c33efa567a985521734f3cac72d763ee3db9d9d3ea"
+used_other_evidence_contract_sha256 = "326dc50276692c5623e23fe63085cb82742435b6c6b3d0a04676451426d9d128"
+
+canonical_key_policy = "Stable raw keys use typed length-prefixed source-member, year, projection, row/column type and code, unit, and price-basis fields. They exclude release hashes, values, positions, descriptions, and local view identifiers. Aggregated keys hash the normalized sorted parent-key functional."
+lineage_policy = "Raw lineage hashes bind the stable key to release, workbook, fixture, projection, authenticated positions, exact integer source token, and source state. Aggregated lineage hashes bind the mapping contract, transformation, and sorted parent keys and lineages. Pure coefficient-one selection preserves the raw key and lineage."
+selected_zero_policy = "A target is SOURCE_SELECTED_ZERO_NOT_SHOWN with raw_value absent only when every contributing source leaf is selected-zero-not-shown. Numeric cancellation to zero and published numeric zero remain SOURCE_EXPLICIT_NUMERIC_ZERO."
+overlay_policy = "Inventory F030 and Used/Other records are value-free semantic references to canonical cell or control owners. They contribute zero observations and zero solver weight."
+control_policy = "Published margins retain source state, canonical lineage, unresolved dependence, and no fixed or solver-active status. Five definitional identity families are materialized as unapproved candidates; approved exact-control count remains zero."
+solver_policy = "All cells and controls are quarantined. No conversion to a synthetic benchmark problem, reconciliation call, adjustment record, or solver artifact is implemented."
+
+production_cell_schema_fields = [
+    "cell_id",
+    "canonical_source_key",
+    "lineage_hash",
+    "source_family_id",
+    "source_artifact_sha256",
+    "source_projection_sha256",
+    "release_id",
+    "retrieved_at_utc",
+    "reference_period",
+    "frequency",
+    "time_basis",
+    "stock_flow_class",
+    "country",
+    "currency",
+    "unit",
+    "price_basis",
+    "valuation_basis",
+    "row_namespace",
+    "row_code",
+    "column_namespace",
+    "column_code",
+    "raw_value",
+    "cell_state",
+    "economic_type",
+    "negative_economic_type",
+    "sign_domain",
+    "counterpart_group_id",
+    "structural_zero_evidence_id",
+    "transformation_ids",
+    "reliability_class_id",
+    "covariance_group_id",
+    "solver_role",
+    "problem_scope_hash",
+    "approval_id",
+    "provenance",
+]
+
+production_control_schema_fields = [
+    "control_id",
+    "control_kind",
+    "term_cell_ids",
+    "coefficients",
+    "rhs",
+    "rhs_state",
+    "country",
+    "reference_period",
+    "frequency",
+    "time_basis",
+    "stock_flow_class",
+    "currency",
+    "unit",
+    "price_basis",
+    "valuation_basis",
+    "source_artifact_sha256s",
+    "source_projection_sha256s",
+    "release_id",
+    "retrieved_at_utc",
+    "canonical_control_key",
+    "lineage_hash",
+    "transformation_ids",
+    "rounding_or_measurement_model",
+    "independence_status",
+    "fixed_status",
+    "problem_scope_hash",
+    "approval_id",
+    "provenance",
+]
+
+forecast_origin_admissible = false
+promotion_ready = false
+model_state_write = false
+accounting_gate_effect = "NONE"
+forecast_score_effect = "NONE"
+solver_invocation_count = 0
+solver_input_cell_count = 0
+solver_input_control_count = 0
+approved_exact_control_count = 0
+approved_structural_zero_count = 0
+adjustment_record_count = 0
+promotion_blockers = [
+    "SOURCE_SELECTED_ZERO_CENSORING_POLICY_NOT_APPROVED",
+    "SOURCE_STRUCTURAL_ZERO_EVIDENCE_INCOMPLETE",
+    "CELL_LEVEL_NEGATIVE_ECONOMIC_TYPES_INCOMPLETE",
+    "PRODUCTION_RELIABILITY_CLASSES_NOT_APPROVED",
+    "PRODUCTION_COVARIANCE_MODEL_NOT_APPROVED",
+    "EXACT_CONTROL_SET_NOT_INDEPENDENTLY_APPROVED",
+    "IMPORT_BOUNDARY_NOT_SELECTED",
+    "USED_OTHER_2024_COMPONENT_AND_SERVICE_BRIDGE_UNRESOLVED",
+    "CURRENT_VINTAGE_NOT_FORECAST_ORIGIN_ELIGIBLE",
+    "PRODUCTION_SCOPE_APPROVAL_NOT_RECORDED",
+]
+
+[implementation]
+module_path = "scripts/us/accounting/USProductionReconciliationLedger.jl"
+module_hash_policy = "SHA256_AFTER_REPLACING_SINGLE_APPROVED_CONTRACT_HASH_LITERAL_WITH_64_ZEROES"
+module_normalized_sha256 = "5a8ded33bc8ff53132a7252015959dd915535b14082b56ef97b70e021c565d61"
+runner_path = "scripts/us/accounting/run_production_reconciliation_candidate_ledger.jl"
+runner_sha256 = "96cf9ebe9a48e68d39311daad8af91d90766f94960d8d670e90021a834a2412a"
+
+[expected]
+target_raw_source_leaf_count = 18826
+control_raw_source_leaf_count = 602
+source_lineage_member_count = 19428
+candidate_cell_count = 17422
+producer_system_cell_count = 11262
+import_evidence_cell_count = 6160
+core_cell_count = 16932
+used_other_cell_count = 490
+numeric_nonzero_cell_count = 6746
+explicit_numeric_zero_cell_count = 563
+selected_zero_not_shown_cell_count = 10113
+negative_cell_count = 129
+candidate_control_count = 924
+candidate_identity_count = 346
+candidate_identity_term_count = 27080
+candidate_identity_structural_rank = 346
+published_control_count = 578
+numeric_control_count = 527
+selected_zero_not_shown_control_count = 51
+used_other_control_count = 10
+f030_overlay_count = 70
+used_other_overlay_count = 518
+overlay_count = 588
+unique_overlay_owner_count = 568
+lineage_relation_count = 925
+solver_input_cell_count = 0
+solver_input_control_count = 0
+approved_exact_control_count = 0
+approved_structural_zero_count = 0
+adjustment_record_count = 0
+
+[[artifact]]
+artifact_id = "after_redefinitions_cells"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_common_basis_approved/cells.csv"
+sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
+role = "CANONICAL_SOURCE_CELLS"
+
+[[artifact]]
+artifact_id = "after_redefinitions_manifest"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_common_basis_approved/manifest.toml"
+sha256 = "ff555043829e5d12ba787ba9ad7d58ef4f0d2ee306740d6847bdfec800935030"
+role = "SOURCE_PROJECTION_AND_RELEASE_MANIFEST"
+
+[[artifact]]
+artifact_id = "model_core_mapping"
+path = "scripts/us/accounting/after_redefinitions_model_core_mapping.toml"
+sha256 = "546b3dc15cbb194210ce564a44626b146551b161ca0ce5ffb90a8a5261b4553c"
+role = "CODE_KEYED_RETAIL_AND_CLOSURE_MAPPING"
+
+[[artifact]]
+artifact_id = "sector_mapping"
+path = "scripts/us/bea71.toml"
+sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+role = "MODEL_AXIS_CONTRACT"
+
+[[artifact]]
+artifact_id = "producer_adapter_contract"
+path = "scripts/us/accounting/after_redefinitions_producer_price_adapter_candidate.toml"
+sha256 = "de524df56ad47fb1f26534019386b27f1fc45ebc927bda5f39c3ad812259cf58"
+role = "TYPED_UPSTREAM_ADAPTER_CANDIDATE"
+
+[[artifact]]
+artifact_id = "inventory_evidence_contract"
+path = "scripts/us/accounting/inventory_transition_evidence_ledger.toml"
+sha256 = "a82f6dd0be400f323d9630c33efa567a985521734f3cac72d763ee3db9d9d3ea"
+role = "F030_SEMANTIC_VIEW_CONTRACT"
+
+[[artifact]]
+artifact_id = "used_other_evidence_contract"
+path = "scripts/us/accounting/used_other_evidence_ledger.toml"
+sha256 = "326dc50276692c5623e23fe63085cb82742435b6c6b3d0a04676451426d9d128"
+role = "USED_OTHER_SEMANTIC_VIEW_CONTRACT"
+
+[[artifact]]
+artifact_id = "valuation_contract"
+path = "scripts/us/accounting/after_redefinitions_valuation_envelope.toml"
+sha256 = "110f82037e45e1de3ce4f5a1df2b7982d064e90a9323f255c7441452fa6d2ede"
+role = "UPSTREAM_VALUATION_BOUNDARY"
+
+[[artifact]]
+artifact_id = "final_use_contract"
+path = "scripts/us/accounting/after_redefinitions_final_use_envelope.toml"
+sha256 = "b4e3969a52618b4e462b8e468ada784dda85cae86550fb27659d2afbb4cbb2be"
+role = "UPSTREAM_FINAL_USE_BOUNDARY"
+
+[[artifact]]
+artifact_id = "supply_cells"
+path = "scripts/us/accounting/fixtures/bea_2024_approved/cells.csv"
+sha256 = "c4461fbe971d8fb70750ff4cce6bb09e582a024d7cc1f6e8ebd8e3685bab69e0"
+role = "UPSTREAM_SUPPLY_CONTROL_FIXTURE"
+
+[[artifact]]
+artifact_id = "supply_manifest"
+path = "scripts/us/accounting/fixtures/bea_2024_approved/manifest.toml"
+sha256 = "564a99ec2011b2566b8951e9eecb4737c0bfbc88f1e077b1eaf596af9894575c"
+role = "UPSTREAM_SUPPLY_CONTROL_MANIFEST"
+
+[[artifact]]
+artifact_id = "methodology_pdf"
+path = "scripts/us/accounting/fixtures/bea_io_concepts_methods_2006_approved/Concepts_and_Methods_US_IO_Accounts_2006.pdf"
+sha256 = "535627e5e44f8461c0a04410f4a05c55d47f2e325d9473cb2df06e5d3e6b271d"
+role = "USED_OTHER_SEMANTIC_METHOD_SOURCE"
+
+[[artifact]]
+artifact_id = "methodology_receipt"
+path = "scripts/us/accounting/fixtures/bea_io_concepts_methods_2006_approved/receipt.toml"
+sha256 = "b4b210be3c364415473f1ef407ed7ea6e9edc2b299bd1058c1658b0ebb3b91ac"
+role = "USED_OTHER_SEMANTIC_METHOD_RECEIPT"

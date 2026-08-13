@@ -1,0 +1,341 @@
+schema_version = "beforeit-us-inventory-transition-evidence-ledger-contract.v1"
+contract_id = "us-inventory-transition-evidence-ledger-v1"
+classification = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+scientific_role = "Fail-closed, source-aware evidence ledger that keeps quarterly aggregate inventory flow, end-of-quarter holder stock, annual after-redefinitions producer-price commodity flow, and synthetic stage identities in separate namespaces. Legacy Table 259 purchasers-price F030 is a different valuation/source boundary and is not loaded or combined here. The ledger supplies no stock transition, crosswalk, model vector, S_s, runtime state, accounting gate, or forecast-origin claim."
+observation_schema_version = "beforeit-us-inventory-evidence-observation.v1"
+check_schema_version = "beforeit-us-inventory-evidence-check.v1"
+transition_schema_version = "beforeit-us-inventory-transition-assessment.v1"
+missing_value_policy = "ABSENT_IS_STRUCTURALLY_MISSING_NOT_NUMERIC_ZERO"
+zero_policy = "PRESERVE_SOURCE_EXPLICIT_NUMERIC_ZERO_SEPARATELY_FROM_SELECTED_ZERO_NOT_SHOWN"
+duplicate_policy = "PRESERVE_PUBLISHED_T50805B_DUPLICATES_BY_LINE_AND_NEVER_SUM_HIERARCHIES"
+namespace_policy = "HOLDER_COMMODITY_AND_STAGE_AXES_ARE_DISJOINT_AND_FULLY_QUALIFIED"
+stock_transition_policy = "NEVER_EQUATE_END_OF_PERIOD_CURRENT_DOLLAR_STOCK_DIFFERENCES_TO_CIPI_WITHOUT_PRIOR_STOCK_AND_VALUATION_TERMS"
+t10105_conversion_policy = "COPY_PINNED_QUARTERLY_FIXTURE_VALUES_ALREADY_DIVIDED_FROM_SAAR_BY_4_EXACTLY_ONCE"
+f030_frequency_policy = "PRESERVE_SIGNED_2024_ANNUAL_PRODUCER_PRICE_FLOW_WITHOUT_DIVISION_BY_4"
+forecast_origin_admissible = false
+promotion_ready = false
+model_inventory_vector_emitted = false
+s_s_emitted = false
+model_state_write = false
+accounting_gate_effect = "NONE"
+
+[expected]
+observation_count = 218
+evidentiary_observation_count = 213
+non_evidentiary_observation_count = 5
+source_check_count = 19
+blocked_transition_count = 8
+t10105_period_count = 119
+t10105_positive_count = 94
+t10105_negative_count = 25
+t10105_zero_count = 0
+t10105_maximum_gpdi_residual_millions = 0.25
+t10105_maximum_expenditure_residual_millions = 0.5
+t10105_2024_total_millions = 53546.0
+t50805b_published_row_count = 29
+t50805b_stock_row_count = 24
+t50805b_reference_period_count = 1
+t50805b_private_total_millions = 4223030.0
+t50805b_duplicate_total_millions = 4223030.0
+f030_core_count = 68
+f030_closure_count = 2
+f030_core_total_millions = 44095.0
+f030_closure_total_millions = 9450.0
+f030_core_closure_cell_total_millions = 53545.0
+f030_published_column_control_millions = 53546.0
+f030_cell_minus_published_control_millions = -1.0
+f030_core_negative_count = 7
+f030_closure_negative_count = 0
+f030_explicit_count = 33
+f030_published_control_minus_t10105_2024_millions = 0.0
+synthetic_comparator_count = 5
+model_vector_output_count = 0
+s_s_output_count = 0
+state_write_count = 0
+gate_effect_count = 0
+origin_admissible_output_count = 0
+
+[rounding]
+f030_published_annual_control_tolerance_millions = 0.5
+f030_source_cell_count = 73
+f030_cells_to_control_tolerance_millions = 37.0
+t10105_converted_quarter_tolerance_millions = 0.125
+t10105_2024_quarter_count = 4
+t10105_2024_sum_tolerance_millions = 0.5
+combined_cross_source_tolerance_millions = 1.0
+cross_source_correction_applied = false
+
+[implementation]
+module_path = "scripts/us/accounting/USInventoryTransitionEvidenceLedger.jl"
+module_hash_policy = "SHA256_AFTER_REPLACING_SINGLE_APPROVED_CONTRACT_HASH_LITERAL_WITH_64_ZEROES"
+module_normalized_sha256 = "0bfb02fe132a2e5d53e5b916e0143b1b059088d0cd24251be8f623af16cff6ac"
+runner_path = "scripts/us/accounting/run_inventory_transition_evidence_ledger.jl"
+runner_sha256 = "7028a96cd098a7ff78071c4f7dab92eefdc4687dd584a4c375dae682241a27eb"
+
+[namespaces]
+holder = [
+    "BEA_NIPA_PRIVATE_INVENTORY_AGGREGATE",
+    "BEA_NIPA_T50805B_HOLDER_LINE",
+    "SYNTHETIC_PRIVATE_HOLDER",
+    "SYNTHETIC_M3_HOLDER",
+]
+commodity = [
+    "BEA_IO_2024_CORE_COMMODITY",
+    "BEA_IO_2024_CLOSURE_COMMODITY",
+]
+stage = ["SYNTHETIC_INVENTORY_STAGE"]
+axes_disjoint = true
+other_label_policy = "BEA_IO closure commodity Other is not T50805B Other industries, T50805B Other retail stores, or an inventory stage."
+
+[f030_aggregation]
+source_projection_id = "producer_final_use_2024"
+source_projection_sha256 = "205d6c126efc27ba07e89b262e27f81f9bcb7200d679ce039a5aaa7a889e6fbb"
+source_column_code = "F030"
+source_year = 2024
+source_frequency = "ANNUAL"
+source_price_basis = "PRODUCERS_PRICES"
+aggregation_policy = "CODE_KEYED_RETAIL_SUM_TO_68_CORE_WITH_USED_OTHER_AS_SEPARATE_CLOSURE"
+retail_source_codes = ["441", "445", "452", "4A0"]
+retail_target_code = "4A0"
+closure_codes = ["Used", "Other"]
+quarterly_conversion_applied = false
+clipping_applied = false
+balancing_applied = false
+closure_allocation_applied = false
+
+[[artifact]]
+artifact_id = "t10105_manifest"
+path = "scripts/us/accounting/fixtures/bea_t10105_2026-08-04/manifest.toml"
+sha256 = "81ac0cd9da4db3cd750a5a1b618631c747a0b51ef40e6cefd4c27ad41f64c72f"
+role = "SOURCE_FIXTURE_MANIFEST"
+
+[[artifact]]
+artifact_id = "t10105_cells"
+path = "scripts/us/accounting/fixtures/bea_t10105_2026-08-04/quarterly_controls.csv"
+sha256 = "c453fbdb52cec412ffe41a4d6b791dd6e7432319d6276ea62fef10421414462f"
+role = "SOURCE_FIXTURE_CELLS"
+
+[[artifact]]
+artifact_id = "t50805b_manifest"
+path = "scripts/us/accounting/fixtures/bea_t50805b_2026q1_current_vintage_diagnostic/manifest.toml"
+sha256 = "c1e7c6aa1469557844307478170c9d4820898a49e67c258da49c0c596cbab3f6"
+role = "SOURCE_FIXTURE_MANIFEST"
+
+[[artifact]]
+artifact_id = "t50805b_cells"
+path = "scripts/us/accounting/fixtures/bea_t50805b_2026q1_current_vintage_diagnostic/cells.csv"
+sha256 = "43ee3f1764c3505f1f752b8115206113dc14d145d412d6b232be7d1656b4d7f4"
+role = "SOURCE_FIXTURE_CELLS"
+
+[[artifact]]
+artifact_id = "after_redefinitions_manifest"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_common_basis_approved/manifest.toml"
+sha256 = "ff555043829e5d12ba787ba9ad7d58ef4f0d2ee306740d6847bdfec800935030"
+role = "SOURCE_FIXTURE_MANIFEST"
+
+[[artifact]]
+artifact_id = "after_redefinitions_cells"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_common_basis_approved/cells.csv"
+sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
+role = "SOURCE_FIXTURE_CELLS"
+
+[[artifact]]
+artifact_id = "model_core_mapping"
+path = "scripts/us/accounting/after_redefinitions_model_core_mapping.toml"
+sha256 = "546b3dc15cbb194210ce564a44626b146551b161ca0ce5ffb90a8a5261b4553c"
+role = "CODE_KEYED_AGGREGATION_MAPPING"
+
+[[artifact]]
+artifact_id = "sector_mapping"
+path = "scripts/us/bea71.toml"
+sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
+role = "MODEL_CORE_AXIS_CONTRACT"
+
+[[artifact]]
+artifact_id = "synthetic_stage_manifest"
+path = "scripts/us/accounting/fixtures/inventory_stock_ledger_contract_v1/manifest.toml"
+sha256 = "60d011228150a9ce7f8ade01b4bf74c32de5ef103584c54f7ba6e6372c592af6"
+role = "SYNTHETIC_NON_EVIDENTIARY_FIXTURE_MANIFEST"
+
+[[artifact]]
+artifact_id = "synthetic_stage_cells"
+path = "scripts/us/accounting/fixtures/inventory_stock_ledger_contract_v1/inventory_stock_ledger.csv"
+sha256 = "809501fd6d0c34ca9312936e762ed691575ea51c847999b8c33b5423a05a0936"
+role = "SYNTHETIC_NON_EVIDENTIARY_FIXTURE_CELLS"
+
+[[artifact]]
+artifact_id = "reader_t10105"
+path = "scripts/us/accounting/UST10105Controls.jl"
+sha256 = "bed5f489b7096bc94f613a8c36449d386e81bf8fb238aad090a02551b967a47e"
+role = "PINNED_READER"
+
+[[artifact]]
+artifact_id = "reader_t50805b"
+path = "scripts/us/accounting/USBEAInventoryStockDiagnostic.jl"
+sha256 = "cc54231577fb4c9bfc6cff3aabbae39e26f4b8175d13f420ed1956ac68b84cb4"
+role = "PINNED_READER"
+
+[[artifact]]
+artifact_id = "reader_supply_make"
+path = "scripts/us/accounting/USSupplyMakeDiagnostics.jl"
+sha256 = "23e02af263eb65db6782b5a734f46afe845ab89f6a2fa760d8a71057a61a3f84"
+role = "PINNED_READER_DEPENDENCY"
+
+[[artifact]]
+artifact_id = "reader_symmetric_supply_use"
+path = "scripts/us/accounting/USSymmetricSupplyUse.jl"
+sha256 = "e5754cdf9e04b36f9f158d1e311d43ca76ba513bb00db069b8e573d209bb9ec2"
+role = "PINNED_READER_DEPENDENCY"
+
+[[artifact]]
+artifact_id = "reader_requirements"
+path = "scripts/us/accounting/USRequirementsDiagnostics.jl"
+sha256 = "2c3344636ad40bed2e0d8bbdc9e3468532c4ac8bff96e8e5b575bdc6108c1b31"
+role = "PINNED_READER_DEPENDENCY"
+
+[[artifact]]
+artifact_id = "reader_after_redefinitions"
+path = "scripts/us/accounting/USAfterRedefinitionsCommonBasis.jl"
+sha256 = "d572363298216f93f5d193eadd9546c5556126f0773d76348b208275c1eb9058"
+role = "PINNED_READER"
+
+[[artifact]]
+artifact_id = "reader_model_core"
+path = "scripts/us/accounting/USAfterRedefinitionsModelCore.jl"
+sha256 = "3f560a9d711a2d52c9da0faf8c5aa8269f572405e3ec2d0ad6d8b974618f5ef9"
+role = "PINNED_READER"
+
+[[artifact]]
+artifact_id = "reader_synthetic_stage"
+path = "scripts/us/accounting/USInventoryStockLedger.jl"
+sha256 = "fd0438806185674332ccb0a8b43ffdb845a7d73a0e24ca0be0e07715f2d42b90"
+role = "PINNED_READER"
+
+[[artifact]]
+artifact_id = "scripts_us_project"
+path = "scripts/us/Project.toml"
+sha256 = "72cec6cb6dc64dc71b9e342890b78afbf8fd66cb97dd8603e4fe905ad137dc1c"
+role = "REPRODUCIBILITY_ENVIRONMENT"
+
+[[artifact]]
+artifact_id = "scripts_us_manifest"
+path = "scripts/us/Manifest.toml"
+sha256 = "c2e596cf8452c5b890bb0ef66c05bc72a57fa25ab6f8fe790f8db4600b035263"
+role = "REPRODUCIBILITY_ENVIRONMENT"
+
+[[source]]
+source_id = "bea_nipa_t10105_cipi"
+evidence_role = "SOURCE_DERIVED_EXACT_UNIT_CONVERSION"
+manifest_artifact_id = "t10105_manifest"
+data_artifact_id = "t10105_cells"
+source_status = "APPROVED_ARCHIVED_CURRENT_VINTAGE_REVISED"
+source_sha256 = "a80351ce2daeccd5994caea385c6ee9f5201fa46ce0c4cab3e7fa19fc8dec574"
+metadata_sha256 = "3e8a0d6e91237e22ee2805ba2abbce6ee746085e395d443e991921a97bee06ba"
+stock_flow_class = "FLOW"
+frequency = "QUARTERLY"
+reference_scope = "1996Q4_THROUGH_2026Q2"
+time_basis = "QUARTER_TOTAL"
+price_basis = "CURRENT_DOLLARS"
+valuation_basis = "PHYSICAL_VOLUME_CHANGE_AT_AVERAGE_QUARTER_PRICES"
+published_rate_basis = "SOURCE_SAAR_DIVIDED_BY_4_EXACTLY_ONCE_UPSTREAM"
+forecast_origin_admissible = false
+
+[[source]]
+source_id = "bea_nipa_t50805b_holder_stocks"
+evidence_role = "DIRECTLY_PUBLISHED_CURRENT_VINTAGE_DIAGNOSTIC"
+manifest_artifact_id = "t50805b_manifest"
+data_artifact_id = "t50805b_cells"
+source_status = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+source_sha256 = "428eb140bc2977b78d65f55da0470e9d1eab2d75b2bba4ef021a4f1014bdefbe"
+metadata_sha256 = "8c06cc9ff25b0c13af8bd40cf594b6b6b1073a97ffd4cf344f76365f1cf0bb97"
+stock_flow_class = "STOCK"
+frequency = "QUARTERLY"
+reference_scope = "2026Q1_ONLY"
+time_basis = "END_OF_QUARTER_LEVEL"
+price_basis = "CURRENT_DOLLARS_AT_RESPECTIVE_END_OF_QUARTER_PRICES"
+valuation_basis = "CURRENT_COST_HOLDER_STOCK"
+published_rate_basis = "LEVEL_NOT_ANNUAL_RATE"
+forecast_origin_admissible = false
+
+[[source]]
+source_id = "bea_after_redefinitions_producer_price_2024_f030"
+evidence_role = "SOURCE_DERIVED_CODE_KEYED_AGGREGATION"
+manifest_artifact_id = "after_redefinitions_manifest"
+data_artifact_id = "after_redefinitions_cells"
+source_status = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+source_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+metadata_sha256 = "8be9fbef6e2c18a7388cd61bd14312159fc3984d4dbc2c60158e977ee7f0e878"
+stock_flow_class = "FLOW"
+frequency = "ANNUAL"
+reference_scope = "CALENDAR_YEAR_2024"
+time_basis = "ANNUAL_TOTAL"
+price_basis = "PRODUCERS_PRICES"
+valuation_basis = "PRODUCER_PRICE_FINAL_USE_F030"
+published_rate_basis = "ANNUAL_NOT_SAAR_NOT_DIVIDED_BY_4"
+forecast_origin_admissible = false
+
+[[source]]
+source_id = "synthetic_inventory_stage_comparator"
+evidence_role = "SYNTHETIC_NON_EVIDENTIARY_COMPARATOR"
+manifest_artifact_id = "synthetic_stage_manifest"
+data_artifact_id = "synthetic_stage_cells"
+source_status = "SYNTHETIC_CONTRACT_FIXTURE_NOT_SOURCE_EVIDENCE"
+source_sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+metadata_sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+stock_flow_class = "STOCK"
+frequency = "SYNTHETIC_MIXED"
+reference_scope = "SYNTHETIC_2026Q1"
+time_basis = "SYNTHETIC_END_OF_PERIOD"
+price_basis = "SYNTHETIC_DECLARED_VALUATION"
+valuation_basis = "SYNTHETIC_ONLY"
+published_rate_basis = "NOT_APPLICABLE_SYNTHETIC"
+forecast_origin_admissible = false
+
+[[blocked_transition]]
+transition_id = "t50805b_prior_stock_transition"
+blocker = "PRIOR_PERIOD_T50805B_STOCK_SLICE_NOT_PINNED"
+required_evidence = "A byte-pinned, release-bound prior-quarter T50805B holder-stock slice on the identical source basis."
+basis = "The pinned T50805B fixture contains only 2026Q1 end-of-quarter holder stocks, so no stock difference is observable."
+
+[[blocked_transition]]
+transition_id = "t50805b_stock_difference_to_t10105_cipi"
+blocker = "STOCK_FLOW_REVALUATION_AND_TIMING_TERMS_NOT_PINNED"
+required_evidence = "Inventory valuation adjustment, price-change, physical-volume, and average-quarter versus end-quarter timing terms."
+basis = "BEA explicitly states that differences of current-dollar end-of-quarter stocks are not the current-dollar CIPI component of GDP."
+
+[[blocked_transition]]
+transition_id = "t50805b_holder_to_f030_commodity"
+blocker = "HOLDER_TO_COMMODITY_CROSSWALK_NOT_PINNED"
+required_evidence = "A source-supported, versioned holder-industry to commodity allocation with uncertainty and conservation controls."
+basis = "T50805B is organized by inventory holder, while F030 is organized by commodity; equal labels do not identify an allocation."
+
+[[blocked_transition]]
+transition_id = "f030_annual_to_t10105_quarterly"
+blocker = "ANNUAL_COMMODITY_TO_QUARTERLY_AGGREGATE_ALLOCATION_NOT_PINNED"
+required_evidence = "A source-supported temporal allocation from annual commodity F030 flows to quarterly aggregate CIPI."
+basis = "The signed annual F030 commodity vector must not be divided by four; the aggregate annual comparison is descriptive and source-rounded only."
+
+[[blocked_transition]]
+transition_id = "observed_holder_to_inventory_stage"
+blocker = "OBSERVED_INVENTORY_STAGE_DECOMPOSITION_NOT_PINNED"
+required_evidence = "Observed source bytes linking holder stocks to materials, work-in-process, and finished-goods stages."
+basis = "The available stage ledger is synthetic contract data and cannot supply empirical stage shares."
+
+[[blocked_transition]]
+transition_id = "used_other_closure_transition"
+blocker = "USED_OTHER_INVENTORY_TRANSITION_TREATMENT_NOT_PINNED"
+required_evidence = "A source-supported treatment of BEA Used and Other closure commodities in inventory accumulation and valuation."
+basis = "The closure commodity Other is distinct from T50805B holder labels containing Other and cannot be absorbed by a name match."
+
+[[blocked_transition]]
+transition_id = "current_vintage_to_forecast_origin"
+blocker = "CURRENT_VINTAGE_RELEASE_STATE_NOT_FORECAST_ORIGIN_ELIGIBLE"
+required_evidence = "Prospectively captured or independently reconstructed release-state artifacts available at each forecast origin."
+basis = "T50805B and F030 are current-vintage diagnostics, and the revised T10105 history is not a first-release origin package."
+
+[[blocked_transition]]
+transition_id = "evidence_to_model_inventory_state"
+blocker = "MODEL_STOCK_SCOPE_PRICE_AND_LATENT_STATE_RECONCILIATION_NOT_PINNED"
+required_evidence = "A model-stock scope definition, valuation adapter, holder/commodity/stage bridge, and latent-state reconciliation protocol."
+basis = "Evidence rows cannot emit a 68-sector inventory vector, S_s, initial conditions, runtime state, accounting gate, or promotion claim."
