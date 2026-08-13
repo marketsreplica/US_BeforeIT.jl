@@ -1,59 +1,155 @@
 """
-    mztest(y::Vector{Float64}, x::Vector{Float64})
+    mztest(y, forecast;
+        covariance = :hac,
+        horizon = 1,
+        kernel = :bartlett,
+        small_sample = true,
+        reference = :f)
 
-Conducts the Mincer-Zarnowitz test for forecast accuracy. 
+Run the Mincer-Zarnowitz regression
 
-# Arguments
-- `y::Vector{Float64}`: A vector of actual values.
-- `x::Vector{Float64}`: A vector of forecasted values.
+`yₜ = α + β forecastₜ + uₜ`
 
-# Returns
-- `c::Float64`: Intercept of the regression model.
-- `beta::Float64`: Slope of the regression model.
-- `p_value::Float64`: p-value for the joint hypothesis test that the intercept is 0 and the slope is 1.
+and jointly test `H₀: α = 0, β = 1`. The return value remains
+`(intercept, slope, p_value)`.
 
-The MZ test, or the Mincer-Zarnowitz test, is a method used in econometrics to assess the accuracy of forecast models. 
-It involves regressing the actual values on the forecasted values and checking the coefficients. 
-Specifically, if the forecasts are unbiased and efficient, the intercept should be zero and the slope 
-should be one in the regression of actual values on forecasted values. 
-The test involves the following steps:
+The regression is solved on a centered and scaled forecast column rather than
+by explicitly inverting `X'X`. The default covariance is a heteroskedasticity-
+and-autocorrelation-consistent sandwich estimator with Bartlett weights through
+lag `horizon - 1`; at `horizon = 1` this is HC1. Set `covariance = :hc0`,
+`:hc1`, or `:homoskedastic` for those alternatives. `reference = :f` compares
+the robust Wald statistic divided by two with `F(2, n - 2)`;
+`reference = :chisq` provides the asymptotic Wald test used by the old
+implementation.
 
-1. Estimate the Regression Model: Regress the actual values (y) on the forecasted values (x):
-
-y_t = \alpha + \beta x_t + \epsilon_t
-
-where y_t are the actual values, x_t are the forecasted values, \alpha is the intercept, \beta is the slope, and \epsilon_t is the error term.
-2.  Test the Hypotheses:
-•   Unbiasedness: Test the null hypothesis H_0: \alpha = 0.
-•   Efficiency: Test the null hypothesis H_0: \beta = 1.
-
-If the forecasts are unbiased and efficient, the intercept (\alpha) should be zero and the slope (\beta) should be one. 
-The joint test can be conducted using an F-test.
+Constant forecasts, invalid samples, and singular Wald covariance estimates
+throw explicit errors.
 """
-function mztest(y::Vector{Float64}, x::Vector{Float64})
-    # Fit a linear model
+function mztest(
+        y::AbstractVector{<:Real},
+        forecast::AbstractVector{<:Real};
+        covariance::Symbol = :hac,
+        horizon::Integer = 1,
+        kernel::Symbol = :bartlett,
+        small_sample::Bool = true,
+        reference::Symbol = :f
+    )
+    length(y) == length(forecast) ||
+        throw(DimensionMismatch("actual and forecast vectors must have equal length"))
+    actual = _forecast_test_sample(y, "y"; minimum_length = 3)
+    predicted = _forecast_test_sample(forecast, "forecast"; minimum_length = 3)
+    n = length(actual)
+    k = 2
 
-    X = hcat(ones(length(x)), x)
-    n, k = size(X)
+    covariance in (:hac, :hc0, :hc1, :homoskedastic) ||
+        throw(ArgumentError("covariance must be :hac, :hc0, :hc1, or :homoskedastic"))
+    reference in (:f, :chisq) ||
+        throw(ArgumentError("reference must be :f or :chisq"))
+    if covariance == :hac
+        _forecast_test_horizon(horizon, n; strict = true)
+        _forecast_kernel_weight(kernel, 0, horizon - 1)
+    elseif horizon != 1
+        throw(ArgumentError("horizon only applies when covariance = :hac"))
+    end
 
-    β = inv(X'X) * X'y
+    forecast_mean = mean(predicted)
+    centered_forecast = predicted .- forecast_mean
+    forecast_scale = sqrt(sum(abs2, centered_forecast) / n)
+    isfinite(forecast_scale) && forecast_scale > 0 ||
+        throw(
+        ArgumentError(
+            "forecast is constant or numerically unscalable, so the Mincer-Zarnowitz slope is unidentified"
+        )
+    )
 
-    # Calculate residuals
-    residuals = y - X * β
+    standardized_forecast = centered_forecast ./ forecast_scale
+    design = hcat(ones(n), standardized_forecast)
+    standardized_coefficients = design \ actual
+    residuals = actual - design * standardized_coefficients
+    residual_tolerance =
+        100 * eps(Float64) * max(norm(actual), norm(design * standardized_coefficients))
+    norm(residuals) > residual_tolerance || throw(
+        DomainError(
+            norm(residuals),
+            "Mincer-Zarnowitz residual variance is numerically zero, so inference is undefined"
+        )
+    )
 
-    # Estimate variance of the residuals
-    σ² = sum(residuals .^ 2) / (n - k)
+    covariance_standardized = _mz_coefficient_covariance(
+        design,
+        residuals,
+        covariance,
+        Int(horizon),
+        kernel,
+        small_sample
+    )
+    transformation = [
+        1.0 -forecast_mean / forecast_scale
+        0.0 1 / forecast_scale
+    ]
+    coefficients = transformation * standardized_coefficients
 
-    # Calculate standard errors of the coefficients
-    var_β = σ² * inv(X'X)
+    # Under α = 0 and β = 1, the coefficients in the standardized regression
+    # are (forecast_mean, forecast_scale). Evaluating the Wald statistic in this
+    # well-conditioned parameterization avoids destroying precision when the
+    # forecast level is large relative to its variation.
+    difference =
+        standardized_coefficients .- [forecast_mean, forecast_scale]
+    eigenvalues = eigvals(covariance_standardized)
+    covariance_scale = maximum(abs, eigenvalues)
+    tolerance = 100 * eps(Float64) * covariance_scale
+    minimum(eigenvalues) > tolerance || throw(
+        DomainError(
+            minimum(eigenvalues),
+            "Mincer-Zarnowitz Wald covariance is singular or numerically degenerate"
+        )
+    )
 
-    # Perform the Wald test for the hypothesis that both coefficients are equal to their respective values in the null hypothesis
-    H0 = [0, 1]
+    wald = dot(difference, covariance_standardized \ difference)
+    wald >= -100 * eps(Float64) * max(abs(wald), 1.0) ||
+        throw(DomainError(wald, "Mincer-Zarnowitz Wald statistic is negative"))
+    wald = max(wald, 0.0)
+    p_value = if reference == :f
+        ccdf(FDist(2, n - k), wald / 2)
+    else
+        ccdf(Chisq(2), wald)
+    end
+    return coefficients[1], coefficients[2], p_value
+end
 
-    coef_diff = β .- H0
-    test_statistic = coef_diff' * inv(var_β) * coef_diff
-    df = length(H0)  # Degrees of freedom
-    p_value = 1 - cdf(Chisq(df), test_statistic)
+function _mz_coefficient_covariance(
+        design::Matrix{Float64},
+        residuals::Vector{Float64},
+        covariance::Symbol,
+        horizon::Int,
+        kernel::Symbol,
+        small_sample::Bool
+    )
+    n, k = size(design)
+    gram_factor = cholesky(Symmetric(design' * design))
+    bread = gram_factor \ Matrix{Float64}(I, k, k)
 
-    return β[1], β[2], p_value
+    if covariance == :homoskedastic
+        residual_variance = sum(abs2, residuals) / (n - k)
+        return residual_variance * bread
+    end
+
+    scores = design .* residuals
+    meat = scores' * scores
+    if covariance == :hac
+        maxlag = horizon - 1
+        for lag in 1:maxlag
+            weight = _forecast_kernel_weight(kernel, lag, maxlag)
+            cross_product =
+                view(scores, (lag + 1):n, :)' * view(scores, 1:(n - lag), :)
+            meat += weight * (cross_product + cross_product')
+        end
+    end
+
+    finite_sample_factor = if covariance == :hc1 || (covariance == :hac && small_sample)
+        n / (n - k)
+    else
+        1.0
+    end
+    return Symmetric(finite_sample_factor * bread * meat * bread)
 end

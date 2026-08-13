@@ -22,12 +22,12 @@ end
     # strongly biased errors -> small p-value
     _, p_biased = Bit.bias_ttest(fill(1.0, 20) .+ Float64[0.01 * (-1)^i for i in 1:20], 1)
     @test p_biased < 0.05
-    # falls back to short-run variance when the HAC estimate is negative
+    # Bartlett weighting keeps this horizon-overlap estimate positive.
     @test Bit.bias_ttest(Float64[1.0, -1.0, 1.0, -1.0], 2) isa Tuple
-    # short samples (n <= h) must not error on the autocovariance lags
-    @test Bit.bias_ttest(Float64[0.5, -0.5], 12) isa Tuple
-    # fewer than two observations returns NaN rather than throwing
-    @test all(isnan, Bit.bias_ttest(Float64[0.3], 1))
+    # Invalid effective samples fail visibly rather than silently shortening
+    # the requested overlap correction or returning NaNs.
+    @test_throws ArgumentError Bit.bias_ttest(Float64[0.5, -0.5], 12)
+    @test_throws ArgumentError Bit.bias_ttest(Float64[0.3], 1)
 end
 
 @testset "stars / rmse_improvement" begin
