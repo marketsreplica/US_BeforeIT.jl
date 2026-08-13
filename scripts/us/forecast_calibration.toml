@@ -1,4 +1,8 @@
 schema_version = "beforeit-us-forecast-calibration.v2"
+artifact_class = "H"
+artifact_role = "engineering_only_forecast_correction"
+eligible_for_raw_calibration = false
+raw_forecast_required_alongside = true
 truth_file = "data/us/validation/ECONOMIC_OUTLOOK_ACTUALS.csv"
 truth_start = "2023Q4"
 measurement_anchor = "2024Q1"

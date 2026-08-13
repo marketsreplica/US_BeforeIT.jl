@@ -16,6 +16,31 @@ using TOML
 import BeforeIT as Bit
 
 const SCRIPT_DIR = @__DIR__
+include(
+    joinpath(
+        SCRIPT_DIR,
+        "accounting",
+        "USSupplyMakeDiagnostics.jl",
+    ),
+)
+using .USSupplyMakeDiagnostics
+include(
+    joinpath(
+        SCRIPT_DIR,
+        "accounting",
+        "USSymmetricSupplyUse.jl",
+    ),
+)
+using .USSymmetricSupplyUse
+include(
+    joinpath(
+        SCRIPT_DIR,
+        "accounting",
+        "USRequirementsDiagnostics.jl",
+    ),
+)
+using .USRequirementsDiagnostics
+
 const REPO_ROOT = normpath(joinpath(SCRIPT_DIR, "..", ".."))
 const DATA_ROOT = joinpath(REPO_ROOT, "data", "us")
 const RAW_ROOT = joinpath(DATA_ROOT, "raw")
@@ -23,11 +48,23 @@ const CURATED_ROOT = joinpath(DATA_ROOT, "curated")
 const VALIDATION_ROOT = joinpath(DATA_ROOT, "validation")
 const BASELINE_ROOT = joinpath(DATA_ROOT, "baselines")
 const CALIBRATION_ROOT = joinpath(DATA_ROOT, "calibration")
+const REQUIREMENTS_FIXTURE_ROOT =
+    joinpath(
+    SCRIPT_DIR,
+    "accounting",
+    "fixtures",
+    "bea_2024_requirements_approved",
+)
+const OFFICIAL_DIRECT_REQUIREMENTS_FIXTURE_ROOT =
+    joinpath(
+    SCRIPT_DIR,
+    "accounting",
+    "fixtures",
+    "bea_2024_official_direct_requirements_approved",
+)
 const DATABASE_PATH = joinpath(DATA_ROOT, "db", "us_calibration.duckdb")
 const SOURCE_FILE = joinpath(SCRIPT_DIR, "sources.toml")
 const MAPPING_FILE = joinpath(SCRIPT_DIR, "bea71.toml")
-const FORECAST_CALIBRATION_FILE =
-    joinpath(SCRIPT_DIR, "forecast_calibration.toml")
 const SOURCE_SPEC = TOML.parsefile(SOURCE_FILE)
 const STRUCTURAL_YEAR = Int(SOURCE_SPEC["pipeline"]["structural_year"])
 const DATA_TRUTH_VINTAGE =
@@ -38,35 +75,14 @@ const ECONOMIC_OUTLOOK_ACTUAL_END =
     Date(String(SOURCE_SPEC["pipeline"]["economic_outlook_actual_end"]))
 const VALID_STATUSES = Set(["APPROVED", "DUBIOUS", "REJECTED", "MISSING"])
 const RUN_SEED = 20260802
-
-function forecast_calibration_config(
-        path::String = FORECAST_CALIBRATION_FILE,
-    )
-    isfile(path) || return Dict{String, Any}()
-    config = TOML.parsefile(path)
-    get(config, "schema_version", nothing) ==
-        "beforeit-us-forecast-calibration.v2" ||
-        error("Unsupported U.S. forecast-calibration schema in $path")
-    return config
-end
-
-function apply_forecast_parameter_overrides!(parameters, config)
-    overrides = get(config, "parameter_overrides", Dict{String, Any}())
-    estimated = Dict{String, Float64}()
-    for (name, value) in overrides
-        haskey(parameters, name) ||
-            error("Forecast calibration references unknown parameter $name")
-        value isa Real || error("Forecast override $name must be numeric")
-        calibrated = Float64(value)
-        isfinite(calibrated) ||
-            error("Forecast override $name must be finite")
-        parameters[name] isa Real ||
-            error("Forecast override $name does not target a scalar parameter")
-        estimated[name] = Float64(parameters[name])
-        parameters[name] = calibrated
-    end
-    return estimated
-end
+const OPENING_MACRO_CONTROL_SOURCE =
+    "BEA_NIPA_T10105_CURRENT_DOLLAR_SAAR_DIVIDED_BY_4"
+const OPENING_MACRO_CONTROL_TOLERANCE = 1.0
+const MODEL_ACCOUNTING_TOLERANCE = 1.0e-6
+const VALUATION_BRIDGE_SCIENTIFIC_STATUS =
+    "REJECTED_NOT_CELL_IDENTIFIED"
+const VALUATION_BRIDGE_RUNTIME_STATUS =
+    "LEGACY_RESEARCH_PATH_STILL_APPLIED_PENDING_PRODUCER_PRICE_ADAPTER"
 
 export collect!, build!, validate!, smoke!, run_all!, status!, main
 
@@ -114,6 +130,8 @@ function RunState()
             unit = String[],
             shape = String[],
             status = String[],
+            source_control_reconciles = String[],
+            model_mapping_admissible = String[],
             check_id = String[],
             detail = String[],
             checked_at = DateTime[],
@@ -337,8 +355,26 @@ function record_parameter_check!(
         shape = "",
         check_id = "availability",
         detail = "",
+        source_control_reconciles = status,
+        model_mapping_admissible = status,
     )
     status in VALID_STATUSES || error("Invalid QA status $status")
+    source_control_reconciles in VALID_STATUSES ||
+        error(
+        "Invalid source-control QA status $source_control_reconciles",
+    )
+    model_mapping_admissible in VALID_STATUSES ||
+        error(
+        "Invalid model-mapping QA status $model_mapping_admissible",
+    )
+    combined_status = worst_status(
+        [source_control_reconciles, model_mapping_admissible],
+    )
+    status == combined_status ||
+        error(
+        "Overall parameter status $status must equal the fail-closed " *
+            "worst status $combined_status across source control and model mapping",
+    )
     push!(
         state.parameter_checks,
         (
@@ -348,6 +384,10 @@ function record_parameter_check!(
             unit = string(unit),
             shape = string(shape),
             status = String(status),
+            source_control_reconciles =
+                String(source_control_reconciles),
+            model_mapping_admissible =
+                String(model_mapping_admissible),
             check_id = check_id,
             detail = string(detail),
             checked_at = now(UTC),
@@ -1056,17 +1096,58 @@ function lookup_matrix(frame::DataFrame)
     return values
 end
 
+"""
+    diagnostic_io_table(rows, table_id, source_sha256)
+
+Construct the typed, sparse I-O representation used by the source-aware
+supply/make diagnostics. Non-numeric BEA markers remain absent structural
+cells; every numeric cell retains its published row and column economic basis.
+"""
+function diagnostic_io_table(rows, table_id, source_sha256)
+    cells = USSupplyMakeDiagnostics.IOCell[]
+    for row in rows
+        value = parse_bea_number(row["DataValue"])
+        ismissing(value) && continue
+        push!(
+            cells,
+            USSupplyMakeDiagnostics.IOCell(
+                row["TableID"],
+                parse(Int, String(row["Year"])),
+                row["RowCode"],
+                get(row, "RowType", ""),
+                row["ColCode"],
+                get(row, "ColType", ""),
+                value,
+            ),
+        )
+    end
+    table = USSupplyMakeDiagnostics.IOTable(
+        cells;
+        source_sha256 = source_sha256,
+    )
+    table.table_id == String(table_id) ||
+        error(
+        "Expected BEA I-O table $table_id; got $(table.table_id)",
+    )
+    return table
+end
+
 io_get(values, row_code::String, column_code::String) =
     get(values, (row_code, column_code), 0.0)
 
 """
     purchasers_to_basic_price_vector(supply_values, model_codes)
 
-Build the commodity valuation bridge from BEA Supply Table 262. `T013` is
-total product supply at basic prices and `T016` is the corresponding supply
-at purchasers' prices. The model's aggregated retail commodity `4A0` must
-combine the four detailed supply rows that feed that model sector before the
-ratio is calculated.
+Build the legacy commodity-level `T013/T016` valuation quotient from BEA
+Supply Table 262. `T013` is total product supply at basic prices and `T016`
+is the corresponding supply at purchasers' prices. The model's aggregated
+retail commodity `4A0` must combine the four detailed supply rows that feed
+that model sector before the ratio is calculated.
+
+The quotient is an arithmetic diagnostic, not a cell-identified valuation
+allocator. The legacy research runtime still consumes it pending a
+producer-price calibration adapter; current accounting evidence rejects that
+application for promotion or forecast-origin admission.
 """
 function purchasers_to_basic_price_vector(supply_values, model_codes)
     supply_rows(code) =
@@ -1095,10 +1176,18 @@ function purchasers_to_basic_price_vector(supply_values, model_codes)
         error("BEA T016 purchasers-price controls must be strictly positive")
     values = basic_price ./ purchasers_price
     all(isfinite, values) ||
-        error("BEA purchasers-to-basic-price bridge contains nonfinite values")
+        error("BEA purchasers-to-basic-price quotient contains nonfinite values")
     all(>(0), values) ||
-        error("BEA purchasers-to-basic-price bridge must be strictly positive")
-    return (; values, basic_price, purchasers_price)
+        error("BEA purchasers-to-basic-price quotient must be strictly positive")
+    return (;
+        values,
+        basic_price,
+        purchasers_price,
+        scientific_status = VALUATION_BRIDGE_SCIENTIFIC_STATUS,
+        runtime_status = VALUATION_BRIDGE_RUNTIME_STATUS,
+        cell_identified = false,
+        diagnostic_only = true,
+    )
 end
 
 """
@@ -1151,6 +1240,109 @@ function build_io!(state::RunState)
     supply_frame = io_long(state.tables["bea_io_262"])
     use_values = lookup_matrix(use_frame)
     supply_values = lookup_matrix(supply_frame)
+    typed_use = diagnostic_io_table(
+        state.tables["bea_io_259"],
+        "259",
+        state.tables["bea_io_259_sha"],
+    )
+    typed_supply = diagnostic_io_table(
+        state.tables["bea_io_262"],
+        "262",
+        state.tables["bea_io_262_sha"],
+    )
+    typed_use.year == STRUCTURAL_YEAR ||
+        error(
+        "BEA Table 259 source year $(typed_use.year) does not match structural year $STRUCTURAL_YEAR",
+    )
+    typed_supply.year == STRUCTURAL_YEAR ||
+        error(
+        "BEA Table 262 source year $(typed_supply.year) does not match structural year $STRUCTURAL_YEAR",
+    )
+    supply_make_report =
+        USSupplyMakeDiagnostics.diagnose_supply_make(
+        typed_use,
+        typed_supply;
+        expected_supply_commodity_count = 73,
+        expected_supply_industry_count = 71,
+        expected_use_commodity_count = 70,
+    )
+    USSupplyMakeDiagnostics.controls_pass(supply_make_report) ||
+        error(
+        "Source-aware BEA supply/make controls exceed published rounding tolerances",
+    )
+    length(supply_make_report.residuals) == 755 ||
+        error(
+        "Source-aware BEA supply/make contract expected exactly 755 controls; found $(length(supply_make_report.residuals))",
+    )
+    symmetric_use_report =
+        USSymmetricSupplyUse.build_industry_technology_system(
+        supply_make_report,
+    )
+    USSymmetricSupplyUse.transformation_controls_pass(
+        symmetric_use_report,
+    ) ||
+        error(
+        "Industry-technology symmetric-use controls exceed declared tolerances",
+    )
+    length(symmetric_use_report.residuals) == 420 ||
+        error(
+        "Industry-technology symmetric-use contract expected exactly 420 controls; found $(length(symmetric_use_report.residuals))",
+    )
+    requirements_fixture =
+        USRequirementsDiagnostics.load_requirements_fixture(
+        REQUIREMENTS_FIXTURE_ROOT,
+    )
+    official_direct_requirements_fixture =
+        USRequirementsDiagnostics.load_official_direct_requirements_fixture(
+        OFFICIAL_DIRECT_REQUIREMENTS_FIXTURE_ROOT,
+    )
+    requirements_fixture.year == STRUCTURAL_YEAR ||
+        error(
+        "BEA Table 59 diagnostic year $(requirements_fixture.year) does not match structural year $STRUCTURAL_YEAR",
+    )
+    official_direct_requirements_fixture.year == STRUCTURAL_YEAR ||
+        error(
+        "BEA official-direct diagnostic year $(official_direct_requirements_fixture.year) does not match structural year $STRUCTURAL_YEAR",
+    )
+    requirements_report =
+        USRequirementsDiagnostics.build_official_direct_requirements(
+        requirements_fixture,
+        official_direct_requirements_fixture,
+    )
+    USRequirementsDiagnostics.requirements_controls_pass(
+        requirements_report,
+    ) ||
+        error("BEA official-direct requirements controls do not pass")
+    length(requirements_report.residuals) == 221 ||
+        error(
+        "BEA official-direct requirements contract expected exactly 221 controls; found $(length(requirements_report.residuals))",
+    )
+    requirements_transaction_report =
+        USRequirementsDiagnostics.build_requirements_transactions(
+        requirements_report,
+        supply_make_report,
+    )
+    USRequirementsDiagnostics.transaction_controls_pass(
+        requirements_transaction_report,
+    ) ||
+        error("BEA official-direct transaction-aggregation controls do not pass")
+    length(requirements_transaction_report.residuals) == 3 ||
+        error(
+        "BEA official-direct transaction contract expected exactly 3 controls; found $(length(requirements_transaction_report.residuals))",
+    )
+    requirements_comparison_report =
+        USRequirementsDiagnostics.compare_structural_transactions(
+        symmetric_use_report,
+        requirements_transaction_report,
+    )
+    USRequirementsDiagnostics.comparison_controls_pass(
+        requirements_comparison_report,
+    ) ||
+        error("BEA structural-transaction comparison controls do not pass")
+    length(requirements_comparison_report.residuals) == 3 ||
+        error(
+        "BEA structural-transaction comparison expected exactly 3 controls; found $(length(requirements_comparison_report.residuals))",
+    )
     special_rows = Set(
         [
             "Other",
@@ -1209,6 +1401,57 @@ function build_io!(state::RunState)
     reported_industry_product_taxes =
         industry_vector("T00TOP") - industry_vector("T00SUB")
     output_control = industry_vector("T018")
+    Set(supply_make_report.commodity_output.codes) ==
+        union(Set(model_codes), Set(["Other", "Used"])) ||
+        error(
+        "Source-aware commodity-output codes do not match the model core plus closure accounts",
+    )
+    Set(supply_make_report.industry_output.codes) == Set(model_codes) ||
+        error(
+        "Source-aware industry-output codes do not match the model industry axis",
+    )
+    domestic_commodity_output_basic_price = Float64[
+        supply_make_report.commodity_output[code] for code in model_codes
+    ]
+    supply_industry_output_basic_price_t017 = Float64[
+        supply_make_report.industry_output[code] for code in model_codes
+    ]
+    maximum(
+        abs,
+        supply_industry_output_basic_price_t017 - output_control,
+    ) <= 2.0 ||
+        error(
+        "Table 262 T017 industry output does not reconcile to Table 259 T018",
+    )
+    # The calibration artifact labels its industry-output vector as Table 259
+    # T018, so persist the actual T018 bytes under that field. Retain the
+    # independently sourced Table 262 T017 vector under an explicit name for
+    # the cross-table provenance check above.
+    source_industry_output_basic_price = copy(output_control)
+    closure_accounts = DataFrame(
+        commodity_code = collect(
+            USSupplyMakeDiagnostics.EXPLICIT_CLOSURE_CODES,
+        ),
+        domestic_output_basic_price_millions_usd = [
+            supply_make_report.commodity_output[code]
+                for code in
+                USSupplyMakeDiagnostics.EXPLICIT_CLOSURE_CODES
+        ],
+        purchaser_supply_millions_usd = [
+            supply_make_report.purchaser_supply[code]
+                for code in
+                USSupplyMakeDiagnostics.EXPLICIT_CLOSURE_CODES
+        ],
+        total_use_millions_usd = [
+            supply_make_report.total_use[code]
+                for code in
+                USSupplyMakeDiagnostics.EXPLICIT_CLOSURE_CODES
+        ],
+        allocation_policy = fill(
+            "explicit_unallocated_closure_account",
+            length(USSupplyMakeDiagnostics.EXPLICIT_CLOSURE_CODES),
+        ),
+    )
     household_consumption = commodity_vector("F010")
     capital_columns = [
         "F02E",
@@ -1353,6 +1596,68 @@ function build_io!(state::RunState)
         detail = "T005 + V001 + V003 + T00OTOP − T00OSUB = T018",
     )
 
+    record_source_check!(
+        state,
+        "BEA",
+        "InputOutput 259/262",
+        "source_aware_supply_make_controls",
+        "APPROVED";
+        observed = "$(length(supply_make_report.residuals)) controls within published rounding; raw make $(size(supply_make_report.raw_make)); aggregated make $(size(supply_make_report.aggregated_make)); raw use $(size(supply_make_report.raw_use)); aggregated use $(size(supply_make_report.aggregated_use))",
+        expected = "755 unbalanced source controls; 73×71 and 70×68 make matrices; 70×71 and 70×68 use matrices",
+        detail = "Commodity and industry axes are distinct Julia types. The only aggregation is code-keyed 441+445+452+4A0 → 4A0; Other and Used remain explicit; balancing_applied=false.",
+    )
+    record_source_check!(
+        state,
+        "BEA",
+        "InputOutput 259/262",
+        "industry_technology_symmetric_use_diagnostic",
+        "DUBIOUS";
+        observed = "$(length(symmetric_use_report.residuals)) transformation controls pass; published-control total \$$(sum(symmetric_use_report.published_symmetric_use.values))m; rounding-normalized total \$$(sum(symmetric_use_report.rounding_normalized_symmetric_use.values))m; $(length(symmetric_use_report.negative_make_cells)) negative make, $(length(symmetric_use_report.negative_use_cells)) negative use, and $(length(symmetric_use_report.negative_symmetric_cells)) negative derived cells preserved",
+        expected = "70×70 commodity-by-commodity industry-technology diagnostic with exact intermediate-use row conservation after explicit source-rounding normalization",
+        detail = "Z = U*diag(g)^(-1)*V'. Both published-output and exact-make-sum denominators are retained. Use is purchasers' price, make is producer price, and output is basic price; no full valuation bridge, Other/Used allocation, clipping, balancing, or model-state reconciliation is claimed.",
+    )
+    largest_comparison_cell =
+        requirements_comparison_report.maximum_absolute_difference_cell
+    record_source_check!(
+        state,
+        "BEA",
+        "InputOutput 59/direct/market-share/259/262",
+        "official_direct_requirements_comparator",
+        "DUBIOUS";
+        observed = "$(length(requirements_report.residuals)) source and round-trip controls, $(length(requirements_transaction_report.residuals)) output-weighted aggregation invariants, and $(length(requirements_comparison_report.residuals)) comparison invariants pass; official B×D differs from I-inv(Table 59) by at most $(requirements_report.maximum_direct_agreement_error); official-direct, T007-scaled 70×70 transaction total \$$(sum(requirements_transaction_report.transactions.values))m; purchaser-price symmetric-use diagnostic exceeds it by \$$(requirements_comparison_report.signed_total_difference)m; L1 cell difference \$$(requirements_comparison_report.absolute_cell_difference)m; largest cell $(largest_comparison_cell.row_code)→$(largest_comparison_cell.column_code) is \$$(largest_comparison_cell.difference)m; cell correlation $(requirements_comparison_report.cell_correlation); $(length(requirements_report.substantive_negative_direct_cells)) direct coefficients are below -$(USRequirementsDiagnostics.SUBSTANTIVE_NEGATIVE_THRESHOLD)",
+        expected = "separately published BEA transformation comparator; a nonzero basis/system-boundary gap remains explicit",
+        detail = "The primary direct matrix is A = B×D from BEA's after-redefinitions direct-requirements and market-share workbooks; I-inv(Table 59) and inv(I-A) are retained as published-rounding round trips. Z = A*diag(q) uses Table 262 T007 before output-weighted retail aggregation. These products share the BEA input-output system, so the comparison is not independent statistical evidence and its raw-cell correlation is not an accuracy score. Both checked-in sources are current-vintage diagnostics, not origin eligible. No negative coefficient is clipped, and no valuation bridge, final-use ledger, Other/Used allocation, balancing, gate change, or model-state write is claimed.",
+    )
+    output_basis_difference =
+        source_industry_output_basic_price -
+        domestic_commodity_output_basic_price
+    record_source_check!(
+        state,
+        "BEA",
+        "InputOutput 262",
+        "commodity_industry_output_basis_separation",
+        "APPROVED";
+        observed = "modeled T007 commodity output \$$(sum(domestic_commodity_output_basic_price))m; T018 industry output \$$(sum(source_industry_output_basic_price))m; signed difference \$$(sum(output_basis_difference))m; maximum absolute sector difference \$$(maximum(abs, output_basis_difference))m",
+        expected = "separate, code-keyed 68-vectors; no positional substitution",
+        detail = "T007 domestic commodity output is admitted only to commodity diagnostics. Table 259 T018 is retained as the industry control; the independently sourced Table 262 T017 vector is stored separately and must reconcile within published rounding.",
+    )
+    record_source_check!(
+        state,
+        "BEA",
+        "InputOutput 259/262",
+        "explicit_other_used_closure_accounts",
+        "APPROVED";
+        observed = join(
+            [
+                "$(row.commodity_code): T007=$(row.domestic_output_basic_price_millions_usd), T016=$(row.purchaser_supply_millions_usd), T019=$(row.total_use_millions_usd)"
+                    for row in eachrow(closure_accounts)
+            ],
+            "; ",
+        ),
+        expected = "Other and Used retained by name and not allocated into the 68 modeled commodities",
+        detail = "Closure-account values remain outside the model core pending a separately governed mapping.",
+    )
+
     supply_output = [
         sum(io_get(supply_values, "T017", source_code) for source_code in column_sources(code))
             for code in model_codes
@@ -1380,10 +1685,10 @@ function build_io!(state::RunState)
         length(purchasers_to_basic.values) == 68 &&
             all(isfinite, purchasers_to_basic.values) &&
             all(>(0), purchasers_to_basic.values) ?
-            "APPROVED" : "REJECTED";
+            "DUBIOUS" : "REJECTED";
         observed = "68 finite positive ratios; range $(extrema(purchasers_to_basic.values))",
-        expected = "T013/T016 by modeled commodity, with 441+445+452+4A0 aggregated before the 4A0 ratio",
-        detail = "The bridge converts purchaser-price use distributions to basic-price producer distributions. Aggregate macro expenditure controls are preserved later during calibration.",
+        expected = "Arithmetic T013/T016 diagnostic by modeled commodity, with 441+445+452+4A0 aggregated before the 4A0 ratio",
+        detail = "The quotient is not a use-cell margin/tax allocator. Scientific status $(purchasers_to_basic.scientific_status); runtime status $(purchasers_to_basic.runtime_status).",
     )
 
     official_export_control = io_get(use_values, "T005", "F040")
@@ -1475,6 +1780,22 @@ function build_io!(state::RunState)
     state.tables["io_bridged"] = bridged
     state.tables["io_bridge_factor"] = bridge_factor
     state.tables["io_output_control"] = output_control
+    state.tables["supply_make_report"] = supply_make_report
+    state.tables["symmetric_use_report"] = symmetric_use_report
+    state.tables["requirements_report"] = requirements_report
+    state.tables["requirements_transaction_report"] =
+        requirements_transaction_report
+    state.tables["requirements_comparison_report"] =
+        requirements_comparison_report
+    state.tables["domestic_commodity_output_basic_price"] =
+        domestic_commodity_output_basic_price
+    state.tables["source_industry_output_basic_price"] =
+        source_industry_output_basic_price
+    state.tables["supply_industry_output_basic_price_t017"] =
+        supply_industry_output_basic_price_t017
+    state.tables["commodity_output_codes"] = copy(model_codes)
+    state.tables["industry_output_codes"] = copy(model_codes)
+    state.tables["io_closure_accounts"] = closure_accounts
     state.tables["compensation_employees"] = compensation
     state.tables["operating_surplus"] = operating_surplus
     state.tables["taxes_production"] = production_taxes
@@ -1490,6 +1811,10 @@ function build_io!(state::RunState)
     state.tables["imports"] = imports
     state.tables["purchasers_to_basic_price"] =
         purchasers_to_basic.values
+    state.tables["valuation_bridge_scientific_status"] =
+        purchasers_to_basic.scientific_status
+    state.tables["valuation_bridge_runtime_status"] =
+        purchasers_to_basic.runtime_status
     state.tables["taxes_products_household"] = taxes_products_household
     state.tables["taxes_products_capitalformation"] = taxes_products_capitalformation
     state.tables["taxes_products_government"] = taxes_products_government
@@ -1534,23 +1859,27 @@ function build_io!(state::RunState)
         state,
         "imports",
         "BEA InputOutput 262",
-        "APPROVED";
+        "REJECTED";
         frequency = "A",
         unit = "millions USD",
         shape = "68×1",
         check_id = "source_mapping",
-        detail = "Table 262 commodity MCIF+MADJ. Negative CIF/FOB adjustment entries are floored at zero and positive entries are proportionally rescaled to the T017 structural control net of Other/Used commodities.",
+        source_control_reconciles = "APPROVED",
+        model_mapping_admissible = "REJECTED",
+        detail = "The raw signed Table 262 MCIF+MADJ rows and the T017 control are retained and reconcile after the documented control adjustment. The legacy nonnegative vector floors CIF/FOB adjustment entries and proportionally rescales positive rows; current accounting contracts leave the model import boundary unselected, so this construction is rejected as an admissible model mapping.",
     )
     record_parameter_check!(
         state,
         "purchasers_to_basic_price",
         "BEA InputOutput 262",
-        "APPROVED";
+        "REJECTED";
         frequency = "A",
         unit = "basic-price supply / purchasers-price supply",
         shape = "68×1",
         check_id = "valuation_bridge",
-        detail = "T013/T016 by commodity; model retail sector 4A0 aggregates supply rows 441, 445, 452, and 4A0 before division.",
+        source_control_reconciles = "APPROVED",
+        model_mapping_admissible = "REJECTED",
+        detail = "The code-keyed T013/T016 arithmetic control is reproducible, including retail aggregation. It is rejected as a model mapping because no source use-cell margin/tax allocation identifies the proportional recipient rescale. The legacy research runtime still applies it pending a producer-price adapter.",
     )
     return state
 end
@@ -2444,6 +2773,8 @@ function parameter_ledger(state::RunState)
     ledger = DataFrame(
         parameter = String[],
         status = String[],
+        source_control_reconciles = String[],
+        model_mapping_admissible = String[],
         sources = String[],
         frequency = String[],
         unit = String[],
@@ -2458,6 +2789,8 @@ function parameter_ledger(state::RunState)
                 (
                     parameter = parameter,
                     status = "MISSING",
+                    source_control_reconciles = "MISSING",
+                    model_mapping_admissible = "MISSING",
                     sources = "",
                     frequency = "",
                     unit = "",
@@ -2472,6 +2805,10 @@ function parameter_ledger(state::RunState)
             (
                 parameter = parameter,
                 status = worst_status(matches.status),
+                source_control_reconciles =
+                    worst_status(matches.source_control_reconciles),
+                model_mapping_admissible =
+                    worst_status(matches.model_mapping_admissible),
                 sources = join(sort!(unique(matches.source)), "; "),
                 frequency = join(sort!(unique(filter(value -> !isempty(value), matches.frequency))), "; "),
                 unit = join(sort!(unique(filter(value -> !isempty(value), matches.unit))), "; "),
@@ -2563,7 +2900,7 @@ function write_validation_log!(state::RunState)
         println(io, "Generated: `$(now(UTC))`")
         println(io, "Structural reference: `2024Q4`; nowcast: `2026Q1`; economic-outlook truth vintage: `$(DATA_TRUTH_VINTAGE)`; model system: `BEA 68 observed commodity sectors`.")
         println(io)
-        println(io, "Status meanings: **APPROVED** passed the registered source and shape tests; **DUBIOUS** is usable only with the stated bridge or proxy; **REJECTED** failed a test; **MISSING** has no validated construction.")
+        println(io, "Overall status is fail-closed across two separate questions: `source_control_reconciles` records whether the retained source/control arithmetic passes, while `model_mapping_admissible` records whether that evidence supports writing the parameter into model state. **APPROVED** passes the stated question; **DUBIOUS** requires the stated sensitivity or unresolved bridge; **REJECTED** is scientifically or mechanically ineligible; **MISSING** has no validated construction.")
         println(io)
         counts = combine(groupby(ledger, :status), nrow => :parameters)
         println(io, "## Parameter coverage")
@@ -2574,12 +2911,12 @@ function write_validation_log!(state::RunState)
             println(io, "| $(row.status) | $(row.parameters) |")
         end
         println(io)
-        println(io, "| Parameter | Status | Frequency | Unit | Shape | Source(s) | Test note |")
-        println(io, "|---|---|---|---|---:|---|---|")
+        println(io, "| Parameter | Overall status | `source_control_reconciles` | `model_mapping_admissible` | Frequency | Unit | Shape | Source(s) | Test note |")
+        println(io, "|---|---|---|---|---|---|---:|---|---|")
         for row in eachrow(ledger)
             println(
                 io,
-                "| $(markdown_escape(row.parameter)) | $(row.status) | $(markdown_escape(row.frequency)) | $(markdown_escape(row.unit)) | $(markdown_escape(row.shape)) | $(markdown_escape(row.sources)) | $(markdown_escape(row.detail)) |",
+                "| $(markdown_escape(row.parameter)) | $(row.status) | $(row.source_control_reconciles) | $(row.model_mapping_admissible) | $(markdown_escape(row.frequency)) | $(markdown_escape(row.unit)) | $(markdown_escape(row.shape)) | $(markdown_escape(row.sources)) | $(markdown_escape(row.detail)) |",
             )
         end
         println(io)
@@ -2625,12 +2962,12 @@ function write_validation_log!(state::RunState)
         println(io)
         println(io, "## Parameter tests")
         println(io)
-        println(io, "| Parameter | Check | Status | Shape | Detail |")
-        println(io, "|---|---|---|---:|---|")
+        println(io, "| Parameter | Check | Overall status | `source_control_reconciles` | `model_mapping_admissible` | Shape | Detail |")
+        println(io, "|---|---|---|---|---|---:|---|")
         for row in eachrow(state.parameter_checks)
             println(
                 io,
-                "| $(markdown_escape(row.parameter)) | $(markdown_escape(row.check_id)) | $(row.status) | $(markdown_escape(row.shape)) | $(markdown_escape(row.detail)) |",
+                "| $(markdown_escape(row.parameter)) | $(markdown_escape(row.check_id)) | $(row.status) | $(row.source_control_reconciles) | $(row.model_mapping_admissible) | $(markdown_escape(row.shape)) | $(markdown_escape(row.detail)) |",
             )
         end
     end
@@ -2659,6 +2996,10 @@ function write_validation_log!(state::RunState)
             Dict(
                     "name" => row.parameter,
                     "status" => row.status,
+                    "source_control_reconciles" =>
+                    row.source_control_reconciles,
+                    "model_mapping_admissible" =>
+                    row.model_mapping_admissible,
                     "source" => row.sources,
                     "frequency" => row.frequency,
                     "unit" => row.unit,
@@ -2791,7 +3132,6 @@ function output_measurement_metadata(
         parameters::Dict{String, Any},
         initial_conditions::Dict{String, Any};
         seed::Int = RUN_SEED,
-        forecast_calibration = Dict{String, Any}(),
     )
     origin_date = Date(calibration_date)
     origin_rows = findall(==(origin_date), panel.period)
@@ -2818,42 +3158,6 @@ function output_measurement_metadata(
             "source" => specification.source,
             "basis" => specification.basis,
         )
-        corrections = get(
-            forecast_calibration,
-            "output_corrections",
-            Dict{String, Any}(),
-        )
-        if haskey(corrections, specification.name)
-            correction = corrections[specification.name]
-            get(correction, "method", nothing) == "damped_log_bias" ||
-                error("Unsupported output correction for $(specification.name)")
-            amplitude = Float64(correction["amplitude"])
-            decay = Float64(correction["decay"])
-            origin_horizon_value = get(correction, "origin_horizon", 0)
-            origin_horizon_value isa Integer &&
-                !(origin_horizon_value isa Bool) &&
-                origin_horizon_value >= 0 ||
-                error(
-                "Output correction origin_horizon must be a nonnegative integer",
-            )
-            origin_horizon = Int(origin_horizon_value)
-            isfinite(amplitude) ||
-                error("Output correction amplitude is nonfinite")
-            isfinite(decay) && decay > 0 ||
-                error("Output correction decay must be finite and positive")
-            entry["path_correction"] = Dict{String, Any}(
-                "method" => "damped_log_bias",
-                "amplitude" => amplitude,
-                "decay" => decay,
-                "origin_horizon" => origin_horizon,
-                "formula" => String(correction["formula"]),
-                "coefficient_fitting_sample" => get(
-                    forecast_calibration,
-                    "coefficient_fitting_sample",
-                    nothing,
-                ),
-            )
-        end
         series[specification.name] = entry
     end
     return Dict{String, Any}(
@@ -2862,6 +3166,138 @@ function output_measurement_metadata(
         "origin_period" => period,
         "data_truth_vintage" => string(DATA_TRUTH_VINTAGE),
         "series" => series,
+    )
+end
+
+function opening_macro_reconciliation_metadata(
+        parameters::Dict{String, Any},
+        initial_conditions::Dict{String, Any};
+        seed::Int = RUN_SEED,
+    )
+    controls =
+        Bit.validated_opening_macro_controls(initial_conditions)
+    controls === nothing &&
+        error("Opening macro reconciliation requires source controls")
+    Random.seed!(seed)
+    model = Bit.Model(
+        deepcopy(parameters),
+        deepcopy(initial_conditions),
+    )
+    implied = Bit.model_implied_opening_macro(model)
+    source_values = Dict{String, Float64}(
+        "nominal_gdp" => controls.nominal_gdp,
+        "nominal_household_consumption" =>
+            controls.nominal_household_consumption,
+        "nominal_government_consumption_and_investment" =>
+            controls.nominal_government_consumption_and_investment,
+        "nominal_capitalformation" =>
+            controls.nominal_capitalformation,
+        "nominal_fixed_capitalformation" =>
+            controls.nominal_fixed_capitalformation,
+        "nominal_inventory_investment" =>
+            controls.nominal_inventory_investment,
+        "nominal_exports" => controls.nominal_exports,
+        "nominal_imports" => controls.nominal_imports,
+    )
+    implied_values = Dict{String, Float64}(
+        "nominal_gdp" => implied.nominal_gdp,
+        "nominal_household_consumption" =>
+            implied.nominal_household_consumption,
+        "nominal_government_consumption_and_investment" =>
+            implied.nominal_government_consumption,
+        "nominal_capitalformation" =>
+            implied.nominal_capitalformation,
+        "nominal_fixed_capitalformation" =>
+            implied.nominal_fixed_capitalformation,
+        "nominal_inventory_investment" =>
+            implied.nominal_capitalformation -
+            implied.nominal_fixed_capitalformation,
+        "nominal_exports" => implied.nominal_exports,
+        "nominal_imports" => implied.nominal_imports,
+    )
+    observed_values = Dict{String, Float64}(
+        "nominal_gdp" => first(model.data.nominal_gdp),
+        "nominal_household_consumption" =>
+            first(model.data.nominal_household_consumption),
+        "nominal_government_consumption_and_investment" =>
+            first(model.data.nominal_government_consumption),
+        "nominal_capitalformation" =>
+            first(model.data.nominal_capitalformation),
+        "nominal_fixed_capitalformation" =>
+            first(model.data.nominal_fixed_capitalformation),
+        "nominal_inventory_investment" =>
+            first(model.data.nominal_inventory_investment),
+        "nominal_exports" => first(model.data.nominal_exports),
+        "nominal_imports" => first(model.data.nominal_imports),
+    )
+    model_minus_source = Dict(
+        key => implied_values[key] - source_values[key]
+            for key in sort!(collect(keys(source_values)))
+    )
+    observed_minus_source = Dict(
+        key => observed_values[key] - source_values[key]
+            for key in sort!(collect(keys(source_values)))
+    )
+    maximum_component_gap =
+        maximum(abs, values(model_minus_source))
+    maximum_observation_gap =
+        maximum(abs, values(observed_minus_source))
+    observed_residuals =
+        Bit.get_accounting_residuals(model.data)
+    observed_expenditure_residual =
+        first(observed_residuals.gdp_and_expenditure)
+    observed_private_investment_residual =
+        observed_values["nominal_capitalformation"] -
+        observed_values["nominal_fixed_capitalformation"] -
+        observed_values["nominal_inventory_investment"]
+    observation_layer_gate =
+        maximum_observation_gap <= MODEL_ACCOUNTING_TOLERANCE &&
+        abs(observed_expenditure_residual) <= controls.tolerance &&
+        abs(observed_private_investment_residual) <= controls.tolerance
+    observation_layer_gate ||
+        error("Opening observation row does not match its source controls")
+    latent_state_gate =
+        maximum_component_gap <= MODEL_ACCOUNTING_TOLERANCE &&
+        abs(implied.expenditure_residual) <=
+        MODEL_ACCOUNTING_TOLERANCE
+    return Dict{String, Any}(
+        "schema_version" =>
+            "beforeit-opening-macro-reconciliation.v1",
+        "diagnostic_seed" => seed,
+        "source" => controls.source,
+        "unit" => controls.unit,
+        "source_rounding_tolerance" => controls.tolerance,
+        "model_numeric_tolerance" => MODEL_ACCOUNTING_TOLERANCE,
+        "observation_layer_gate" => "PASS",
+        "latent_state_reconciliation_gate" =>
+            latent_state_gate ? "PASS" : "FAIL",
+        "structural_supply_use_gate" => "FAIL_UNRECONCILED",
+        "full_accounting_gate" => "FAIL",
+        "source_values" => source_values,
+        "observed_values" => observed_values,
+        "model_implied_values" => implied_values,
+        "observed_minus_source" => observed_minus_source,
+        "model_minus_source" => model_minus_source,
+        "source_expenditure_residual" =>
+            controls.expenditure_residual,
+        "source_private_investment_residual" =>
+            controls.investment_residual,
+        "observed_expenditure_residual" =>
+            observed_expenditure_residual,
+        "observed_private_investment_residual" =>
+            observed_private_investment_residual,
+        "model_implied_expenditure_residual" =>
+            implied.expenditure_residual,
+        "maximum_absolute_observation_gap" =>
+            maximum_observation_gap,
+        "maximum_absolute_component_gap" =>
+            maximum_component_gap,
+        "inventory_stock_status" =>
+            "MISSING_INDEPENDENT_QUARTER_END_STOCK",
+        "note" =>
+            "The observed first row is source-anchored. This diagnostic " *
+            "preserves the unreconciled model-implied state/demand wedge; " *
+            "observation anchoring alone cannot promote the artifact.",
     )
 end
 
@@ -2881,9 +3317,31 @@ function calibration_metadata(state::RunState, period::String, kind::String)
         "database" => relpath(DATABASE_PATH, REPO_ROOT),
         "validation_checklist" => relpath(joinpath(VALIDATION_ROOT, "DATA_CHECKLIST.md"), REPO_ROOT),
         "input_sha256" => sort!(unique(state.acquisitions.raw_sha256)),
+        "accounting_adapter" => Dict(
+            "schema_version" =>
+                "beforeit-us-source-aware-output.v1-diagnostic",
+            "industry_output_basis" =>
+                "BEA_TABLE_259_T018_INDUSTRY_BASIC_PRICE",
+            "commodity_output_basis" =>
+                "BEA_TABLE_262_T007_COMMODITY_BASIC_PRICE",
+            "commodity_output_use" =>
+                "signed_unreconciled_commodity_gap_diagnostic_only",
+            "opening_inventory_source" => "absent",
+            "discrepancy_derived_opening_inventory" => false,
+            "closure_applied" => false,
+            "opening_macro_control_source" =>
+                OPENING_MACRO_CONTROL_SOURCE,
+            "opening_macro_control_gate" => "PASS_AT_SOURCE_ROUNDING",
+            "forecast_promotion_status" =>
+                "BLOCKED_ACCOUNTING_AND_INVENTORY_GATES",
+        ),
         "measurement_status" => Dict(
             "production_network" =>
                 "DUBIOUS model bridge: official BEA Table 259 sparse core is column-scaled to T005; raw and observed aggregation retained",
+            "commodity_output" =>
+                "APPROVED diagnostic input: BEA Table 262 T007, code-keyed and separate from industry output; no balance adjustment",
+            "opening_inventory" =>
+                "MISSING: unreconciled commodity gap is retained but is not converted into S_s",
             "annual_structure" => "official 2024 BEA/BLS with documented Census/USDA proxies",
             "financial_stocks" => "official NSA Federal Reserve Financial Accounts through 2026Q1",
             "cps_2025q4" =>
@@ -2901,6 +3359,11 @@ function build_calibration_object!(state::RunState)
             "quarterly_panel",
             "nipa_values",
             "model_codes",
+            "domestic_commodity_output_basic_price",
+            "source_industry_output_basic_price",
+            "supply_industry_output_basic_price_t017",
+            "commodity_output_codes",
+            "industry_output_codes",
         )
         haskey(state.tables, required) || error("Build stage is missing $required")
     end
@@ -2966,13 +3429,62 @@ function build_calibration_object!(state::RunState)
         "imports" => reshape(Float64.(state.tables["imports"]), 68, 1),
         "use_explicit_trade" => true,
         "use_product_tax_netting" => true,
-        "use_commodity_balance_inventory" => true,
+        "use_opening_macro_controls" => true,
+        "opening_macro_control_source" =>
+            OPENING_MACRO_CONTROL_SOURCE,
+        "opening_macro_control_unit" =>
+            Bit.OPENING_MACRO_CONTROL_UNIT,
+        "opening_macro_control_absolute_tolerance" =>
+            OPENING_MACRO_CONTROL_TOLERANCE,
+        "use_explicit_commodity_output" => true,
+        "diagnose_commodity_balance" => true,
+        "use_commodity_balance_inventory" => false,
+        "domestic_commodity_output_basic_price" =>
+            reshape(
+            Float64.(
+                state.tables[
+                    "domestic_commodity_output_basic_price",
+                ],
+            ),
+            68,
+            1,
+        ),
+        "commodity_output_codes" =>
+            String.(state.tables["commodity_output_codes"]),
+        "commodity_output_basis" =>
+            "BEA_TABLE_262_T007_COMMODITY_BASIC_PRICE",
+        "industry_output_codes" =>
+            String.(state.tables["industry_output_codes"]),
+        "industry_output_basis" =>
+            "BEA_TABLE_259_T018_INDUSTRY_BASIC_PRICE",
+        "source_industry_output_basic_price" =>
+            reshape(
+            Float64.(state.tables["source_industry_output_basic_price"]),
+            68,
+            1,
+        ),
+        "supply_industry_output_basis" =>
+            "BEA_TABLE_262_T017_INDUSTRY_BASIC_PRICE",
+        "supply_industry_output_basic_price_t017" =>
+            reshape(
+            Float64.(
+                state.tables[
+                    "supply_industry_output_basic_price_t017",
+                ],
+            ),
+            68,
+            1,
+        ),
         "purchasers_to_basic_price" =>
             reshape(
             Float64.(state.tables["purchasers_to_basic_price"]),
             68,
             1,
         ),
+        "valuation_bridge_scientific_status" =>
+            String(state.tables["valuation_bridge_scientific_status"]),
+        "valuation_bridge_runtime_status" =>
+            String(state.tables["valuation_bridge_runtime_status"]),
         "compensation_employees" =>
             reshape(Float64.(state.tables["compensation_employees"]), 68, 1),
         "operating_surplus" =>
@@ -2994,6 +3506,24 @@ function build_calibration_object!(state::RunState)
     data = Dict{String, Any}(
         "quarters_num" => Bit.date2num.(DateTime.(panel.period)),
         "nominal_gdp_quarterly" => Float64.(panel.nominal_gdp_quarterly),
+        "nominal_household_consumption_quarterly" =>
+            Float64.(panel.nominal_household_consumption_quarterly),
+        "nominal_gross_private_domestic_investment_quarterly" =>
+            Float64.(
+            panel.nominal_gross_private_domestic_investment_quarterly,
+        ),
+        "nominal_fixed_investment_quarterly" =>
+            Float64.(panel.nominal_fixed_investment_quarterly),
+        "nominal_inventory_investment_quarterly" =>
+            Float64.(panel.nominal_inventory_investment_quarterly),
+        "nominal_exports_quarterly" =>
+            Float64.(panel.nominal_exports_quarterly),
+        "nominal_imports_quarterly" =>
+            Float64.(panel.nominal_imports_quarterly),
+        "nominal_government_consumption_and_investment_quarterly" =>
+            Float64.(
+            panel.nominal_government_consumption_and_investment_quarterly,
+        ),
         "real_gdp_quarterly" => Float64.(panel.real_gdp_quarterly),
         "real_household_consumption_quarterly" =>
             Float64.(panel.real_household_consumption_quarterly),
@@ -3095,9 +3625,6 @@ function build_baseline!(
         scale = Float64(SOURCE_SPEC["pipeline"]["scale"]),
         use_growth_rate_ar1 = false,
     )
-    forecast_calibration = forecast_calibration_config()
-    estimated_forecast_parameters =
-        apply_forecast_parameter_overrides!(parameters, forecast_calibration)
     parameters["G"] == 68 || error("Calibrated model does not have 68 sectors")
     parameters["S"] == 68 || error("Calibrated model does not have 68 industries")
     all_finite(parameters) || error("Calibrated parameters contain nonfinite values")
@@ -3112,12 +3639,50 @@ function build_baseline!(
     end
     minimum(eigvals(Symmetric(parameters["C"]))) >= -1.0e-10 ||
         error("Exogenous shock covariance is not positive semidefinite")
+    opening_controls =
+        Bit.validated_opening_macro_controls(initial_conditions)
+    opening_controls === nothing &&
+        error("U.S. baseline is missing validated opening macro controls")
     metadata = calibration_metadata(state, period, kind)
-    metadata["forecast_calibration"] = deepcopy(forecast_calibration)
-    metadata["forecast_calibration"]["estimated_parameters"] =
-        estimated_forecast_parameters
-    metadata["forecast_calibration"]["config_path"] =
-        relpath(FORECAST_CALIBRATION_FILE, REPO_ROOT)
+    metadata["opening_macro_controls"] = Dict{String, Any}(
+        "schema_version" => "beforeit-opening-macro-controls.v1",
+        "source" => opening_controls.source,
+        "unit" => opening_controls.unit,
+        "absolute_tolerance" => opening_controls.tolerance,
+        "nominal_gdp" => opening_controls.nominal_gdp,
+        "nominal_household_consumption" =>
+            opening_controls.nominal_household_consumption,
+        "nominal_government_consumption_and_investment" =>
+            opening_controls.nominal_government_consumption_and_investment,
+        "nominal_gross_private_domestic_investment" =>
+            opening_controls.nominal_capitalformation,
+        "nominal_fixed_investment" =>
+            opening_controls.nominal_fixed_capitalformation,
+        "nominal_inventory_investment" =>
+            opening_controls.nominal_inventory_investment,
+        "nominal_exports" => opening_controls.nominal_exports,
+        "nominal_imports" => opening_controls.nominal_imports,
+        "expenditure_residual" =>
+            opening_controls.expenditure_residual,
+        "private_investment_residual" =>
+            opening_controls.investment_residual,
+        "inventory_stock_treatment" =>
+            "absent; signed inventory investment is an opening flow only",
+    )
+    metadata["opening_macro_reconciliation"] =
+        opening_macro_reconciliation_metadata(
+        parameters,
+        initial_conditions;
+        seed = RUN_SEED + (kind == "structural" ? 201 : 202),
+    )
+    metadata["calibration_firewall"] = Dict{String, Any}(
+        "schema_version" => "beforeit-calibration-firewall.v1",
+        "raw_parameters" => true,
+        "forecast_error_fitted_parameters" => false,
+        "postprocessing_embedded" => false,
+        "note" =>
+            "Forecast-error-fitted overrides and output corrections are separate class-H artifacts.",
+    )
     metadata["output_measurement"] = output_measurement_metadata(
         state.tables["quarterly_panel"],
         calibration_date,
@@ -3125,7 +3690,6 @@ function build_baseline!(
         parameters,
         initial_conditions;
         seed = RUN_SEED + (kind == "structural" ? 101 : 102),
-        forecast_calibration,
     )
     object_path = joinpath(
         CALIBRATION_ROOT,
@@ -3612,6 +4176,55 @@ function build_sector_accounts!(state::RunState)
     return state
 end
 
+const NIPA_NOMINAL_EXPENDITURE_KEYS = (
+    "nominal_gdp_quarterly",
+    "nominal_household_consumption_quarterly",
+    "nominal_gross_private_domestic_investment_quarterly",
+    "nominal_fixed_investment_quarterly",
+    "nominal_inventory_investment_quarterly",
+    "nominal_exports_quarterly",
+    "nominal_imports_quarterly",
+    "nominal_government_consumption_and_investment_quarterly",
+)
+
+function nipa_nominal_expenditure_residuals(data)
+    for key in NIPA_NOMINAL_EXPENDITURE_KEYS
+        haskey(data, key) ||
+            error("National quarterly panel is missing $key")
+    end
+    lengths = length.(getindex.(Ref(data), NIPA_NOMINAL_EXPENDITURE_KEYS))
+    all(==(first(lengths)), lengths) ||
+        error("Nominal NIPA expenditure controls do not share one axis")
+    return Float64.(data["nominal_gdp_quarterly"]) .-
+        Float64.(data["nominal_household_consumption_quarterly"]) .-
+        Float64.(
+        data["nominal_gross_private_domestic_investment_quarterly"],
+    ) .-
+        Float64.(data["nominal_exports_quarterly"]) .+
+        Float64.(data["nominal_imports_quarterly"]) .-
+        Float64.(
+        data[
+            "nominal_government_consumption_and_investment_quarterly",
+        ],
+    )
+end
+
+function nipa_private_investment_residuals(data)
+    for key in (
+            "nominal_gross_private_domestic_investment_quarterly",
+            "nominal_fixed_investment_quarterly",
+            "nominal_inventory_investment_quarterly",
+        )
+        haskey(data, key) ||
+            error("National quarterly panel is missing $key")
+    end
+    return Float64.(
+        data["nominal_gross_private_domestic_investment_quarterly"],
+    ) .-
+        Float64.(data["nominal_fixed_investment_quarterly"]) .-
+        Float64.(data["nominal_inventory_investment_quarterly"])
+end
+
 function validate_model_contract!(state::RunState)
     object = state.artifacts["calibration_object"]
     calibration = object.calibration
@@ -3635,6 +4248,60 @@ function validate_model_contract!(state::RunState)
         error("Measured import input contains negative values")
     figaro["use_explicit_trade"] === true ||
         error("Measured trade input must explicitly opt in")
+    figaro["use_opening_macro_controls"] === true ||
+        error("U.S. calibration must opt into opening macro controls")
+    figaro["opening_macro_control_source"] ==
+        OPENING_MACRO_CONTROL_SOURCE ||
+        error("U.S. opening macro controls have an unsupported source")
+    figaro["opening_macro_control_unit"] ==
+        Bit.OPENING_MACRO_CONTROL_UNIT ||
+        error("U.S. opening macro controls have an unsupported unit")
+    Float64(figaro["opening_macro_control_absolute_tolerance"]) ==
+        OPENING_MACRO_CONTROL_TOLERANCE ||
+        error("U.S. opening macro controls have an unsupported tolerance")
+    figaro["use_explicit_commodity_output"] === true ||
+        error("U.S. calibration must explicitly opt into commodity output")
+    figaro["diagnose_commodity_balance"] === true ||
+        error("U.S. calibration must retain the signed commodity-gap diagnostic")
+    figaro["use_commodity_balance_inventory"] === false ||
+        error(
+        "U.S. calibration must not derive opening inventories from the commodity gap",
+    )
+    commodity_output =
+        Bit.explicit_calibration_commodity_output(figaro, 1, 68)
+    size(figaro["domestic_commodity_output_basic_price"]) == (68, 1) ||
+        error("Domestic commodity output must be 68×1")
+    all(isfinite, commodity_output) ||
+        error("Domestic commodity output contains nonfinite values")
+    all(commodity_output .>= 0) ||
+        error("Domestic commodity output contains negative values")
+    String.(figaro["commodity_output_codes"]) ==
+        String.(figaro["industry_output_codes"]) ||
+        error("Commodity and industry controls are not aligned by code")
+    figaro["industry_output_basis"] ==
+        "BEA_TABLE_259_T018_INDUSTRY_BASIC_PRICE" ||
+        error("Industry output has an unsupported economic basis")
+    size(figaro["source_industry_output_basic_price"]) == (68, 1) ||
+        error("Source industry output must be 68×1")
+    all(isfinite, figaro["source_industry_output_basic_price"]) ||
+        error("Source industry output contains nonfinite values")
+    all(figaro["source_industry_output_basic_price"] .>= 0) ||
+        error("Source industry output contains negative values")
+    figaro["supply_industry_output_basis"] ==
+        "BEA_TABLE_262_T017_INDUSTRY_BASIC_PRICE" ||
+        error("Supply-table industry output has an unsupported economic basis")
+    size(figaro["supply_industry_output_basic_price_t017"]) == (68, 1) ||
+        error("Supply-table industry output must be 68×1")
+    all(isfinite, figaro["supply_industry_output_basic_price_t017"]) ||
+        error("Supply-table industry output contains nonfinite values")
+    maximum(
+        abs,
+        figaro["supply_industry_output_basic_price_t017"] -
+            figaro["source_industry_output_basic_price"],
+    ) <= 2.0 ||
+        error(
+        "Table 262 T017 industry output does not reconcile to Table 259 T018",
+    )
     size(figaro["purchasers_to_basic_price"]) == (68, 1) ||
         error("Purchasers-to-basic-price bridge must be 68×1")
     all(isfinite, figaro["purchasers_to_basic_price"]) ||
@@ -3643,6 +4310,49 @@ function validate_model_contract!(state::RunState)
         error("Purchasers-to-basic-price bridge must be strictly positive")
     length(data["quarters_num"]) >= 119 ||
         error("National quarterly panel is too short")
+    for key in NIPA_NOMINAL_EXPENDITURE_KEYS
+        haskey(data, key) ||
+            error("National quarterly panel is missing $key")
+        length(data[key]) == length(data["quarters_num"]) ||
+            error("$key does not align with the national quarterly axis")
+        all(isfinite, data[key]) ||
+            error("$key contains nonfinite values")
+        key == "nominal_inventory_investment_quarterly" ||
+            all(>(0), data[key]) ||
+            error("$key contains nonpositive values")
+    end
+    nipa_expenditure_residuals =
+        nipa_nominal_expenditure_residuals(data)
+    maximum(abs, nipa_expenditure_residuals) <= 1.0 ||
+        error(
+        "Nominal NIPA expenditure controls exceed the published rounding tolerance",
+    )
+    nipa_investment_residuals =
+        nipa_private_investment_residuals(data)
+    maximum(abs, nipa_investment_residuals) <= 0.5 ||
+        error(
+        "Gross private domestic investment does not reconcile to fixed investment plus inventory investment",
+    )
+    record_source_check!(
+        state,
+        "BEA",
+        "NIPA T10105",
+        "nominal_expenditure_identity",
+        "APPROVED";
+        observed = maximum(abs, nipa_expenditure_residuals),
+        expected = "maximum absolute source-rounding residual <= 1 million USD per quarter",
+        detail = "GDP, PCE, gross private domestic investment, exports, imports, and government consumption/investment are preserved as origin-level macro controls; no commodity discrepancy is relabeled as inventories.",
+    )
+    record_source_check!(
+        state,
+        "BEA",
+        "NIPA T10105",
+        "private_investment_identity",
+        "APPROVED";
+        observed = maximum(abs, nipa_investment_residuals),
+        expected = "maximum absolute source-rounding residual <= 0.5 million USD per quarter",
+        detail = "Gross private domestic investment equals fixed investment plus signed change in private inventories at published precision.",
+    )
     for key in (
             "real_fixed_capitalformation_quarterly",
             "nominal_wages_quarterly",

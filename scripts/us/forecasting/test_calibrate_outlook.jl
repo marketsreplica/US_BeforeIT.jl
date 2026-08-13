@@ -3,6 +3,7 @@
 using CSV
 using DataFrames
 using Dates
+using JSON
 using Statistics
 using Test
 
@@ -148,6 +149,24 @@ end
         Date(2026, 3, 31)
     @test USOutlookCalibration.validate_contract(deepcopy(config)) isa
         AbstractDict
+
+    wrong_artifact_class = deepcopy(config)
+    wrong_artifact_class["artifact_class"] = "C"
+    @test_throws ErrorException USOutlookCalibration.validate_contract(
+        wrong_artifact_class,
+    )
+
+    leaks_into_raw_calibration = deepcopy(config)
+    leaks_into_raw_calibration["eligible_for_raw_calibration"] = true
+    @test_throws ErrorException USOutlookCalibration.validate_contract(
+        leaks_into_raw_calibration,
+    )
+
+    raw_product_not_retained = deepcopy(config)
+    raw_product_not_retained["raw_forecast_required_alongside"] = false
+    @test_throws ErrorException USOutlookCalibration.validate_contract(
+        raw_product_not_retained,
+    )
 
     bad_date = deepcopy(config)
     bad_date["target_end"] = "2026Q3"
@@ -463,4 +482,38 @@ end
     rebased = USOutlookCalibration.rebase_levels(trending, 250.0)
     @test all(rebased[1, :] .== 250.0)
     @test rebased[2, 1] == 245.0
+end
+
+@testset "US outlook checked-in provenance is current" begin
+    summary_path = joinpath(
+        USOutlookCalibration.DEFAULT_OUTPUT_DIR,
+        "calibration_summary.json",
+    )
+    summary = JSON.parsefile(summary_path)
+    reproducibility = summary["reproducibility"]
+    for (path_key, hash_key) in (
+            ("config_path", "config_sha256"),
+            ("truth_path", "truth_sha256"),
+            (
+                "structural_artifact_path",
+                "structural_artifact_sha256",
+            ),
+            (
+                "forecast_baseline_path",
+                "forecast_baseline_sha256",
+            ),
+            (
+                "calibration_artifact_path",
+                "calibration_artifact_sha256",
+            ),
+        )
+        path = joinpath(
+            USOutlookCalibration.REPO_ROOT,
+            reproducibility[path_key],
+        )
+        @test USOutlookCalibration.file_sha256(path) ==
+            reproducibility[hash_key]
+    end
+    @test summary["evaluation_design"]["real_time_vintage_claim"] ===
+        false
 end

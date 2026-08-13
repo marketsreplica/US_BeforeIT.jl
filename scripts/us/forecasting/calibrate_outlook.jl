@@ -148,6 +148,15 @@ module USOutlookCalibration
     function validate_contract(config::AbstractDict)
         get(config, "schema_version", nothing) == EXPECTED_SCHEMA ||
             error("Unsupported calibration schema")
+        get(config, "artifact_class", nothing) == "H" ||
+            error("Forecast-error calibration must be an explicit class-H artifact")
+        get(config, "artifact_role", nothing) ==
+            "engineering_only_forecast_correction" ||
+            error("Forecast-error calibration must retain its engineering-only role")
+        get(config, "eligible_for_raw_calibration", nothing) === false ||
+            error("Class-H calibration cannot be eligible for raw calibration")
+        get(config, "raw_forecast_required_alongside", nothing) === true ||
+            error("A class-H product must retain and score the raw forecast alongside it")
         date_expectations = Dict(
             "truth_start" => EXPECTED_TRUTH_START,
             "measurement_anchor" => EXPECTED_MEASUREMENT_ANCHOR,
