@@ -123,7 +123,7 @@ end
             "CURRENT_VINTAGE_FAIL_CLOSED_READINESS_GATE_NOT_ORIGIN_ELIGIBLE"
         @test contract.promotion_status == "NOT_READY_NOT_PROMOTED"
         @test contract.admission_evidence_hash ==
-            "admission1:6291bdc8101d9984039cd804483d6fe5962a133ecf281794ba109045877f51de"
+            "admission1:824a0cf2efae13c1b55966a40dd0edef49cb50d9b0c82f63f05952baf568d0a3"
         @test result.admission_evidence_hash ==
             contract.admission_evidence_hash
         @test admission_artifact.sha256 ==
