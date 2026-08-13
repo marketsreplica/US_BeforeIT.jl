@@ -1,1 +1,1 @@
-Please work on a new worktree for edits except if user asks otherwise.
+Please work on a new worktree for edits except if user asks otherwise. For your coding tasks only explore your own worktree do not read or edit other worktrees from this repository to keep the isolation of tasks.
