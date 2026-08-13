@@ -56,6 +56,37 @@ all historical inputs needed to reproduce it.
 
 ---
 
+## Status addendum — 2026-08-13
+
+The plan body below is unchanged. This block records where the program
+actually stands; where the two disagree, this block is current.
+
+- **Stage-2 milestone achieved 2026-08-10.** The ABM was scored against ten
+  statistical benchmarks over 61 origins (2010Q2–2025Q2), a structural defect
+  was diagnosed by matched-seed experiment, repaired on accounting grounds and
+  re-scored on identical cells and seeds. The repaired model
+  `beforeit_abm_us_v2` takes 1st of 14 on the headline pair {real GDP,
+  GDP deflator} in all three sample tracks (0.830 / 0.829 / 0.796 weighted
+  RMSE ratio against a VAR(1) anchor), against v1's 0.905 / 0.894 / 1.272.
+  Full write-up: [US_ABM_FORECAST_REPORT.md](US_ABM_FORECAST_REPORT.md);
+  paper version: `paper/US_ABM_Forecasting_Paper.tex`.
+- **Gate 1 (accounting basis) is partially closed.** The opening commodity
+  balance now clears to 1.0e-13 in the reconciled artifact. The valuation and
+  closure-account policies remain open.
+- **Gates 2–5 remain open.** The stage-2 result is a revised-data,
+  mixed-vintage diagnostic (`real_time = false`, `origin_admissible = false`,
+  `promotion_eligible = false`); it is not the frozen pseudo-real-time
+  competition gate 4 requires, and no DSGE benchmark is in the field.
+- **Next open workstreams**, in dependency order: (i) the labour block, which
+  over-heats to ~1 % unemployment once goods rationing stops; (ii) capital
+  accumulation — a capacity-expansion term in desired investment, calibrated
+  against `net I = ΔK` and never against forecast RMSE, without which the
+  model is valid only at h ≤ 12; (iii) the PCE-price and payroll bridges from
+  model internals to official target definitions; (iv) a DSGE benchmark in the
+  comparison field; (v) stage 3 — vintage-clean origins from 2014 onward.
+
+---
+
 ## Part I — Is the implementation consistent with the paper?
 
 ### I.1 Verdict

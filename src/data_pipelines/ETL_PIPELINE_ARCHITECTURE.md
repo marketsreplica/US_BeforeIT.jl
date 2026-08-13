@@ -52,7 +52,7 @@ This document outlines a modern, serverless data pipeline architecture for the U
                               ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                 Data Transformation Service                         │
-│  • NAICS to BeforeIT 71-sector mapping                            │
+│  • NAICS/71-source-industry to 68-commodity model mapping         │
 │  • Quarterly/annual aggregation                                    │
 │  • MATLAB datenum conversion                                       │
 │  • Currency scaling and normalization                             │
@@ -155,7 +155,8 @@ collector-service/
 
 Key transformations include:
 
-1. **Sector Mapping**: Convert NAICS codes to BeforeIT 71-sector classification
+1. **Sector Mapping**: Convert NAICS/71-source-industry inputs to the
+   68-commodity BeforeIT U.S. model classification
 2. **Time Alignment**: Standardize quarterly/annual data with MATLAB datenum compatibility
 3. **Currency Normalization**: Convert to billions USD, apply appropriate scaling
 4. **Missing Data**: Interpolation strategies for incomplete time series
@@ -316,7 +317,7 @@ class DataTransformer:
         return transformed
         
     def map_to_beforeit_sectors(self, naics_data):
-        """Map NAICS codes to BeforeIT 71-sector classification"""
+        """Map NAICS/71-source-industry inputs to the 68-commodity U.S. model."""
         mapped_data = []
         
         for record in naics_data:
