@@ -1,0 +1,97 @@
+schema_version = "beforeit-us-census-m3-inventory-stage-fixture.v1"
+classification = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+source_url = "https://www.census.gov/manufacturing/m3/prel/historical_data/histshts/naics/naicsinvp.xlsx"
+retrieved_at_utc = "2026-08-06T16:40:45Z"
+source_last_modified = "Tue, 04 Aug 2026 14:00:21 GMT"
+workbook_internal_period_hint = "2026/Jun26"
+source_workbook_sha256 = "74ee0d3b9d4a9673a39f1f4ece28206dcccca6451f48aee63506c61675373538"
+source_workbook_byte_count = 969323
+source_receipt_sha256 = "8bee49047f315bfedbde66eb3f9ccccd7526726e13c3e0b6857da6a2947cb600"
+source_workbook_vintage = "CURRENT_MUTABLE_CAPTURE_NOT_IMMUTABLE_RELEASE"
+source_revision_status = "NOT_ENCODED_PER_CELL_IN_WORKBOOK"
+forecast_origin_admissible = false
+economy_wide_scope_claimed = false
+bea_allocation_applied = false
+commodity_holder_crosswalk_applied = false
+transition_emitted = false
+model_inventory_vector_emitted = false
+model_state_write = false
+accounting_gate_effect = "NONE"
+forecast_score_effect = "NONE"
+
+[source_semantics]
+scope = "DOMESTIC_MANUFACTURING_M3_SURVEY_ONLY"
+frequency = "MONTHLY"
+time_basis = "END_OF_MONTH_STOCK_LEVEL"
+about_page_valuation_basis = "CURRENT_COST_OR_MARKET_VALUE"
+historical_documentation_valuation_basis = "MILLIONS_OF_DOLLARS_AT_CURRENT_MARKET"
+definitions_page_valuation_basis = "COST_USING_ANY_VALUATION_METHOD_OTHER_THAN_LIFO"
+price_adjustment = "NOT_ADJUSTED_FOR_PRICE_CHANGES"
+adjusted_code = "A"
+unadjusted_code = "U"
+total_code = "TI"
+materials_code = "MI"
+work_in_process_code = "WI"
+finished_goods_code = "FI"
+missing_value_policy = "ABSENT_CELL_IS_SOURCE_MISSING_NOT_ZERO"
+zero_policy = "NUMERIC_ZERO_IS_EXPLICIT_ZERO_DISTINCT_FROM_MISSING"
+revision_policy = "CURRENT_WORKBOOK_CAN_REVISE_HISTORY; NO_PSEUDO_VINTAGE_OR_FIRST_RELEASE_CLAIM"
+
+[source_method]
+stage_control_allocation_is_census_method = true
+unadjusted_stage_method = "THREE_DIGIT_NAICS_TOTAL_INVENTORY_CONTROL; INITIAL_STAGE_RATIO_ESTIMATES; DIFFERENCE_PROPORTIONALLY_ALLOCATED_TO_STAGES"
+seasonally_adjusted_stage_method = "STAGES_SEASONALLY_ADJUSTED_AT_THREE_DIGIT_NAICS; DIFFERENCE_TO_ADJUSTED_TOTAL_PROPORTIONALLY_ALLOCATED_TO_STAGES"
+reason = "SIGNIFICANT_NUMBER_OF_COMPANIES_REPORT_TOTAL_INVENTORIES_BUT_CANNOT_REPORT_STAGE_DETAIL"
+independent_stage_measurement_claimed = false
+project_allocation_applied = false
+identity_interpretation = "PUBLISHED_CONTROLLED_ACCOUNTING_IDENTITY_NOT_INDEPENDENT_STAGE_VALIDATION"
+
+[expected]
+source_row_count = 11060
+source_series_count = 316
+adjusted_series_count = 158
+unadjusted_series_count = 158
+total_series_count = 172
+materials_series_count = 48
+work_in_process_series_count = 48
+finished_goods_series_count = 48
+year_minimum = 1992
+year_maximum = 2026
+source_cell_count = 132720
+numeric_cell_count = 130824
+missing_cell_count = 1896
+explicit_zero_count = 0
+negative_count = 0
+stage_identity_set_count = 48
+identity_check_count = 20160
+identity_exact_pass_count = 19872
+identity_source_missing_count = 288
+identity_partial_missing_count = 0
+identity_failure_count = 0
+maximum_absolute_identity_residual_millions = 0
+latest_observed_period = "2026-06"
+missing_period_start = "2026-07"
+missing_period_end = "2026-12"
+stage_identity_series_codes = ["A11S", "A12S", "A13S", "A14S", "A15S", "A16S", "A21S", "A22S", "A23S", "A24S", "A25S", "A26S", "A27S", "A31S", "A32S", "A33S", "A34S", "A35S", "A36S", "A37S", "A39S", "AMDM", "AMNM", "AMTM", "U11S", "U12S", "U13S", "U14S", "U15S", "U16S", "U21S", "U22S", "U23S", "U24S", "U25S", "U26S", "U27S", "U31S", "U32S", "U33S", "U34S", "U35S", "U36S", "U37S", "U39S", "UMDM", "UMNM", "UMTM"]
+
+[citations]
+historical_documentation_url = "https://www.census.gov/manufacturing/m3/historical_data/naicshist.pdf"
+time_series_url = "https://www.census.gov/manufacturing/m3/historical/timeseries.html"
+methodology_url = "https://www.census.gov/manufacturing/m3/how_the_data_are_collected/index.html"
+definitions_url = "https://www.census.gov/manufacturing/m3/definitions/index.html"
+about_url = "https://www.census.gov/manufacturing/m3/about_the_surveys/index.html"
+
+[artifacts]
+series_rows_sha256 = "7b0ab1879460afac35b7a84b7cc8d31be7c876e3f825f1fb141c1e94d242facf"
+identity_checks_sha256 = "9dcea66c61c18e5ce7eac620dcafeb300d7e97c5c6b6089e8696191a461ed932"
+
+[blocked_boundaries]
+economy_wide_bea_allocation = true
+commodity_holder_crosswalk = true
+stage_to_model_stock_scope_bridge = true
+stock_flow_transition = true
+current_vintage_to_forecast_origin = true
+model_state_write = true
+accounting_gate = true
+forecast_score = true

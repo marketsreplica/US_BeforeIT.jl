@@ -1,0 +1,64 @@
+schema_version = "beforeit-us-oecd-sut-source-axis-valuation-fixture.v2"
+classification = "CURRENT_VINTAGE_DIAGNOSTIC_NOT_ORIGIN_ELIGIBLE"
+promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
+forecast_origin_admissible = false
+model_state_write = false
+accounting_gate_effect = "NONE"
+source_year = 2024
+sdmx_version = "2.0"
+captured_at_utc = "2026-08-06T15:10:26Z"
+source_response_count = 25
+source_bundle_sha256 = "b202aa776874eb712a207f9be6f312a12c5d73ed367db881c32f7bb81936a1f7"
+raw_response_path = "scripts/us/accounting/oecd_valuation/raw/oecd_sut_usa_2024_v2"
+generator_sha256 = "e6690b200017f9b2c06cb1f9cc3fd210b73a1b1552902c03d8baac3603be6fde"
+project_sha256 = "72cec6cb6dc64dc71b9e342890b78afbf8fd66cb97dd8603e4fe905ad137dc1c"
+julia_manifest_sha256 = "c2e596cf8452c5b890bb0ef66c05bc72a57fa25ab6f8fe790f8db4600b035263"
+source_axis_cell_count = 10675
+axis_code_count = 245
+t1610_nonbasic_quarantine_count = 245
+rounding_tolerance_hundredths_million_usd = 1
+source_missing_identity_policy = "NOT_EVALUABLE_SOURCE_MISSING"
+structural_zero_metadata_status = "ABSENT"
+combined_margin_split_status = "NOT_RUN_BLOCKED"
+model_mapping_status = "NOT_RUN_BLOCKED"
+state_write_status = "NOT_RUN_BLOCKED"
+
+[fixture_files]
+axis_codes_csv_sha256 = "29d56d85154e9bb9317f999576869ea071cd1ca8858baa81c8921d52b6da52f6"
+cells_csv_sha256 = "25531db1941cbc00dc8294e31322cc5c425a4ff0365d0f517850a3538176b5a4"
+identity_evaluations_csv_sha256 = "30a1dcce1f87283b051bec4ea1e5ea1e5944deb721773463f6d3fb6c15fa3e8e"
+source_receipts_json_sha256 = "695b683fd6709b9e5cf4225999773bdc5ecb0b4f7bb1a6dec956cba7fa88b083"
+source_totals_csv_sha256 = "e10c53d53148005cdf0fc8c396f19bf911bd48ea93b9a21843c6dd72d94f537f"
+t1610_nonbasic_quarantine_csv_sha256 = "3691a589f1678e4aa19f4db0ab9b0545aa7dfc128983a54e9d2df85f1fc7fdc4"
+
+[selected_rows]
+T1600 = 10495
+T1610 = 10673
+T1620 = 4500
+T1630 = 9723
+T1633 = 9555
+T1634 = 1425
+
+[explicit_zero_counts]
+purchasers = 111
+basic = 14
+combined_margin = 137
+net_product_tax = 246
+gross_product_tax = 177
+subsidy_magnitude = 123
+
+[missing_counts]
+purchasers = 180
+basic = 2
+combined_margin = 6175
+net_product_tax = 952
+gross_product_tax = 1120
+subsidy_magnitude = 9250
+
+[equation_diagnostics]
+valuation_identity_evaluated_count = 4226
+valuation_identity_not_evaluable_source_missing_count = 6449
+tax_identity_evaluated_count = 1257
+tax_identity_not_evaluable_source_missing_count = 9418
+maximum_valuation_identity_residual_hundredths_million_usd = 1
+maximum_tax_identity_residual_hundredths_million_usd = 1
