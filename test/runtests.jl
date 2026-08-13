@@ -28,6 +28,9 @@ using Runic
     include("utils/austria_baselines.jl")
     include("utils/us_baselines.jl")
 
+    # U.S. ABM: builds and steps the model from both committed 2024 artifacts
+    include("us_abm_smoke.jl")
+
     # search_and_matching
     include("markets/search_and_matching.jl")
 
