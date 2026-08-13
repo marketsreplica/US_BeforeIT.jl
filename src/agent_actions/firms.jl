@@ -13,15 +13,19 @@ function cost_push_inflation(firms::AbstractFirms, model::AbstractModel)
 end
 
 function desired_capital_material_employment(firms::AbstractFirms, Q_s_i)
+    capacity_limited_output =
+        min.(Q_s_i, firms.K_i .* firms.kappa_i)
 
     # target investments in capital
-    I_d_i = firms.delta_i ./ firms.kappa_i .* min(Q_s_i, firms.K_i .* firms.kappa_i)
+    I_d_i =
+        firms.delta_i ./ firms.kappa_i .* capacity_limited_output
 
     # intermediate goods to purchase
-    DM_d_i = min.(Q_s_i, firms.K_i .* firms.kappa_i) ./ firms.beta_i
+    DM_d_i = capacity_limited_output ./ firms.beta_i
 
     # target employment
-    N_d_i = max.(1.0, round.(min(Q_s_i, firms.K_i .* firms.kappa_i) ./ firms.alpha_bar_i))
+    N_d_i =
+        max.(1.0, round.(capacity_limited_output ./ firms.alpha_bar_i))
     return I_d_i, DM_d_i, N_d_i
 end
 
