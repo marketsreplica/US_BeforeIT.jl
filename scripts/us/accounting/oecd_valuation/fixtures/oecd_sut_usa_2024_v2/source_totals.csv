@@ -1,0 +1,7 @@
+table_identifier,component,transaction,activity,product,value_hundredths_million_usd,obs_status,aggregation_policy
+T1600,purchasers,TU,_Z,_T,5456842235,A,published_total_cell_only
+T1610,basic,TU,_Z,_T,5355809681,A,published_total_cell_only
+T1620,combined_margin,TU,_Z,_T,-4,A,published_total_cell_only
+T1630,net_product_tax,TU,_Z,_T,101032558,A,published_total_cell_only
+T1633,gross_product_tax,TU,_Z,_T,109968166,A,published_total_cell_only
+T1634,subsidy_magnitude,TU,_Z,_T,8935607,A,published_total_cell_only

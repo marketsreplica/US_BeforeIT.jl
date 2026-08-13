@@ -1,0 +1,112 @@
+schema_version = "beforeit-us-revised-data-quarterly-panel.v1"
+artifact_id = "beforeit-us-revised-data-eight-target-panel-2026q2.v1"
+information_track = "revised_mixed_vintage_diagnostic"
+forecast_origin_admissible = false
+promotion_eligible = false
+abm_accuracy_claimed = false
+bitemporal = false
+real_time = false
+revised_current_release_snapshot = true
+evidence_class = "QUARANTINED_REVISED_CURRENT_RELEASE_DIAGNOSTIC_ONLY"
+panel_file = "quarterly_panel.csv"
+panel_sha256 = "f7bb26a467465937060b1e9e734a020b9158a8136db05d2e0df47c3bff851bbe"
+row_count = 101
+start_period = "2000Q3"
+end_period = "2025Q3"
+target_order = ["real_gdp", "pce_price_index", "core_pce_price_index", "gdp_deflator", "unemployment_rate", "payroll_employment", "effective_federal_funds_rate", "nominal_gdp"]
+source_receipts_file = "source_receipts.json"
+source_receipts_sha256 = "14bab08bb573265e0affc878cedbbb8d4a0f8f5510fc59990f92d614f109d488"
+bea_content_fingerprint_sha256 = "a08c824620e30d09ebdb9bd35cadd1d9f45e36a7bf5b83e1d4d1551d1310bf33"
+
+[quarantine]
+claim = "This current/revised mixed-vintage panel may exercise benchmark and scoring plumbing only; it cannot establish pseudo-real-time accuracy."
+historical_release_availability_verified = false
+first_release_truth = false
+near_mature_truth = false
+mature_truth = false
+inventory_registered = false
+origin_count_added = 0
+abm_forecast_scores_added = 0
+
+[complete_case_boundary]
+rule = "Primary eight-target panel ends before the first quarter without all three monthly CPS unemployment observations."
+first_excluded_period = "2025Q4"
+missing_source_observation = "LNS14000000 2025-10"
+official_guidance_url = "https://www.bls.gov/cps/methods/2025-federal-government-shutdown-impact-cps.htm"
+rationale = "BLS states it could not produce reliable 2025Q4 quarterly estimates with one-third of the quarter missing."
+two_month_mean_used = false
+missing_value_imputed = false
+post_gap_source_observations_retained = true
+post_gap_source_end_period = "2026Q2"
+
+[build]
+generator_file = "../build_fixture.py"
+generator_sha256 = "2c37433663e3f7898d29195a8a8ef94f176bd4046c0d1b55e86d6ab58b1f9b8f"
+decimal_log_precision = "50 significant decimal digits"
+panel_decimal_places = 12
+csv_encoding = "UTF-8"
+csv_line_endings = "LF"
+
+[sources.bea_quarterly_levels]
+file = "bea_quarterly_levels.csv"
+sha256 = "977f85676b087eba896847895a3c4c9c88976c30d10d99f582fe62598ae8f158"
+row_count = 525
+start_period = "2000Q2"
+end_period = "2026Q2"
+lineage = "Pinned BEA HMI7 2026Q2 advance present-day content fingerprint; published values only."
+
+[sources.bls_monthly_levels]
+file = "bls_monthly_levels.csv"
+sha256 = "9100125a88e928f8e03bcfb78a0c71efe45fc0b16c3ce816422de2a6a709ea28"
+row_count = 636
+start_month = "2000-01"
+end_month = "2026-06"
+lineage = "BLS Public Data API v2 present-day current/revised responses, split into three ten-or-fewer-year requests."
+
+[sources.effr_daily_rates]
+file = "effr_daily_rates.csv"
+sha256 = "77a1ef7ca350c937562d97586a3ae33b09d6da2006d5c1bad644ec3b0911384b"
+row_count = 6530
+start_effective_date = "2000-07-03"
+end_effective_date = "2026-06-30"
+lineage = "New York Fed EFFR search.csv current/revised response; one row per published effective business date."
+
+[transformations.bea_growth_and_prices]
+targets = ["real_gdp", "pce_price_index", "core_pce_price_index", "gdp_deflator", "nominal_gdp"]
+rule = "400 * ln(level_t / level_t_minus_1)"
+output_unit = "percentage_points_annual_rate"
+
+[transformations.payroll_employment]
+source_series = "CES0000000001"
+rule = "quarterly arithmetic mean of three monthly levels, then 100 * ln(mean_t / mean_t_minus_1)"
+output_unit = "log_points"
+
+[transformations.unemployment_rate]
+source_series = "LNS14000000"
+rule = "quarterly arithmetic mean only when all three monthly percent levels are published"
+missing_month_boundary = "BLS reports LNS14000000 2025-10 as unavailable under footnote 9 (2025 lapse in appropriations); the primary complete-case panel stops at 2025Q3."
+two_month_mean_used = false
+missing_month_values_imputed = false
+output_unit = "percentage_points"
+
+[transformations.effective_federal_funds_rate]
+source_series = "EFFR"
+rule = "equal-weight arithmetic mean of all published rates in the quarter whose effective dates are Monday through Friday"
+weekends_imputed = false
+published_nonbusiness_date_exception = "The API response contains one exact Sunday-labelled row, 2003-07-20 at 1.02, whose published fields other than date exactly duplicate the adjacent 2003-07-21 row. It is retained in the pinned raw-response hash but excluded without reassignment. Any other weekend row or pair drift fails."
+output_unit = "percentage_points"
+
+[source_terms.bea]
+attribution = "Source: U.S. Bureau of Economic Analysis"
+terms_url = "https://www.bea.gov/index.php/help/faq/145"
+
+[source_terms.bls]
+attribution = "Source: U.S. Bureau of Labor Statistics"
+api_documentation_url = "https://www.bls.gov/developers/api_signature_v2.htm"
+
+[source_terms.new_york_fed]
+attribution = "© 2026 Federal Reserve Bank of New York. Content from the New York Fed subject to the Terms of Use at newyorkfed.org."
+reference_rate_notice = "The Effective Federal Funds Rate data is subject to the Terms of Use posted at newyorkfed.org. The New York Fed is not responsible for publication of the Effective Federal Funds Rate data by BeforeIT, does not sanction or endorse any particular republication, and has no liability for your use."
+modification_notice = "Modified/derived by BeforeIT: published daily EFFR observations are equal-weight averaged by calendar quarter; no weekend observations are imputed."
+terms_url = "https://www.newyorkfed.org/privacy/termsofuse"
+source_page_url = "https://www.newyorkfed.org/markets/reference-rates/effr"

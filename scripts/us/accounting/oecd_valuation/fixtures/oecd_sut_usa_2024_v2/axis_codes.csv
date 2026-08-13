@@ -1,0 +1,246 @@
+axis,code,label,parent_code,depth,child_count,is_hierarchy_leaf,axis_role
+transaction,P2,Intermediate consumption,TU,1,0,1,leaf
+transaction,P3,Final consumption expenditure,TU,1,3,0,aggregate
+transaction,P34,Domestic purchases by non-residents,P3S14DC,3,0,1,leaf
+transaction,P3S13,General government final consumption expenditure,P3,2,0,1,leaf
+transaction,P3S14DC,Households final consumption expenditure domestic concept,P3,2,1,0,aggregate
+transaction,P5,Gross capital formation,TU,1,3,0,aggregate
+transaction,P51G,Gross fixed capital formation,P5,2,0,1,leaf
+transaction,P52,Changes in inventories,P5,2,0,1,leaf
+transaction,P6,Exports of goods and services,TU,1,4,0,aggregate
+transaction,P6A,Re-exports,P6,2,0,1,leaf
+transaction,TU,Total use,,0,4,0,aggregate
+activity,A,"Agriculture, forestry and fishing",_T,1,3,0,aggregate
+activity,A01,"Crop and animal production, hunting and related service activities",A,2,0,1,leaf
+activity,A02,Forestry and logging,A,2,0,1,leaf
+activity,A03,Fishing and aquaculture,A,2,0,1,leaf
+activity,B,Mining and quarrying,_T,1,5,0,aggregate
+activity,B05,Mining of coal and lignite,B,2,0,1,leaf
+activity,B06,Extraction of crude petroleum and natural gas,B,2,0,1,leaf
+activity,B07,Mining of metal ores,B,2,0,1,leaf
+activity,B08,Other mining and quarrying,B,2,0,1,leaf
+activity,B09,Mining support service activities,B,2,0,1,leaf
+activity,C,Manufacturing,_T,1,19,0,aggregate
+activity,C10,Manufacture of food products,C10T12,3,0,1,leaf
+activity,C10T12,Manufacture of food products; beverages and tobacco products,C,2,3,0,aggregate
+activity,C11,Manufacture of beverages,C10T12,3,0,1,leaf
+activity,C12,Manufacture of tobacco products,C10T12,3,0,1,leaf
+activity,C13,Manufacture of textiles,C13T15,3,0,1,leaf
+activity,C13T15,"Manufacture of textiles, wearing apparel, leather and related products",C,2,3,0,aggregate
+activity,C14,Manufacture of wearing apparel,C13T15,3,0,1,leaf
+activity,C15,Manufacture of leather and related products,C13T15,3,0,1,leaf
+activity,C16,"Manufacture of wood and of products of wood and cork, except furniture; manufacture of articles of straw and plaiting materials",C,2,0,1,leaf
+activity,C17,Manufacture of paper and paper products,C,2,0,1,leaf
+activity,C18,Printing and reproduction of recorded media,C,2,0,1,leaf
+activity,C19,Manufacture of coke and refined petroleum products,C,2,0,1,leaf
+activity,C20,Manufacture of chemicals and chemical products,C,2,0,1,leaf
+activity,C21,Manufacture of basic pharmaceutical products and pharmaceutical preparations,C,2,0,1,leaf
+activity,C22,Manufacture of rubber and plastics products,C,2,0,1,leaf
+activity,C23,Manufacture of other non-metallic mineral products,C,2,0,1,leaf
+activity,C24,Manufacture of basic metals,C,2,0,1,leaf
+activity,C25,"Manufacture of fabricated metal products, except machinery and equipment",C,2,0,1,leaf
+activity,C26,"Manufacture of computer, electronic and optical products",C,2,0,1,leaf
+activity,C27,Manufacture of electrical equipment,C,2,0,1,leaf
+activity,C28,Manufacture of machinery and equipment n.e.c.,C,2,0,1,leaf
+activity,C29,"Manufacture of motor vehicles, trailers and semi-trailers",C,2,0,1,leaf
+activity,C30,Manufacture of other transport equipment,C,2,0,1,leaf
+activity,C31,Manufacture of furniture,C31_32,3,0,1,leaf
+activity,C31_32,Manufacture of furniture; other manufacturing,C,2,2,0,aggregate
+activity,C32,Other manufacturing,C31_32,3,0,1,leaf
+activity,C33,Repair and installation of machinery and equipment,C,2,0,1,leaf
+activity,D,"Electricity, gas, steam and air conditioning supply",_T,1,1,0,aggregate
+activity,E,"Water supply; sewerage, waste management and remediation activities",_T,1,2,0,aggregate
+activity,E36,"Water collection, treatment and supply",E,2,0,1,leaf
+activity,E37,Sewerage,E37T39,3,0,1,leaf
+activity,E37T39,"Sewerage, waste management, remediation activities",E,2,3,0,aggregate
+activity,E38,"Waste collection, treatment and disposal activities; materials recovery",E37T39,3,0,1,leaf
+activity,E39,Remediation activities and other waste management services,E37T39,3,0,1,leaf
+activity,F,Construction,_T,1,3,0,aggregate
+activity,F41,Construction of buildings,F,2,0,1,leaf
+activity,F42,Civil engineering,F,2,0,1,leaf
+activity,G,Wholesale and retail trade; repair of motor vehicles and motorcycles,_T,1,3,0,aggregate
+activity,G45,Wholesale and retail trade and repair of motor vehicles and motorcycles,G,2,0,1,leaf
+activity,G46,"Wholesale trade, except of motor vehicles and motorcycles",G,2,0,1,leaf
+activity,G47,"Retail trade, except of motor vehicles and motorcycles",G,2,0,1,leaf
+activity,H,Transportation and storage,_T,1,5,0,aggregate
+activity,H49,Land transport and transport via pipelines,H,2,0,1,leaf
+activity,H50,Water transport,H,2,0,1,leaf
+activity,H51,Air transport,H,2,0,1,leaf
+activity,H52,Warehousing and support activities for transportation,H,2,0,1,leaf
+activity,H53,Postal and courier activities,H,2,0,1,leaf
+activity,I,Accommodation and food service activities,_T,1,2,0,aggregate
+activity,I55,Accommodation,I,2,0,1,leaf
+activity,I56,Food and beverage service activities,I,2,0,1,leaf
+activity,J,Information and communication,_T,1,4,0,aggregate
+activity,J58,Publishing activities,J,2,0,1,leaf
+activity,J59,"Motion picture, video and television programme production, sound recording and music publishing activities",J59_60,3,0,1,leaf
+activity,J59_60,"Motion picture, video, television programme production; programming and broadcasting activities",J,2,2,0,aggregate
+activity,J60,Programming and broadcasting activities,J59_60,3,0,1,leaf
+activity,J61,Telecommunications,J,2,0,1,leaf
+activity,J62,"Computer programming, consultancy and related activities",J62_63,3,0,1,leaf
+activity,J62_63,"Computer programming, consultancy, and information service activities",J,2,2,0,aggregate
+activity,J63,Information service activities,J62_63,3,0,1,leaf
+activity,K,Financial and insurance activities,_T,1,3,0,aggregate
+activity,K64,"Financial service activities, except insurance and pension funding",K,2,0,1,leaf
+activity,K65,"Insurance, reinsurance and pension funding, except compulsory social security",K,2,0,1,leaf
+activity,K66,Activities auxiliary to financial service and insurance activities,K,2,0,1,leaf
+activity,L,Real estate activities,_T,1,2,0,aggregate
+activity,L68A,Imputed rents of owner-occupied dwellings,L,2,0,1,leaf
+activity,L68B,Real estate activities excluding imputed rents,L,2,0,1,leaf
+activity,M,"Professional, scientific and technical activities",_T,1,5,0,aggregate
+activity,M69,Legal and accounting activities,M69_70,3,0,1,leaf
+activity,M69_70,Legal and accounting activities; activities of head offices; management consultancy activities,M,2,2,0,aggregate
+activity,M70,Activities of head offices; management consultancy activities,M69_70,3,0,1,leaf
+activity,M71,Architectural and engineering activities; technical testing and analysis,M,2,0,1,leaf
+activity,M72,Scientific research and development,M,2,0,1,leaf
+activity,M73,Advertising and market research,M,2,0,1,leaf
+activity,M74,"Other professional, scientific and technical activities",M74_75,3,0,1,leaf
+activity,M74_75,"Other professional, scientific and technical activities; veterinary activities",M,2,2,0,aggregate
+activity,M75,Veterinary activities,M74_75,3,0,1,leaf
+activity,N,Administrative and support service activities,_T,1,4,0,aggregate
+activity,N77,Rental and leasing activities,N,2,0,1,leaf
+activity,N78,Employment activities,N,2,0,1,leaf
+activity,N79,"Travel agency, tour operator, reservation service and related activities",N,2,0,1,leaf
+activity,N80,Security and investigation activities,N80T82,3,0,1,leaf
+activity,N80T82,"Security and investigation, service and landscape, office administrative and support activities",N,2,3,0,aggregate
+activity,N81,Services to buildings and landscape activities,N80T82,3,0,1,leaf
+activity,N82,"Office administrative, office support and other business support activities",N80T82,3,0,1,leaf
+activity,O,Public administration and defence; compulsory social security,_T,1,1,0,aggregate
+activity,P,Education,_T,1,1,0,aggregate
+activity,Q,Human health and social work activities,_T,1,2,0,aggregate
+activity,Q86,Human health activities,Q,2,0,1,leaf
+activity,Q87,Residential care activities,Q87_88,3,0,1,leaf
+activity,Q87_88,Residential care activities and social work activities without accommodation,Q,2,2,0,aggregate
+activity,Q88,Social work activities without accommodation,Q87_88,3,0,1,leaf
+activity,R,"Arts, entertainment and recreation",_T,1,2,0,aggregate
+activity,R90,"Creative, arts and entertainment activities",R90T92,3,0,1,leaf
+activity,R90T92,"Creative, arts and entertainment activities; libraries, archives, museums and other cultural activities; gambling and betting activities",R,2,3,0,aggregate
+activity,R91,"Libraries, archives, museums and other cultural activities",R90T92,3,0,1,leaf
+activity,R92,Gambling and betting activities,R90T92,3,0,1,leaf
+activity,R93,Sports activities and amusement and recreation activities,R,2,0,1,leaf
+activity,S,Other service activities,_T,1,3,0,aggregate
+activity,S94,Activities of membership organizations,S,2,0,1,leaf
+activity,S95,Repair of computers and personal and household goods,S,2,0,1,leaf
+activity,S96,Other personal service activities,S,2,0,1,leaf
+activity,_T,Total - all activities,,0,22,0,published_total
+activity,_Z,Not applicable,,0,0,1,not_applicable
+product,CPA08_A,"Products of agriculture, forestry and fishing",_T,1,3,0,aggregate
+product,CPA08_A01,"Products of agriculture, hunting and related services",CPA08_A,2,0,1,leaf
+product,CPA08_A02,"Products of forestry, logging and related services",CPA08_A,2,0,1,leaf
+product,CPA08_A03,Fish and other fishing products; aquaculture products; support services to fishing,CPA08_A,2,0,1,leaf
+product,CPA08_B,Mining and quarrying,_T,1,5,0,aggregate
+product,CPA08_B05,Coal and lignite,CPA08_B,2,0,1,leaf
+product,CPA08_B06,Crude petroleum and natural gas,CPA08_B,2,0,1,leaf
+product,CPA08_B07,Metal ores,CPA08_B,2,0,1,leaf
+product,CPA08_B08,Other mining and quarrying products,CPA08_B,2,0,1,leaf
+product,CPA08_B09,Mining support services,CPA08_B,2,0,1,leaf
+product,CPA08_C,Manufactured products,_T,1,19,0,aggregate
+product,CPA08_C10,Food products,CPA08_C10T12,3,0,1,leaf
+product,CPA08_C10T12,"Food, beverages and tobacco products",CPA08_C,2,3,0,aggregate
+product,CPA08_C11,Beverages,CPA08_C10T12,3,0,1,leaf
+product,CPA08_C12,Tobacco products,CPA08_C10T12,3,0,1,leaf
+product,CPA08_C13,Textiles,CPA08_C13T15,3,0,1,leaf
+product,CPA08_C13T15,"Textiles, wearing apparel, leather and related products",CPA08_C,2,3,0,aggregate
+product,CPA08_C14,Wearing apparel,CPA08_C13T15,3,0,1,leaf
+product,CPA08_C15,Leather and related products,CPA08_C13T15,3,0,1,leaf
+product,CPA08_C16,"Wood and of products of wood and cork, except furniture; articles of straw and plaiting materials",CPA08_C,2,0,1,leaf
+product,CPA08_C17,Paper and paper products,CPA08_C,2,0,1,leaf
+product,CPA08_C18,Printing and recording services,CPA08_C,2,0,1,leaf
+product,CPA08_C19,Coke and refined petroleum products,CPA08_C,2,0,1,leaf
+product,CPA08_C20,Chemicals and chemical products,CPA08_C,2,0,1,leaf
+product,CPA08_C21,Basic pharmaceutical products and pharmaceutical preparations,CPA08_C,2,0,1,leaf
+product,CPA08_C22,Rubber and plastic products,CPA08_C,2,0,1,leaf
+product,CPA08_C23,Other non-metallic mineral products,CPA08_C,2,0,1,leaf
+product,CPA08_C24,Basic metals,CPA08_C,2,0,1,leaf
+product,CPA08_C25,"Fabricated metal products, except machinery and equipment",CPA08_C,2,0,1,leaf
+product,CPA08_C26,"Computer, electronic and optical products",CPA08_C,2,0,1,leaf
+product,CPA08_C27,Electrical equipment,CPA08_C,2,0,1,leaf
+product,CPA08_C28,Machinery and equipment n.e.c.,CPA08_C,2,0,1,leaf
+product,CPA08_C29,"Motor vehicles, trailers and semi-trailers",CPA08_C,2,0,1,leaf
+product,CPA08_C30,Other transport equipment,CPA08_C,2,0,1,leaf
+product,CPA08_C31,Furniture,CPA08_C31_32,3,0,1,leaf
+product,CPA08_C31_32,Furniture and other manufactured goods,CPA08_C,2,2,0,aggregate
+product,CPA08_C32,Other manufactured goods,CPA08_C31_32,3,0,1,leaf
+product,CPA08_C33,Repair and installation services of machinery and equipment,CPA08_C,2,0,1,leaf
+product,CPA08_D,"Electricity, gas, steam and air conditioning",_T,1,1,0,aggregate
+product,CPA08_E,"Water supply; sewerage, waste management and remediation services",_T,1,2,0,aggregate
+product,CPA08_E36,Natural water; water treatment and supply services,CPA08_E,2,0,1,leaf
+product,CPA08_E37,Sewerage services; sewage sludge,CPA08_E37T39,3,0,1,leaf
+product,CPA08_E37T39,"Sewerage services; sewage sludge; waste collection, treatment and disposal services; materials recovery services; remediation services and other waste management services",CPA08_E,2,3,0,aggregate
+product,CPA08_E38,"Waste collection, treatment and disposal services; materials recovery services",CPA08_E37T39,3,0,1,leaf
+product,CPA08_E39,Remediation services and other waste management services,CPA08_E37T39,3,0,1,leaf
+product,CPA08_F,Constructions and construction works,_T,1,3,0,aggregate
+product,CPA08_F41,Buildings and building construction works,CPA08_F,2,0,1,leaf
+product,CPA08_F42,Constructions and construction works for civil engineering,CPA08_F,2,0,1,leaf
+product,CPA08_G,Wholesale and retail trade services; repair services of motor vehicles and motorcycles,_T,1,3,0,aggregate
+product,CPA08_G45,Wholesale and retail trade and repair services of motor vehicles and motorcycles,CPA08_G,2,0,1,leaf
+product,CPA08_G46,"Wholesale trade services, except of motor vehicles and motorcycles",CPA08_G,2,0,1,leaf
+product,CPA08_G47,"Retail trade services, except of motor vehicles and motorcycles",CPA08_G,2,0,1,leaf
+product,CPA08_H,Transportation and storage services,_T,1,5,0,aggregate
+product,CPA08_H49,Land transport services and transport services via pipelines,CPA08_H,2,0,1,leaf
+product,CPA08_H50,Water transport services,CPA08_H,2,0,1,leaf
+product,CPA08_H51,Air transport services,CPA08_H,2,0,1,leaf
+product,CPA08_H52,Warehousing and support services for transportation,CPA08_H,2,0,1,leaf
+product,CPA08_H53,Postal and courier services,CPA08_H,2,0,1,leaf
+product,CPA08_I,Accommodation and food services,_T,1,2,0,aggregate
+product,CPA08_I55,Accommodation services,CPA08_I,2,0,1,leaf
+product,CPA08_I56,Food and beverage serving services,CPA08_I,2,0,1,leaf
+product,CPA08_J,Information and communication services,_T,1,4,0,aggregate
+product,CPA08_J58,Publishing services,CPA08_J,2,0,1,leaf
+product,CPA08_J59,"Motion picture, video and television programme production services, sound recording and music publishing",CPA08_J59_60,3,0,1,leaf
+product,CPA08_J59_60,"Motion picture, video and television programme production services, sound recording and music publishing; programming and broadcasting services",CPA08_J,2,2,0,aggregate
+product,CPA08_J60,Programming and broadcasting services,CPA08_J59_60,3,0,1,leaf
+product,CPA08_J61,Telecommunications services,CPA08_J,2,0,1,leaf
+product,CPA08_J62,"Computer programming, consultancy and related services",CPA08_J62_63,3,0,1,leaf
+product,CPA08_J62_63,"Computer programming, consultancy and related services; Information services",CPA08_J,2,2,0,aggregate
+product,CPA08_J63,Information services,CPA08_J62_63,3,0,1,leaf
+product,CPA08_K,Financial and insurance services,_T,1,3,0,aggregate
+product,CPA08_K64,"Financial services, except insurance and pension funding",CPA08_K,2,0,1,leaf
+product,CPA08_K65,"Insurance, reinsurance and pension funding services, except compulsory social security",CPA08_K,2,0,1,leaf
+product,CPA08_K66,Services auxiliary to financial services and insurance services,CPA08_K,2,0,1,leaf
+product,CPA08_L,Real estate services,_T,1,2,0,aggregate
+product,CPA08_L68A,Imputed rents of owner-occupied dwellings,CPA08_L,2,0,1,leaf
+product,CPA08_L68B,Real estate services excluding imputed rents,CPA08_L,2,0,1,leaf
+product,CPA08_M,"Professional, scientific and technical services",_T,1,5,0,aggregate
+product,CPA08_M69,Legal and accounting services,CPA08_M69_70,3,0,1,leaf
+product,CPA08_M69_70,Legal and accounting services; services of head offices; management consultancy services,CPA08_M,2,2,0,aggregate
+product,CPA08_M70,Services of head offices; management consulting services,CPA08_M69_70,3,0,1,leaf
+product,CPA08_M71,Architectural and engineering services; technical testing and analysis services,CPA08_M,2,0,1,leaf
+product,CPA08_M72,Scientific research and development services,CPA08_M,2,0,1,leaf
+product,CPA08_M73,Advertising and market research services,CPA08_M,2,0,1,leaf
+product,CPA08_M74,"Other professional, scientific and technical services",CPA08_M74_75,3,0,1,leaf
+product,CPA08_M74_75,"Other professional, scientific and technical services and veterinary services",CPA08_M,2,2,0,aggregate
+product,CPA08_M75,Veterinary services,CPA08_M74_75,3,0,1,leaf
+product,CPA08_N,Administrative and support services,_T,1,4,0,aggregate
+product,CPA08_N77,Rental and leasing services,CPA08_N,2,0,1,leaf
+product,CPA08_N78,Employment services,CPA08_N,2,0,1,leaf
+product,CPA08_N79,"Travel agency, tour operator and other reservation services and related services",CPA08_N,2,0,1,leaf
+product,CPA08_N80,Security and investigation services,CPA08_N80T82,3,0,1,leaf
+product,CPA08_N80T82,"Security and investigation services; services to buildings and landscape; office administrative, office support and other business support services",CPA08_N,2,3,0,aggregate
+product,CPA08_N81,Services to buildings and landscape,CPA08_N80T82,3,0,1,leaf
+product,CPA08_N82,"Office administrative, office support and other business support services",CPA08_N80T82,3,0,1,leaf
+product,CPA08_O,Public administration and defence services; compulsory social security services,_T,1,0,1,leaf
+product,CPA08_P,Education services,_T,1,0,1,leaf
+product,CPA08_Q,Human health and social work services,_T,1,2,0,aggregate
+product,CPA08_Q86,Human health services,CPA08_Q,2,0,1,leaf
+product,CPA08_Q87,Residential care services,CPA08_Q87_88,3,0,1,leaf
+product,CPA08_Q87_88,Residential care services; social work services without accommodation,CPA08_Q,2,2,0,aggregate
+product,CPA08_Q88,Social work services without accommodation,CPA08_Q87_88,3,0,1,leaf
+product,CPA08_R,"Arts, entertainment and recreation services",_T,1,2,0,aggregate
+product,CPA08_R90,"Creative, arts and entertainment services",CPA08_R90T92,3,0,1,leaf
+product,CPA08_R90T92,"Creative, arts, entertainment, library, archive, museum, other cultural services; gambling and betting services",CPA08_R,2,3,0,aggregate
+product,CPA08_R91,"Library, archive, museum and other cultural services",CPA08_R90T92,3,0,1,leaf
+product,CPA08_R92,Gambling and betting services,CPA08_R90T92,3,0,1,leaf
+product,CPA08_R93,Sporting services and amusement and recreation services,CPA08_R,2,0,1,leaf
+product,CPA08_S,Other services,_T,1,3,0,aggregate
+product,CPA08_S94,Services furnished by membership organisations,CPA08_S,2,0,1,leaf
+product,CPA08_S95,Repair services of computers and personal and household goods,CPA08_S,2,0,1,leaf
+product,CPA08_S96,Other personal services,CPA08_S,2,0,1,leaf
+product,CPA08_T,Services of households as employers; undifferentiated goods and services produced by households for own use,_T,1,2,0,aggregate
+product,CPA08_T97,Services of households as employers of domestic personnel,CPA08_T,2,0,1,leaf
+product,CPA08_U,Services provided by extraterritorial organisations and bodies,_T,1,0,1,leaf
+product,_T,Total,,0,22,0,published_total
+product,_X,Unspecified,_T,1,0,1,leaf
+valuation,B,Basic prices,,0,0,1,leaf
+valuation,O,Purchasers prices,,0,0,1,leaf
+valuation,Y,Taxes less subsidies on products,,0,0,1,leaf
