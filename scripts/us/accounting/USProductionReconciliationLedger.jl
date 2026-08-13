@@ -41,7 +41,7 @@ const STATUS_SCHEMA =
 const MANIFEST_SCHEMA =
     "beforeit-us-production-reconciliation-candidate-ledger-manifest.v1"
 const APPROVED_CONTRACT_SHA256 =
-    "12bc6cd1d514d9a2224cbfe709ebb3b1d1944bc6fdcf804f209690d0c69313a0"
+    "79a029665e45f5b981b6333e278d4ee35486980f39037de4e921e066695292c5"
 const DEFAULT_CONTRACT_PATH =
     joinpath(@__DIR__, "production_reconciliation_candidate_ledger.toml")
 const DEFAULT_REPO_ROOT = normpath(joinpath(@__DIR__, "..", "..", ".."))

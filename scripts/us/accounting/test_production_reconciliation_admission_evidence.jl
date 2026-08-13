@@ -96,9 +96,9 @@ end
         @test normalized_module_sha256(ADMISSION_MODULE_PATH) ==
             contract.module_normalized_sha256
         @test contract.candidate_problem_scope_hash ==
-            "scope1:9b41bd41ba5ba7f421aac0a3244cd58bf663fef36dcd507628af4d009cb69088"
+            "scope1:c5431dd4b2691fa29e57c35cbe8dc2b5e5a325fc2b637602df83d5399d142903"
         @test contract.candidate_problem_hash ==
-            "problem1:07607869be848a0016e5de1ea861b6350593369b92f973eac8b417648803a3d3"
+            "problem1:f8469e00492d34ffb4f7f1a1eefc7fa715f558b983cb8206862721a5c22ab1b2"
         @test length(contract.artifacts) == 12
         @test contract.artifacts["itable_canonical_grid"].sha256 ==
             "2a7c2eb3a809ff9b2e9805569692a095adf590a959017d99911e7f11450ab4e8"

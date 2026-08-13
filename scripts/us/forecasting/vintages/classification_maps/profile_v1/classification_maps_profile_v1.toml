@@ -247,7 +247,7 @@ sha256 = "6384181f9cd2afdc9693fd0e01f313cd52004efe41fdafec6f18916ee27d3dc6"
 [[source_pins]]
 pin_id = "after_redefinitions_profile"
 path = "scripts/us/forecasting/vintages/bea_industry/after_redefinitions_2025_adapter_v1/bea_after_redefinitions_2025_profile_v1.toml"
-sha256 = "4f8ce3d53d11964c1268ee7ecfe18701b90b46ff73816b4a9af246e36db753a5"
+sha256 = "57c71a1d9a1a8f4ecad7fbc4dbc284590792aa3b2966388bf138397dc0e10d11"
 
 [[source_pins]]
 pin_id = "beforeit_bea71_model_bridge"

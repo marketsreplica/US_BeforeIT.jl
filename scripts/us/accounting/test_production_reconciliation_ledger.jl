@@ -109,7 +109,7 @@ end
             "AUTHENTICATED_PRODUCTION_SCHEMA_AND_LINEAGE_CANDIDATE"
         @test contract.promotion_status == "RESEARCH_ONLY_NOT_PROMOTED"
         @test contract.problem_scope_hash ==
-            "scope1:9b41bd41ba5ba7f421aac0a3244cd58bf663fef36dcd507628af4d009cb69088"
+            "scope1:c5431dd4b2691fa29e57c35cbe8dc2b5e5a325fc2b637602df83d5399d142903"
         @test normalized_module_sha256(LEDGER_MODULE_PATH) ==
             contract.module_normalized_sha256
         @test collect(String.(fieldnames(ProductionCellRecord))) ==

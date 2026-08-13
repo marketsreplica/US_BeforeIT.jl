@@ -6,9 +6,9 @@ promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
 scientific_scope = "Authenticate BEA display-token semantics, compute display-level control residuals under explicit primary and counterfactual policies, materialize the raw-source observation loading, overlay exact literature-backed negative-cell sign domains, and materialize a zero-extra-likelihood domestic-use difference sidecar whose raw residual is null whenever either parent lineage contains a selected-zero source leaf. Register valuation/import boundaries and revision/dependence evidence without recipient-level margin or tax allocation, structural-zero approval, statistical reliability weights, covariance parameters, solver inputs, reconciliation, model-state writes, origin admission, or forecast scores."
 as_of_date = "2026-08-06"
 
-candidate_problem_scope_hash = "scope1:9b41bd41ba5ba7f421aac0a3244cd58bf663fef36dcd507628af4d009cb69088"
-candidate_problem_hash = "problem1:07607869be848a0016e5de1ea861b6350593369b92f973eac8b417648803a3d3"
-candidate_ledger_contract_sha256 = "12bc6cd1d514d9a2224cbfe709ebb3b1d1944bc6fdcf804f209690d0c69313a0"
+candidate_problem_scope_hash = "scope1:c5431dd4b2691fa29e57c35cbe8dc2b5e5a325fc2b637602df83d5399d142903"
+candidate_problem_hash = "problem1:f8469e00492d34ffb4f7f1a1eefc7fa715f558b983cb8206862721a5c22ab1b2"
+candidate_ledger_contract_sha256 = "79a029665e45f5b981b6333e278d4ee35486980f39037de4e921e066695292c5"
 display_semantics_fixture_sha256 = "3091d35ae9a7268ee9025e8c242392c0eb45f757b9a1e3331bc872526df1de5e"
 display_semantics_manifest_sha256 = "74d869aa36636487a8acd13b9eb15d942e83e274f86ace852dbde1519b4f26ff"
 display_semantics_generator_sha256 = "c92ae3b41397cf42e9da634e1025e91e930e760d2467e65a32e5ea61aca02350"
@@ -153,7 +153,7 @@ adjustment_record_count = 0
 [[artifact]]
 artifact_id = "candidate_ledger_contract"
 path = "scripts/us/accounting/production_reconciliation_candidate_ledger.toml"
-sha256 = "12bc6cd1d514d9a2224cbfe709ebb3b1d1944bc6fdcf804f209690d0c69313a0"
+sha256 = "79a029665e45f5b981b6333e278d4ee35486980f39037de4e921e066695292c5"
 role = "AUTHENTICATED_PRODUCTION_LEDGER_CONTRACT"
 
 [[artifact]]
@@ -207,7 +207,7 @@ role = "EXACT_CELL_LEVEL_LITERATURE_BACKED_SIGN_DOMAIN_OVERLAY"
 [[artifact]]
 artifact_id = "negative_cell_semantics_manifest"
 path = "scripts/us/accounting/fixtures/bea_2024_negative_cell_semantics_approved/manifest.toml"
-sha256 = "1c886a99c50c9dce339c360dc6e6880725d152ec2a6a64a18db220566cbdcfa1"
+sha256 = "f872514c142103a032af889626a8b6a8bc09a9bf5bb96a7f3d63f1b50cc204ec"
 role = "NEGATIVE_CELL_SOURCE_SCOPE_AND_FAIL_CLOSED_POLICY"
 
 [[artifact]]
