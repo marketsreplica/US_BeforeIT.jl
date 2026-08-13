@@ -1,4 +1,159 @@
 abstract type AbstractProperties <: AbstractObject end
+
+const OPENING_MACRO_CONTROL_UNIT =
+    "millions_current_currency_per_model_quarter"
+
+const OPENING_MACRO_NUMERIC_KEYS = (
+    "opening_nominal_gdp",
+    "opening_nominal_household_consumption",
+    "opening_nominal_government_consumption_and_investment",
+    "opening_nominal_capitalformation",
+    "opening_nominal_fixed_capitalformation",
+    "opening_nominal_inventory_investment",
+    "opening_nominal_fixed_capitalformation_dwellings",
+    "opening_nominal_exports",
+    "opening_nominal_imports",
+)
+
+"""
+    validated_opening_macro_controls(initial_conditions)
+
+Read an explicitly opted-in, current-price opening observation from an
+initial-condition dictionary. The opening row is a measured origin-quarter
+flow record, not an inferred inventory stock or a balancing plug. Gross
+private domestic investment must reconcile to fixed investment plus signed
+inventory investment, and the expenditure-side GDP identity must pass the
+declared source-rounding tolerance.
+
+Artifacts without `use_opening_macro_controls = true` retain the original
+model-implied opening-row behavior and return `nothing`.
+"""
+function validated_opening_macro_controls(initial_conditions)
+    enabled = get(initial_conditions, "use_opening_macro_controls", false)
+    enabled isa Bool ||
+        throw(
+        ArgumentError(
+            "initial_conditions[\"use_opening_macro_controls\"] must be boolean",
+        ),
+    )
+    enabled || return nothing
+
+    source = get(initial_conditions, "opening_macro_control_source", nothing)
+    source isa AbstractString && !isempty(strip(source)) ||
+        throw(ArgumentError("opening macro controls require a nonempty source"))
+    unit = get(initial_conditions, "opening_macro_control_unit", nothing)
+    unit == OPENING_MACRO_CONTROL_UNIT ||
+        throw(
+        ArgumentError(
+            "opening macro controls must use $OPENING_MACRO_CONTROL_UNIT",
+        ),
+    )
+    tolerance_value = get(
+        initial_conditions,
+        "opening_macro_control_absolute_tolerance",
+        nothing,
+    )
+    tolerance_value isa Real ||
+        throw(ArgumentError("opening macro controls require a numeric tolerance"))
+    tolerance = Float64(tolerance_value)
+    isfinite(tolerance) && tolerance >= 0 ||
+        throw(
+        ArgumentError(
+            "opening macro control tolerance must be finite and nonnegative",
+        ),
+    )
+
+    values = Dict{String, Float64}()
+    for key in OPENING_MACRO_NUMERIC_KEYS
+        haskey(initial_conditions, key) ||
+            throw(ArgumentError("opening macro controls are missing $key"))
+        value = initial_conditions[key]
+        value isa Real ||
+            throw(ArgumentError("opening macro control $key must be numeric"))
+        numeric = Float64(value)
+        isfinite(numeric) ||
+            throw(ArgumentError("opening macro control $key must be finite"))
+        values[key] = numeric
+    end
+
+    for key in (
+            "opening_nominal_gdp",
+            "opening_nominal_household_consumption",
+            "opening_nominal_government_consumption_and_investment",
+            "opening_nominal_capitalformation",
+            "opening_nominal_fixed_capitalformation",
+            "opening_nominal_exports",
+            "opening_nominal_imports",
+        )
+        values[key] > 0 ||
+            throw(ArgumentError("opening macro control $key must be positive"))
+    end
+    dwellings = values["opening_nominal_fixed_capitalformation_dwellings"]
+    dwellings >= 0 ||
+        throw(
+        ArgumentError(
+            "opening dwelling investment control cannot be negative",
+        ),
+    )
+    dwellings <=
+        values["opening_nominal_fixed_capitalformation"] + tolerance ||
+        throw(
+        ArgumentError(
+            "opening dwelling investment exceeds total fixed investment",
+        ),
+    )
+
+    investment_residual =
+        values["opening_nominal_capitalformation"] -
+        values["opening_nominal_fixed_capitalformation"] -
+        values["opening_nominal_inventory_investment"]
+    abs(investment_residual) <= tolerance ||
+        throw(
+        ArgumentError(
+            "opening gross private domestic investment does not reconcile " *
+                "to fixed investment plus signed inventory investment",
+        ),
+    )
+    expenditure_residual =
+        values["opening_nominal_gdp"] -
+        values["opening_nominal_household_consumption"] -
+        values["opening_nominal_government_consumption_and_investment"] -
+        values["opening_nominal_capitalformation"] -
+        values["opening_nominal_exports"] +
+        values["opening_nominal_imports"]
+    abs(expenditure_residual) <= tolerance ||
+        throw(
+        ArgumentError(
+            "opening macro controls do not satisfy the current-price " *
+                "expenditure identity",
+        ),
+    )
+
+    return (
+        source = String(source),
+        unit = String(unit),
+        tolerance,
+        nominal_gdp = values["opening_nominal_gdp"],
+        nominal_household_consumption =
+            values["opening_nominal_household_consumption"],
+        nominal_government_consumption_and_investment =
+            values[
+            "opening_nominal_government_consumption_and_investment",
+        ],
+        nominal_capitalformation =
+            values["opening_nominal_capitalformation"],
+        nominal_fixed_capitalformation =
+            values["opening_nominal_fixed_capitalformation"],
+        nominal_inventory_investment =
+            values["opening_nominal_inventory_investment"],
+        nominal_fixed_capitalformation_dwellings = dwellings,
+        nominal_exports = values["opening_nominal_exports"],
+        nominal_imports = values["opening_nominal_imports"],
+        investment_residual,
+        expenditure_residual,
+    )
+end
+
 Bit.@object mutable struct Properties(Object) <: AbstractProperties
     G::Bit.typeInt
     T_prime::Bit.typeInt
@@ -39,6 +194,17 @@ Bit.@object mutable struct Properties(Object) <: AbstractProperties
     sb_other::Bit.typeFloat
     E_k::Bit.typeFloat
     r_bar::Bit.typeFloat
+    use_opening_macro_controls::Bool
+    opening_nominal_gdp::Bit.typeFloat
+    opening_nominal_household_consumption::Bit.typeFloat
+    opening_nominal_government_consumption_and_investment::Bit.typeFloat
+    opening_nominal_capitalformation::Bit.typeFloat
+    opening_nominal_fixed_capitalformation::Bit.typeFloat
+    opening_nominal_inventory_investment::Bit.typeFloat
+    opening_nominal_fixed_capitalformation_dwellings::Bit.typeFloat
+    opening_nominal_exports::Bit.typeFloat
+    opening_nominal_imports::Bit.typeFloat
+    expectation_rw_drift::Bool
 end
 
 function Properties(parameters::Dict{String, Any}, initial_conditions)
@@ -93,9 +259,55 @@ function Properties(parameters::Dict{String, Any}, initial_conditions)
     E_k = typeFloat(initial_conditions["E_k"])
     r_bar = typeFloat(initial_conditions["r_bar"])
 
+    opening_controls =
+        validated_opening_macro_controls(initial_conditions)
+    use_opening_macro_controls = opening_controls !== nothing
+    opening_nominal_gdp =
+        typeFloat(use_opening_macro_controls ? opening_controls.nominal_gdp : 0)
+    opening_nominal_household_consumption = typeFloat(
+        use_opening_macro_controls ?
+            opening_controls.nominal_household_consumption : 0,
+    )
+    opening_nominal_government_consumption_and_investment = typeFloat(
+        use_opening_macro_controls ?
+            opening_controls.nominal_government_consumption_and_investment :
+            0,
+    )
+    opening_nominal_capitalformation = typeFloat(
+        use_opening_macro_controls ?
+            opening_controls.nominal_capitalformation : 0,
+    )
+    opening_nominal_fixed_capitalformation = typeFloat(
+        use_opening_macro_controls ?
+            opening_controls.nominal_fixed_capitalformation : 0,
+    )
+    opening_nominal_inventory_investment = typeFloat(
+        use_opening_macro_controls ?
+            opening_controls.nominal_inventory_investment : 0,
+    )
+    opening_nominal_fixed_capitalformation_dwellings = typeFloat(
+        use_opening_macro_controls ?
+            opening_controls.nominal_fixed_capitalformation_dwellings : 0,
+    )
+    opening_nominal_exports = typeFloat(
+        use_opening_macro_controls ? opening_controls.nominal_exports : 0,
+    )
+    opening_nominal_imports = typeFloat(
+        use_opening_macro_controls ? opening_controls.nominal_imports : 0,
+    )
+
+    # Growth-expectation specification.  `false` reproduces the legacy log-level AR(1)
+    # exactly, so calibrations that do not register the parameter are unaffected.
+    expectation_rw_drift = Bool(get(parameters, "expectation_rw_drift", false))
+
     return Properties(
         G, T_prime, H_act, H_inact, J, L, I_s, I, H, tau_INC, tau_FIRM, tau_VAT, tau_SIF,
         tau_SIW, tau_EXPORT, tau_CF, tau_G, theta_UB, psi, psi_H, mu, theta_DIV, theta, zeta, zeta_LTV,
-        zeta_b, b_CF_g, b_CFH_g, b_HH_g, c_G_g, c_E_g, c_I_g, a_sg, C, D_H, K_H, sb_other, E_k, r_bar
+        zeta_b, b_CF_g, b_CFH_g, b_HH_g, c_G_g, c_E_g, c_I_g, a_sg, C, D_H, K_H, sb_other, E_k, r_bar,
+        use_opening_macro_controls, opening_nominal_gdp, opening_nominal_household_consumption,
+        opening_nominal_government_consumption_and_investment, opening_nominal_capitalformation,
+        opening_nominal_fixed_capitalformation, opening_nominal_inventory_investment,
+        opening_nominal_fixed_capitalformation_dwellings, opening_nominal_exports,
+        opening_nominal_imports, expectation_rw_drift
     )
 end
