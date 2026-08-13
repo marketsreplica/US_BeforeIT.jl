@@ -190,7 +190,7 @@ function mean_squared_monte_carlo_error(run, scored_origins, target, horizon)
     selected = [
         row.monte_carlo_standard_error^2 for row in run.ensembles if
             row.target_id == target && row.horizon == horizon &&
-                row.origin_index in scored_origins
+            row.origin_index in scored_origins
     ]
     return isempty(selected) ? 0.0 : mean(selected)
 end
@@ -199,7 +199,7 @@ function scored_origin_set(run, track, model_id, target, horizon)
     return Set(
         row.origin_index for row in run.cells if
             row.model_id == model_id && row.target_id == target &&
-                row.horizon == horizon
+            row.horizon == horizon
     )
 end
 

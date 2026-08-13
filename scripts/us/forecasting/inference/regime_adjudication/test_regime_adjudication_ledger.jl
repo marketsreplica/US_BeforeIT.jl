@@ -13,7 +13,7 @@ function input_record(
         tokens,
         evidence_refs = [
             "evidence:$observation_id:$contrast_id:$index"
-            for index in eachindex(tokens)
+                for index in eachindex(tokens)
         ],
         disposition = "REGIME_ACCEPTED",
         accepted = only(tokens),
@@ -36,7 +36,7 @@ function set_tokens!(row, tokens)
     row["raw_tokens"] = collect(tokens)
     row["evidence_refs"] = [
         "evidence:replacement:$(row["record_id"]):$index"
-        for index in eachindex(tokens)
+            for index in eachindex(tokens)
     ]
     return row
 end
@@ -153,9 +153,9 @@ end
     @test length(validated.raw_token_inventory) == 11
     @test any(
         item ->
-            item.observation_id == "origin_2" &&
-                item.contrast_id == PANDEMIC &&
-                item.raw_token == "Other",
+        item.observation_id == "origin_2" &&
+            item.contrast_id == PANDEMIC &&
+            item.raw_token == "Other",
         validated.raw_token_inventory,
     )
     @test validated.records[1].observation_id == "origin_1"
@@ -239,8 +239,8 @@ end
             (true, true, true)
         @test any(
             item ->
-                item.record_id == record.record_id &&
-                    item.raw_token == case.token,
+            item.record_id == record.record_id &&
+                item.raw_token == case.token,
             validated.raw_token_inventory,
         )
     end
@@ -618,7 +618,7 @@ end
     @test_throws RegimeAdjudicationError build_regime_adjudication_ledger(
         "missing.grid.v1",
         ["origin_1", "origin_2", "origin_3"],
-        valid_inputs()[1:end-1],
+        valid_inputs()[1:(end - 1)],
     )
 
     rows = valid_inputs()

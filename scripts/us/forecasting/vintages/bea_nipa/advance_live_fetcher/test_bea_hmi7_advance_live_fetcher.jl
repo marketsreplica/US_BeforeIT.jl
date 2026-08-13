@@ -200,10 +200,10 @@ end
     @test all(plan.filesystem_writes_made == 0 for plan in plans)
     @test all(
         workbook.request_headers == (
-            "Accept" => workbook.media_type,
-            "Accept-Encoding" => "identity",
-            "User-Agent" => "BeforeIT-US-BEA-HMI7-Advance-Capture/1.0",
-        ) for plan in plans for workbook in plan.workbooks
+                "Accept" => workbook.media_type,
+                "Accept-Encoding" => "identity",
+                "User-Agent" => "BeforeIT-US-BEA-HMI7-Advance-Capture/1.0",
+            ) for plan in plans for workbook in plan.workbooks
     )
     @test length(Set(workbook.url for plan in plans for workbook in plan.workbooks)) == 80
     @test occursin("/2014/q3/", plans[13].workbooks[1].url)

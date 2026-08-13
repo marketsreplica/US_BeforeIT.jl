@@ -399,12 +399,14 @@ struct SimulatedPath
 end
 
 path_seed(variant_name, origin_period, path) = Int(
-    hash((
-        :beforeit_us_abm_revised_comparison_v1,
-        variant_name,
-        origin_period,
-        path,
-    )) % 0x40000000,
+    hash(
+        (
+            :beforeit_us_abm_revised_comparison_v1,
+            variant_name,
+            origin_period,
+            path,
+        )
+    ) % 0x40000000,
 )
 
 """
@@ -462,28 +464,28 @@ function pathwise_values(paths, target_id, current_row::Int, previous_row::Int)
     if target_id == "real_gdp"
         return [
             annualized_log_growth(
-                path.real_gdp[current_row],
-                path.real_gdp[previous_row],
-            ) for path in paths
+                    path.real_gdp[current_row],
+                    path.real_gdp[previous_row],
+                ) for path in paths
         ]
     elseif target_id == "nominal_gdp"
         return [
             annualized_log_growth(
-                path.nominal_gdp[current_row],
-                path.nominal_gdp[previous_row],
-            ) for path in paths
+                    path.nominal_gdp[current_row],
+                    path.nominal_gdp[previous_row],
+                ) for path in paths
         ]
     elseif target_id == "gdp_deflator"
         return [
             400.0 * (
-                (
-                    log(path.nominal_gdp[current_row]) -
+                    (
+                        log(path.nominal_gdp[current_row]) -
                         log(path.real_gdp[current_row])
-                ) - (
-                    log(path.nominal_gdp[previous_row]) -
+                    ) - (
+                        log(path.nominal_gdp[previous_row]) -
                         log(path.real_gdp[previous_row])
-                )
-            ) for path in paths
+                    )
+                ) for path in paths
         ]
     elseif target_id == "unemployment_rate"
         return [path.unemployment_rate[current_row] for path in paths]
@@ -524,10 +526,10 @@ function summarize_ensemble(
                     dispersion,
                     dispersion / sqrt(used),
                     quantile(values, 0.05),
-                    quantile(values, 0.10),
+                    quantile(values, 0.1),
                     quantile(values, 0.25),
                     quantile(values, 0.75),
-                    quantile(values, 0.90),
+                    quantile(values, 0.9),
                     quantile(values, 0.95),
                 ),
             )
@@ -731,7 +733,7 @@ end
 function comparison_relative_scores(summaries, model_ids, benchmark_model_id)
     by_key = Dict(
         (row.sample_track, row.model_id, row.target_id, row.horizon) => row
-        for row in summaries
+            for row in summaries
     )
     relative = RelativeScore[]
     for track in TRACKS
@@ -804,7 +806,7 @@ function comparison_weighted_scores(
                     length(selected_cells) == expected_cells
                 total_weight = sum(
                     target_weight * BASE.HORIZON_WEIGHTS[row.horizon]
-                    for row in selected;
+                        for row in selected;
                     init = 0.0,
                 )
                 observation_counts = getfield.(selected, :observation_count)
@@ -863,11 +865,22 @@ function comparison_weighted_scores(
     return output
 end
 
+"""
+    model_family(variant)
+
+The ensemble's family label, derived from the variant so that a v2 run is never
+labelled as v1. `beforeit_abm_us_v2_mean` -> `beforeit_abm_us_v2`,
+`beforeit_abm_us_v1_mean_burnin` -> `beforeit_abm_us_v1_burnin`.
+"""
+model_family(variant::ABMVariant) = replace(variant.mean_model_id, "_mean" => "")
+
 function monte_carlo_errors(
         panel::QuarterlyPanel,
         ensembles::Vector{EnsembleSummary},
         paths::Int,
+        variant::ABMVariant,
     )
+    family = model_family(variant)
     output = MonteCarloError[]
     for target_id in ABM_TARGET_IDS
         for horizon in BASE.HORIZONS
@@ -886,7 +899,7 @@ function monte_carlo_errors(
             push!(
                 output,
                 MonteCarloError(
-                    "beforeit_abm_us_v1",
+                    family,
                     target_id,
                     horizon,
                     length(selected),
@@ -1024,7 +1037,7 @@ function run_abm_comparison(
         summaries,
         relative,
         weighted,
-        monte_carlo_errors(panel, ensembles, paths),
+        monte_carlo_errors(panel, ensembles, paths, variant),
         base_result.benchmark_model_id,
         variant.mean_model_id,
         variant.median_model_id,

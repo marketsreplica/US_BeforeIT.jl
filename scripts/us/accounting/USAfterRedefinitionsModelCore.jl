@@ -200,7 +200,7 @@ struct ModelCoreAggregationReport
     joint_aggregation_commutation_frobenius_residual::Float64
     source_recomputed_cell_correlation::Float64
     maximum_joint_aggregation_commutation_residual_cell::
-        ModelCoreCommutationResidualCell
+    ModelCoreCommutationResidualCell
     negative_intermediate_cells::Vector{NegativeCell}
     negative_make_cells::Vector{NegativeCell}
     negative_symmetric_cells::Vector{NegativeCell}
@@ -407,9 +407,9 @@ function aggregate_matrix(
                 matrix.values[source_row_position, source_column_position]
             explicit[target_row_position, target_column_position] |=
                 matrix.explicit[
-                    source_row_position,
-                    source_column_position,
-                ]
+                source_row_position,
+                source_column_position,
+            ]
         end
     end
     return LabeledMatrix{R, C}(
@@ -543,7 +543,7 @@ function build_import_allocation_ledger(
                 for row_position in eachindex(commodity_codes)
                 for column_position in eachindex(final.column_codes)
                 if final.column_codes[column_position] != "F050" &&
-                    final.values[row_position, column_position] < 0
+                final.values[row_position, column_position] < 0
         ],
     )
     return ImportAllocationLedger(
@@ -900,16 +900,16 @@ function model_core_internal_controls_pass(report::ModelCoreAggregationReport)
         )
         commodity_source_counts = Dict(
             code => count(
-                ==(code),
-                values(report.source_commodity_mapping),
-            )
+                    ==(code),
+                    values(report.source_commodity_mapping),
+                )
                 for code in account_codes
         )
         industry_source_counts = Dict(
             code => count(
-                ==(code),
-                values(report.source_industry_mapping),
-            )
+                    ==(code),
+                    values(report.source_industry_mapping),
+                )
                 for code in model_codes
         )
         for (position, code) in pairs(account_codes)
@@ -1112,10 +1112,10 @@ function _build_model_core_aggregation(
     )
     structurally_equal(fixture, approved_fixture) ||
         throw(
-            ArgumentError(
-                "in-memory common-basis fixture differs from the byte-pinned approved fixture",
-            ),
-        )
+        ArgumentError(
+            "in-memory common-basis fixture differs from the byte-pinned approved fixture",
+        ),
+    )
     common = build_common_basis_report(fixture)
     common_basis_controls_pass(common) ||
         throw(ArgumentError("source common-basis controls do not pass"))
@@ -1211,7 +1211,7 @@ function _build_model_core_aggregation(
         fixture.producer_commodity_output_make,
         BitVector(
             fixture.source_explicit[
-                "producer_make_commodity_output_2024"
+                "producer_make_commodity_output_2024",
             ][:, 1],
         ),
         account_codes,
@@ -1222,7 +1222,7 @@ function _build_model_core_aggregation(
         fixture.producer_industry_output_make,
         BitVector(
             fixture.source_explicit[
-                "producer_make_industry_output_2024"
+                "producer_make_industry_output_2024",
             ][:, 1],
         ),
         model_codes,
@@ -1522,12 +1522,12 @@ function _build_model_core_aggregation(
             abs,
             recomputed_full_values -
                 vcat(
-                    hcat(symmetric_values, model_to_closure_values),
-                    hcat(
-                        closure_to_model_values,
-                        closure_to_closure_values,
-                    ),
+                hcat(symmetric_values, model_to_closure_values),
+                hcat(
+                    closure_to_model_values,
+                    closure_to_closure_values,
                 ),
+            ),
         ),
         0.0,
         NUMERICAL_TOLERANCE_MILLIONS_USD,

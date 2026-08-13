@@ -79,8 +79,8 @@ function maximum_residual_ratio(report, family)
         filter(residual -> residual.family == family, report.residuals)
     return maximum(
         residual.tolerance == 0.0 ?
-        (residual.residual == 0.0 ? 0.0 : Inf) :
-        abs(residual.residual) / residual.tolerance
+            (residual.residual == 0.0 ? 0.0 : Inf) :
+            abs(residual.residual) / residual.tolerance
             for residual in residuals
     )
 end
@@ -169,7 +169,7 @@ end
             source == target
                 for (source, target) in report.source_commodity_mapping
                 if source ∉ MODEL_CORE_RETAIL_CODES &&
-                    source ∉ report.closure_codes
+                source ∉ report.closure_codes
         )
         @test all(
             source == target
@@ -248,7 +248,7 @@ end
             fixture.producer_commodity_output_make,
             BitVector(
                 fixture.source_explicit[
-                    "producer_make_commodity_output_2024"
+                    "producer_make_commodity_output_2024",
                 ][:, 1],
             ),
             account_codes,
@@ -258,7 +258,7 @@ end
             fixture.producer_industry_output_make,
             BitVector(
                 fixture.source_explicit[
-                    "producer_make_industry_output_2024"
+                    "producer_make_industry_output_2024",
                 ][:, 1],
             ),
             model_codes,
@@ -525,14 +525,14 @@ end
             length(report.closure.import_allocation.negative_f050_cells) == 48
         @test length(report.import_allocation.negative_allocation_cells) +
             length(
-                report.closure.import_allocation.negative_allocation_cells,
-            ) == 10
+            report.closure.import_allocation.negative_allocation_cells,
+        ) == 10
 
         @test length(report.residuals) == 494
         @test all(residual.passed for residual in report.residuals)
         @test count(
             residual ->
-                residual.family ==
+            residual.family ==
                 :model_core_joint_aggregation_commutation,
             report.residuals,
         ) == 1

@@ -259,7 +259,7 @@ function _accepted_labels(contrast_id)
         return ACCEPTED_REGIME_LABELS.NBER_REGIME_CONTRAST
     contrast_id == "POLICY_REGIME_CONTRAST" &&
         return ACCEPTED_REGIME_LABELS.POLICY_REGIME_CONTRAST
-    fail("contrast_id", "unknown contrast")
+    return fail("contrast_id", "unknown contrast")
 end
 
 function _raw_tokens(value, location)
@@ -275,42 +275,42 @@ function _evidence_refs(value, token_count, location)
         let
                 ref = _expect_string(item, "$location[$index]")
                 occursin(EVIDENCE_REF_PATTERN, ref) ||
-                    fail(
-                        "$location[$index]",
-                        "contains unsupported evidence-reference characters",
-                    )
+                fail(
+                    "$location[$index]",
+                    "contains unsupported evidence-reference characters",
+                )
                 separator = findfirst(==(':'), ref)
                 separator === nothing &&
-                    fail(
-                        "$location[$index]",
-                        "must use a recognized evidence-reference namespace",
-                    )
+                fail(
+                    "$location[$index]",
+                    "must use a recognized evidence-reference namespace",
+                )
                 namespace = lowercase(ref[firstindex(ref):(separator - 1)])
                 namespace in EVIDENCE_REF_NAMESPACES ||
-                    fail(
-                        "$location[$index]",
-                        "uses an unrecognized evidence-reference namespace",
-                    )
+                fail(
+                    "$location[$index]",
+                    "uses an unrecognized evidence-reference namespace",
+                )
                 separator < lastindex(ref) ||
-                    fail("$location[$index]", "has an empty evidence payload")
+                fail("$location[$index]", "has an empty evidence payload")
                 payload = ref[(separator + 1):lastindex(ref)]
                 lowercase(payload) in RESERVED_ID_TOKENS &&
-                    fail(
-                        "$location[$index]",
-                        "contains a reserved placeholder payload",
-                    )
+                fail(
+                    "$location[$index]",
+                    "contains a reserved placeholder payload",
+                )
                 components = [
                     component for component in
-                        split(lowercase(payload), r"[._:/#-]+")
+                    split(lowercase(payload), r"[._:/#-]+")
                     if !isempty(component)
                 ]
                 !isempty(components) ||
-                    fail("$location[$index]", "has an empty evidence payload")
+                fail("$location[$index]", "has an empty evidence payload")
                 any(component -> component in RESERVED_ID_TOKENS, components) &&
-                    fail(
-                        "$location[$index]",
-                        "contains a reserved placeholder component",
-                    )
+                fail(
+                    "$location[$index]",
+                    "contains a reserved placeholder component",
+                )
                 ref
         end for (index, item) in enumerate(_expect_vector(value, location))
     )
@@ -337,23 +337,23 @@ function _validate_pending_issue(tokens, issue_code, location)
     has_source_usage = any(_is_source_usage_provenance, tokens)
     has_source_usage &&
         issue_code !=
-            "SOURCE_USAGE_PROVENANCE_OUTSIDE_REGIME_VOCABULARY" &&
+        "SOURCE_USAGE_PROVENANCE_OUTSIDE_REGIME_VOCABULARY" &&
         fail(location, "typed source-usage provenance requires its explicit reason")
     has_used && has_other &&
         issue_code !=
-            "NATIVE_BEA_ACCOUNTING_LABEL_OUTSIDE_REGIME_VOCABULARY" &&
+        "NATIVE_BEA_ACCOUNTING_LABEL_OUTSIDE_REGIME_VOCABULARY" &&
         fail(location, "combined Used/Other tokens require the native-BEA reason")
     has_used && !has_other &&
         issue_code ∉ (
-            "BARE_USED_INVALID_FOR_REGIME",
-            "NATIVE_BEA_ACCOUNTING_LABEL_OUTSIDE_REGIME_VOCABULARY",
-        ) &&
+        "BARE_USED_INVALID_FOR_REGIME",
+        "NATIVE_BEA_ACCOUNTING_LABEL_OUTSIDE_REGIME_VOCABULARY",
+    ) &&
         fail(location, "raw Used requires an explicit out-of-vocabulary reason")
     has_other && !has_used &&
         issue_code ∉ (
-            "OTHER_UNREGISTERED_FOR_REGIME",
-            "NATIVE_BEA_ACCOUNTING_LABEL_OUTSIDE_REGIME_VOCABULARY",
-        ) &&
+        "OTHER_UNREGISTERED_FOR_REGIME",
+        "NATIVE_BEA_ACCOUNTING_LABEL_OUTSIDE_REGIME_VOCABULARY",
+    ) &&
         fail(location, "raw Other requires an explicit out-of-vocabulary reason")
     if issue_code == "BARE_USED_INVALID_FOR_REGIME"
         "used" in lowered ||
@@ -366,9 +366,9 @@ function _validate_pending_issue(tokens, issue_code, location)
             fail(location, "unknown-token issue requires a raw token")
         any(
             token ->
-                token ∉ ALL_ACCEPTED_LABELS &&
-                    _lower_token(token) ∉ ("used", "other") &&
-                    !_is_source_usage_provenance(token),
+            token ∉ ALL_ACCEPTED_LABELS &&
+                _lower_token(token) ∉ ("used", "other") &&
+                !_is_source_usage_provenance(token),
             tokens,
         ) || fail(
             location,
@@ -412,37 +412,37 @@ function _validate_record_semantics(
     contains_pending_only_token &&
         disposition != "REGIME_UNKNOWN_PENDING_ADJUDICATION" &&
         fail(
-            "$location.disposition",
-            "Used, Other, and source-usage provenance require pending adjudication",
-        )
+        "$location.disposition",
+        "Used, Other, and source-usage provenance require pending adjudication",
+    )
     if disposition == "REGIME_ACCEPTED"
         issue_code == "NONE" ||
             fail("$location.issue_code", "accepted regime requires NONE")
         accepted_label in allowed_labels ||
             fail(
-                "$location.accepted_regime_label",
-                "is not registered for $contrast_id",
-            )
+            "$location.accepted_regime_label",
+            "is not registered for $contrast_id",
+        )
         !isempty(tokens) ||
             fail("$location.raw_tokens", "accepted regime requires raw evidence")
         all(token -> token == accepted_label, tokens) ||
             fail(
-                "$location.raw_tokens",
-                "accepted regime requires every preserved token to equal the accepted label",
-            )
+            "$location.raw_tokens",
+            "accepted regime requires every preserved token to equal the accepted label",
+        )
         include_affected ||
             fail("$location.include_in_affected_regime_contrast", "must be true")
     else
         accepted_label == "NOT_ACCEPTED" ||
             fail(
-                "$location.accepted_regime_label",
-                "nonaccepted disposition requires NOT_ACCEPTED",
-            )
+            "$location.accepted_regime_label",
+            "nonaccepted disposition requires NOT_ACCEPTED",
+        )
         !include_affected ||
             fail(
-                "$location.include_in_affected_regime_contrast",
-                "unresolved or conflicted record must be excluded",
-            )
+            "$location.include_in_affected_regime_contrast",
+            "unresolved or conflicted record must be excluded",
+        )
         if disposition == "REGIME_UNKNOWN_PENDING_ADJUDICATION"
             _validate_pending_issue(tokens, issue_code, "$location.issue_code")
         elseif disposition == "REGIME_CONTRADICTION_QUARANTINED"
@@ -450,31 +450,31 @@ function _validate_record_semantics(
                 fail("$location.issue_code", "unknown contradiction issue code")
             all(token -> token in ALL_ACCEPTED_LABELS, tokens) ||
                 fail(
-                    "$location.raw_tokens",
-                    "contradiction records may contain only registered regime labels",
-                )
+                "$location.raw_tokens",
+                "contradiction records may contain only registered regime labels",
+            )
             distinct = Set(tokens)
             if issue_code == "MUTUALLY_EXCLUSIVE_REGIME_LABELS_PRESENT"
                 all(token -> token in allowed_labels, tokens) ||
                     fail(
-                        "$location.raw_tokens",
-                        "mutually exclusive labels must belong to the affected contrast",
-                    )
+                    "$location.raw_tokens",
+                    "mutually exclusive labels must belong to the affected contrast",
+                )
                 count(token -> token in allowed_labels, distinct) >= 2 ||
                     fail(
-                        "$location.raw_tokens",
-                        "contradiction requires two registered mutually exclusive labels",
-                    )
+                    "$location.raw_tokens",
+                    "contradiction requires two registered mutually exclusive labels",
+                )
                 length(Set(evidence_refs)) >= 2 ||
                     fail(
-                        "$location.evidence_refs",
-                        "mutually exclusive labels require distinct evidence references",
-                    )
+                    "$location.evidence_refs",
+                    "mutually exclusive labels require distinct evidence references",
+                )
             else
                 any(
                     token ->
-                        token in ALL_ACCEPTED_LABELS &&
-                            token ∉ allowed_labels,
+                    token in ALL_ACCEPTED_LABELS &&
+                        token ∉ allowed_labels,
                     distinct,
                 ) || fail(
                     "$location.raw_tokens",
@@ -486,21 +486,21 @@ function _validate_record_semantics(
                 fail("$location.issue_code", "unknown source-conflict issue code")
             all(token -> token in allowed_labels, tokens) ||
                 fail(
-                    "$location.raw_tokens",
-                    "source conflicts may contain only labels registered for the affected contrast",
-                )
+                "$location.raw_tokens",
+                "source conflicts may contain only labels registered for the affected contrast",
+            )
             if issue_code == "SOURCE_ASSERTIONS_DISAGREE"
                 length(Set(tokens)) >= 2 ||
                     fail(
-                        "$location.raw_tokens",
-                        "assertion disagreement requires at least two distinct raw tokens",
-                    )
+                    "$location.raw_tokens",
+                    "assertion disagreement requires at least two distinct raw tokens",
+                )
             end
             length(Set(evidence_refs)) >= 2 ||
                 fail(
-                    "$location.evidence_refs",
-                    "source conflict requires distinct evidence references",
-                )
+                "$location.evidence_refs",
+                "source conflict requires distinct evidence references",
+            )
         end
     end
     return nothing
@@ -540,9 +540,9 @@ function _validate_record(value, sequence)
     )
     include_full ||
         fail(
-            "$location.include_in_full_sample_primary",
-            "full-sample primary analysis must preserve every observation",
-        )
+        "$location.include_in_full_sample_primary",
+        "full-sample primary analysis must preserve every observation",
+    )
     include_affected = _expect_bool(
         row["include_in_affected_regime_contrast"],
         "$location.include_in_affected_regime_contrast",
@@ -621,7 +621,7 @@ function _expected_masks(observation_ids, records)
         let
                 by_observation = Dict(
                     record.observation_id =>
-                        record.include_in_affected_regime_contrast
+                    record.include_in_affected_regime_contrast
                     for record in records
                     if record.contrast_id == contrast_id
                 )
@@ -711,19 +711,19 @@ function _validate_inventory(value, expected)
     end
     validated == expected ||
         fail(
-            "raw_token_inventory",
-            "does not preserve every raw token in record and token order",
-        )
+        "raw_token_inventory",
+        "does not preserve every raw token in record and token order",
+    )
     return Tuple(
         (
-            sequence = row["sequence"],
-            record_id = row["record_id"],
-            observation_id = row["observation_id"],
-            contrast_id = row["contrast_id"],
-            token_index = row["token_index"],
-            raw_token = row["raw_token"],
-            evidence_ref = row["evidence_ref"],
-        ) for row in validated
+                sequence = row["sequence"],
+                record_id = row["record_id"],
+                observation_id = row["observation_id"],
+                contrast_id = row["contrast_id"],
+                token_index = row["token_index"],
+                raw_token = row["raw_token"],
+                evidence_ref = row["evidence_ref"],
+            ) for row in validated
     )
 end
 
@@ -770,12 +770,12 @@ function _validate_masks(value, observation_ids, expected)
     end
     return Tuple(
         (
-            contrast_id = row["contrast_id"],
-            observation_ids = Tuple(row["observation_ids"]),
-            inclusion_mask = Tuple(row["inclusion_mask"]),
-            included_count = row["included_count"],
-            excluded_count = row["excluded_count"],
-        ) for row in expected
+                contrast_id = row["contrast_id"],
+                observation_ids = Tuple(row["observation_ids"]),
+                inclusion_mask = Tuple(row["inclusion_mask"]),
+                included_count = row["included_count"],
+                excluded_count = row["excluded_count"],
+            ) for row in expected
     )
 end
 
@@ -882,9 +882,9 @@ function validate_regime_adjudication_ledger(document)
     )
     observed_pairs == expected_pairs ||
         fail(
-            "ledger.records",
-            "records must exhaust the observation/contrast grid in registry order",
-        )
+        "ledger.records",
+        "records must exhaust the observation/contrast grid in registry order",
+    )
 
     full_mask = Tuple(
         _expect_bool(value, "ledger.full_sample_primary_mask[$index]")
@@ -899,9 +899,9 @@ function validate_regime_adjudication_ledger(document)
         fail("ledger.full_sample_primary_mask", "length mismatch")
     all(full_mask) ||
         fail(
-            "ledger.full_sample_primary_mask",
-            "full-sample primary analysis must retain every observation",
-        )
+        "ledger.full_sample_primary_mask",
+        "full-sample primary analysis must retain every observation",
+    )
 
     expected_inventory = _expected_inventory(records)
     inventory =
