@@ -1,0 +1,318 @@
+schema_version = "beforeit-us-bea-after-redefinitions-2025-prospective-profile.v1"
+contract_id = "bea-after-redefinitions-2025-annual-update-prospective-snapshot-v1"
+classification = "AUGUST_2026_COMPLETION_ELIGIBLE_ONLY_AFTER_NEW_PROSPECTIVE_BUNDLE_VALIDATES"
+current_status = "CANNOT_RUN_NO_NEW_PROSPECTIVE_BUNDLE"
+requirement_id = "bea_industry_valuation_structural"
+campaign_id = "slow_structural_pre_origin"
+required_profile_count = 6
+completion_rule = "ALL_SIX_PROFILES_FROM_ONE_EXACT_ARCHIVE_BUNDLE_VERIFIED"
+source_agency = "U.S. Bureau of Economic Analysis"
+source_attribution = "Source: U.S. Bureau of Economic Analysis"
+source_endorsement_claim = "NONE"
+snapshot_boundary = "FIXED_2025_RELEASE_RETRIEVED_PROSPECTIVELY_BEFORE_2026Q3_ORIGIN_NOT_HISTORICAL_FIRST_PUBLICATION_STATE"
+august_completion_eligible = true
+excluded_other_slow_structural_profile_count = 27
+excluded_other_profile_relabel_allowed = false
+origin_admissible = false
+source_inventory_mutation_allowed = false
+model_state_write_allowed = false
+empirical_forecast_allowed = false
+accuracy_evaluation_allowed = false
+promotion_eligible = false
+production_scoring_allowed = false
+
+[prospective_contract]
+contract_id = "beforeit-us-prospective-2026q3-acquisition.v2"
+path = "scripts/us/forecasting/vintages/prospective/prospective_2026q3_contract_v2.toml"
+file_sha256 = "b24ff0c40172d2a23991fbe75c2fe42c6ba6c6c1f5fd46d079ac6d51429bf98f"
+semantic_content_sha256 = "5d1e7f34eea0470877c7bed096d8b2fb26590f95bd06febb90813faf6063708a"
+required_requirement_id = "bea_industry_valuation_structural"
+required_default_capture_id = "slow_structural_pre_origin"
+required_profile_count = 6
+
+[capture_window]
+not_before_utc = "2026-08-06T00:00:00.000Z"
+deadline_utc = "2026-08-31T23:59:59.000Z"
+availability_basis = "VERIFIED_PRE_ORIGIN_RECEIPT_COMPLETION"
+origin_timestamp_utc = "2026-10-30T14:00:00.000Z"
+origin_cutoff_strictly_after_capture_required = true
+
+[source]
+requested_url = "https://apps.bea.gov/HistData/Files/Releases/Industry/2025/GDP_by_Industry/Q2/Annual_September-25-2025/MAKE-USE-IMPORTS%20(AFTER%20REDEFINITIONS).zip"
+requested_url_sha256 = "b435fded361dc2f826640dd8be09b57a309124df282038b3898982dd219135a4"
+expected_host = "apps.bea.gov"
+source_release_id = "BEA_INDUSTRY_ANNUAL_2025_09_25"
+source_release_date = "2025-09-25"
+archive_name = "MAKE-USE-IMPORTS (AFTER REDEFINITIONS).zip"
+archive_sha256 = "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+archive_byte_count = 8326144
+archive_entry_count = 12
+media_types = ["application/x-zip-compressed"]
+extension = "zip"
+terms_url = "https://www.bea.gov/index.php/help/faq/145"
+terms_url_sha256 = "8d141868f8f8f24ac25eca9a238a50222d48138b115c0f9a8075941e09b83707"
+terms_review_required_on_capture_date = true
+terms_review_timezone = "UTC"
+terms_review_authorization_claim = "LOCAL_RESEARCH_REVIEW_ASSERTION_NOT_LEGAL_AUTHORIZATION"
+
+[policy_review]
+access_date = "2026-08-08"
+linking_policy_url = "https://www.bea.gov/about/policies-and-information/linking"
+linking_policy_url_sha256 = "ded3e1b2aec07c1b478b8b42971dad41c6358d480e97edae969d42cde7e7d5e9"
+faq_145_url = "https://www.bea.gov/index.php/help/faq/145"
+faq_145_url_sha256 = "8d141868f8f8f24ac25eca9a238a50222d48138b115c0f9a8075941e09b83707"
+input_output_page_url = "https://www.bea.gov/itable/input-output"
+input_output_page_url_sha256 = "471055a2a1dad11f94ad61478b535be5d9a71328f9c76abc66584c32b7436b50"
+open_data_page_url = "https://www.bea.gov/open-data"
+open_data_page_url_sha256 = "11d5e76b0924ea6db133b343629d8130255aa137085654af7aadf4fe3bd188b7"
+page_content_sha256_status = "NOT_CAPTURED_NO_POLICY_AUTHORIZATION_CLAIM"
+same_day_policy_authorization_claimed = false
+direct_archive_authority_inferred_from_api_terms = false
+api_authority_inferred_from_direct_archive_policy = false
+source_attribution_required = true
+source_attribution = "Source: U.S. Bureau of Economic Analysis"
+endorsement_claim = "NONE"
+
+[transport]
+method = "GET"
+protocol = "HTTPS_ONLY"
+follow_redirects = false
+maximum_redirects = 0
+ambient_proxy_allowed = false
+netrc_allowed = false
+cookies_allowed = false
+retry_count = 0
+accept_encoding = "identity"
+minimum_body_bytes = 8326144
+maximum_body_bytes = 8326144
+maximum_duration_seconds = 60
+maximum_header_count = 64
+maximum_header_bytes = 65536
+maximum_request_count = 1
+raw_wire_headers_preserved = false
+parsed_header_order_required = true
+transport_assertion_authentication = "UNAUTHENTICATED_LOCAL_PROCESS_ASSERTION"
+
+[[request_headers]]
+sequence = 1
+name = "Accept"
+value = "application/x-zip-compressed"
+
+[[request_headers]]
+sequence = 2
+name = "Accept-Encoding"
+value = "identity"
+
+[[request_headers]]
+sequence = 3
+name = "User-Agent"
+value = "BeforeIT-US-BEA-Industry-Prospective-Snapshot/1.0"
+
+[[repository_evidence]]
+evidence_id = "production_reconciliation_admission_evidence"
+path = "scripts/us/accounting/production_reconciliation_admission_evidence.toml"
+sha256 = "35ca8e8b0cbb1ff6d50e510ae1a49a11f4f87fe0c0495aebe3e89012e410d67b"
+role = "IMMUTABLE_HISTDATA_URL_AND_ARCHIVE_IDENTITY"
+
+[[repository_evidence]]
+evidence_id = "workbook_sheet_inventory"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_detail_scope_approved/workbook_sheet_inventory.toml"
+sha256 = "133057426f8221e468417ad1276cce82887847a6c9d07c7208fd48ebc75262c4"
+role = "WORKBOOK_MEMBER_HASH_AND_SHEET_INVENTORY"
+
+[[repository_evidence]]
+evidence_id = "common_basis_manifest"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_common_basis_approved/manifest.toml"
+sha256 = "ff555043829e5d12ba787ba9ad7d58ef4f0d2ee306740d6847bdfec800935030"
+role = "PURCHASER_PRODUCER_IMPORT_MEMBER_IDENTITIES"
+
+[[repository_evidence]]
+evidence_id = "prior_nonprospective_source_receipt"
+path = "scripts/us/accounting/fixtures/bea_after_redefinitions_2017_special_accounts_vintage/source_acquisition_receipt.json"
+sha256 = "8be9fbef6e2c18a7388cd61bd14312159fc3984d4dbc2c60158e977ee7f0e878"
+role = "KNOWN_ARCHIVE_BYTE_COUNT_AND_HASH_NOT_PROSPECTIVE_ORIGIN_EVIDENCE"
+
+[[repository_evidence]]
+evidence_id = "source_inventory_nonmutation_pin"
+path = "scripts/us/forecasting/vintages/current_inventory.toml"
+sha256 = "110b4448db0b49e95cbc2fe1cf7019f6b877b3f391c6069a81c2e7c3c2a086ae"
+role = "PROVE_ADAPTER_DID_NOT_MUTATE_SOURCE_INVENTORY"
+
+[[archive_entries]]
+name = "ImportMatrices_After_Redefinitions_Summary.xlsx"
+crc32 = "bf0407af"
+compressed_byte_count = 695339
+uncompressed_byte_count = 841463
+compression_method = 8
+
+[[archive_entries]]
+name = "ImportMatrices_After_Redefinitions_Sector.xlsx"
+crc32 = "97cda1b2"
+compressed_byte_count = 83546
+uncompressed_byte_count = 98422
+compression_method = 8
+
+[[archive_entries]]
+name = "ImportMatrices_After_Redefinitions_Detail.xlsx"
+crc32 = "e8e0f99b"
+compressed_byte_count = 1249457
+uncompressed_byte_count = 1739352
+compression_method = 8
+
+[[archive_entries]]
+name = "IOUse_After_Redefinitions_PUR_Summary.xlsx"
+crc32 = "6d82e3e4"
+compressed_byte_count = 124256
+uncompressed_byte_count = 129070
+compression_method = 8
+
+[[archive_entries]]
+name = "IOUse_After_Redefinitions_PUR_Sector.xlsx"
+crc32 = "3dcfa3e9"
+compressed_byte_count = 21076
+uncompressed_byte_count = 23995
+compression_method = 8
+
+[[archive_entries]]
+name = "IOUse_After_Redefinitions_PUR_Detail.xlsx"
+crc32 = "7d0505ad"
+compressed_byte_count = 1766182
+uncompressed_byte_count = 2067134
+compression_method = 8
+
+[[archive_entries]]
+name = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+crc32 = "c6f4b720"
+compressed_byte_count = 1145936
+uncompressed_byte_count = 1163798
+compression_method = 8
+
+[[archive_entries]]
+name = "IOUse_After_Redefinitions_PRO_Sector.xlsx"
+crc32 = "35148f12"
+compressed_byte_count = 140387
+uncompressed_byte_count = 150634
+compression_method = 8
+
+[[archive_entries]]
+name = "IOUse_After_Redefinitions_PRO_Detail.xlsx"
+crc32 = "2ba984e9"
+compressed_byte_count = 1824126
+uncompressed_byte_count = 2113284
+compression_method = 8
+
+[[archive_entries]]
+name = "IOMake_After_Redefinitions_PRO_Summary.xlsx"
+crc32 = "44720ce0"
+compressed_byte_count = 429830
+uncompressed_byte_count = 598989
+compression_method = 8
+
+[[archive_entries]]
+name = "IOMake_After_Redefinitions_PRO_Sector.xlsx"
+crc32 = "f74774ed"
+compressed_byte_count = 64266
+uncompressed_byte_count = 80800
+compression_method = 8
+
+[[archive_entries]]
+name = "IOMake_After_Redefinitions_PRO_Detail.xlsx"
+crc32 = "964b4340"
+compressed_byte_count = 778917
+uncompressed_byte_count = 1472556
+compression_method = 8
+
+[[workbooks]]
+member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+sha256 = "9e3791d657909843ce202161bae00cf8a425d7e1bf866cc8a0462810f0ae00c7"
+byte_count = 1163798
+outer_crc32 = "c6f4b720"
+workbook_xml_sha256 = "804c0198dbd8ca8d2d20995c18105892ec261854eaefbed46d4dadfefc17810f"
+workbook_xml_byte_count = 3515
+workbook_xml_crc32 = "91355efe"
+sheet_names = ["1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
+
+[[workbooks]]
+member = "IOMake_After_Redefinitions_PRO_Summary.xlsx"
+sha256 = "073b87c7e52e76fb78ad7ddafb0c2e60f9188fc5a4e56dc0094f4a7ae3f529c6"
+byte_count = 598989
+outer_crc32 = "44720ce0"
+workbook_xml_sha256 = "c30117634ae1fcf307d4b3b0bb03fb971149815bd8bc230b33e74fad0940764e"
+workbook_xml_byte_count = 3515
+workbook_xml_crc32 = "89200a04"
+sheet_names = ["1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
+
+[[workbooks]]
+member = "ImportMatrices_After_Redefinitions_Summary.xlsx"
+sha256 = "9246c68288bb593495366288b9d8fd2038cae1ff500855ccd3e5c4377d0d3b25"
+byte_count = 841463
+outer_crc32 = "bf0407af"
+workbook_xml_sha256 = "3bfa8e27f7b28cd12232a0621595ff25220d8e76ad7c3f530ee75cc0765d7a13"
+workbook_xml_byte_count = 3561
+workbook_xml_crc32 = "85ff4f8e"
+sheet_names = ["Import Reconcilliation", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"]
+
+[[workbooks]]
+member = "IOUse_After_Redefinitions_PUR_Summary.xlsx"
+sha256 = "9d55530ec5cd4688855ef474c779d0dba5f2e1e74d4fcfcdc95cddc64c69262b"
+byte_count = 129070
+outer_crc32 = "6d82e3e4"
+workbook_xml_sha256 = "73e98badbb0bf9c9d4dda6b5e81701c5b45387f756148dd392a02ec1fdb7f240"
+workbook_xml_byte_count = 2372
+workbook_xml_crc32 = "58753fbd"
+sheet_names = ["2007", "2012", "2017"]
+
+[[profiles]]
+profile_id = "after_redefinitions_release_zip"
+selector = "BEA:InputOutputAfterRedefinitions:release=2025_annual_update:archive=MAKE-USE-IMPORTS (AFTER REDEFINITIONS).zip"
+member = ""
+sheet = ""
+evidence_kind = "EXACT_ARCHIVE_BYTES_AND_VALIDATED_ZIP_DIRECTORY"
+
+[[profiles]]
+profile_id = "producer_use_2024"
+selector = "BEA:InputOutputAfterRedefinitions:member=IOUse_After_Redefinitions_PRO_Summary.xlsx:sheet=2024:price_basis=producers"
+member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+sheet = "2024"
+evidence_kind = "PINNED_MEMBER_HASH_ZIP_CRC_AND_OOXML_SHEET"
+
+[[profiles]]
+profile_id = "make_2024"
+selector = "BEA:InputOutputAfterRedefinitions:member=IOMake_After_Redefinitions_PRO_Summary.xlsx:sheet=2024:price_basis=producers"
+member = "IOMake_After_Redefinitions_PRO_Summary.xlsx"
+sheet = "2024"
+evidence_kind = "PINNED_MEMBER_HASH_ZIP_CRC_AND_OOXML_SHEET"
+
+[[profiles]]
+profile_id = "imports_by_user_2024"
+selector = "BEA:InputOutputAfterRedefinitions:member=ImportMatrices_After_Redefinitions_Summary.xlsx:sheet=2024:full_industry_and_final_use_matrix=true"
+member = "ImportMatrices_After_Redefinitions_Summary.xlsx"
+sheet = "2024"
+evidence_kind = "PINNED_MEMBER_HASH_ZIP_CRC_AND_OOXML_SHEET"
+
+[[profiles]]
+profile_id = "benchmark_purchaser_use_2017"
+selector = "BEA:BenchmarkInputOutput:Year=2017:use_table:price_basis=purchasers:full_published_table=true:resolved_workbook_member_required=true"
+member = "IOUse_After_Redefinitions_PUR_Summary.xlsx"
+sheet = "2017"
+evidence_kind = "RESOLVED_PINNED_PURCHASER_MEMBER_HASH_ZIP_CRC_AND_OOXML_SHEET"
+
+[[profiles]]
+profile_id = "benchmark_producer_use_2017"
+selector = "BEA:BenchmarkInputOutput:Year=2017:use_table:price_basis=producers:full_published_table=true:resolved_workbook_member_required=true"
+member = "IOUse_After_Redefinitions_PRO_Summary.xlsx"
+sheet = "2017"
+evidence_kind = "RESOLVED_PINNED_PRODUCER_MEMBER_HASH_ZIP_CRC_AND_OOXML_SHEET"
+
+[limitations]
+blockers = [
+    "NO_NEW_PROSPECTIVE_CAPTURE_BUNDLE_EXISTS",
+    "NO_BUILT_IN_NETWORK_TRANSPORT_IN_PURE_VALIDATOR",
+    "EXTERNAL_TIMESTAMP_NOT_ESTABLISHED",
+    "LOCAL_TWO_COPY_STORAGE_IS_ONE_FAULT_DOMAIN",
+    "SOURCE_AND_TRANSPORT_ASSERTIONS_ARE_NOT_INDEPENDENTLY_AUTHENTICATED",
+    "POLICY_REVIEW_PAGE_BYTES_NOT_CAPTURED_NO_AUTHORIZATION_CLAIM",
+    "DIRECT_ARCHIVE_AND_API_ACCESS_AUTHORITIES_NOT_INTERCHANGEABLE",
+    "PRESENT_DAY_FIXED_ARCHIVE_RETRIEVAL_DOES_NOT_PROVE_HISTORICAL_FIRST_STATE",
+    "ALL_ORIGIN_ADMISSION_PROMOTION_SCORING_AND_PRODUCTION_GATES_FALSE",
+]

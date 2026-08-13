@@ -1,0 +1,106 @@
+[artifact]
+schema_version = "beforeit-us-bea-nipa-historical-availability-audit.v1"
+audit_id = "bea-nipa-r2026q2-advance-availability-audit-2026-08-05"
+audit_date = "2026-08-05"
+release_id = "r2026q2_advance"
+reference_period = "2026Q2"
+estimate_label = "advance"
+evidence_scope = "RETROSPECTIVE_RESEARCH_AUDIT_WITHOUT_EXACT_WORKBOOK_BYTE_AVAILABILITY_PROOF"
+outcome = "EXACT_WORKBOOK_BYTE_AVAILABILITY_AT_ORIGIN_NOT_PROVEN"
+raw_workbook_pair_persisted_outside_git = true
+historical_release_availability_verified = false
+release_event_timestamp_verified_for_exact_workbook_bytes = false
+first_state_verified = false
+origin_admissible = false
+inventory_registered = false
+ready = false
+
+[candidate_origin]
+origin_cutoff_utc = "2026-07-31T14:00:00Z"
+origin_cutoff_new_york_fixed_offset = "2026-07-31T10:00:00-04:00"
+origin_kind = "RETROSPECTIVE_RECONSTRUCTION_ONLY"
+exact_pair_required_at_or_before_cutoff = true
+requirement_satisfied = false
+
+[exact_pair]
+raw_bundle_sha256 = "9f4152937f58d777feb0f6562c1b1ca3681b0e51c1aa03b486fd5d29d1e794ff"
+section_1_sha256 = "ddcd0c5b693cb5d179198e67dda60f817e0e97196e6f1c158152971bbc80b136"
+section_1_bytes = 4056562
+section_2_sha256 = "1d5e3c6e177f6ba818bacf6361b3f21b7996e6cfdf55afb4d2a86a41bd2a4011"
+section_2_bytes = 4870580
+exact_byte_identity_bound_to_pre_origin_evidence = false
+
+[official_release_page]
+url = "https://www.bea.gov/news/2026/gdp-advance-estimate-2nd-quarter-2026"
+stated_embargoed_release_utc = "2026-07-30T12:30:00Z"
+stated_embargoed_release_local = "2026-07-30T08:30:00-04:00"
+scope = "RELEASE_EVENT_PAGE_NOT_EXACT_WORKBOOK_BYTE_RECEIPT"
+exact_pair_hashes_present = false
+exact_pair_availability_proven = false
+
+[[independent_evidence]]
+evidence_id = "internet-archive-release-pdf-20260730125234"
+uri = "https://web.archive.org/web/20260730125234id_/https://www.bea.gov/sites/default/files/2026-07/gdp2q26-adv.pdf"
+memento_datetime_utc = "2026-07-30T12:52:34Z"
+media_type = "application/pdf"
+byte_count = 425337
+sha256 = "f2938d344ed8b658cb4bd349016db8ef8b8c85c7b69708f68a14fce713c098fd"
+current_official_copy_same_sha256 = true
+scope = "RELEASE_PDF_EXISTENCE_AND_CONTENT"
+contains_exact_pair_hashes = false
+binds_exact_pair_bytes = false
+satisfies_exact_pair_availability_requirement = false
+
+[[independent_evidence]]
+evidence_id = "internet-archive-news-page-20260730180426"
+uri = "https://web.archive.org/web/20260730180426id_/https://www.bea.gov/news/2026/gdp-advance-estimate-2nd-quarter-2026"
+memento_datetime_utc = "2026-07-30T18:04:26Z"
+media_type = "text/html"
+byte_count = 52640
+sha256 = "4636dc341d7cd1a53196fdf0ad529143b0e8b2d0db874f6086ca9b8ebf23cf5d"
+current_official_copy_same_sha256 = true
+scope = "RELEASE_PAGE_EXISTENCE_AND_CONTENT"
+contains_exact_pair_hashes = false
+binds_exact_pair_bytes = false
+satisfies_exact_pair_availability_requirement = false
+
+[[exact_workbook_archive_searches]]
+provider = "Internet Archive CDX"
+section_id = "1"
+url = "https://web.archive.org/cdx/search/cdx?url=apps.bea.gov/HistData/Files/Releases/GDP_and_PI/2026/Q2/Advance_July-30-2026/Section1all_xls.xlsx&output=json&filter=statuscode:200&filter=timestamp:20260730-20260731&fl=timestamp,original,digest,statuscode,mimetype,length&collapse=digest"
+observed_on = "2026-08-05"
+matching_capture_count = 0
+absence_is_availability_evidence = false
+
+[[exact_workbook_archive_searches]]
+provider = "Internet Archive CDX"
+section_id = "2"
+url = "https://web.archive.org/cdx/search/cdx?url=apps.bea.gov/HistData/Files/Releases/GDP_and_PI/2026/Q2/Advance_July-30-2026/Section2all_xls.xlsx&output=json&filter=statuscode:200&filter=timestamp:20260730-20260731&fl=timestamp,original,digest,statuscode,mimetype,length&collapse=digest"
+observed_on = "2026-08-05"
+matching_capture_count = 0
+absence_is_availability_evidence = false
+
+[[present_day_server_observations]]
+section_id = "1"
+url = "https://apps.bea.gov/HistData/Files/Releases/GDP_and_PI/2026/Q2/Advance_July-30-2026/Section1all_xls.xlsx"
+raw_sha256 = "ddcd0c5b693cb5d179198e67dda60f817e0e97196e6f1c158152971bbc80b136"
+etag = "\"afc95ba2a20dd1:0\""
+last_modified = "Thu, 30 Jul 2026 13:48:02 GMT"
+observation_occurred_after_origin = true
+server_metadata_is_independent_pre_origin_evidence = false
+proves_pre_origin_exact_byte_availability = false
+
+[[present_day_server_observations]]
+section_id = "2"
+url = "https://apps.bea.gov/HistData/Files/Releases/GDP_and_PI/2026/Q2/Advance_July-30-2026/Section2all_xls.xlsx"
+raw_sha256 = "1d5e3c6e177f6ba818bacf6361b3f21b7996e6cfdf55afb4d2a86a41bd2a4011"
+etag = "\"e98f41a2a20dd1:0\""
+last_modified = "Thu, 30 Jul 2026 13:48:02 GMT"
+observation_occurred_after_origin = true
+server_metadata_is_independent_pre_origin_evidence = false
+proves_pre_origin_exact_byte_availability = false
+
+[remaining_requirement]
+required_evidence = "INDEPENDENT_EVIDENCE_BINDING_BOTH_EXACT_RAW_SHA256_IDENTITIES_TO_AVAILABILITY_AT_OR_BEFORE_THE_ORIGIN_CUTOFF"
+current_evidence_is_sufficient = false
+fallback_policy = "KEEP_RETROSPECTIVE_ORIGIN_CANNOT_RUN_AND_BEGIN_PROSPECTIVE_CAPTURE"

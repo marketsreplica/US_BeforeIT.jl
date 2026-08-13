@@ -1,0 +1,32 @@
+[artifact]
+schema_version = "beforeit-us-opening-macro-control.v1"
+canonicalization = "sorted_typed_v1_excluding_artifact_content_sha256"
+content_sha256 = "ed75c563d10509c6e13d2fb34bd97757ceecdc89f1ed355017cccbec53539bee"
+
+[control]
+control_id = "bea.t10105.2026q1.retrieval-2026-08-04"
+reference_period = "2026Q1"
+availability_timestamp_utc = "2026-08-04T00:26:34Z"
+availability_basis = "archive_retrieval_completion"
+source_release_id = "bea-nipa-t10105-q-history.retrieval-2026-08-04"
+source_artifact_sha256 = "a80351ce2daeccd5994caea385c6ee9f5201fa46ce0c4cab3e7fa19fc8dec574"
+transformation_version = "bea-nipa-saar-to-quarter.v1"
+unit = "millions_current_usd_per_quarter"
+
+[values]
+nominal_gdp = 7966430.25
+pce = 5408737.0
+gpdi = 1408504.0
+fixed_investment = 1415517.25
+inventory_investment = -7013.25
+exports = 877175.75
+imports = 1082164.75
+government_consumption_and_investment = 1354178.75
+
+[identities]
+gdp_formula = "gdp-pce-gpdi-exports+imports-government"
+gdp_residual = -0.5
+gdp_tolerance = 1.0
+investment_formula = "gpdi-fixed_investment-inventory_investment"
+investment_residual = 0.0
+investment_tolerance = 0.5

@@ -1,0 +1,336 @@
+prohibited_actions = ["NETWORK_REQUEST", "FILESYSTEM_WRITE", "RAW_CAPTURE", "ORIGIN_ADMISSION", "SOURCE_INVENTORY_MUTATION", "FORECAST_EXECUTION", "TRUTH_ACCESS", "SCORING", "CLAIM_FIRST_PUBLIC_HISTORY", "CLAIM_PUBLISHER_AUTHENTICATION", "CLAIM_INJECTED_BYTES_CAME_FROM_PLANNED_URL", "MANIFEST_PROJECTION_AS_PROVIDER_RAW_OBJECT"]
+
+[artifact]
+schema_version = "beforeit-us-bls-cps-prospective-capture-set.v1"
+contract_id = "bls-cps-final-structural-pre-origin-offline-candidate.audit-repaired.v2"
+status = "CANNOT_RUN"
+canonicalization = "sorted-typed-length-aware-excluding-artifact-content-sha256.v1"
+content_sha256 = "68e8d7a1a366c9409e4a29f83dfa90864fbcb0024fcbd91aa53cc16dcbd04e8b"
+
+[scope]
+capture_id = "final_structural_pre_origin"
+requirement_id = "bls_cps_structural"
+source_id = "bls_cps_structural_controls"
+profile_count = 6
+chunk_count = 8
+catalog_object_count = 8
+object_count = 16
+offline_validation_only = true
+synthetic_input_only = true
+network_action_count = 0
+filesystem_write_action_count = 0
+current_qualified_count = 0
+current_v3_integration = false
+current_v3_gap = "v3_has_no_set_valued_raw_object_media_or_catalog_trust_branch"
+catalog_provider_layout_evidenced = false
+catalog_projection_operational = false
+catalog_evidence_status = "MISSING_FUTURE_PROSPECTIVE_FULL_CATALOG_CAPTURE_REQUIRED"
+injected_bytes_are_provider_url_bytes = false
+full_provider_object_completeness_proven = false
+actual_bls_bytes_claimed = false
+availability_claimed = false
+atomicity_claimed = false
+first_public_history_claimed = false
+publisher_authentication_claimed = false
+
+[origin]
+capture_not_before_utc = "2026-10-29T13:30:00Z"
+capture_deadline_utc = "2026-10-30T13:45:00Z"
+origin_timestamp_utc = "2026-10-30T14:00:00Z"
+completion_must_be_strictly_before_origin = true
+
+[release]
+reference_month = "2026-09"
+scheduled_release_date = "2026-10-02"
+scheduled_release_time_et = "08:30"
+scheduled_release_timestamp_utc = "2026-10-02T12:30:00Z"
+release_event_separate_from_final_capture_window = true
+public_api_documented_lag_days = 1
+single_release_time_api_capture_sufficient = false
+claim_ceiling = "SCHEDULE_AND_DOCUMENTED_API_LAG_ONLY_NO_ACTUAL_AVAILABILITY_CLAIM"
+
+[routes]
+planned_api_url = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
+api_method = "POST"
+api_media_type = "application/json"
+api_registration_key_present = false
+planned_catalog_base_url = "https://download.bls.gov/pub/time.series/ln/"
+catalog_media_type = "text/plain"
+injected_object_url_provenance = "UNAUTHENTICATED_NOT_CLAIMED"
+
+[limits]
+max_json_bytes = 8388608
+max_json_depth = 64
+max_json_nodes = 250000
+max_json_string_bytes = 1048576
+max_ln_series_bytes = 33554432
+max_lookup_tsv_bytes = 8388608
+max_tsv_lines = 500000
+max_tsv_columns = 64
+max_tsv_field_bytes = 1048576
+max_text_lines = 100000
+ln_series_ceiling_rationale = "32_MiB_is_more_than_twice_independent_audit_reference_size_15288538_bytes"
+
+[coverage]
+required_terminal_year = 2026
+required_terminal_period = "M09"
+required_frequency = "Monthly"
+monthly_period_pattern = "M01..M12"
+annual_period = "M13"
+annual_period_policy = "REJECT_NOT_REQUIRED_FOR_MONTHLY_PROJECTIONS"
+annual_period_kept_separate = false
+explicit_missing_token = "-"
+october_2025_period = "2025-M10"
+october_2025_missing_required = true
+october_2025_missing_footnote_code = "9"
+october_2025_missing_footnote_text = "Data unavailable due to the 2025 lapse in appropriations."
+no_gap_no_overlap_required = true
+catalog_begin_end_match_required = true
+
+[catalog_contract]
+provider_layout_evidence_status = "MISSING_NOT_LOCALLY_EVIDENCED"
+future_full_catalog_capture_required = true
+synthetic_fixture_header_is_provider_schema_claim = false
+full_raw_objects_must_be_hashed_before_projection = true
+projection_receipt_schema = "beforeit-us-bls-cps-catalog-projection-receipt.v1"
+projection_receipt_self_hash_required = true
+projection_receipt_binds_full_header = true
+projection_receipt_binds_full_raw_hashes = true
+projection_receipt_binds_physical_row_ordinals = true
+irrelevant_rows_must_be_retained_in_full_raw_hash = true
+seven_row_projection_may_be_manifested_as_raw = false
+synthetic_series_required_columns = ["series_id", "series_title", "seasonal_code", "periodicity_code", "tdat_code", "lfst_code", "ages_code", "begin_year", "begin_period", "end_year", "end_period"]
+synthetic_lookup_code_suffix = "_code"
+synthetic_lookup_text_suffix = "_text"
+
+[[profiles]]
+profile_id = "cps_employed"
+series_id = "LNU02000000"
+selector = "BLS:CPS:SeriesID=LNU02000000:Frequency=M:NSA=true:history_as_known_at_receipt_through=2026-09:historical_first_states_not_claimed=true"
+seasonal_text = "Not Seasonally Adjusted"
+unit_text = "Number in thousands"
+frequency_text = "Monthly"
+series_title = "(Unadj) Employment Level"
+labor_force_status_text = "Employed"
+ages_text = "16 years and over"
+expected_begin_year = 1948
+expected_begin_period = "M01"
+
+[[profiles]]
+profile_id = "cps_inactive"
+series_id = "LNU05000000"
+selector = "BLS:CPS:SeriesID=LNU05000000:Frequency=M:NSA=true:history_as_known_at_receipt_through=2026-09:historical_first_states_not_claimed=true"
+seasonal_text = "Not Seasonally Adjusted"
+unit_text = "Number in thousands"
+frequency_text = "Monthly"
+series_title = "(Unadj) Not in Labor Force"
+labor_force_status_text = "Not in labor force"
+ages_text = "16 years and over"
+expected_begin_year = 1975
+expected_begin_period = "M01"
+
+[[profiles]]
+profile_id = "cps_labor_force"
+series_id = "LNU01000000"
+selector = "BLS:CPS:SeriesID=LNU01000000:Frequency=M:NSA=true:history_as_known_at_receipt_through=2026-09:historical_first_states_not_claimed=true"
+seasonal_text = "Not Seasonally Adjusted"
+unit_text = "Number in thousands"
+frequency_text = "Monthly"
+series_title = "(Unadj) Civilian Labor Force Level"
+labor_force_status_text = "Civilian labor force"
+ages_text = "16 years and over"
+expected_begin_year = 1948
+expected_begin_period = "M01"
+
+[[profiles]]
+profile_id = "cps_population"
+series_id = "LNU00000000"
+selector = "BLS:CPS:SeriesID=LNU00000000:Frequency=M:NSA=true:history_as_known_at_receipt_through=2026-09:historical_first_states_not_claimed=true"
+seasonal_text = "Not Seasonally Adjusted"
+unit_text = "Number in thousands"
+frequency_text = "Monthly"
+series_title = "(Unadj) Civilian Noninstitutional Population"
+labor_force_status_text = "Civilian noninstitutional population"
+ages_text = "16 years and over"
+expected_begin_year = 1948
+expected_begin_period = "M01"
+
+[[profiles]]
+profile_id = "cps_unemployed"
+series_id = "LNU03000000"
+selector = "BLS:CPS:SeriesID=LNU03000000:Frequency=M:NSA=true:history_as_known_at_receipt_through=2026-09:historical_first_states_not_claimed=true"
+seasonal_text = "Not Seasonally Adjusted"
+unit_text = "Number in thousands"
+frequency_text = "Monthly"
+series_title = "(Unadj) Unemployment Level"
+labor_force_status_text = "Unemployed"
+ages_text = "16 years and over"
+expected_begin_year = 1948
+expected_begin_period = "M01"
+
+[[profiles]]
+profile_id = "cps_unemployment_rate"
+series_id = "LNS14000000"
+selector = "BLS:CPS:SeriesID=LNS14000000:Frequency=M:SA=true:history_as_known_at_receipt_through=2026-09:seasonal_factor_vintage_as_known_at_receipt=true:historical_first_states_not_claimed=true"
+seasonal_text = "Seasonally Adjusted"
+unit_text = "Percent"
+frequency_text = "Monthly"
+series_title = "(Seas) Unemployment Rate"
+labor_force_status_text = "Unemployment rate"
+ages_text = "16 years and over"
+expected_begin_year = 1948
+expected_begin_period = "M01"
+
+[[chunks]]
+object_id = "api_1948_1957"
+start_year = 1948
+end_year = 1957
+body = "{\"seriesid\":[\"LNU02000000\",\"LNU05000000\",\"LNU01000000\",\"LNU00000000\",\"LNU03000000\",\"LNS14000000\"],\"startyear\":\"1948\",\"endyear\":\"1957\"}"
+
+[[chunks]]
+object_id = "api_1958_1967"
+start_year = 1958
+end_year = 1967
+body = "{\"seriesid\":[\"LNU02000000\",\"LNU05000000\",\"LNU01000000\",\"LNU00000000\",\"LNU03000000\",\"LNS14000000\"],\"startyear\":\"1958\",\"endyear\":\"1967\"}"
+
+[[chunks]]
+object_id = "api_1968_1977"
+start_year = 1968
+end_year = 1977
+body = "{\"seriesid\":[\"LNU02000000\",\"LNU05000000\",\"LNU01000000\",\"LNU00000000\",\"LNU03000000\",\"LNS14000000\"],\"startyear\":\"1968\",\"endyear\":\"1977\"}"
+
+[[chunks]]
+object_id = "api_1978_1987"
+start_year = 1978
+end_year = 1987
+body = "{\"seriesid\":[\"LNU02000000\",\"LNU05000000\",\"LNU01000000\",\"LNU00000000\",\"LNU03000000\",\"LNS14000000\"],\"startyear\":\"1978\",\"endyear\":\"1987\"}"
+
+[[chunks]]
+object_id = "api_1988_1997"
+start_year = 1988
+end_year = 1997
+body = "{\"seriesid\":[\"LNU02000000\",\"LNU05000000\",\"LNU01000000\",\"LNU00000000\",\"LNU03000000\",\"LNS14000000\"],\"startyear\":\"1988\",\"endyear\":\"1997\"}"
+
+[[chunks]]
+object_id = "api_1998_2007"
+start_year = 1998
+end_year = 2007
+body = "{\"seriesid\":[\"LNU02000000\",\"LNU05000000\",\"LNU01000000\",\"LNU00000000\",\"LNU03000000\",\"LNS14000000\"],\"startyear\":\"1998\",\"endyear\":\"2007\"}"
+
+[[chunks]]
+object_id = "api_2008_2017"
+start_year = 2008
+end_year = 2017
+body = "{\"seriesid\":[\"LNU02000000\",\"LNU05000000\",\"LNU01000000\",\"LNU00000000\",\"LNU03000000\",\"LNS14000000\"],\"startyear\":\"2008\",\"endyear\":\"2017\"}"
+
+[[chunks]]
+object_id = "api_2018_2026"
+start_year = 2018
+end_year = 2026
+body = "{\"seriesid\":[\"LNU02000000\",\"LNU05000000\",\"LNU01000000\",\"LNU00000000\",\"LNU03000000\",\"LNS14000000\"],\"startyear\":\"2018\",\"endyear\":\"2026\"}"
+
+[[catalog_objects]]
+object_id = "catalog_ln_series"
+filename = "ln.series"
+kind = "series_tsv"
+
+[[catalog_objects]]
+object_id = "catalog_ln_footnote"
+filename = "ln.footnote"
+kind = "lookup_tsv"
+
+[[catalog_objects]]
+object_id = "catalog_ln_seasonal"
+filename = "ln.seasonal"
+kind = "lookup_tsv"
+
+[[catalog_objects]]
+object_id = "catalog_ln_periodicity"
+filename = "ln.periodicity"
+kind = "lookup_tsv"
+
+[[catalog_objects]]
+object_id = "catalog_ln_lfst"
+filename = "ln.lfst"
+kind = "lookup_tsv"
+
+[[catalog_objects]]
+object_id = "catalog_ln_ages"
+filename = "ln.ages"
+kind = "lookup_tsv"
+
+[[catalog_objects]]
+object_id = "catalog_ln_tdat"
+filename = "ln.tdat"
+kind = "lookup_tsv"
+
+[[catalog_objects]]
+object_id = "catalog_ln_txt"
+filename = "ln.txt"
+kind = "bounded_text"
+
+[[source_pins]]
+binding_id = "prospective_v2_module"
+path = "scripts/us/forecasting/vintages/prospective/USProspectiveAcquisitionContractV2.jl"
+sha256 = "435df6c4b4de879c0f24d3f9bb9f7504fc6172ae34e94db8cb6ba84282d6e379"
+
+[[source_pins]]
+binding_id = "prospective_v2_contract"
+path = "scripts/us/forecasting/vintages/prospective/prospective_2026q3_contract_v2.toml"
+sha256 = "b24ff0c40172d2a23991fbe75c2fe42c6ba6c6c1f5fd46d079ac6d51429bf98f"
+
+[[source_pins]]
+binding_id = "common_origin_v3_module"
+path = "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/USCommonOriginAcquisitionV3.jl"
+sha256 = "9654eb61b92b2655391b00952ed4cbee0e9fa58224339f1fb0440c51570e719e"
+
+[[source_pins]]
+binding_id = "common_origin_v3_policy"
+path = "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/common_origin_acquisition_v3_policy.toml"
+sha256 = "0deff5e3e6c950b5682bba96fcefa1fa2304bbbadae6227a940376dc7699bd3e"
+
+[[source_pins]]
+binding_id = "accepted_snapshot_envelope_module"
+path = "scripts/us/forecasting/vintages/bea_industry/prospective_snapshot_envelope_v1/USProspectiveSnapshotEnvelopeV1.jl"
+sha256 = "cb8fffd626c019fa6ce65a32664a46d1ecd87d3337f72ea378900d2d4f05b165"
+
+[[source_pins]]
+binding_id = "accepted_snapshot_envelope_tests"
+path = "scripts/us/forecasting/vintages/bea_industry/prospective_snapshot_envelope_v1/test_prospective_snapshot_envelope_v1.jl"
+sha256 = "ae36445f9b7af77fa8a93a945bab2109382c881e2942c71c78f9252a29470d1e"
+
+[[source_pins]]
+binding_id = "sources_toml"
+path = "scripts/us/sources.toml"
+sha256 = "41b2bf73b92fb0cf9d9e02ae836beb91d07cd6a3bd20ecf668882350c86f23c9"
+
+[[source_pins]]
+binding_id = "us_pipeline"
+path = "scripts/us/USPipeline.jl"
+sha256 = "ce4d8138a1c07fdc9509d7560f307f226dc314eb0a4394270ef1e1014b9ca14d"
+
+[[source_pins]]
+binding_id = "project_toml"
+path = "scripts/us/Project.toml"
+sha256 = "72cec6cb6dc64dc71b9e342890b78afbf8fd66cb97dd8603e4fe905ad137dc1c"
+
+[[source_pins]]
+binding_id = "manifest_toml"
+path = "scripts/us/Manifest.toml"
+sha256 = "c2e596cf8452c5b890bb0ef66c05bc72a57fa25ab6f8fe790f8db4600b035263"
+
+[[source_pins]]
+binding_id = "current_inventory"
+path = "scripts/us/forecasting/vintages/current_inventory.toml"
+sha256 = "110b4448db0b49e95cbc2fe1cf7019f6b877b3f391c6069a81c2e7c3c2a086ae"
+
+[gates]
+origin_admissible = false
+qualified_leaf = false
+current_v3_integration = false
+raw_capture_complete = false
+source_inventory_mutation_allowed = false
+forecast_execution_allowed = false
+truth_access_allowed = false
+scoring_allowed = false
+promotion_allowed = false

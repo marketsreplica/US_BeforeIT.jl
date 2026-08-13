@@ -1,0 +1,103 @@
+blocking_reasons = [
+  "EXACT_PDF_BODY_NOT_RETAINED_IN_PROSPECTIVE_OBJECT_CATALOG",
+  "EXTERNAL_TIMESTAMP_AND_TWO_CUSTODY_DOMAINS_ABSENT",
+  "FARM_COUNT_TO_BEFOREIT_FIRM_POPULATION_MAPPING_DUBIOUS",
+  "INDEPENDENT_QUALIFIED_LEAF_VERIFIER_ABSENT",
+  "ORIGIN_PRECEDENCE_AND_RELEASE_AVAILABILITY_NOT_ATTESTED",
+  "PYPDF_RUNTIME_AND_TRANSITIVE_CODE_NOT_AUTHENTICATED",
+  "USDA_POLICY_PAGE_BYTES_NOT_CAPTURED",
+]
+prohibited_actions = [
+  "network_request",
+  "write_raw",
+  "admit_origin",
+  "approve_model_mapping",
+  "emit_forecast",
+  "load_truth",
+  "score",
+  "mutate_inventory",
+  "promote",
+  "register_production",
+]
+
+[artifact]
+schema_version = "beforeit-us-usda-nass-farms-land-in-farms-profile.v1"
+status = "PRESENT_DAY_PDF_TABLE_PARSED_NONADMITTING"
+claim_ceiling = "EXACT_CURRENT_PDF_TABLE_MECHANICS_ONLY_NO_PROSPECTIVE_ORIGIN"
+content_sha256 = "68f3233505343cedb9e43d702418ef0aa24640126689bae9f068d045e678cffa"
+
+[source]
+agency = "USDA National Agricultural Statistics Service"
+url = "https://www.nass.usda.gov/Publications/Todays_Reports/reports/fnlo0226.pdf"
+expected_pdf_sha256 = "8ed104e9df2280f1daf85ce37b20e68ced001ae23d5c3755c7c32fafecada25b"
+expected_pdf_bytes = 618881
+body_preserved_in_repository = false
+evidence_class = "present_day_ephemeral_retrieval_nonprospective"
+
+[selector]
+profile_selector = "USDA:NASS:FarmsAndLandInFarms:Report=2025_summary_containing_2024:ReferenceYear=2024:Geography=US:Series=number_of_farms:Unit=farms"
+reference_year = 2024
+geography = "United States"
+series = "number_of_farms"
+unit = "farms"
+page_number = 5
+
+[parser]
+allowed_pypdf_versions = ["6.10.0", "6.14.2"]
+page_text_sha256 = "f87964637727537c2f981e3f3c1282b9abb366456f490aa3f6531605ce0aeb40"
+expected_page_count = 17
+runtime_authenticated = false
+full_table_required = true
+positional_binding_required = true
+
+[result]
+status = "PRESENT_DAY_PDF_TABLE_PARSED_NONADMITTING"
+reference_year = 2024
+number_of_farms = 1880000
+adjacent_year = 2025
+adjacent_number_of_farms = 1865000
+table_mechanics_validated = true
+prospective_profile_qualified = false
+
+[model_mapping]
+target_model_industry = "111CA Farms"
+mapping_status = "DUBIOUS_NOT_APPROVED"
+one_farm_equals_one_model_firm = false
+
+[gates]
+origin_admissible = false
+profile_qualified = false
+model_input_approved = false
+operator_approved = false
+forecast_emission_allowed = false
+truth_access_allowed = false
+scoring_allowed = false
+accuracy_evidence = false
+promotion_eligible = false
+production_eligible = false
+inventory_mutation_authorized = false
+
+[[sources]]
+binding_id = "current_source_configuration"
+path = "scripts/us/sources.toml"
+sha256 = "41b2bf73b92fb0cf9d9e02ae836beb91d07cd6a3bd20ecf668882350c86f23c9"
+
+[[sources]]
+binding_id = "current_pipeline"
+path = "scripts/us/USPipeline.jl"
+sha256 = "ce4d8138a1c07fdc9509d7560f307f226dc314eb0a4394270ef1e1014b9ca14d"
+
+[[sources]]
+binding_id = "prospective_contract"
+path = "scripts/us/forecasting/vintages/prospective/prospective_2026q3_contract_v2.toml"
+sha256 = "b24ff0c40172d2a23991fbe75c2fe42c6ba6c6c1f5fd46d079ac6d51429bf98f"
+
+[[sources]]
+binding_id = "prospective_contract_validator"
+path = "scripts/us/forecasting/vintages/prospective/USProspectiveAcquisitionContractV2.jl"
+sha256 = "435df6c4b4de879c0f24d3f9bb9f7504fc6172ae34e94db8cb6ba84282d6e379"
+
+[[sources]]
+binding_id = "synthetic_v4_trust_schema"
+path = "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v4/USCommonOriginAcquisitionV4.jl"
+sha256 = "0f4c248950ebee59d1e6b5882db6516cbb539f9e54c7dfbb6b53fe0f7a5f6b4e"

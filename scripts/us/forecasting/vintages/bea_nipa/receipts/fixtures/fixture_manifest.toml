@@ -1,0 +1,55 @@
+[artifact]
+schema_version = "beforeit-us-bea-nipa-receipt-fixtures.v1"
+fixture_set_id = "bea-nipa-atomic-workbook-receipt-contract.v1"
+status = "SYNTHETIC_CONTRACT_FIXTURES_NOT_SOURCE_EVIDENCE"
+as_of_date = "2026-08-05"
+digest_algorithm = "sha256"
+source_workbook_bytes_included = false
+historical_availability_evidence_included = false
+origin_admission_evidence_included = false
+live_acquisition_receipt_included = false
+normalization = "The two base64 files decode to deterministic minimal OOXML packages containing explicit synthetic markers. They are not BEA bytes. The receipt and target profile exercise contract structure only and require allow_synthetic=true."
+
+[[fixtures]]
+path = "raw-sha256-1fcbbed42071c751ff8ce4dba55dd46d08dd187ff7ba1ba3ad4cd5d16ee5fd18.xlsx.b64"
+file_sha256 = "2c68398f96cb3988c9904b5e37f776b73f5a0045b5eafad1889f79355da5fe90"
+fixture_kind = "base64_raw_workbook"
+decoded_raw_sha256 = "1fcbbed42071c751ff8ce4dba55dd46d08dd187ff7ba1ba3ad4cd5d16ee5fd18"
+decoded_raw_bytes = 2324
+synthetic = true
+source_evidence = false
+origin_admissible = false
+
+[[fixtures]]
+path = "raw-sha256-597d1c6f4ba3b7c2c859ad95c382d971afe0e73ffe4308764cb08814f7ebe3f3.xlsx.b64"
+file_sha256 = "0dc2e5d44c886b5f170df3723f5298481275b5bbc96aacc717354a44d44217bb"
+fixture_kind = "base64_raw_workbook"
+decoded_raw_sha256 = "597d1c6f4ba3b7c2c859ad95c382d971afe0e73ffe4308764cb08814f7ebe3f3"
+decoded_raw_bytes = 2324
+synthetic = true
+source_evidence = false
+origin_admissible = false
+
+[[fixtures]]
+path = "synthetic_content_fingerprint.json"
+file_sha256 = "4d579488c04085a033d8ca7ffe7118918344147aa42b7c1ef142f75dfc4e6b74"
+fixture_kind = "synthetic_parsed_content_fingerprint"
+synthetic = true
+source_evidence = false
+origin_admissible = false
+
+[[fixtures]]
+path = "synthetic_receipt.toml"
+file_sha256 = "d3f89a10825e6486e56af9a75ab36136a76f9ebe9af4d459b1634385a490e701"
+fixture_kind = "synthetic_atomic_pair_receipt"
+synthetic = true
+source_evidence = false
+origin_admissible = false
+
+[[fixtures]]
+path = "synthetic_target_profile.toml"
+file_sha256 = "dbb9d1c5ed65da9fffbb46fe87ec8b545a5f1f8d070fd9f50784994bd4be1d7c"
+fixture_kind = "synthetic_semantic_target_profile"
+synthetic = true
+source_evidence = false
+origin_admissible = false

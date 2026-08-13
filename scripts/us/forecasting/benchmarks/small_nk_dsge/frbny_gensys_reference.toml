@@ -1,0 +1,152 @@
+schema_version = "beforeit-us-frbny-gensys-reference.v1"
+status = "EXTERNAL_NUMERIC_REFERENCE_FIXTURE_ONLY"
+eu = [1, 1]
+
+[upstream]
+repository = "https://github.com/FRBNY-DSGE/DSGE.jl"
+tag = "v1.3.0"
+commit = "45c26624ec225d6d355219cde71638f6171694ad"
+license = "BSD-3-Clause"
+stake_ieee754_hex = "0x3ff000010c6f7a0b"
+model_source_url = "https://raw.githubusercontent.com/FRBNY-DSGE/DSGE.jl/v1.3.0/src/models/representative/an_schorfheide/an_schorfheide.jl"
+model_source_sha256 = "2fa0fa3fd0971ffde20181e967492bbff9f638181ce7dbae539dfe1fdbf2b87e"
+equilibrium_source_url = "https://raw.githubusercontent.com/FRBNY-DSGE/DSGE.jl/v1.3.0/src/models/representative/an_schorfheide/eqcond.jl"
+equilibrium_source_sha256 = "104fa4c91950fb9f9b023c6dc85014ebff0b49b5e7caf88b532f68c7f8604b8d"
+measurement_source_url = "https://raw.githubusercontent.com/FRBNY-DSGE/DSGE.jl/v1.3.0/src/models/representative/an_schorfheide/measurement.jl"
+measurement_source_sha256 = "8cd81cf19a039337261569081328604250095ab5a2e3141f32b3f17a80f06402"
+solver_source_url = "https://raw.githubusercontent.com/FRBNY-DSGE/DSGE.jl/v1.3.0/src/solve/gensys.jl"
+solver_source_sha256 = "a8bba403c557dd27176b9045cb4b236998c55fd4a5fd36cbb5a58fe9b85aba1b"
+test_source_url = "https://raw.githubusercontent.com/FRBNY-DSGE/DSGE.jl/v1.3.0/test/solve/gensys.jl"
+test_source_sha256 = "3347367070a39aeb951e99929937f6288a68aeb90943ae5cdeb7f1cda672895c"
+reference_hdf5_url = "https://raw.githubusercontent.com/FRBNY-DSGE/DSGE.jl/v1.3.0/test/reference/gensys.h5"
+reference_hdf5_sha256 = "42bc870270cc66e5699c09faf8ce00bdfb3d27c49936a058f0afea48f20cbb92"
+numeric_storage = "column_major_ieee754_binary64_bits"
+
+[parameters]
+tau = "0x3fffe631f8a0902e"
+kappa = "0x3fe76113404ea4a9"
+psi1 = "0x3ff24b5dcc63f141"
+psi2 = "0x3fdd07c84b5dcc64"
+r_annual = "0x3fa0068db8bac711"
+pi_star = "0x40204d35a858793e"
+gamma_quarterly = "0x3ff8000000000000"
+rho_rate = "0x3fd89eecbfb15b57"
+rho_g = "0x3fd82c3c9eecbfb1"
+rho_z = "0x3feea71de69ad42c"
+sigma_rate = "0x3fdf5c28f5c28f5c"
+sigma_g = "0x3ff759b3d07c84b6"
+sigma_z = "0x3fed972474538ef3"
+
+[g1]
+rows = 8
+cols = 8
+values_ieee754_hex = [
+    "0x3c83176b949c0bdc",
+    "0x3c95e57671be4bd6",
+    "0x3c658092b82c3164",
+    "0x3ff0000000000001",
+    "0xb93b25a16fa6d56e",
+    "0xb96520bfef164741",
+    "0xbc3d17b319b4b2c1",
+    "0xbc3b6f7aa419bc3a",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0xbfc5a5e5a5bcb0eb",
+    "0xbfc46a3b1d950638",
+    "0x3fccd64641993b88",
+    "0xbcaf05621c60b78d",
+    "0x3c6511f7151ae2bf",
+    "0x3c8520bfef164741",
+    "0xbfa3821de8107724",
+    "0xbfa265a6f77314a9",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x3fd82c3c9eecbfb5",
+    "0xbc90000000000000",
+    "0xbcb0e38cbf16b691",
+    "0xb948000000000000",
+    "0x3fd82c3c9eecbfb3",
+    "0xbc8520bfef164741",
+    "0x3fc24298158b01aa",
+    "0xbc9ea045a342c6d4",
+    "0x3fefc5b3457e5308",
+    "0x4011a69a72d94697",
+    "0x400b0d82ebbca0ea",
+    "0x3cadc5c0ce517d16",
+    "0xbca8000000000000",
+    "0x3feea71de69ad427",
+    "0x3fd8444f8c91baf0",
+    "0x400d802d5c083172",
+    "0xbc92e34bfa5188bd",
+    "0x3cb0000000000000",
+    "0x3ca29fdff6f7c382",
+    "0xbc752d138cb44a7e",
+    "0x3c7d0a46c8a0dc90",
+    "0x3c8c2baa941db457",
+    "0x3c84dad57469e938",
+    "0x3cac1b4a37916201",
+    "0xbc90f22a189d4f7f",
+    "0x3cc8000000000000",
+    "0x3ccafcb058287424",
+    "0xbcacda17dca02558",
+    "0xbc46b7c02bb855a0",
+    "0x3ca520bfef164741",
+    "0x3c74b1993b79b390",
+    "0x3cc300ea61b2894b",
+]
+
+[constant]
+rows = 8
+cols = 1
+values_ieee754_hex = [
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+    "0x0000000000000000",
+]
+
+[impact]
+rows = 8
+cols = 3
+values_ieee754_hex = [
+    "0x3ff09596e690c6fe",
+    "0x40126d3283b578f9",
+    "0x400c3de3c7e3c950",
+    "0x3caf14bb469db57e",
+    "0xbcb0000000000000",
+    "0x3feffffffffffffd",
+    "0x3fd95557fd4ce767",
+    "0x400ecc1902c787f0",
+    "0x3ff0000000000000",
+    "0x3cb6000000000000",
+    "0xbcb9000000000000",
+    "0x3960000000000000",
+    "0x3feffffffffffffe",
+    "0x0000000000000000",
+    "0x3fd82c3c9eecbfb4",
+    "0x3c9b800000000000",
+    "0xbfdc22e1ace3690b",
+    "0xbfda889b17359c6d",
+    "0x3fe2bd6c46942845",
+    "0xbc7660b693927f6c",
+    "0x3c7306b537642922",
+    "0x3c81ff05f1261681",
+    "0xbfb95aec82766c65",
+    "0xbfb7e93382b1ebac",
+]

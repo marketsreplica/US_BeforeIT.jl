@@ -1,0 +1,91 @@
+[artifact]
+schema_version = "beforeit-us-metadata-schema-contract.v1"
+described_schema_version = "beforeit-us-retention-custody-covenant.v2"
+status = "CLOSED_FAIL_CLOSED"
+canonicalization = "sorted-typed-length-prefixed-v1-excluding-artifact-content-sha256"
+content_sha256 = "2c6d6840a3396d5ced8e4e20b3bf0c5cc1fce68fdb927b796258fbf7a72382c3"
+
+[contract]
+purpose = "pre-seal covenant retaining origin evidence through the h12 mature-truth boundary and later receipt-completion audit"
+unknown_fields_allowed = false
+truth_values_loaded_by_verifier = false
+future_truth_receipt_required_at_preseal = false
+calendar_boundary_alone_allows_deletion = false
+self_hash_alone_is_custody_evidence = false
+covered_subject_is_exact_ordered_child_closure = true
+custody_approvals_must_follow_latest_child_evidence = true
+numeric_control_fields_require_toml_integer = true
+
+[root]
+required_tables = ["artifact", "geometry", "covenant", "approvals", "gates"]
+
+[artifact_fields]
+exact = ["schema_version", "evidence_class", "canonicalization", "content_sha256"]
+schema_version = "beforeit-us-retention-custody-covenant.v2"
+evidence_class_allowed = ["PROSPECTIVE_NONSYNTHETIC", "SYNTHETIC_TEST_ONLY"]
+
+[geometry_fields]
+exact = [
+    "origin_reference_quarter",
+    "maximum_horizon_quarters",
+    "maximum_target_reference_quarter",
+    "maximum_target_period_end_utc",
+    "mature_truth_lag_months",
+    "mathematical_minimum_retain_until_utc",
+]
+origin_reference_quarter = "2026Q3"
+maximum_horizon_quarters = 12
+maximum_target_reference_quarter = "2029Q3"
+maximum_target_period_end_utc = "2029-09-30T23:59:59Z"
+mature_truth_lag_months = 60
+mathematical_minimum_retain_until_utc = "2034-09-30T23:59:59Z"
+
+[covenant_fields]
+exact = [
+    "custody_policy_id",
+    "covered_subject_sha256",
+    "minimum_durable_replica_count",
+    "retain_origin_evidence_until_utc",
+    "mature_truth_receipt_preseal_state",
+    "later_mature_receipt_completion_required",
+    "later_mature_receipt_external_timestamp_required",
+    "later_mature_receipt_durable_replication_required",
+    "post_receipt_independent_audit_required",
+    "deletion_release_rule",
+]
+minimum_durable_replica_count = 2
+retain_origin_evidence_until_utc = "2034-09-30T23:59:59Z"
+mature_truth_receipt_preseal_state = "FUTURE_NOT_LOADED_EXPECTED"
+deletion_release_rule = "ONLY_AFTER_CALENDAR_BOUNDARY_AND_LAST_REQUIRED_MATURE_TRUTH_RECEIPT_COMPLETION_EXTERNAL_TIMESTAMP_DURABLE_REPLICATION_AND_INDEPENDENT_AUDIT"
+
+[approval_fields]
+exact = [
+    "evidence_subject_sha256",
+    "owner_id",
+    "owner_receipt_path",
+    "owner_receipt_sha256",
+    "validator_id",
+    "validator_receipt_path",
+    "validator_receipt_sha256",
+]
+distinct_identities_receipts_and_hashes_required = true
+signed_at_must_be_at_or_after_latest_child_evidence = true
+
+[resource_limits]
+maximum_metadata_file_bytes = 16777216
+maximum_vector_items = 4096
+maximum_table_entries = 4096
+maximum_string_bytes = 1048576
+maximum_identifier_bytes = 512
+maximum_relative_path_bytes = 4096
+maximum_path_component_bytes = 255
+maximum_path_components = 128
+
+[gate_fields]
+exact = [
+    "truth_access_allowed",
+    "scoring_allowed",
+    "origin_admission_allowed",
+    "deletion_allowed_pre_maturity",
+]
+required_value = false

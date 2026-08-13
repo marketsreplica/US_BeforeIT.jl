@@ -1,0 +1,89 @@
+schema_version = "beforeit-us-revised-data-abm-engineering-protocol.v1"
+contract_id = "beforeit-us-revised-data-abm-engineering-qualification.v1"
+information_track = "revised_mixed_vintage_diagnostic"
+diagnostic_class = "engineering_input_qualification_only"
+origin_period = "2026Q1"
+forecast_start_period = "2026Q2"
+forecast_end_period = "2027Q1"
+horizons = [1, 2, 3, 4]
+path_count = 32
+runner_implemented = false
+ensemble_executed = false
+blockers = [
+    "FULL_ACCOUNTING_BRIDGE_UNRESOLVED",
+    "OUTPUT_SCALE_BRIDGE_UNVALIDATED",
+    "TIER1_TARGET_OPERATOR_COVERAGE_ZERO_OF_EIGHT",
+    "HISTORICAL_ORIGIN_COUNT_ZERO",
+]
+
+[declarations]
+origin_admissible = false
+promotion_eligible = false
+confirmatory = false
+truth_blind = false
+class_h_allowed = false
+production_registry_allowed = false
+scoring_allowed = false
+inference_allowed = false
+input_truth_isolation_verified = false
+input_lineage_verified = false
+truth_values_emitted = false
+forecast_values_emitted = false
+distribution_artifacts_emitted = false
+
+[sanitization]
+required_past_only_series = ["C_G", "C_E", "Y_I"]
+time_dimension = 1
+retain_rule = "quarter_le_origin_inclusive"
+partition_rule = "parameters_to_structural_declared_series_including_required_to_dynamic_remaining_initial_conditions_to_state"
+declared_dynamic_future_values_in_qualified_hash = false
+class_h_inputs_rejected = true
+qualified_values_nonfinite_rejected = true
+qualified_values_missing_rejected = true
+
+[execution]
+serial_only = true
+parallel_allowed = false
+julia_threads = 1
+openblas_threads = 1
+process_global_rng_assumed = true
+seed_before_model_construction = true
+seed_before_simulation = true
+construction_path_purpose = "abm_engineering_model_construction"
+simulation_path_purpose = "abm_engineering_simulation"
+path_ids = "one_based_contiguous"
+
+[[input_series]]
+id = "C_G"
+formula = "timescale*sum(government_consumption_at_origin)*real_government_consumption[t]/real_government_consumption[origin]"
+unit = "annualized_model_currency_flow_at_calibration_scale"
+frequency = "quarterly"
+time_semantics = "history_through_origin_only"
+
+[[input_series]]
+id = "C_E"
+formula = "timescale*sum(domestic_exports_at_origin)*real_exports[t]/real_exports[origin]"
+unit = "annualized_model_currency_flow_at_calibration_scale"
+frequency = "quarterly"
+time_semantics = "history_through_origin_only"
+
+[[input_series]]
+id = "Y_I"
+formula = "timescale*sum(imports_at_origin)*real_imports[t]/real_imports[origin]"
+unit = "annualized_model_currency_flow_at_calibration_scale"
+frequency = "quarterly"
+time_semantics = "history_through_origin_only"
+
+[[candidate_output_operators]]
+id = "real_gdp_growth"
+formula = "400*log(real_gdp_level[t]/real_gdp_level[t-1])"
+unit = "annualized_log_percent"
+frequency = "quarterly"
+status = "NOT_VALIDATED"
+
+[[candidate_output_operators]]
+id = "gdp_deflator_inflation"
+formula = "400*log(gdp_deflator_level[t]/gdp_deflator_level[t-1])"
+unit = "annualized_log_percent"
+frequency = "quarterly"
+status = "NOT_VALIDATED"

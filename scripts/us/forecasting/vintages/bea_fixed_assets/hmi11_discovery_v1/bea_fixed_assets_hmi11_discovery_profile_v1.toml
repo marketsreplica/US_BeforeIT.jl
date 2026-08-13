@@ -1,0 +1,369 @@
+prohibited_actions = [
+    "ACCESS_SOURCE_ARTIFACT_BYTES",
+    "ADMIT_ORIGIN",
+    "APPEND_FORECAST",
+    "APPEND_SCORE",
+    "APPEND_TRUTH",
+    "AUTHENTICATE_PUBLISHER_FROM_LOCAL_HASHES",
+    "CAPTURE_SOURCE",
+    "DOWNLOAD_SOURCE",
+    "EXECUTE_MODEL",
+    "LOAD_TRUTH",
+    "MAKE_HTTP_REQUEST",
+    "MUTATE_SOURCE_INVENTORY",
+    "PROMOTE_MODEL",
+    "WRITE_DATA",
+    "WRITE_RECEIPT",
+]
+
+[artifact]
+schema_version = "beforeit-us-bea-fixed-assets-hmi11-discovery-profile.v1"
+status = "CANNOT_RUN"
+role = "DISCOVERY_MECHANICS_ONLY"
+canonicalization = "sorted-typed-length-prefixed-v1-excluding-artifact-content-sha256"
+content_sha256 = "96d0f93b4bf538b45fac44843f47dfd0e8aa8ca4a8e9125cfd3861e2de9e6921"
+
+[contract]
+evidence_date = "2026-08-08"
+discovery_mechanics_only = true
+permanent_nonadmitting = true
+maximum_status = "CANNOT_RUN"
+successor_required_for_any_higher_status = true
+standard_library_only = true
+synthetic_fixtures_only = true
+network_access_forbidden = true
+filesystem_write_forbidden = true
+capture_forbidden = true
+source_artifact_byte_access_forbidden = true
+source_binding_verification_mandatory_for_operational_build_and_replay = true
+source_binding_bypass_keyword_forbidden = true
+
+[hmi11]
+history_main_id = 11
+main_name = "Fixed Asset"
+folder_pattern = "FA\\dataYear\\vintage_NewReleaseDate"
+root_discovery_url = "https://apps.bea.gov/histdata/core/data/Fea_DisplayChildrenC/?HistMainId=11&getFiles=false&getDirs=true"
+directory_id_endpoint = "https://apps.bea.gov/histdata/core/data/UrlPath_getID/"
+resolved_path_endpoint = "https://apps.bea.gov/histdata/core/data/getPath/"
+release_files_endpoint = "https://apps.bea.gov/histdata/core/data/Fea_DisplayChildrenC/"
+internal_histdata_root = "/Inetpub/wwwroot/website/website/HistData/"
+internal_release_root = "/Inetpub/wwwroot/website/website/HistData/Files/Releases/FA"
+official_histdata_root = "https://apps.bea.gov/HistData/"
+
+[parser]
+max_body_bytes = 1048576
+max_nesting_depth = 32
+max_string_bytes = 65536
+max_array_items = 4096
+max_object_members = 64
+max_number_bytes = 128
+duplicate_members_after_escape_decode_rejected = true
+unknown_response_fields_rejected = true
+
+[selection]
+capture_cutoff_required = true
+eligible_release_rule = "unique_latest_canonical_annual_update_date_no_later_than_explicit_capture_cutoff"
+canonical_separator = "\\"
+data_year_pattern = "^[0-9]{4}$"
+release_path_dynamic_component_count = 2
+release_label_pattern = "AnnualUpdate_Month-D-YYYY"
+latest_date_ties_rejected = true
+future_only_rejected = true
+required_sections = ["3", "5", "7"]
+
+[response_envelope]
+required_count = 4
+required_roles = [
+    "ROOT_DIRECTORY_CATALOG",
+    "PATH_TO_DIRECTORY_ID",
+    "DIRECTORY_ID_TO_PATH",
+    "RELEASE_FILE_CATALOG",
+]
+body_requires_exact_byte_vector = true
+body_sha256_required = true
+body_hash_reuse_forbidden = true
+body_path_equality_alone_insufficient = true
+prior_body_hash_chain_required = true
+requested_uri_derived_from_prior_state = true
+final_effective_uri_must_equal_requested = true
+selected_path_lineage_required = true
+directory_id_lineage_required = true
+metadata_lineage_replay_required = true
+
+[page_visible_observation]
+observation_status = "PAGE_VISIBLE_UNPRESERVED_NOT_SOURCE_EVIDENCE"
+page_url = "https://apps.bea.gov/histdata/fileStructDisplay.html?theID=14195&HMI=11&oldDiv=National%20Accounts&year=2024&quarter=&ReleaseDate=September-26-2025&Vintage=AnnualUpdate"
+release_date_label = "September-26-2025"
+release_directory_id_label = "14195"
+source_response_bytes_preserved = false
+artifact_bytes_preserved = false
+historical_member_names_resolved = false
+
+[unresolved]
+future_2026_release_directory_resolved = false
+future_member_case_resolved = false
+source_artifact_bytes_verified = false
+raw_artifact_hashes_resolved = false
+official_intraday_availability_resolved = false
+capture_complete = false
+qualified_leaf_present = false
+approvals_complete = false
+publisher_trust_authenticated = false
+transport_trust_authenticated = false
+custody_complete = false
+workbook_contents_verified = false
+
+[gates]
+source_byte_access_allowed = false
+capture_allowed = false
+qualified_leaf_allowed = false
+model_input_allowed = false
+origin_admission_allowed = false
+forecast_execution_allowed = false
+truth_access_allowed = false
+scoring_allowed = false
+accuracy_claim_allowed = false
+promotion_allowed = false
+production_allowed = false
+
+[[citations]]
+id = "bea_fixed_assets_landing"
+url = "https://www.bea.gov/itable/fixed-assets"
+status = "OFFICIAL_PAGE_ROUTE_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[citations]]
+id = "bea_fixed_assets_download_catalog"
+url = "https://apps.bea.gov/iTable/?categories=flatfiles&isuri=1&nipa_table_list=1&reqid=10&step=4"
+status = "OFFICIAL_PAGE_ROUTE_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[citations]]
+id = "bea_historical_data_archive"
+url = "https://apps.bea.gov/histdata/"
+status = "OFFICIAL_PAGE_ROUTE_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[profiles]]
+profile_id = "faat301esi_net_stock"
+table_name = "FAAt301ESI"
+section_id = "3"
+candidate_sheet_name = "FAAt301ESI-A"
+frequency = "A"
+year = "2024"
+line_numbers = "1,3,4,6,7,8,9,13,16,17,18,19,20,21,22,23,24,25,26,30,33,34,35,36,37,38,39,40,43,49,50,51,52,53,54,55,56,58,59,60,61,63,64,68,69,72,74,75,77,78,79,80,82,83,84,86,87,88,89,91,92,94,95,96"
+selector = "BEA:FixedAssets:TableName=FAAt301ESI:Frequency=A:Year=2024:LineNumber=1,3,4,6,7,8,9,13,16,17,18,19,20,21,22,23,24,25,26,30,33,34,35,36,37,38,39,40,43,49,50,51,52,53,54,55,56,58,59,60,61,63,64,68,69,72,74,75,77,78,79,80,82,83,84,86,87,88,89,91,92,94,95,96"
+selector_sha256 = "54438df3f42ca5c4faaf6846d182020f5b874614cc34163e1eb61fbd1cc3cd09"
+raw_sha256 = "UNRESOLVED"
+sheet_verified = false
+contents_verified = false
+units_verified = false
+bytes_verified = false
+
+[[profiles]]
+profile_id = "faat304esi_depreciation"
+table_name = "FAAt304ESI"
+section_id = "3"
+candidate_sheet_name = "FAAt304ESI-A"
+frequency = "A"
+year = "2024"
+line_numbers = "1,3,4,6,7,8,9,13,16,17,18,19,20,21,22,23,24,25,26,30,33,34,35,36,37,38,39,40,43,49,50,51,52,53,54,55,56,58,59,60,61,63,64,68,69,72,74,75,77,78,79,80,82,83,84,86,87,88,89,91,92,94,95,96"
+selector = "BEA:FixedAssets:TableName=FAAt304ESI:Frequency=A:Year=2024:LineNumber=1,3,4,6,7,8,9,13,16,17,18,19,20,21,22,23,24,25,26,30,33,34,35,36,37,38,39,40,43,49,50,51,52,53,54,55,56,58,59,60,61,63,64,68,69,72,74,75,77,78,79,80,82,83,84,86,87,88,89,91,92,94,95,96"
+selector_sha256 = "a617d58e90f48dfd6e1a5b52bd1d708c0eaed66fb2be23a19d3d16eff06c522b"
+raw_sha256 = "UNRESOLVED"
+sheet_verified = false
+contents_verified = false
+units_verified = false
+bytes_verified = false
+
+[[profiles]]
+profile_id = "faat307esi_investment"
+table_name = "FAAt307ESI"
+section_id = "3"
+candidate_sheet_name = "FAAt307ESI-A"
+frequency = "A"
+year = "2024"
+line_numbers = "1,3,4,6,7,8,9,13,16,17,18,19,20,21,22,23,24,25,26,30,33,34,35,36,37,38,39,40,43,49,50,51,52,53,54,55,56,58,59,60,61,63,64,68,69,72,74,75,77,78,79,80,82,83,84,86,87,88,89,91,92,94,95,96"
+selector = "BEA:FixedAssets:TableName=FAAt307ESI:Frequency=A:Year=2024:LineNumber=1,3,4,6,7,8,9,13,16,17,18,19,20,21,22,23,24,25,26,30,33,34,35,36,37,38,39,40,43,49,50,51,52,53,54,55,56,58,59,60,61,63,64,68,69,72,74,75,77,78,79,80,82,83,84,86,87,88,89,91,92,94,95,96"
+selector_sha256 = "f61ff34ce389b9429fb406d1e0e9c836d471b526d23306a7ab10872876926626"
+raw_sha256 = "UNRESOLVED"
+sheet_verified = false
+contents_verified = false
+units_verified = false
+bytes_verified = false
+
+[[profiles]]
+profile_id = "faat501_residential_net_stock"
+table_name = "FAAt501"
+section_id = "5"
+candidate_sheet_name = "FAAt501-A"
+frequency = "A"
+year = "2024"
+line_numbers = "11,12"
+selector = "BEA:FixedAssets:TableName=FAAt501:Frequency=A:Year=2024:LineNumber=11,12"
+selector_sha256 = "4f8fddcba21c8396b895dd918eb57701be53a0ffffdc1383a10bed5e9a71641e"
+raw_sha256 = "UNRESOLVED"
+sheet_verified = false
+contents_verified = false
+units_verified = false
+bytes_verified = false
+
+[[profiles]]
+profile_id = "faat504_residential_depreciation"
+table_name = "FAAt504"
+section_id = "5"
+candidate_sheet_name = "FAAt504-A"
+frequency = "A"
+year = "2024"
+line_numbers = "11,12"
+selector = "BEA:FixedAssets:TableName=FAAt504:Frequency=A:Year=2024:LineNumber=11,12"
+selector_sha256 = "bd6200bd19a7d3df0691ecf29094992840110b262a04d7971fec5fc4a8bf6cc8"
+raw_sha256 = "UNRESOLVED"
+sheet_verified = false
+contents_verified = false
+units_verified = false
+bytes_verified = false
+
+[[profiles]]
+profile_id = "faat507_residential_investment"
+table_name = "FAAt507"
+section_id = "5"
+candidate_sheet_name = "FAAt507-A"
+frequency = "A"
+year = "2024"
+line_numbers = "11,12"
+selector = "BEA:FixedAssets:TableName=FAAt507:Frequency=A:Year=2024:LineNumber=11,12"
+selector_sha256 = "1748bda6b552f3b5a1459fcef370dce908fe51d640a483c1ba69d96c7458d4b3"
+raw_sha256 = "UNRESOLVED"
+sheet_verified = false
+contents_verified = false
+units_verified = false
+bytes_verified = false
+
+[[profiles]]
+profile_id = "faat701_government_net_stock"
+table_name = "FAAt701"
+section_id = "7"
+candidate_sheet_name = "FAAt701-A"
+frequency = "A"
+year = "2024"
+line_numbers = "1,21,22,55,79"
+selector = "BEA:FixedAssets:TableName=FAAt701:Frequency=A:Year=2024:LineNumber=1,21,22,55,79"
+selector_sha256 = "f93a6654d887ae60ac7773d038eefd9bc7a9840fc6a2689637e1abe32d1cd1a6"
+raw_sha256 = "UNRESOLVED"
+sheet_verified = false
+contents_verified = false
+units_verified = false
+bytes_verified = false
+
+[[profiles]]
+profile_id = "faat703_government_depreciation"
+table_name = "FAAt703"
+section_id = "7"
+candidate_sheet_name = "FAAt703-A"
+frequency = "A"
+year = "2024"
+line_numbers = "1,21,22,55,79"
+selector = "BEA:FixedAssets:TableName=FAAt703:Frequency=A:Year=2024:LineNumber=1,21,22,55,79"
+selector_sha256 = "3b6acbd4d7b5e7dfae026a132a00b497f6cbfb762d677956f667bc371f71e196"
+raw_sha256 = "UNRESOLVED"
+sheet_verified = false
+contents_verified = false
+units_verified = false
+bytes_verified = false
+
+[[source_bindings]]
+binding_id = "legacy_v2_module"
+path = "scripts/us/forecasting/vintages/prospective/USProspectiveAcquisitionContractV2.jl"
+physical_sha256 = "435df6c4b4de879c0f24d3f9bb9f7504fc6172ae34e94db8cb6ba84282d6e379"
+semantic_sha256 = "NOT_APPLICABLE"
+semantic_canonicalization = "NOT_APPLICABLE"
+role = "authoritative_legacy_contract_validator"
+
+[[source_bindings]]
+binding_id = "legacy_v2_contract"
+path = "scripts/us/forecasting/vintages/prospective/prospective_2026q3_contract_v2.toml"
+physical_sha256 = "b24ff0c40172d2a23991fbe75c2fe42c6ba6c6c1f5fd46d079ac6d51429bf98f"
+semantic_sha256 = "5d1e7f34eea0470877c7bed096d8b2fb26590f95bd06febb90813faf6063708a"
+semantic_canonicalization = "legacy_v2"
+role = "authoritative_eight_profile_selector_contract"
+
+[[source_bindings]]
+binding_id = "common_origin_v3_module"
+path = "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/USCommonOriginAcquisitionV3.jl"
+physical_sha256 = "9654eb61b92b2655391b00952ed4cbee0e9fa58224339f1fb0440c51570e719e"
+semantic_sha256 = "NOT_APPLICABLE"
+semantic_canonicalization = "NOT_APPLICABLE"
+role = "common_origin_composition_validator"
+
+[[source_bindings]]
+binding_id = "common_origin_v3_policy"
+path = "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/common_origin_acquisition_v3_policy.toml"
+physical_sha256 = "0deff5e3e6c950b5682bba96fcefa1fa2304bbbadae6227a940376dc7699bd3e"
+semantic_sha256 = "a69392029c2221ab5f490311c02d09a667e71982c486a1612100c1d6dcd96d13"
+semantic_canonicalization = "common_origin_v3"
+role = "permanent_cannot_run_parent_policy"
+
+[[source_bindings]]
+binding_id = "common_origin_parent_v3_schema"
+path = "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/common_origin_parent_v3.schema.toml"
+physical_sha256 = "cf4060554a6c53de079d728c2a2ac179309e9a7b888edc3bfa0a931ced5442a2"
+semantic_sha256 = "a140f2c730102ab882f606c2780d1214f0db691f4f921b5e9c1a140cfaf520ce"
+semantic_canonicalization = "common_origin_v3"
+role = "common_origin_parent_schema"
+
+[[source_bindings]]
+binding_id = "common_origin_leaf_v1_schema"
+path = "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/prospective_profile_verification_receipt_v1.schema.toml"
+physical_sha256 = "6bcd6f26efba67bb92053dabdc20c08f6b36d9c3569a92a5e980c5117265a4cd"
+semantic_sha256 = "702ffcf060fd9bfb3530e3f9dee5936304351ab58ee386b53455662c3f069fe8"
+semantic_canonicalization = "common_origin_v3"
+role = "currently_unqualified_leaf_receipt_schema"
+
+[[source_bindings]]
+binding_id = "common_origin_retention_v2_schema"
+path = "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/retention_custody_v2.schema.toml"
+physical_sha256 = "94eb2a1bdbd1346b4918d63bdf1befcf506a8b6d39c6eeaa1b50e87eb2c79598"
+semantic_sha256 = "2c6d6840a3396d5ced8e4e20b3bf0c5cc1fce68fdb927b796258fbf7a72382c3"
+semantic_canonicalization = "common_origin_v3"
+role = "common_origin_retention_schema"
+
+[[source_bindings]]
+binding_id = "current_inventory"
+path = "scripts/us/forecasting/vintages/current_inventory.toml"
+physical_sha256 = "110b4448db0b49e95cbc2fe1cf7019f6b877b3f391c6069a81c2e7c3c2a086ae"
+semantic_sha256 = "6b1fc42b1d645d43f9be6e215d42ab662924d6bb51249760aa2992d143031d74"
+semantic_canonicalization = "legacy_v2"
+role = "current_empty_fail_closed_release_inventory"
+
+[[source_bindings]]
+binding_id = "scripts_us_project"
+path = "scripts/us/Project.toml"
+physical_sha256 = "72cec6cb6dc64dc71b9e342890b78afbf8fd66cb97dd8603e4fe905ad137dc1c"
+semantic_sha256 = "NOT_APPLICABLE"
+semantic_canonicalization = "NOT_APPLICABLE"
+role = "offline_runtime_dependency_identity"
+
+[[source_bindings]]
+binding_id = "scripts_us_manifest"
+path = "scripts/us/Manifest.toml"
+physical_sha256 = "c2e596cf8452c5b890bb0ef66c05bc72a57fa25ab6f8fe790f8db4600b035263"
+semantic_sha256 = "NOT_APPLICABLE"
+semantic_canonicalization = "NOT_APPLICABLE"
+role = "offline_runtime_lock_identity"
+
+[[source_bindings]]
+binding_id = "hmi7_discovery_precedent"
+path = "scripts/us/forecasting/vintages/bea_nipa/BEANIPADiscovery.jl"
+physical_sha256 = "6f7497ae91f0cd40de6ffa110dd45f81c72adc0c0634f99d80fe652fb3f9437f"
+semantic_sha256 = "NOT_APPLICABLE"
+semantic_canonicalization = "NOT_APPLICABLE"
+role = "local_mechanics_precedent_not_hmi11_authority"
+
+[[source_bindings]]
+binding_id = "hmi7_discovery_documentation_precedent"
+path = "scripts/us/forecasting/vintages/bea_nipa/README.md"
+physical_sha256 = "639d79ebc1f944259e636e74c8bb68065d120d158ec6b850d253e3fbb23aeeb5"
+semantic_sha256 = "NOT_APPLICABLE"
+semantic_canonicalization = "NOT_APPLICABLE"
+role = "local_documentation_precedent_not_hmi11_authority"

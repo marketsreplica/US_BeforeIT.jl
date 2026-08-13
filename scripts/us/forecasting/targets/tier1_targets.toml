@@ -1,0 +1,488 @@
+[artifact]
+schema_version = "beforeit-us-tier1-target-truth-coverage.v1"
+canonicalization = "sorted_typed_v1_excluding_artifact_content_sha256"
+content_sha256 = "bdbbeb48a39c7fdd03972626cf7f1e421ba7c5dd254f5537a40dda0eb4ae1fcb"
+
+[contract]
+contract_id = "beforeit-us-tier1-target-coverage.v1-draft"
+protocol_id = "beforeit-us-forecast-evaluation.v1-draft"
+protocol_sha256 = "88519e5b04936f528396cf5243ff270844d0d38651fd84fc3b1c76fef997b584"
+audit_as_of_date = "2026-08-05"
+audit_scope = "Installed repository artifacts and ignored local retrieval snapshots; retrieval dates are not historical release vintages."
+required_target_count = 8
+required_truth_layers = ["first_release", "near_mature", "mature"]
+required_weight_sum = 1.0
+minimum_promotion_observations_per_truth_layer = 40
+minimum_historical_vintages_per_target = 40
+evidence_verifier_status = "NOT_IMPLEMENTED_FAIL_CLOSED"
+truth_matrix_count = 0
+approved_operator_bridge_count = 0
+promotion_rule = "all_eight_exact_historical_targets_all_three_truth_layers_all_operators_approved_and_all_artifacts_verified"
+
+[[targets]]
+target_id = "real_gdp"
+target_version = "bea-real-gdp.v1-draft"
+weight = 0.125
+source_concept = "BEA_NIPA_real_gdp"
+provider = "U.S. Bureau of Economic Analysis"
+source_table = "NIPA Table 1.1.6"
+source_series = "Gross domestic product"
+source_dataset_id = "NIPA"
+source_table_id = "T10106"
+source_line_number = "1"
+source_series_code = "A191RX"
+source_unit = "millions_chained_2017_dollars_saar"
+source_seasonal_adjustment = "seasonally_adjusted_at_annual_rates"
+frequency = "quarterly"
+source_release_granularity = "quarterly_nipa_estimate"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_growth"
+secondary_transformation = "four_quarter_log_growth"
+transformation_version = "us-real-gdp-growth.v1-draft"
+operator_version = "abm-to-bea-real-gdp.v1-draft"
+output_unit = "percentage_points_annual_rate"
+truth_policy = "nipa_quarterly"
+operator_status = "pending_validation"
+installed_status = "approximate"
+installed_evidence = [
+    "scripts/us/sources.toml installs BEA API T10106 line 1 current-vintage quarterly levels.",
+    "The installed panel is a retrieval snapshot and has no frozen Tier-1 observation-operator artifact.",
+]
+vintage_status = "current_vintage_only"
+release_timestamp_status = "retrieval_timestamp_only"
+historical_vintage_count = 0
+retrieval_vintages = ["2026-08-02", "2026-08-04"]
+acquisition_route = "Archive exact_release BEA GDP news-release files and API snapshots with publication timestamps and release IDs."
+
+[[targets.truth_layers]]
+layer_id = "first_release"
+required = true
+requirement = "earliest_official_release_reporting_complete_target_reference_period"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "near_mature"
+required = true
+requirement = "third_scheduled_quarterly_estimate"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "mature"
+required = true
+requirement = "latest_official_vintage_at_fixed_60_month_lag"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets]]
+target_id = "pce_price_index"
+target_version = "bea-pce-price-index.v1-draft"
+weight = 0.125
+source_concept = "BEA_NIPA_pce_price_index"
+provider = "U.S. Bureau of Economic Analysis"
+source_table = "NIPA Table 2.3.4"
+source_series = "Personal consumption expenditures"
+source_dataset_id = "NIPA"
+source_table_id = "T20304"
+source_line_number = "1"
+source_series_code = "DPCERG"
+source_unit = "index_2017_equals_100"
+source_seasonal_adjustment = "seasonally_adjusted"
+frequency = "quarterly"
+source_release_granularity = "quarterly_nipa_estimate"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_inflation"
+secondary_transformation = "four_quarter_log_inflation"
+transformation_version = "us-pce-price-inflation.v1-draft"
+operator_version = "abm-to-bea-pce-price-index.v1-draft"
+output_unit = "percentage_points_annual_rate"
+truth_policy = "nipa_quarterly"
+operator_status = "pending_validation"
+installed_status = "absent"
+installed_evidence = [
+    "No PCE price-index series is declared in scripts/us/sources.toml or installed in the local quarterly target panel.",
+]
+vintage_status = "absent"
+release_timestamp_status = "absent"
+historical_vintage_count = 0
+retrieval_vintages = []
+acquisition_route = "Archive exact_release BEA NIPA Table 2.3.4 snapshots and GDP release files with publication timestamps and release IDs."
+
+[[targets.truth_layers]]
+layer_id = "first_release"
+required = true
+requirement = "earliest_official_release_reporting_complete_target_reference_period"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "near_mature"
+required = true
+requirement = "third_scheduled_quarterly_estimate"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "mature"
+required = true
+requirement = "latest_official_vintage_at_fixed_60_month_lag"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets]]
+target_id = "core_pce_price_index"
+target_version = "bea-core-pce-price-index.v1-draft"
+weight = 0.125
+source_concept = "BEA_NIPA_core_pce_price_index"
+provider = "U.S. Bureau of Economic Analysis"
+source_table = "NIPA Table 2.3.4"
+source_series = "Personal consumption expenditures excluding food and energy"
+source_dataset_id = "NIPA"
+source_table_id = "T20304"
+source_line_number = "25"
+source_series_code = "DPCCRG"
+source_unit = "index_2017_equals_100"
+source_seasonal_adjustment = "seasonally_adjusted"
+frequency = "quarterly"
+source_release_granularity = "quarterly_nipa_estimate"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_inflation"
+secondary_transformation = "four_quarter_log_inflation"
+transformation_version = "us-core-pce-price-inflation.v1-draft"
+operator_version = "abm-to-bea-core-pce-price-index.v1-draft"
+output_unit = "percentage_points_annual_rate"
+truth_policy = "nipa_quarterly"
+operator_status = "pending_validation"
+installed_status = "absent"
+installed_evidence = [
+    "No PCE price index excluding food and energy is declared in scripts/us/sources.toml or installed in the local quarterly target panel.",
+]
+vintage_status = "absent"
+release_timestamp_status = "absent"
+historical_vintage_count = 0
+retrieval_vintages = []
+acquisition_route = "Archive exact_release BEA NIPA Table 2.3.4 snapshots and GDP release files with publication timestamps and release IDs."
+
+[[targets.truth_layers]]
+layer_id = "first_release"
+required = true
+requirement = "earliest_official_release_reporting_complete_target_reference_period"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "near_mature"
+required = true
+requirement = "third_scheduled_quarterly_estimate"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "mature"
+required = true
+requirement = "latest_official_vintage_at_fixed_60_month_lag"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets]]
+target_id = "gdp_deflator"
+target_version = "bea-gdp-deflator.v1-draft"
+weight = 0.125
+source_concept = "BEA_NIPA_gdp_deflator"
+provider = "U.S. Bureau of Economic Analysis"
+source_table = "NIPA Table 1.1.9"
+source_series = "Gross domestic product"
+source_dataset_id = "NIPA"
+source_table_id = "T10109"
+source_line_number = "1"
+source_series_code = "A191RD"
+source_unit = "index_2017_equals_100"
+source_seasonal_adjustment = "seasonally_adjusted"
+frequency = "quarterly"
+source_release_granularity = "quarterly_nipa_estimate"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_inflation"
+secondary_transformation = "four_quarter_log_inflation"
+transformation_version = "us-gdp-deflator-inflation.v1-draft"
+operator_version = "abm-to-bea-gdp-deflator.v1-draft"
+output_unit = "percentage_points_annual_rate"
+truth_policy = "nipa_quarterly"
+operator_status = "pending_validation"
+installed_status = "approximate"
+installed_evidence = [
+    "scripts/us/USPipeline.jl derives a ratio from current-vintage T10105 line 1 and T10106 line 1 instead of installing a frozen T10109 target artifact.",
+    "The local ratio is diagnostic target material, not a validated historical observation bridge.",
+]
+vintage_status = "current_vintage_only"
+release_timestamp_status = "retrieval_timestamp_only"
+historical_vintage_count = 0
+retrieval_vintages = ["2026-08-02", "2026-08-04"]
+acquisition_route = "Archive exact_release BEA NIPA Table 1.1.9 snapshots and GDP release files, preserving direct published deflator vintages."
+
+[[targets.truth_layers]]
+layer_id = "first_release"
+required = true
+requirement = "earliest_official_release_reporting_complete_target_reference_period"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "near_mature"
+required = true
+requirement = "third_scheduled_quarterly_estimate"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "mature"
+required = true
+requirement = "latest_official_vintage_at_fixed_60_month_lag"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets]]
+target_id = "unemployment_rate"
+target_version = "bls-unemployment-rate.v1-draft"
+weight = 0.125
+source_concept = "BLS_CPS_unemployment_rate"
+provider = "U.S. Bureau of Labor Statistics"
+source_table = "Current Population Survey"
+source_series = "LNS14000000"
+source_dataset_id = "BLS_CPS_PUBLIC_DATA_API"
+source_table_id = "LNS"
+source_line_number = "not_applicable"
+source_series_code = "LNS14000000"
+source_unit = "percent_of_civilian_labor_force"
+source_seasonal_adjustment = "seasonally_adjusted"
+frequency = "monthly"
+source_release_granularity = "monthly_employment_situation_release"
+aggregation = "quarterly_average_monthly"
+primary_transformation = "percent_level"
+secondary_transformation = "quarterly_change"
+transformation_version = "us-cps-unemployment-quarterly.v1-draft"
+operator_version = "abm-to-bls-unemployment-rate.v1-draft"
+output_unit = "percentage_points"
+truth_policy = "monthly_or_daily_derived"
+operator_status = "pending_validation"
+installed_status = "approximate"
+installed_evidence = [
+    "scripts/us/sources.toml declares BLS CPS LNS14000000 and scripts/us/USPipeline.jl forms quarterly averages.",
+    "The raw files are current retrieval snapshots and do not preserve monthly Employment Situation release vintages or vintage-specific seasonal factors.",
+]
+vintage_status = "current_vintage_only"
+release_timestamp_status = "retrieval_timestamp_only"
+historical_vintage_count = 0
+retrieval_vintages = ["2026-08-02", "2026-08-04"]
+acquisition_route = "Archive exact_release BLS Employment Situation files and CPS time-series snapshots with publication timestamps and seasonal-factor vintages."
+
+[[targets.truth_layers]]
+layer_id = "first_release"
+required = true
+requirement = "earliest_official_release_reporting_complete_target_reference_period"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "near_mature"
+required = true
+requirement = "latest_official_vintage_at_reference_period_end_plus_90_calendar_days"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "mature"
+required = true
+requirement = "latest_official_vintage_at_fixed_60_month_lag"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets]]
+target_id = "payroll_employment"
+target_version = "bls-payroll-employment.v1-draft"
+weight = 0.125
+source_concept = "BLS_CES_total_nonfarm_payrolls"
+provider = "U.S. Bureau of Labor Statistics"
+source_table = "Current Employment Statistics"
+source_series = "CES0000000001"
+source_dataset_id = "BLS_CES_PUBLIC_DATA_API"
+source_table_id = "CES"
+source_line_number = "not_applicable"
+source_series_code = "CES0000000001"
+source_unit = "thousands_of_payroll_jobs"
+source_seasonal_adjustment = "seasonally_adjusted"
+frequency = "monthly"
+source_release_granularity = "monthly_employment_situation_release"
+aggregation = "quarterly_average_monthly"
+primary_transformation = "quarterly_log_growth"
+secondary_transformation = "revision_to_level"
+transformation_version = "us-ces-payroll-quarterly.v1-draft"
+operator_version = "abm-to-bls-payroll-employment.v1-draft"
+output_unit = "log_points"
+truth_policy = "monthly_or_daily_derived"
+operator_status = "pending_validation"
+installed_status = "absent"
+installed_evidence = [
+    "The local pipeline uses QCEW jobs for structural allocation but does not install CES total nonfarm payroll series CES0000000001 as a forecast target.",
+]
+vintage_status = "absent"
+release_timestamp_status = "absent"
+historical_vintage_count = 0
+retrieval_vintages = []
+acquisition_route = "Archive exact_release BLS Employment Situation files, CES first and revised estimates, and annual benchmark-revision files."
+
+[[targets.truth_layers]]
+layer_id = "first_release"
+required = true
+requirement = "earliest_official_release_reporting_complete_target_reference_period"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "near_mature"
+required = true
+requirement = "latest_official_vintage_at_reference_period_end_plus_90_calendar_days"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "mature"
+required = true
+requirement = "latest_official_vintage_at_fixed_60_month_lag"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets]]
+target_id = "effective_federal_funds_rate"
+target_version = "frb-effective-federal-funds-rate.v1-draft"
+weight = 0.125
+source_concept = "FRB_effective_federal_funds_rate"
+provider = "Federal Reserve Bank of New York"
+source_table = "Reference Rates"
+source_series = "EFFR"
+source_dataset_id = "FRBNY_REFERENCE_RATES"
+source_table_id = "EFFR"
+source_line_number = "not_applicable"
+source_series_code = "EFFR"
+source_unit = "percent_per_annum"
+source_seasonal_adjustment = "not_seasonally_adjusted"
+frequency = "daily_business_day"
+source_release_granularity = "daily_reference_rate_publication"
+aggregation = "quarterly_average_daily"
+primary_transformation = "percentage_point_level"
+secondary_transformation = "quarterly_change"
+transformation_version = "us-effr-quarterly-average.v1-draft"
+operator_version = "abm-to-frb-effective-federal-funds-rate.v1-draft"
+output_unit = "percentage_points"
+truth_policy = "monthly_or_daily_derived"
+operator_status = "pending_validation"
+installed_status = "absent"
+installed_evidence = [
+    "scripts/us/sources.toml installs monthly FRED FEDFUNDS for model calibration; it is not the required daily FRBNY EFFR target and cannot support quarterly-average-daily release vintages.",
+]
+vintage_status = "absent"
+release_timestamp_status = "absent"
+historical_vintage_count = 0
+retrieval_vintages = []
+acquisition_route = "Archive exact_release FRBNY EFFR daily observations and publication timestamps, then aggregate eligible business-day observations by quarter."
+
+[[targets.truth_layers]]
+layer_id = "first_release"
+required = true
+requirement = "earliest_official_release_reporting_complete_target_reference_period"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "near_mature"
+required = true
+requirement = "latest_official_vintage_at_reference_period_end_plus_90_calendar_days"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "mature"
+required = true
+requirement = "latest_official_vintage_at_fixed_60_month_lag"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets]]
+target_id = "nominal_gdp"
+target_version = "bea-nominal-gdp.v1-draft"
+weight = 0.125
+source_concept = "BEA_NIPA_nominal_gdp"
+provider = "U.S. Bureau of Economic Analysis"
+source_table = "NIPA Table 1.1.5"
+source_series = "Gross domestic product"
+source_dataset_id = "NIPA"
+source_table_id = "T10105"
+source_line_number = "1"
+source_series_code = "A191RC"
+source_unit = "millions_current_dollars_saar"
+source_seasonal_adjustment = "seasonally_adjusted_at_annual_rates"
+frequency = "quarterly"
+source_release_granularity = "quarterly_nipa_estimate"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_growth"
+secondary_transformation = "four_quarter_log_growth"
+transformation_version = "us-nominal-gdp-growth.v1-draft"
+operator_version = "abm-to-bea-nominal-gdp.v1-draft"
+output_unit = "percentage_points_annual_rate"
+truth_policy = "nipa_quarterly"
+operator_status = "pending_validation"
+installed_status = "approximate"
+installed_evidence = [
+    "scripts/us/sources.toml installs BEA API T10105 line 1 current-vintage quarterly levels.",
+    "The installed panel is a retrieval snapshot and has no frozen Tier-1 observation-operator artifact.",
+]
+vintage_status = "current_vintage_only"
+release_timestamp_status = "retrieval_timestamp_only"
+historical_vintage_count = 0
+retrieval_vintages = ["2026-08-02", "2026-08-04"]
+acquisition_route = "Archive exact_release BEA GDP news-release files and NIPA Table 1.1.5 snapshots with publication timestamps and release IDs."
+
+[[targets.truth_layers]]
+layer_id = "first_release"
+required = true
+requirement = "earliest_official_release_reporting_complete_target_reference_period"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "near_mature"
+required = true
+requirement = "third_scheduled_quarterly_estimate"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"
+
+[[targets.truth_layers]]
+layer_id = "mature"
+required = true
+requirement = "latest_official_vintage_at_fixed_60_month_lag"
+status = "missing"
+observation_count = 0
+artifact_sha256 = "unavailable"

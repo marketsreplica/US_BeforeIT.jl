@@ -1,0 +1,410 @@
+schema_version = "beforeit-us-forecast-protocol.v1"
+protocol_id = "beforeit-us-forecast-evaluation.v1-draft"
+experiment_version = "beforeit-us-retrospective.v1-draft"
+status = "draft"
+approval_status = "pending_validation"
+canonicalization = "utf8_length_prefixed_sorted_map.v1"
+digest_algorithm = "sha256"
+
+[governance]
+model_owner_role = "research_lead"
+model_owner_approval = "pending"
+independent_validator_role = "independent_validation"
+independent_validator_approval = "pending_validation"
+frozen = false
+
+[issue_rules]
+release_eligibility = "release_timestamp_utc <= origin_timestamp_utc"
+same_timestamp_release = "eligible"
+missing_intraday_release_timestamp = "ineligible"
+
+[issue_rules.timestamp]
+local_timezone = "America/New_York"
+daylight_saving_rule = "IANA_tzdb_at_origin_date"
+canonical_timezone = "UTC"
+canonical_format = "RFC3339_seconds_Z"
+comparison_precision = "seconds"
+
+[issue_rules.quarterly]
+version = "quarterly-after-advance.v1-draft"
+trigger = "first_business_day_after_bea_advance_gdp_release"
+business_day_calendar = "us_federal_holidays_weekends.v1"
+local_issue_time = "10:00:00"
+publication_calendar = "bea_gdp_release_calendar.v1"
+latest_quarter_treatment = "advance_estimate_observed_provisional"
+
+[issue_rules.nowcast]
+version = "monthly-and-pre-advance-nowcast.v1-draft"
+cutoffs = [
+    "tenth_business_day_after_month_end",
+    "final_business_day_before_bea_advance_gdp_release",
+]
+business_day_calendar = "us_federal_holidays_weekends.v1"
+local_issue_time = "10:00:00"
+final_cutoff_relation = "strictly_before_bea_advance_release_timestamp"
+
+[products]
+cross_product_pooling = false
+
+[products.quarterly_unconditional]
+product_id = "quarterly_unconditional"
+version = "quarterly-unconditional.v1-draft"
+kind = "unconditional_forecast"
+information_set = "exact_as_of_origin_releases_only"
+origin_rule = "quarterly-after-advance.v1-draft"
+horizons = [1, 2, 4, 8, 12]
+conditioning = "none"
+benchmark_tracks = ["common_information", "published_forecast"]
+ranking_pool = "quarterly_unconditional_only"
+promotion_eligible = true
+realized_future_data_allowed = false
+show_unconditional_baseline = false
+
+[products.ragged_edge_nowcast]
+product_id = "ragged_edge_nowcast"
+version = "ragged-edge-nowcast.v1-draft"
+kind = "ragged_edge_nowcast"
+information_set = "exact_as_of_monthly_weekly_cutoff"
+origin_rule = "monthly-and-pre-advance-nowcast.v1-draft"
+horizons = [0, 1]
+conditioning = "released_ragged_edge_observations_only"
+benchmark_tracks = ["common_information", "published_forecast"]
+ranking_pool = "ragged_edge_nowcast_only"
+promotion_eligible = false
+realized_future_data_allowed = false
+show_unconditional_baseline = false
+
+[products.ex_ante_scenario]
+product_id = "ex_ante_scenario"
+version = "ex-ante-scenario.v1-draft"
+kind = "conditional_scenario"
+information_set = "exact_as_of_origin_plus_versioned_assumptions"
+origin_rule = "quarterly-after-advance.v1-draft"
+horizons = [1, 2, 4, 8, 12]
+conditioning = "hard_soft_or_endogenous_labels_required"
+benchmark_tracks = ["common_information", "published_forecast"]
+ranking_pool = "ex_ante_scenario_only"
+promotion_eligible = false
+realized_future_data_allowed = false
+show_unconditional_baseline = true
+
+[products.ex_post_replication]
+product_id = "ex_post_replication"
+version = "ex-post-replication.v1-draft"
+kind = "ex_post_paper_conditional"
+information_set = "revised_data_plus_realized_future_gem_paths"
+origin_rule = "paper-replication-interpretation.v1-draft"
+horizons = [1, 2, 4, 8, 12]
+conditioning = "realized_future_government_exports_imports"
+benchmark_tracks = ["common_information"]
+ranking_pool = "ex_post_replication_only"
+promotion_eligible = false
+realized_future_data_allowed = true
+show_unconditional_baseline = true
+
+[[targets]]
+target_id = "real_gdp"
+target_version = "bea-real-gdp.v1-draft"
+operator_version = "abm-to-bea-real-gdp.v1-draft"
+source_concept = "BEA_NIPA_real_gdp"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_growth"
+secondary_transformation = "four_quarter_log_growth"
+output_unit = "percentage_points_annual_rate"
+truth_policy = "nipa_quarterly"
+bridge_status = "pending_validation"
+critical = true
+weight = 0.125
+
+[[targets]]
+target_id = "pce_price_index"
+target_version = "bea-pce-price-index.v1-draft"
+operator_version = "abm-to-bea-pce-price-index.v1-draft"
+source_concept = "BEA_NIPA_pce_price_index"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_inflation"
+secondary_transformation = "four_quarter_log_inflation"
+output_unit = "percentage_points_annual_rate"
+truth_policy = "nipa_quarterly"
+bridge_status = "pending_validation"
+critical = false
+weight = 0.125
+
+[[targets]]
+target_id = "core_pce_price_index"
+target_version = "bea-core-pce-price-index.v1-draft"
+operator_version = "abm-to-bea-core-pce-price-index.v1-draft"
+source_concept = "BEA_NIPA_core_pce_price_index"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_inflation"
+secondary_transformation = "four_quarter_log_inflation"
+output_unit = "percentage_points_annual_rate"
+truth_policy = "nipa_quarterly"
+bridge_status = "pending_validation"
+critical = true
+weight = 0.125
+
+[[targets]]
+target_id = "gdp_deflator"
+target_version = "bea-gdp-deflator.v1-draft"
+operator_version = "abm-to-bea-gdp-deflator.v1-draft"
+source_concept = "BEA_NIPA_gdp_deflator"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_inflation"
+secondary_transformation = "four_quarter_log_inflation"
+output_unit = "percentage_points_annual_rate"
+truth_policy = "nipa_quarterly"
+bridge_status = "pending_validation"
+critical = false
+weight = 0.125
+
+[[targets]]
+target_id = "unemployment_rate"
+target_version = "bls-unemployment-rate.v1-draft"
+operator_version = "abm-to-bls-unemployment-rate.v1-draft"
+source_concept = "BLS_CPS_unemployment_rate"
+aggregation = "quarterly_average_monthly"
+primary_transformation = "percent_level"
+secondary_transformation = "quarterly_change"
+output_unit = "percentage_points"
+truth_policy = "monthly_or_daily_derived"
+bridge_status = "pending_validation"
+critical = true
+weight = 0.125
+
+[[targets]]
+target_id = "payroll_employment"
+target_version = "bls-payroll-employment.v1-draft"
+operator_version = "abm-to-bls-payroll-employment.v1-draft"
+source_concept = "BLS_CES_total_nonfarm_payrolls"
+aggregation = "quarterly_average_monthly"
+primary_transformation = "quarterly_log_growth"
+secondary_transformation = "revision_to_level"
+output_unit = "log_points"
+truth_policy = "monthly_or_daily_derived"
+bridge_status = "pending_validation"
+critical = false
+weight = 0.125
+
+[[targets]]
+target_id = "effective_federal_funds_rate"
+target_version = "frb-effective-federal-funds-rate.v1-draft"
+operator_version = "abm-to-frb-effective-federal-funds-rate.v1-draft"
+source_concept = "FRB_effective_federal_funds_rate"
+aggregation = "quarterly_average_daily"
+primary_transformation = "percentage_point_level"
+secondary_transformation = "quarterly_change"
+output_unit = "percentage_points"
+truth_policy = "monthly_or_daily_derived"
+bridge_status = "pending_validation"
+critical = false
+weight = 0.125
+
+[[targets]]
+target_id = "nominal_gdp"
+target_version = "bea-nominal-gdp.v1-draft"
+operator_version = "abm-to-bea-nominal-gdp.v1-draft"
+source_concept = "BEA_NIPA_nominal_gdp"
+aggregation = "official_quarterly"
+primary_transformation = "annualized_qoq_log_growth"
+secondary_transformation = "four_quarter_log_growth"
+output_unit = "percentage_points_annual_rate"
+truth_policy = "nipa_quarterly"
+bridge_status = "pending_validation"
+critical = false
+weight = 0.125
+
+[truth]
+version = "us-truth-selection.v1-draft"
+error_sign = "forecast_minus_truth"
+revision_error_sign = "first_release_minus_mature_truth"
+mixed_vintage_label_required = true
+score_status_before_mature = "provisional"
+score_status_after_mature = "final"
+
+[truth.first_release]
+version = "first-release-truth.v1-draft"
+definition = "earliest_official_release_reporting_complete_target_reference_period"
+tie_break = "earliest_release_timestamp_then_source_release_id"
+
+[truth.near_mature]
+version = "near-mature-truth.v1-draft"
+definition = "source_family_specific_fixed_rule"
+nipa_rule = "third_scheduled_quarterly_estimate"
+monthly_or_daily_rule = "latest_official_vintage_at_reference_period_end_plus_90_calendar_days"
+cutoff_time_utc = "23:59:59Z"
+missing_cutoff_policy = "score_unavailable"
+
+[truth.mature]
+version = "mature-truth.v1-draft"
+definition = "latest_official_vintage_at_fixed_reference_period_lag"
+fixed_lag_months = 60
+cutoff_time_utc = "23:59:59Z"
+post_cutoff_revisions = "excluded_from_primary_mature_truth"
+missing_cutoff_policy = "score_unavailable"
+
+[benchmarks]
+version = "us-benchmark-contract.v1-draft"
+cross_track_pooling = false
+primary_champion_track = "common_information"
+
+[benchmarks.common_information]
+version = "common-information-benchmarks.v1-draft"
+information_rule = "identical_origin_manifest_and_eligible_observables"
+families = [
+    "seasonal_naive",
+    "random_walk",
+    "ar",
+    "var",
+    "bvar",
+    "dynamic_factor_bridge_midas",
+    "compact_semi_structural",
+    "smets_wouters_dsge",
+]
+hyperparameter_rule = "selected_inside_each_origin_using_past_data_only"
+fallback_policy = "explicit_failure_record_no_silent_substitution"
+density_required = true
+eligible_for_primary_champion = true
+
+[benchmarks.published_forecast]
+version = "published-forecast-benchmarks.v1-draft"
+information_rule = "matched_archived_publication_timestamp_distinct_information_set"
+families = [
+    "spf",
+    "cbo",
+    "fomc_sep",
+    "frbny_dsge",
+    "gdpnow",
+    "nyfed_staff_nowcast",
+]
+hyperparameter_rule = "publisher_method_as_archived_not_reselected"
+fallback_policy = "explicit_failure_record_no_silent_substitution"
+density_required = false
+eligible_for_primary_champion = false
+
+[scores]
+version = "us-score-contract.v1-draft"
+balanced_sample_rule = "intersection_by_target_horizon_truth_model_pair_and_benchmark_track"
+all_available_samples_reported = true
+exact_origin_counts_required = true
+heterogeneous_pooling_allowed = false
+
+[scores.point]
+primary = ["rmse", "mae", "mase", "mean_error"]
+diagnostics = [
+    "median_absolute_error",
+    "relative_rmse",
+    "relative_mae",
+    "direction_accuracy",
+    "turning_point_accuracy",
+    "event_classification_accuracy",
+    "economically_weighted_loss",
+    "accounting_residual",
+]
+paper_parity = "rmse"
+mape_policy = "diagnostic_only_for_strictly_positive_economically_meaningful_levels"
+
+[scores.density]
+primary = ["crps", "weighted_interval_score"]
+interval_coverage_levels = [0.5, 0.8, 0.9, 0.95]
+diagnostics = [
+    "coverage",
+    "interval_width",
+    "sharpness",
+    "pit_rank_histogram",
+    "serial_independence",
+    "calibration_curve",
+]
+event_scores = ["brier_score", "reliability"]
+multivariate_scores = ["energy_score", "variogram_score"]
+log_score_policy = "disabled_until_finite_ensemble_estimator_and_tail_safeguard_are_preregistered"
+full_predictive_uncertainty_required = true
+
+[scores.horizon_weights]
+horizons = [1, 2, 4, 8, 12]
+weights = [0.30, 0.25, 0.20, 0.15, 0.10]
+
+[origin_requirements]
+version = "us-origin-requirements.v1-draft"
+core_horizons = [1, 2, 4]
+long_horizons = [8, 12]
+retrospective_vintage_clean_minimum = 40
+long_horizon_rule = "maximum_common_balanced_sample_with_power_report"
+prospective_shadow_minimum = 8
+exact_counts_by_cell_required = true
+insufficient_sample_status = "research_only_no_superiority_claim"
+
+[promotion]
+version = "us-promotion-rule.v1-draft"
+status = "inactive_pending_validation"
+product_id = "quarterly_unconditional"
+all_gates_required = true
+confidence_level = 0.95
+
+[promotion.scientific_integrity]
+max_unresolved_failures = 0
+failure_categories = [
+    "leakage",
+    "identity",
+    "variant",
+    "parameter_status",
+    "numerical",
+    "scale_convergence",
+]
+
+[promotion.evidence_volume]
+retrospective_vintage_clean_minimum = 40
+core_horizons = [1, 2, 4]
+long_horizon_rule = "maximum_common_balanced_sample_with_power_report"
+
+[promotion.point_competitiveness]
+index = "target_horizon_weighted_primary_point_loss"
+benchmark_track = "strongest_frozen_common_information_benchmark"
+noninferiority_relative_loss_upper_ci_max = 1.05
+critical_cell_relative_loss_upper_ci_max = 1.10
+critical_cell_explanation_required = true
+
+[promotion.density_usefulness]
+primary_scores = ["crps", "weighted_interval_score"]
+noninferiority_relative_score_upper_ci_max = 1.05
+maximum_absolute_coverage_error = 0.10
+full_predictive_uncertainty_required = true
+
+[promotion.robustness]
+required_dimensions = [
+    "truth_vintage",
+    "estimation_window",
+    "regime",
+    "agent_scale",
+    "origin_state_draws",
+    "structural_and_model_variants",
+]
+max_unexplained_failures = 0
+
+[promotion.incremental_abm_value]
+eligible_objectives = ["sector", "joint_tail", "scenario", "combination"]
+minimum_relative_improvement = 0.02
+tier1_point_gate_must_pass = true
+
+[promotion.prospective_reliability]
+minimum_consecutive_origins = 8
+max_material_pipeline_failures = 0
+
+[promotion.governance]
+required_signoffs = [
+    "observation_operator",
+    "vintage_firewall",
+    "benchmark_fairness",
+    "model_risk_limits",
+    "rollback_procedure",
+]
+rollback_procedure_required = true
+
+[change_control]
+version = "us-forecast-change-control.v1-draft"
+retrospective_score_freeze = "freeze_code_data_queries_targets_weights_margins_and_seeds_before_final_run"
+exploratory_change_policy = "new_exploratory_experiment_id_and_no_retroactive_primary_claim"
+prospective_maintenance_policy = "versioned_change_with_predeployment_review_and_parallel_challenger_run"
+material_change_requires_new_experiment_version = true
+forecast_artifacts_immutable = true
+truth_and_scores_append_only = true

@@ -1,0 +1,414 @@
+prohibited_actions = [
+    "ACCESS_PROVIDER_BODY_BYTES",
+    "ADMIT_ORIGIN",
+    "APPEND_FORECAST",
+    "APPEND_SCORE",
+    "APPEND_TRUTH",
+    "AUTHENTICATE_PUBLISHER_FROM_LOCAL_HASHES",
+    "CAPTURE_SOURCE",
+    "DOWNLOAD_SOURCE",
+    "EXECUTE_MODEL",
+    "LOAD_TRUTH",
+    "MAKE_HTTP_REQUEST",
+    "MUTATE_SOURCE_INVENTORY",
+    "PARSE_SYNTHETIC_FIXTURE_AS_PROVIDER_BYTES",
+    "PROMOTE_MODEL",
+    "WRITE_DATA",
+    "WRITE_RECEIPT",
+]
+
+[artifact]
+schema_version = "beforeit-us-census-structural-logical-profile.v1"
+status = "CANNOT_RUN"
+role = "LOGICAL_SCHEMA_MECHANICS_ONLY"
+canonicalization = "sorted-typed-length-prefixed-v1-excluding-artifact-content-sha256"
+content_sha256 = "c661bc84b0b9f9ee3c6ff28982721a9a9dacd14d6e73cc6859db54737429b491"
+
+[contract]
+evidence_date = "2026-08-08"
+permanent_nonadmitting = true
+maximum_status = "CANNOT_RUN"
+successor_required_for_any_higher_status = true
+standard_library_only = true
+synthetic_fixtures_only = true
+synthetic_fixture_format = "BEFOREIT_SYNTHETIC_LOGICAL_TSV_V1_NOT_PROVIDER_BYTES"
+synthetic_fixture_attributed_to_provider = false
+network_access_forbidden = true
+filesystem_write_forbidden = true
+provider_body_access_forbidden = true
+source_binding_verification_mandatory_for_operational_build_and_replay = true
+source_binding_bypass_keyword_forbidden = true
+required_profile_count = 6
+resolved_logical_schema_count = 6
+qualified_physical_layout_count = 0
+current_qualified_count = 0
+
+[physical_evidence]
+status = "MISSING_FUTURE_PROSPECTIVE_SIX_BODY_CAPTURE_REQUIRED"
+provider_bodies_preserved = false
+provider_bytes_claimed = false
+provider_header_bytes_verified = false
+provider_column_order_verified = false
+provider_encoding_verified = false
+provider_bom_verified = false
+provider_newlines_verified = false
+provider_null_lexemes_verified = false
+provider_row_order_verified = false
+provider_row_membership_verified = false
+aies_member_names_verified = false
+aies_member_crcs_verified = false
+aies_delimiter_verified = false
+susb_physical_emplfl_r_presence_2022_resolved = false
+susb_complete_flag_vocabulary_resolved = false
+availability_verified = false
+publisher_authentication_verified = false
+transport_authentication_verified = false
+full_provider_object_completeness_verified = false
+
+[aies]
+year = "2023"
+naics_vintage = "2017"
+geography = "0100000US"
+common_structural_fields = [
+    "GEO_ID",
+    "GEO_ID_F",
+    "INDLEVEL",
+    "NAICS",
+    "NAICS_F",
+    "NAICS_LABEL",
+    "NAME",
+    "SECTOR",
+    "YEAR",
+]
+value_publication_flag_tokens = ["", "D", "N", "S", "Z"]
+cv_publication_flag_tokens = ["", "v", "w"]
+flagged_numeric_zero_fill_forbidden = true
+raw_lexeme_preservation_required = true
+
+[aies.flag_meanings]
+D = "WITHHELD_TO_AVOID_DISCLOSING_OPERATIONS_OF_INDIVIDUAL_COMPANIES_DATA_INCLUDED_IN_HIGHER_LEVEL_TOTALS"
+N = "NOT_AVAILABLE_OR_NOT_COMPARABLE"
+S = "ESTIMATE_DOES_NOT_MEET_PUBLICATION_STANDARDS"
+Z = "ESTIMATE_ROUNDS_TO_ZERO"
+v = "CV_30_POINT_0_TO_60_POINT_8_PERCENT"
+w = "CV_GREATER_THAN_60_POINT_8_PERCENT_AND_NOT_SIGNIFICANTLY_DIFFERENT_FROM_ZERO_AT_90_PERCENT"
+
+[susb]
+year = "2022"
+naics_vintage = "2017"
+canonical_filename = "us_state_6digitnaics_2022.txt"
+logical_fields = [
+    "STATE",
+    "NAICS",
+    "ENTRSIZE",
+    "FIRM",
+    "ESTB",
+    "EMPL",
+    "EMPLFL_R",
+    "EMPLFL_N",
+    "PAYR",
+    "PAYRFL_N",
+    "RCPT",
+    "RCPTFL_N",
+    "STATEDSCR",
+    "NAICSDSCR",
+    "ENTRSIZEDSCR",
+]
+key_fields = ["STATE", "NAICS", "ENTRSIZE"]
+integer_fields = ["FIRM", "ESTB", "EMPL", "PAYR", "RCPT"]
+flag_fields = ["EMPLFL_R", "EMPLFL_N", "PAYRFL_N", "RCPTFL_N"]
+description_fields = ["STATEDSCR", "NAICSDSCR", "ENTRSIZEDSCR"]
+national_state_code = "00"
+all_published_size_codes = ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
+disjoint_size_codes = ["02", "03", "04", "06", "07", "09"]
+subtotal_05_components = ["02", "03", "04"]
+subtotal_08_components = ["05", "06", "07"]
+total_01_components = ["08", "09"]
+all_published_codes_means_retain_not_sum = true
+national_total_projection_state = "00"
+national_total_projection_size = "01"
+national_total_projection_must_be_separately_hashed = true
+synthetic_known_noise_flag_tokens = ["", "G", "H", "J", "S", "D"]
+complete_provider_flag_vocabulary_resolved = false
+historical_D_replaced_by_S_starting_2017 = true
+historical_D_allowed_in_2022_synthetic_fixture = false
+emplfl_r_discontinued_starting_2018 = true
+synthetic_2022_emplfl_r_must_be_empty = true
+physical_2022_emplfl_r_column_presence_resolved = false
+suppressed_numeric_zero_is_withheld_unknown = true
+suppressed_value_included_in_broader_totals = true
+firm_interindustry_additivity = "PROHIBITED_MULTI_INDUSTRY_ENTERPRISE_DOUBLE_COUNT_RISK"
+firm_model_role = "INDUSTRY_FIRM_PRESENCES_PROXY_ONLY_PENDING_VALIDATED_ALLOCATION_OR_DEDUPLICATION_ONTOLOGY"
+overlap_checks_limited_to_each_state_naics_key = true
+cross_naics_firm_sum_forbidden = true
+
+[susb.known_flag_meanings]
+G = "NOISE_RANGE_LESS_THAN_2_PERCENT"
+H = "NOISE_RANGE_2_TO_LESS_THAN_5_PERCENT"
+J = "NOISE_RANGE_AT_LEAST_5_PERCENT"
+S = "WITHHELD_NUMERIC_SET_TO_ZERO_AND_INCLUDED_IN_BROADER_TOTALS"
+D = "HISTORICAL_DISCLOSURE_FLAG_REPLACED_BY_S_STARTING_2017"
+
+[gates]
+provider_parser_allowed = false
+capture_allowed = false
+qualified_leaf_allowed = false
+model_input_allowed = false
+origin_admission_allowed = false
+forecast_execution_allowed = false
+truth_access_allowed = false
+scoring_allowed = false
+accuracy_claim_allowed = false
+promotion_allowed = false
+production_allowed = false
+
+[[profiles]]
+profile_id = "aies00inv_2023_economy_wide"
+requirement_id = "census_aies_inventory_allocation"
+product_code = "AIES00INV"
+archive_filename = "AIES00INV.zip"
+source_url = "https://www2.census.gov/programs-surveys/aies/data/2023/AIES00INV.zip"
+provider_member_name = "UNRESOLVED_NOT_CAPTURED"
+expected_field_count = 21
+key_fields = ["GEO_ID", "YEAR", "NAICS", "TYPOP", "TAXSTAT"]
+dimension_fields = ["GEO_ID", "INDLEVEL", "NAICS", "SECTOR", "YEAR", "TAXSTAT", "TYPOP"]
+label_fields = ["NAICS_LABEL", "NAME", "TAXSTAT_LABEL", "TYPOP_LABEL"]
+structural_flag_fields = ["GEO_ID_F", "NAICS_F"]
+measure_value_fields = ["RCPT_TOT_VAL", "INV_E_TOT_DVAL"]
+measure_value_flag_fields = ["RCPT_TOT_VAL_F", "INV_E_TOT_DVAL_F"]
+measure_cv_fields = ["RCPT_TOT_CV", "INV_E_TOT_CV"]
+measure_cv_flag_fields = ["RCPT_TOT_CV_F", "INV_E_TOT_CV_F"]
+logical_fields = [
+    "GEO_ID", "GEO_ID_F", "INDLEVEL", "NAICS", "NAICS_F", "NAICS_LABEL", "NAME", "SECTOR", "YEAR",
+    "TAXSTAT", "TAXSTAT_LABEL", "TYPOP", "TYPOP_LABEL",
+    "RCPT_TOT_VAL", "RCPT_TOT_VAL_F", "RCPT_TOT_CV", "RCPT_TOT_CV_F",
+    "INV_E_TOT_DVAL", "INV_E_TOT_DVAL_F", "INV_E_TOT_CV", "INV_E_TOT_CV_F",
+]
+
+[[profiles]]
+profile_id = "aies31inv_2023_manufacturing_valuation"
+requirement_id = "census_aies_inventory_allocation"
+product_code = "AIES31INV"
+archive_filename = "AIES31INV.zip"
+source_url = "https://www2.census.gov/programs-surveys/aies/data/2023/AIES31INV.zip"
+provider_member_name = "UNRESOLVED_NOT_CAPTURED"
+expected_field_count = 21
+key_fields = ["GEO_ID", "YEAR", "NAICS"]
+dimension_fields = ["GEO_ID", "INDLEVEL", "NAICS", "SECTOR", "YEAR"]
+label_fields = ["NAICS_LABEL", "NAME"]
+structural_flag_fields = ["GEO_ID_F", "NAICS_F"]
+measure_value_fields = ["INV_E_TOT_DVAL", "INV_E_LIFO_VAL", "INV_E_LIFO_RSV_VAL"]
+measure_value_flag_fields = ["INV_E_TOT_DVAL_F", "INV_E_LIFO_VAL_F", "INV_E_LIFO_RSV_VAL_F"]
+measure_cv_fields = ["INV_E_TOT_CV", "INV_E_LIFO_CV", "INV_E_LIFO_RSV_CV"]
+measure_cv_flag_fields = ["INV_E_TOT_CV_F", "INV_E_LIFO_CV_F", "INV_E_LIFO_RSV_CV_F"]
+logical_fields = [
+    "GEO_ID", "GEO_ID_F", "INDLEVEL", "NAICS", "NAICS_F", "NAICS_LABEL", "NAME", "SECTOR", "YEAR",
+    "INV_E_TOT_DVAL", "INV_E_TOT_DVAL_F", "INV_E_TOT_CV", "INV_E_TOT_CV_F",
+    "INV_E_LIFO_VAL", "INV_E_LIFO_VAL_F", "INV_E_LIFO_CV", "INV_E_LIFO_CV_F",
+    "INV_E_LIFO_RSV_VAL", "INV_E_LIFO_RSV_VAL_F", "INV_E_LIFO_RSV_CV", "INV_E_LIFO_RSV_CV_F",
+]
+
+[[profiles]]
+profile_id = "aies42inv_2023_wholesale_valuation"
+requirement_id = "census_aies_inventory_allocation"
+product_code = "AIES42INV"
+archive_filename = "AIES42INV.zip"
+source_url = "https://www2.census.gov/programs-surveys/aies/data/2023/AIES42INV.zip"
+provider_member_name = "UNRESOLVED_NOT_CAPTURED"
+expected_field_count = 23
+key_fields = ["GEO_ID", "YEAR", "NAICS", "TYPOP"]
+dimension_fields = ["GEO_ID", "INDLEVEL", "NAICS", "SECTOR", "YEAR", "TYPOP"]
+label_fields = ["NAICS_LABEL", "NAME", "TYPOP_LABEL"]
+structural_flag_fields = ["GEO_ID_F", "NAICS_F"]
+measure_value_fields = ["INV_E_TOT_DVAL", "INV_E_LIFO_VAL", "INV_E_LIFO_RSV_VAL"]
+measure_value_flag_fields = ["INV_E_TOT_DVAL_F", "INV_E_LIFO_VAL_F", "INV_E_LIFO_RSV_VAL_F"]
+measure_cv_fields = ["INV_E_TOT_CV", "INV_E_LIFO_CV", "INV_E_LIFO_RSV_CV"]
+measure_cv_flag_fields = ["INV_E_TOT_CV_F", "INV_E_LIFO_CV_F", "INV_E_LIFO_RSV_CV_F"]
+logical_fields = [
+    "GEO_ID", "GEO_ID_F", "INDLEVEL", "NAICS", "NAICS_F", "NAICS_LABEL", "NAME", "SECTOR", "YEAR",
+    "TYPOP", "TYPOP_LABEL",
+    "INV_E_TOT_DVAL", "INV_E_TOT_DVAL_F", "INV_E_TOT_CV", "INV_E_TOT_CV_F",
+    "INV_E_LIFO_VAL", "INV_E_LIFO_VAL_F", "INV_E_LIFO_CV", "INV_E_LIFO_CV_F",
+    "INV_E_LIFO_RSV_VAL", "INV_E_LIFO_RSV_VAL_F", "INV_E_LIFO_RSV_CV", "INV_E_LIFO_RSV_CV_F",
+]
+
+[[profiles]]
+profile_id = "aies44inv_2023_retail_valuation"
+requirement_id = "census_aies_inventory_allocation"
+product_code = "AIES44INV"
+archive_filename = "AIES44INV.zip"
+source_url = "https://www2.census.gov/programs-surveys/aies/data/2023/AIES44INV.zip"
+provider_member_name = "UNRESOLVED_NOT_CAPTURED"
+expected_field_count = 23
+key_fields = ["GEO_ID", "YEAR", "NAICS"]
+dimension_fields = ["GEO_ID", "INDLEVEL", "NAICS", "SECTOR", "YEAR", "INDGROUP", "SUBSECTOR"]
+label_fields = ["NAICS_LABEL", "NAME"]
+structural_flag_fields = ["GEO_ID_F", "NAICS_F"]
+measure_value_fields = ["INV_E_TOT_DVAL", "INV_E_LIFO_VAL", "INV_E_LIFO_RSV_VAL"]
+measure_value_flag_fields = ["INV_E_TOT_DVAL_F", "INV_E_LIFO_VAL_F", "INV_E_LIFO_RSV_VAL_F"]
+measure_cv_fields = ["INV_E_TOT_CV", "INV_E_LIFO_CV", "INV_E_LIFO_RSV_CV"]
+measure_cv_flag_fields = ["INV_E_TOT_CV_F", "INV_E_LIFO_CV_F", "INV_E_LIFO_RSV_CV_F"]
+logical_fields = [
+    "GEO_ID", "GEO_ID_F", "INDLEVEL", "NAICS", "NAICS_F", "NAICS_LABEL", "NAME", "SECTOR", "YEAR",
+    "INDGROUP", "SUBSECTOR",
+    "INV_E_TOT_DVAL", "INV_E_TOT_DVAL_F", "INV_E_TOT_CV", "INV_E_TOT_CV_F",
+    "INV_E_LIFO_VAL", "INV_E_LIFO_VAL_F", "INV_E_LIFO_CV", "INV_E_LIFO_CV_F",
+    "INV_E_LIFO_RSV_VAL", "INV_E_LIFO_RSV_VAL_F", "INV_E_LIFO_RSV_CV", "INV_E_LIFO_RSV_CV_F",
+]
+
+[[profiles]]
+profile_id = "aies51inv_2023_information_stages"
+requirement_id = "census_aies_inventory_allocation"
+product_code = "AIES51INV"
+archive_filename = "AIES51INV.zip"
+source_url = "https://www2.census.gov/programs-surveys/aies/data/2023/AIES51INV.zip"
+provider_member_name = "UNRESOLVED_NOT_CAPTURED"
+expected_field_count = 27
+key_fields = ["GEO_ID", "YEAR", "NAICS", "TAXSTAT"]
+dimension_fields = ["GEO_ID", "INDLEVEL", "NAICS", "SECTOR", "YEAR", "TAXSTAT"]
+label_fields = ["NAICS_LABEL", "NAME", "TAXSTAT_LABEL"]
+structural_flag_fields = ["GEO_ID_F", "NAICS_F"]
+measure_value_fields = ["INV_E_TOT_DVAL", "INV_E_FIN_VAL", "INV_E_WIP_VAL", "INV_E_MAT_VAL"]
+measure_value_flag_fields = ["INV_E_TOT_DVAL_F", "INV_E_FIN_VAL_F", "INV_E_WIP_VAL_F", "INV_E_MAT_VAL_F"]
+measure_cv_fields = ["INV_E_TOT_CV", "INV_E_FIN_CV", "INV_E_WIP_CV", "INV_E_MAT_CV"]
+measure_cv_flag_fields = ["INV_E_TOT_CV_F", "INV_E_FIN_CV_F", "INV_E_WIP_CV_F", "INV_E_MAT_CV_F"]
+logical_fields = [
+    "GEO_ID", "GEO_ID_F", "INDLEVEL", "NAICS", "NAICS_F", "NAICS_LABEL", "NAME", "SECTOR", "YEAR",
+    "TAXSTAT", "TAXSTAT_LABEL",
+    "INV_E_TOT_DVAL", "INV_E_TOT_DVAL_F", "INV_E_TOT_CV", "INV_E_TOT_CV_F",
+    "INV_E_FIN_VAL", "INV_E_FIN_VAL_F", "INV_E_FIN_CV", "INV_E_FIN_CV_F",
+    "INV_E_WIP_VAL", "INV_E_WIP_VAL_F", "INV_E_WIP_CV", "INV_E_WIP_CV_F",
+    "INV_E_MAT_VAL", "INV_E_MAT_VAL_F", "INV_E_MAT_CV", "INV_E_MAT_CV_F",
+]
+
+[[profiles]]
+profile_id = "susb_employer_enterprises"
+requirement_id = "census_susb_structural"
+product_code = "SUSB_2022_US_STATE_6DIGIT_NAICS"
+archive_filename = "us_state_6digitnaics_2022.txt"
+source_url = "https://www2.census.gov/programs-surveys/susb/tables/2022/us_state_6digitnaics_2022.txt"
+provider_member_name = "NOT_APPLICABLE_DIRECT_TEXT_OBJECT"
+expected_field_count = 15
+key_fields = ["STATE", "NAICS", "ENTRSIZE"]
+dimension_fields = ["STATE", "NAICS", "ENTRSIZE"]
+label_fields = ["STATEDSCR", "NAICSDSCR", "ENTRSIZEDSCR"]
+structural_flag_fields = ["EMPLFL_R", "EMPLFL_N", "PAYRFL_N", "RCPTFL_N"]
+measure_value_fields = ["FIRM", "ESTB", "EMPL", "PAYR", "RCPT"]
+measure_value_flag_fields = []
+measure_cv_fields = []
+measure_cv_flag_fields = []
+logical_fields = [
+    "STATE", "NAICS", "ENTRSIZE", "FIRM", "ESTB", "EMPL", "EMPLFL_R", "EMPLFL_N",
+    "PAYR", "PAYRFL_N", "RCPT", "RCPTFL_N", "STATEDSCR", "NAICSDSCR", "ENTRSIZEDSCR",
+]
+
+[[source_bindings]]
+binding_id = "prospective_v2_module"
+repository_relative_path = "scripts/us/forecasting/vintages/prospective/USProspectiveAcquisitionContractV2.jl"
+physical_sha256 = "435df6c4b4de879c0f24d3f9bb9f7504fc6172ae34e94db8cb6ba84282d6e379"
+
+[[source_bindings]]
+binding_id = "prospective_v2_contract"
+repository_relative_path = "scripts/us/forecasting/vintages/prospective/prospective_2026q3_contract_v2.toml"
+physical_sha256 = "b24ff0c40172d2a23991fbe75c2fe42c6ba6c6c1f5fd46d079ac6d51429bf98f"
+
+[[source_bindings]]
+binding_id = "common_origin_v4_module"
+repository_relative_path = "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v4/USCommonOriginAcquisitionV4.jl"
+physical_sha256 = "0f4c248950ebee59d1e6b5882db6516cbb539f9e54c7dfbb6b53fe0f7a5f6b4e"
+
+[[source_bindings]]
+binding_id = "common_origin_v4_policy"
+repository_relative_path = "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v4/common_origin_acquisition_v4_policy.toml"
+physical_sha256 = "84e74d236f0e0ac781a482b996be95fceefe56f2a349be089b51054c3edd8834"
+
+[[source_bindings]]
+binding_id = "current_inventory"
+repository_relative_path = "scripts/us/forecasting/vintages/current_inventory.toml"
+physical_sha256 = "110b4448db0b49e95cbc2fe1cf7019f6b877b3f391c6069a81c2e7c3c2a086ae"
+
+[[source_bindings]]
+binding_id = "sources_toml"
+repository_relative_path = "scripts/us/sources.toml"
+physical_sha256 = "41b2bf73b92fb0cf9d9e02ae836beb91d07cd6a3bd20ecf668882350c86f23c9"
+
+[[source_bindings]]
+binding_id = "us_pipeline"
+repository_relative_path = "scripts/us/USPipeline.jl"
+physical_sha256 = "ce4d8138a1c07fdc9509d7560f307f226dc314eb0a4394270ef1e1014b9ca14d"
+
+[[source_bindings]]
+binding_id = "scripts_us_project"
+repository_relative_path = "scripts/us/Project.toml"
+physical_sha256 = "72cec6cb6dc64dc71b9e342890b78afbf8fd66cb97dd8603e4fe905ad137dc1c"
+
+[[source_bindings]]
+binding_id = "scripts_us_manifest"
+repository_relative_path = "scripts/us/Manifest.toml"
+physical_sha256 = "c2e596cf8452c5b890bb0ef66c05bc72a57fa25ab6f8fe790f8db4600b035263"
+
+[[citations]]
+id = "census_2023_aies_tables"
+url = "https://www.census.gov/data/tables/2023/econ/aies/2023-aies-tables.html"
+status = "OFFICIAL_PAGE_ROUTE_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[citations]]
+id = "aies00inv_group_dictionary"
+url = "https://api.census.gov/data/timeseries/aies/inv/groups/AIES00INV.html"
+status = "OFFICIAL_DOCUMENTATION_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[citations]]
+id = "aies31inv_group_dictionary"
+url = "https://api.census.gov/data/timeseries/aies/miscsector/groups/AIES31INV.html"
+status = "OFFICIAL_DOCUMENTATION_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[citations]]
+id = "aies42inv_group_dictionary"
+url = "https://api.census.gov/data/timeseries/aies/miscsector/groups/AIES42INV.html"
+status = "OFFICIAL_DOCUMENTATION_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[citations]]
+id = "aies44inv_group_dictionary"
+url = "https://api.census.gov/data/timeseries/aies/miscsector/groups/AIES44INV.html"
+status = "OFFICIAL_DOCUMENTATION_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[citations]]
+id = "aies51inv_group_dictionary"
+url = "https://api.census.gov/data/timeseries/aies/miscsector/groups/AIES51INV.html"
+status = "OFFICIAL_DOCUMENTATION_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[citations]]
+id = "susb_2022_dataset"
+url = "https://www.census.gov/data/datasets/2022/econ/susb/2022-susb.html"
+status = "OFFICIAL_PAGE_ROUTE_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[citations]]
+id = "susb_record_layout"
+url = "https://www2.census.gov/programs-surveys/susb/technical-documentation/record_layout_us_and_state_2007_to_present.txt"
+status = "OFFICIAL_DOCUMENTATION_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[citations]]
+id = "susb_enterprise_size_codes"
+url = "https://www2.census.gov/programs-surveys/susb/technical-documentation/enterprise_codes_2017.txt"
+status = "OFFICIAL_DOCUMENTATION_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[citations]]
+id = "susb_glossary"
+url = "https://www.census.gov/programs-surveys/susb/about/glossary.html"
+status = "OFFICIAL_DOCUMENTATION_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"
+
+[[citations]]
+id = "susb_methodology"
+url = "https://www.census.gov/programs-surveys/susb/technical-documentation/methodology.html"
+status = "OFFICIAL_DOCUMENTATION_PAGE_VISIBLE_UNPRESERVED"
+local_bytes_sha256 = "NOT_PRESERVED"

@@ -1,0 +1,174 @@
+[artifact]
+schema_version = "beforeit-household-consumption-implicit-price-analogue-qualification.v1"
+canonicalization = "sorted_typed_v1_excluding_artifact_content_sha256"
+content_sha256 = "5cc1f2a17e454ac454ab208c1712608051bd613b3be579f8e7ca2ef714d20379"
+
+[contract]
+economic_object = "beforeit-household-consumption-implicit-price-analogue.v1"
+qualification_status = "MODEL_OPERATOR_MECHANICS_VALIDATED_NONADMITTING"
+information_track = "synthetic_model_operator_mechanics"
+fixture_class = "SYNTHETIC_OPERATOR_TEST_FIXTURE"
+input_path_kind = "CALLER_SUPPLIED_SYNTHETIC_RAW_PATHS"
+measurement_regime = "SYNTHETIC_POST_STEP_HOMOGENEOUS"
+raw_inputs = [
+    "nominal_household_consumption",
+    "real_household_consumption",
+]
+ratio_formula = "D[path,t]=N[path,t]/R[path,t]"
+qoq_formula = "400*log(D[path,t]/D[path,t-1])"
+four_quarter_formula = "100*log(D[path,t]/D[path,t-4])"
+transformation_convention = "continuous_log_for_model_and_eventual_direct_truth_not_bea_published_compounded_annual_rate"
+qoq_period_mapping = "input_row_t_maps_to_same_period_output_row_t_minus_1"
+four_quarter_period_mapping = "input_row_t_maps_to_same_period_output_row_t_minus_4"
+path_evaluation_rule = "transform_each_raw_path_before_any_summary"
+rebase_rule = "positive_time_invariant_path_specific_D_scale_cancels"
+opening_stitch_rule = "opening_D0_equals_one_by_normalization_and_must_not_be_joined_to_first_post_step_for_empirical_execution"
+minimum_qoq_rows = 2
+minimum_four_quarter_rows = 5
+frequency = "quarterly"
+qoq_output_unit = "percentage_points_annual_rate"
+four_quarter_output_unit = "percentage_points"
+official_equivalence_status = "NOT_VALIDATED"
+tier1_total_pce_operator_approved = false
+tier1_core_pce_operator_approved = false
+origin_admissible = false
+promotion_eligible = false
+
+[boundaries]
+blockers = [
+    "BEA_FISHER_CHAIN_EQUIVALENCE_UNVALIDATED",
+    "PCE_NPISH_PAYER_IMPUTATION_SCOPE_UNVALIDATED",
+    "PURCHASER_PRICE_TAX_MARGIN_VALUATION_UNVALIDATED",
+    "CORE_PCE_FOOD_ENERGY_CROSSWALK_UNVALIDATED",
+    "DIRECT_RELEASE_VINTAGES_ABSENT",
+    "SEASONAL_ADJUSTMENT_BRIDGE_UNVALIDATED",
+    "OPENING_PRICE_BASKET_STITCH_UNRESOLVED",
+    "TIER1_PCE_OPERATOR_APPROVAL_FALSE",
+    "TIER1_CORE_PCE_OPERATOR_APPROVAL_FALSE",
+]
+prohibited_actions = [
+    "construct_model",
+    "run_model",
+    "load_artifact",
+    "load_truth",
+    "emit_forecast",
+    "score",
+    "infer",
+    "execute_opening_to_first_step_empirical",
+    "admit_origin",
+    "approve_tier1_operator",
+    "promote",
+    "register_production",
+    "write_output",
+]
+
+[declarations]
+synthetic_raw_path_input_only = true
+transform_each_path_before_summary = true
+model_construction_allowed = false
+model_execution_allowed = false
+artifact_input_allowed = false
+truth_access_allowed = false
+empirical_input_allowed = false
+opening_to_first_step_empirical_allowed = false
+forecast_emission_allowed = false
+scoring_allowed = false
+inference_allowed = false
+origin_admissible = false
+promotion_eligible = false
+production_registry_allowed = false
+write_output_allowed = false
+official_total_pce_operator_claim_allowed = false
+official_core_pce_operator_claim_allowed = false
+
+[[source_files]]
+path = "src/utils/data.jl"
+sha256 = "3b42bcc124e5242c2a9b7303d9feddbfa7d6e54b07e62961ef646bf06ff8b5b8"
+role = "opening_normalization_and_post_step_nominal_real_consumption_identity"
+
+[[source_files]]
+path = "src/markets/search_and_matching.jl"
+sha256 = "940d50110feeeb8c816379375b4cd2b714687f465962699be134e05935b3e61d"
+role = "internal_household_price_aggregate_construction"
+
+[[source_files]]
+path = "scripts/us/forecasting/targets/tier1_targets.toml"
+sha256 = "328a8717e6626dfa8a57b2068cf82ba9b7231c108275760fe6cf2546b58a82fc"
+role = "direct_total_and_core_pce_target_contracts_and_false_approval_state"
+
+[[source_files]]
+path = "scripts/us/forecasting/origins/opening_macro_mapping.toml"
+sha256 = "55402fd1620cb5094c267bb8d34145cefdc0c6946c84ef5876dc83cbab838850"
+role = "unresolved_opening_pce_mapping"
+
+[[official_sources]]
+source_id = "bea-nipa-handbook-chapter-4"
+provider = "U.S. Bureau of Economic Analysis"
+title = "NIPA Handbook, Chapter 4: Estimating Methods"
+url = "https://www.bea.gov/resources/methodologies/nipa-handbook/pdf/chapter-04.pdf"
+role = "fisher_chain_and_implicit_price_deflator_distinction"
+
+[[official_sources]]
+source_id = "bea-nipa-handbook-chapter-5"
+provider = "U.S. Bureau of Economic Analysis"
+title = "NIPA Handbook, Chapter 5: Personal Consumption Expenditures"
+url = "https://www.bea.gov/resources/methodologies/nipa-handbook/pdf/chapter-05.pdf"
+role = "pce_component_scope_price_quantity_and_fisher_aggregation"
+
+[[official_sources]]
+source_id = "bea-faq-521"
+provider = "U.S. Bureau of Economic Analysis"
+title = "How are the PCE price indexes calculated?"
+url = "https://www.bea.gov/help/faq/521"
+role = "pce_price_and_quantity_methods"
+
+[[official_sources]]
+source_id = "bea-faq-555"
+provider = "U.S. Bureau of Economic Analysis"
+title = "How does the PCE price index differ from the CPI?"
+url = "https://www.bea.gov/help/faq/555"
+role = "pce_scope_weight_and_formula_boundary"
+
+[[official_sources]]
+source_id = "bea-faq-1009"
+provider = "U.S. Bureau of Economic Analysis"
+title = "How are nonprofit institutions serving households treated in the NIPAs?"
+url = "https://www.bea.gov/help/faq/1009"
+role = "npish_scope_boundary"
+
+[[official_sources]]
+source_id = "bea-faq-83"
+provider = "U.S. Bureau of Economic Analysis"
+title = "What is the market-based PCE price index?"
+url = "https://www.bea.gov/help/faq/83"
+role = "imputation_and_market_scope_boundary"
+
+[[official_sources]]
+source_id = "bea-faq-518"
+provider = "U.S. Bureau of Economic Analysis"
+title = "What is the core PCE price index?"
+url = "https://www.bea.gov/help/faq/518"
+role = "core_food_and_energy_exclusion_boundary"
+
+[[official_sources]]
+source_id = "bea-core-pce-food-energy-composition"
+provider = "U.S. Bureau of Economic Analysis"
+title = "Composition of food and energy excluded from the core PCE price index"
+url = "https://www.bea.gov/sites/default/files/2018-04/Composition%20of%20food%20and%20energy%20excluded%20from%20Core%20PCE%20Price%20Index.xls"
+role = "detailed_core_product_crosswalk_boundary"
+
+[[direct_truth_selectors]]
+target_id = "pce_price_index"
+dataset_id = "NIPA"
+table_id = "T20304"
+line_number = "1"
+series_code = "DPCERG"
+status = "DOCUMENTED_NOT_LOADED"
+
+[[direct_truth_selectors]]
+target_id = "core_pce_price_index"
+dataset_id = "NIPA"
+table_id = "T20304"
+line_number = "25"
+series_code = "DPCCRG"
+status = "DOCUMENTED_NOT_LOADED"

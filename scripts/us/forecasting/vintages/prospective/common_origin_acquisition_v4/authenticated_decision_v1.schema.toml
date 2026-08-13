@@ -1,0 +1,23 @@
+[artifact]
+schema_version = "beforeit-us-schema-contract.v1"
+document_schema = "beforeit-us-authenticated-decision.v1"
+evidence_class = "SYNTHETIC_INERT"
+
+[canonical_subject]
+canonicalization = "BEFOREIT_US_AUTHENTICATED_EVIDENCE_V4_DOMAIN_SEPARATED_TYPED_LENGTH_V1"
+domain = "BeforeIT/US/authenticated-evidence/v4/canonical-subject/v1"
+map_keys_sorted_by_utf8_string = true
+node_tag_and_uint64_payload_length = true
+list_count_and_order_bound = true
+integer_encoding = "SIGNED_INT64_BIG_ENDIAN_TWOS_COMPLEMENT"
+float_allowed = false
+
+[production_successor_requirements]
+signature_algorithm = "ECDSA_P256_SHA256"
+detached_signature = true
+subject_reconstructed_by_validator = true
+owner_and_validator_key_ids_distinct = true
+owner_and_validator_organizations_distinct = true
+key_registry_lookup_required = true
+signature_verification_required = true
+synthetic_candidate_signature_count = 0

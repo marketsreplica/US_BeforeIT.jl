@@ -1,0 +1,204 @@
+[artifact]
+schema_version = "beforeit-us-effr-observed-state-contract.v3"
+contract_id = "beforeit-us-effr-observed-state-offline-adjudication.v3"
+contract_version = "3.0.0"
+incompatible_with = "beforeit-us-effr-one-effective-date-capture-receipt.v2"
+status = "CANDIDATE_OFFLINE_NONADMITTING"
+canonicalization = "sorted_typed_length_aware_excluding_artifact_content_sha256.v1"
+content_sha256 = "33eb8eba8a6399568c0890d86d555cb5177659d62c098522098ca5d6ce21952c"
+
+[current_state_disposition]
+current_openapi_definition = "ABSENT"
+captured_wire_presence = "ABSENT"
+authoritative_evidence_ever_official = "NOT_ESTABLISHED"
+raw_false_derivation_allowed = false
+synthetic_current_state_allowed = false
+
+[observations]
+morning_class = "MORNING_WINDOW_ENDPOINT_OBSERVATION"
+post_revision_class = "POST_REVISION_WINDOW_ENDPOINT_OBSERVATION"
+transition_class = "OBSERVED_EFFR_TRANSITION"
+morning_window_start_utc = "13:00:00Z"
+morning_window_end_utc = "13:15:00Z"
+post_revision_window_start_utc = "18:30:00Z"
+post_revision_window_end_utc = "18:45:00Z"
+pair_atomic = false
+
+[parser]
+envelope_keys = ["refRates"]
+effr_type_literal = "EFFR"
+rate_required_fields = ["effectiveDate", "type", "percentRate", "percentPercentile1", "percentPercentile25", "percentPercentile75", "percentPercentile99", "targetRateFrom", "targetRateTo", "revisionIndicator"]
+volume_required_fields = ["effectiveDate", "type", "volumeInBillions", "revisionIndicator"]
+allowed_revision_tokens = ["", "r"]
+footnote_field = "footnoteId"
+footnote_ids = [1, 2, 3]
+footnote_alias_allowed = false
+duplicate_members_rejected_before_materialization = true
+exact_numeric_lexemes_preserved = true
+max_json_body_bytes = 1048576
+max_json_nesting_depth = 64
+max_json_number_bytes = 96
+max_json_mantissa_digits = 40
+max_json_abs_exponent = 20
+percent_alias_allowed = false
+unknown_fields_allowed = false
+
+[policy]
+marked_revision_token = "r"
+rate_change_threshold_basis_points = 1
+strictly_greater_than_threshold = true
+footnote_required_for_marked_revision = false
+footnote_pair_rule = "EXACT_FOOTNOTE_ID_INTEGER_OR_ABSENCE_MATCH_OR_QUARANTINE"
+unchanged_claim = "NO_MARKED_REVISION_OBSERVED_AS_OF_SECOND_CAPTURE"
+
+[estimand]
+status = "PENDING"
+candidate_estimands = ["STRICT_FIRST_PUBLIC_BYTES", "PRE_ORIGIN_OBSERVED_ENDPOINT_VINTAGE"]
+owner_validator_decision = "REQUIRED_BEFORE_ORIGIN_ADMISSION"
+
+[gates]
+accuracy_evaluation_allowed = false
+empirical_forecast_allowed = false
+external_timestamp_authenticated = false
+full_campaign_complete = false
+network_exchange_count_externally_witnessed = false
+operator_authorization_externally_authenticated = false
+origin_admissible = false
+other_required_profiles_complete = false
+production_use_allowed = false
+production_scoring_allowed = false
+profile_completion_authorized = false
+promotion_eligible = false
+publisher_provenance_authenticated = false
+raw_durably_stored_external = false
+readiness = false
+source_inventory_mutation_allowed = false
+transport_provenance_authenticated = false
+
+[source_bindings]
+campaign_control_file_sha256 = "83db9b24f88e7ad48ba21726f7905b2ba7a00638e681ff40d8fdcf0c728edd02"
+campaign_schedule_file_sha256 = "ddbc7a089a636d09f97e68e67da7f534ecca6c88d6b7dbc8bf78080ce7400e25"
+campaign_schedule_content_sha256 = "fb984becfc5608922cd4acffd7e3e3bdf997022935f816acad221ec32dcd0383"
+prospective_contract_file_sha256 = "b24ff0c40172d2a23991fbe75c2fe42c6ba6c6c1f5fd46d079ac6d51429bf98f"
+prospective_contract_content_sha256 = "5d1e7f34eea0470877c7bed096d8b2fb26590f95bd06febb90813faf6063708a"
+v2_contract_source_sha256 = "6c4ee3ff95b92daf34899db64dbff7fc920eb33e5bc4bf17a6adf99bf3b3f651"
+august7_manifest_file_sha256 = "f801b5539a550857a4ca6c69e0f16ad1c7645ab83e3c87407a0c99aeed4db6d1"
+august7_manifest_semantic_sha256 = "9a865a8b60f06b0da33be4f48e40266d986d633d250715c55c69fb113d130885"
+august7_rate_raw_sha256 = "5977e0aafae9f34d348ad69166afce47c223b6147312654155855e0450315341"
+august7_volume_raw_sha256 = "13f146b7f27a724f28a63343fed40c1cdb3c447eec1a5663d5b1b5f192febc61"
+api_documentation_url = "https://markets.newyorkfed.org/static/docs/markets-api.html"
+api_documentation_sha256 = "c1ab76a0e006e7f16c5ba4660716f2ade0f8a76e58dbbe7124d73a9fbf98cd2c"
+api_documentation_current_state_occurrences = 0
+openapi_url = "https://markets.newyorkfed.org/static/docs/markets-api.yml"
+openapi_sha256 = "5dbb331d86b91bfc115be9b5fe9c46735833a4f7280d33e4327e8acf7ad30d2b"
+openapi_effr_record_schema_path = "#/components/schemas/effr-record"
+openapi_current_state_occurrences = 0
+openapi_revision_indicator_occurrences = 6
+openapi_footnote_id_schema_members = 5
+openapi_standalone_footnote_schema_members = 0
+terms_url = "https://www.newyorkfed.org/privacy/termsofuse"
+terms_sha256 = "a2904b4679f340f17330c845f481399398f7aeb1fabae5ca14781f15ed3d776b"
+holiday_url = "https://www.newyorkfed.org/aboutthefed/holiday_schedule"
+holiday_sha256 = "2d4c37577b6e439136ef15ccf1d56869133e1342a292310417f190d24e239b17"
+effr_page_url = "https://www.newyorkfed.org/markets/reference-rates/effr"
+revision_policy_url = "https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates"
+
+[[transition_matrix]]
+sequence = 1
+evidence = "both empty tokens; selected EFFR semantics and full bodies identical"
+decision = "NO_MARKED_REVISION_OBSERVED_AS_OF_SECOND_CAPTURE"
+
+[[transition_matrix]]
+sequence = 2
+evidence = "morning empty; later coherent r pair; exact published decimal-lexeme rate change strictly greater than one basis point; optional contingency footnoteId absent or the same exact JSON integer"
+decision = "MARKED_SAME_DAY_REVISION_OBSERVED"
+
+[[transition_matrix]]
+sequence = 3
+evidence = "morning endpoint already carries r"
+decision = "QUARANTINED_MORNING_ALREADY_MARKED_REVISED"
+
+[[transition_matrix]]
+sequence = 4
+evidence = "later empty token but selected EFFR semantics change"
+decision = "QUARANTINED_UNMARKED_EFFR_TRANSITION"
+
+[[transition_matrix]]
+sequence = 5
+evidence = "later r without a published rate change strictly greater than one basis point"
+decision = "QUARANTINED_MARKED_REVISION_POLICY_INCONSISTENT"
+
+[[transition_matrix]]
+sequence = 6
+evidence = "rate and volume tokens, exact footnoteId integers or absence, dates, types, or capture roles differ"
+decision = "QUARANTINED_RATE_VOLUME_PAIR_MISMATCH"
+
+[[transition_matrix]]
+sequence = 7
+evidence = "selected EFFR semantics identical but full response bytes differ"
+decision = "QUARANTINED_FULL_RESPONSE_CHANGED_WITHOUT_EFFR_TRANSITION"
+
+[[transition_matrix]]
+sequence = 8
+evidence = "missing or unknown token, alias, new field, duplicate member, currentState, or unknown category"
+decision = "QUARANTINED_SUCCESSOR_PROFILE_REQUIRED"
+
+[[citations]]
+id = "NYFED_EFFR"
+url = "https://www.newyorkfed.org/markets/reference-rates/effr"
+scope = "remote assertion for EFFR meaning and raw r revision marker; footnoteId is a separate contingency annotation; not local publisher authentication"
+local_authentication_status = "REMOTE_LITERATURE_ASSERTION_NOT_LOCALLY_AUTHENTICATED"
+
+[[citations]]
+id = "NYFED_REVISION_POLICY"
+url = "https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates"
+scope = "remote assertion for approximately 09:00 and 14:30 ET publication policy and greater-than-one-basis-point revision threshold"
+local_authentication_status = "REMOTE_LITERATURE_ASSERTION_NOT_LOCALLY_AUTHENTICATED"
+
+[[citations]]
+id = "NYFED_MARKETS_API"
+url = "https://markets.newyorkfed.org/static/docs/markets-api.html"
+scope = "pinned local documentation snapshot plus direct authoritative URL"
+local_authentication_status = "PINNED_LOCAL_SNAPSHOT"
+
+[[citations]]
+id = "OPENAPI_3_0_SCHEMA"
+url = "https://spec.openapis.org/oas/v3.0.0.html#schema"
+scope = "absence of required does not create a mandatory closed response member"
+local_authentication_status = "REMOTE_LITERATURE_ASSERTION_NOT_LOCALLY_AUTHENTICATED"
+
+[[citations]]
+id = "JSON_SCHEMA_2020_12_REQUIRED"
+url = "https://json-schema.org/draft/2020-12/json-schema-validation#name-required"
+scope = "required-member semantics"
+local_authentication_status = "REMOTE_LITERATURE_ASSERTION_NOT_LOCALLY_AUTHENTICATED"
+
+[[citations]]
+id = "RFC_8259_JSON"
+url = "https://www.rfc-editor.org/rfc/rfc8259.html"
+scope = "interoperability hazard of non-unique JSON object names"
+local_authentication_status = "REMOTE_LITERATURE_ASSERTION_NOT_LOCALLY_AUTHENTICATED"
+
+[[citations]]
+id = "RFC_9110_DATE"
+url = "https://www.rfc-editor.org/rfc/rfc9110.html#name-date"
+scope = "HTTP Date is message metadata and not a trusted publication timestamp"
+local_authentication_status = "REMOTE_LITERATURE_ASSERTION_NOT_LOCALLY_AUTHENTICATED"
+
+[[citations]]
+id = "RFC_3161_TIMESTAMP"
+url = "https://www.rfc-editor.org/rfc/rfc3161.html"
+scope = "a trusted timestamp can bind digest existence but cannot alone authenticate publisher provenance"
+local_authentication_status = "REMOTE_LITERATURE_ASSERTION_NOT_LOCALLY_AUTHENTICATED"
+
+[[citations]]
+id = "SEMVER_2_0_0"
+url = "https://semver.org/spec/v2.0.0.html"
+scope = "major version marks the deliberately incompatible v2-to-v3 semantics"
+local_authentication_status = "REMOTE_LITERATURE_ASSERTION_NOT_LOCALLY_AUTHENTICATED"
+
+[[citations]]
+id = "REAL_TIME_DATA_CROUSHORE_STARK"
+url = "https://doi.org/10.1016/S0304-4076(01)00072-0"
+scope = "dated information-set motivation; does not authenticate local EFFR captures"
+local_authentication_status = "REMOTE_LITERATURE_ASSERTION_NOT_LOCALLY_AUTHENTICATED"

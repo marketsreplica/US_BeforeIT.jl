@@ -1,0 +1,142 @@
+schema_version = "beforeit-us-artifact-evidence-schema.v1"
+root_schema_version = "beforeit-us-artifact-evidence.v1"
+truth_schema_version = "beforeit-us-truth-evidence-manifest.v1"
+operator_schema_version = "beforeit-us-operator-evidence-manifest.v1"
+validation_receipt_schema_version = "beforeit-us-operator-validation-receipt.v1"
+signoff_receipt_schema_version = "beforeit-us-operator-signoff-receipt.v1"
+digest_algorithm = "sha256"
+canonicalization = "sorted_typed_v1_excluding_artifact_content_sha256"
+path_policy = "normalized relative regular files confined to the root evidence directory; absolute paths, parent traversal, and symbolic-link traversal are rejected"
+root_manifest_policy = "the root evidence manifest must be a regular file and must not be a symbolic link"
+byte_policy = "read each local file once, compare its raw bytes with the declared lowercase SHA-256, then parse those same bytes when TOML is required"
+minimum_common_protocol_eligible_origins = 40
+common_origin_rule = "set intersection of eligible origin_id values across all 8 targets times all 3 truth layers"
+unique_observation_key = ["origin_id", "reference_key"]
+cross_manifest_origin_binding = [
+    "origin_timestamp_utc",
+    "protocol_eligible",
+    "origin_evidence_sha256",
+]
+eligible_product_id = "quarterly_unconditional"
+eligible_origin_rule_id = "quarterly-after-advance.v1-draft"
+eligible_information_track = "common_information"
+
+[root_manifest]
+required_top_level_keys = [
+    "artifact",
+    "contract",
+    "truth_manifests",
+    "operator_manifests",
+]
+required_truth_manifest_references = 24
+required_operator_manifest_references = 8
+reference_statuses = ["available", "unavailable"]
+availability_statuses = ["unavailable", "partial", "candidate"]
+unavailable_sentinel = "unavailable"
+unknown_fields = "rejected"
+duplicate_target_layer_references = "rejected"
+duplicate_operator_target_references = "rejected"
+duplicate_available_manifest_paths = "rejected"
+
+[truth_manifest]
+required_tables = ["truth", "observations"]
+required_truth_keys = [
+    "schema_version",
+    "manifest_id",
+    "target_id",
+    "truth_layer_id",
+    "protocol_id",
+    "protocol_sha256",
+    "evidence_class",
+    "truth_artifact_format",
+    "truth_artifact_path",
+    "truth_artifact_sha256",
+    "observation_count",
+]
+required_observation_keys = [
+    "origin_id",
+    "origin_timestamp_utc",
+    "reference_key",
+    "product_id",
+    "origin_rule_id",
+    "information_track",
+    "protocol_eligible",
+    "origin_evidence_sha256",
+]
+reference_key_format = "YYYY-Q[1-4]"
+eligible_origin_evidence = "64 lowercase hexadecimal SHA-256"
+ineligible_origin_evidence = "unavailable"
+truth_artifact_bytes = "required and SHA-256 verified for every available truth manifest"
+truth_artifact_format = "beforeit-us-truth-values-tsv.v1"
+truth_artifact_header = "target_id<TAB>truth_layer_id<TAB>origin_id<TAB>reference_key<TAB>value"
+truth_artifact_encoding = "nonempty valid UTF-8, LF line endings only, exactly one final LF, and at least one value row"
+truth_artifact_rows = "exactly five tab-separated fields; target_id and truth_layer_id must equal the manifest reference; value must be a finite canonical decimal number"
+truth_artifact_identity = "rows must be sorted and unique by (origin_id, reference_key); their key set and count must exactly equal the manifest observations"
+cross_manifest_origin_consistency = "each origin_id must bind the same origin_timestamp_utc, protocol_eligible flag, and origin_evidence_sha256 everywhere"
+eligible_origin_injectivity = "distinct eligible origin_id values must have distinct origin_timestamp_utc values and distinct origin_evidence_sha256 values across the complete bundle"
+
+[operator_manifest]
+required_tables = ["operator"]
+required_operator_keys = [
+    "schema_version",
+    "manifest_id",
+    "target_id",
+    "operator_id",
+    "protocol_id",
+    "protocol_sha256",
+    "evidence_class",
+    "operator_artifact_path",
+    "operator_artifact_sha256",
+    "validation_artifact_path",
+    "validation_artifact_sha256",
+    "validation_receipt_path",
+    "validation_receipt_sha256",
+    "signoff_receipt_path",
+    "signoff_receipt_sha256",
+]
+operator_artifact_bytes = "required, nonempty, and SHA-256 verified"
+validation_artifact_bytes = "required, nonempty, and SHA-256 verified"
+validation_receipt_bytes = "required, SHA-256 verified, and parsed"
+signoff_receipt_bytes = "required, SHA-256 verified, and parsed"
+bundle_separation = "operator artifact, validation artifact, validation receipt, and signoff receipt paths and byte hashes must be pairwise distinct"
+
+[validation_receipt]
+decision = "approved"
+validator_role = "independent_validation"
+bindings = [
+    "target_id",
+    "operator_id",
+    "protocol_id",
+    "protocol_sha256",
+    "evidence_class",
+    "operator_artifact_sha256",
+    "validation_artifact_sha256",
+]
+
+[signoff_receipt]
+decision = "approved"
+signatory_role = "research_lead"
+bindings = [
+    "target_id",
+    "operator_id",
+    "protocol_id",
+    "protocol_sha256",
+    "evidence_class",
+    "operator_artifact_sha256",
+    "validation_artifact_sha256",
+    "validation_receipt_sha256",
+]
+separation_of_duties = "signatory_id must differ from validator_id"
+time_order = "signoff issued_at_utc must not predate validation issued_at_utc"
+receipt_uniqueness = "validation and signoff paths, hashes, and IDs must be unique across operators"
+
+[verification_result]
+verification_scope = "local_bundle_integrity_only"
+integrity_verified = "true only when all 24 truth manifests, all 8 operator manifests, and at least 40 common eligible origins satisfy the local byte, structure, binding, and injectivity checks"
+verified = false
+promotion_eligible = false
+promotion_api = "require_verified_evidence remains fail-closed for every bundle accepted by this verifier"
+unresolved_origin_bytes = "origin_evidence_sha256 is an identity binding only; upstream source-release/origin bytes are not resolved here"
+unresolved_truth_semantics = "origin-by-horizon reference-quarter alignment and first_release, near_mature, and mature release semantics are not verified here"
+unresolved_receipt_authentication = "validator and signatory identities are integrity-bound strings, not externally authenticated approvals"
+non_retrospective_evidence = "any complete evidence class other than retrospective_evaluation receives an additional non-promotion blocker"
