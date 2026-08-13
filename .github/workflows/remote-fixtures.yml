@@ -1,0 +1,77 @@
+name: Remote fixture tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  bea-special-accounts:
+    name: BEA 2017 special-account fixture
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Install pinned independent reader
+        run: python -m pip install openpyxl==3.1.5
+      - name: Regenerate from exact official archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          scratch="$(mktemp -d)"
+          archive="$scratch/after-redefinitions.zip"
+          source_dir="$scratch/source"
+          values="$scratch/openpyxl-values.json"
+          output="$scratch/output"
+          receipt="$scratch/generation_openpyxl.json"
+          fixture_dir="scripts/us/accounting/fixtures/bea_after_redefinitions_2017_special_accounts_vintage"
+          curl --fail --silent --show-error --location \
+            'https://apps.bea.gov/industry/release/zip/MAKE-USE-IMPORTS%20(AFTER%20REDEFINITIONS).zip' \
+            --output "$archive"
+          test "$(stat -c%s "$archive")" = "8326144"
+          test "$(sha256sum "$archive" | cut -d' ' -f1)" = \
+            "c93326b3e4ba3bc2024165448800acb89e9b549090b6b4e0c0c0db27c0eea7da"
+          mkdir -p "$source_dir" "$output"
+          unzip -q "$archive" -d "$source_dir"
+          python \
+            scripts/us/accounting/extract_after_redefinitions_2017_special_accounts_values.py \
+            "$source_dir" "$values"
+          BEFOREIT_PREEXTRACTED_VALUES_JSON="$values" node \
+            scripts/us/accounting/generate_after_redefinitions_2017_special_accounts_fixture.mjs \
+            "$source_dir" \
+            "$archive" \
+            "$fixture_dir/source_acquisition_receipt.json" \
+            "$fixture_dir/component_crosswalk.json" \
+            "$output" \
+            "$receipt"
+          cmp "$output/cells.csv" "$fixture_dir/cells.csv"
+          cmp "$output/manifest.toml" "$fixture_dir/manifest.toml"
+          cmp "$receipt" "$fixture_dir/generation_openpyxl.json"
+
+  zenodo:
+    name: Zenodo calibration fixtures
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+      - uses: julia-actions/setup-julia@v3
+        with:
+          version: '1.10'
+      - uses: actions/cache@v5
+        env:
+          cache-name: cache-remote-fixtures
+        with:
+          path: ~/.julia
+          key: ${{ runner.os }}-remote-${{ env.cache-name }}-${{ hashFiles('Project.toml', 'Manifest.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-remote-${{ env.cache-name }}-
+            ${{ runner.os }}-remote-
+      - uses: julia-actions/julia-buildpkg@v1
+      - uses: julia-actions/julia-runtest@v1
+        env:
+          JULIA_NUM_THREADS: 2
+          BEFOREIT_RUN_REMOTE_TESTS: 'true'
