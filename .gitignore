@@ -10,6 +10,19 @@
 *.jld2
 *.tex
 !reports/**/*.tex
+# LaTeX paper (U.S. ABM forecasting). Source, bibliography, figure scripts,
+# vector figures and the compiled PDF are the user-facing deliverable and are
+# versioned; LaTeX build intermediates are not.
+!paper/**/*.tex
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.out
+paper/*.synctex.gz
+paper/*.toc
 reports/us_calibration/*.aux
 reports/us_calibration/*.fdb_latexmk
 reports/us_calibration/*.fls
@@ -50,6 +63,8 @@ Manifest.toml
 
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
+__pycache__/
+*.py[cod]
 
 # IPython
 profile_default/
@@ -136,5 +151,36 @@ data/us/db/
 !data/us/baselines/*.jld2
 !data/us/calibration/
 !data/us/calibration/*.jld2
+!data/us/accounting/
+!data/us/accounting/candidates/
+!data/us/accounting/candidates/*.jld2
+!scripts/us/accounting/fixtures/**/*.csv
+!scripts/us/accounting/fixtures/**/manifest.toml
 !output/us_calibration/*.csv
 !output/us_calibration/*.json
+
+# First-pass ABM vs statistical benchmark diagnostic. The compact score tables,
+# per-origin diagnostics and manifests are versioned; the per-cell forecast files
+# (~3.3 MB each) and the raw per-origin ensemble summaries (~850 KB each) are
+# rebuildable from the driver and stay local.
+!output/us_forecasting/abm_revised_comparison*/manifest.toml
+!output/us_forecasting/abm_revised_comparison*/score_summaries.csv
+!output/us_forecasting/abm_revised_comparison*/relative_scores.csv
+!output/us_forecasting/abm_revised_comparison*/weighted_relative_scores.csv
+!output/us_forecasting/abm_revised_comparison*/monte_carlo_errors.csv
+!output/us_forecasting/abm_revised_comparison*/abm_origin_diagnostics.csv
+!output/us_forecasting/abm_revised_comparison*/failures.csv
+!output/us_forecasting/abm_revised_comparison*/current_outlook.csv
+
+# Scored ABM-vs-benchmark comparison outputs and the commodity-balance
+# reconciliation report. Compact score tables and manifests are versioned so a
+# result can be re-read without re-running the 61-origin ensembles; the ensemble
+# caches themselves are versioned too because they are what makes the scoring
+# and the interval-coverage table reproducible without a re-simulation.
+!output/us_forecasting/abm_v2_comparison/**/*.csv
+!output/us_forecasting/abm_v2_comparison_outlook/*.csv
+!output/us_forecasting/commodity_balance_reconciliation/*.csv
+# `manifest.toml` would otherwise be caught by the `Manifest.toml` rule above on
+# case-insensitive filesystems; these are run seals, not Pkg manifests.
+!output/us_forecasting/abm_v2_comparison/**/manifest.toml
+!output/us_forecasting/abm_v2_comparison_outlook/manifest.toml

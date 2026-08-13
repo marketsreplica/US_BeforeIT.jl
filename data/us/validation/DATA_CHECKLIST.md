@@ -1,16 +1,25 @@
 # U.S. calibration data checklist
 
 Generated: `2026-08-04T00:27:13.046`
+Status correction applied: `2026-08-06`
 Structural reference: `2024Q4`; nowcast: `2026Q1`; economic-outlook truth vintage: `2026-08-04`; model system: `BEA 68 observed commodity sectors`.
 
-Status meanings: **APPROVED** passed the registered source and shape tests; **DUBIOUS** is usable only with the stated bridge or proxy; **REJECTED** failed a test; **MISSING** has no validated construction.
+Overall status is fail-closed across two distinct questions: `source_control_reconciles` records whether the retained source/control arithmetic passes, while `model_mapping_admissible` records whether that evidence supports writing the parameter into model state. **APPROVED** passes the stated question; **DUBIOUS** requires the stated sensitivity or unresolved bridge; **REJECTED** is scientifically or mechanically ineligible; **MISSING** has no validated construction. The next generated report will emit both dimensions for every parameter.
+
+The two legacy mappings corrected after this snapshot are:
+
+| Parameter | Overall status | `source_control_reconciles` | `model_mapping_admissible` | Reason |
+|---|---|---|---|---|
+| imports | REJECTED | APPROVED | REJECTED | The signed source rows and total reconcile, but flooring negative valuation adjustments and proportionally rescaling positive rows is not a selected model-import boundary. |
+| purchasers_to_basic_price | REJECTED | APPROVED | REJECTED | The code-keyed `T013/T016` arithmetic is reproducible, but the quotient does not identify the recipient-cell margin/tax allocation. |
 
 ## Parameter coverage
 
 | Status | Parameters |
 |---|---:|
-| APPROVED | 40 |
+| APPROVED | 38 |
 | DUBIOUS | 17 |
+| REJECTED | 2 |
 
 | Parameter | Status | Frequency | Unit | Shape | Source(s) | Test note |
 |---|---|---|---|---:|---|---|
@@ -48,8 +57,8 @@ Status meanings: **APPROVED** passed the registered source and shape tests; **DU
 | household_consumption | APPROVED | A | millions USD | 68×1 | BEA InputOutput 259 | Table 259 F010. |
 | fixed_capitalformation | APPROVED | A | millions USD | 68×1 | BEA InputOutput 259 | Table 259 private fixed-investment uses F02E+F02N+F02R+F02S, excluding inventories. |
 | exports | APPROVED | A | millions USD | 68×1 | BEA InputOutput 259 | Table 259 F040. |
-| imports | APPROVED | A | millions USD | 68×1 | BEA InputOutput 262 | Table 262 commodity MCIF+MADJ. Negative CIF/FOB adjustment entries are floored at zero and positive entries are proportionally rescaled to the T017 structural control net of Other/Used commodities. |
-| purchasers_to_basic_price | APPROVED | A | basic-price supply / purchasers-price supply | 68×1 | BEA InputOutput 262 | T013/T016 by commodity; model retail sector 4A0 aggregates supply rows 441, 445, 452, and 4A0 before division. |
+| imports | REJECTED | A | millions USD | 68×1 | BEA InputOutput 262 | `source_control_reconciles=APPROVED`; `model_mapping_admissible=REJECTED`. The signed source rows and total reconcile, but the legacy floor-and-rescale vector is not a selected model-import boundary. |
+| purchasers_to_basic_price | REJECTED | A | basic-price supply / purchasers-price supply | 68×1 | BEA InputOutput 262 | `source_control_reconciles=APPROVED`; `model_mapping_admissible=REJECTED`. The code-keyed T013/T016 arithmetic is reproducible, but it does not identify a use-cell valuation allocation. |
 | compensation_employees | APPROVED | A | millions USD | 68×1 | BEA InputOutput 259 | Table 259 V001. |
 | operating_surplus | APPROVED | A | millions USD | 68×1 | BEA InputOutput 259 | Table 259 V003. |
 | government_consumption | APPROVED | A | millions USD | 68×1 | BEA InputOutput 259 | Table 259 federal and state/local consumption plus gross-investment uses F06*/F07*/F10*, matching broad NIPA government demand. |

@@ -1,6 +1,7 @@
 # U.S. calibration test log
 
 Generated: `2026-08-04T00:27:13.126`
+Status correction applied: `2026-08-06`
 
 ## Executed stages
 
@@ -76,6 +77,15 @@ Generated: `2026-08-04T00:27:13.126`
 
 ## Parameter tests
 
+The `Status` column below is the fail-closed overall result. For the two
+corrected legacy mappings, the retained source arithmetic passes but model
+admissibility does not:
+
+| Parameter | `source_control_reconciles` | `model_mapping_admissible` |
+|---|---|---|
+| imports | APPROVED | REJECTED |
+| purchasers_to_basic_price | APPROVED | REJECTED |
+
 | Parameter | Check | Status | Shape | Detail |
 |---|---|---|---:|---|
 | intermediate_consumption | source_mapping | DUBIOUS | 68×68×1 | 68×68 column-controlled model bridge; approved raw source retained. |
@@ -91,8 +101,8 @@ Generated: `2026-08-04T00:27:13.126`
 | taxes_products_capitalformation | source_mapping | DUBIOUS | 1 | Table 262 commodity tax valuation bridge allocated to fixed-investment uses. |
 | taxes_products_government | source_mapping | DUBIOUS | 1 | Table 262 commodity tax valuation bridge allocated to government-consumption uses. |
 | gross_capitalformation_dwellings | source_mapping | DUBIOUS | 1 | Table 259 F02R plus the Table 262 valuation-bridge product tax. |
-| imports | source_mapping | APPROVED | 68×1 | Table 262 commodity MCIF+MADJ. Negative CIF/FOB adjustment entries are floored at zero and positive entries are proportionally rescaled to the T017 structural control net of Other/Used commodities. |
-| purchasers_to_basic_price | valuation_bridge | APPROVED | 68×1 | T013/T016 by commodity; model retail sector 4A0 aggregates supply rows 441, 445, 452, and 4A0 before division. |
+| imports | source_mapping | REJECTED | 68×1 | `source_control_reconciles=APPROVED`; `model_mapping_admissible=REJECTED`. The signed source rows and total reconcile, but the legacy floor-and-rescale vector is not a selected model-import boundary. |
+| purchasers_to_basic_price | valuation_bridge | REJECTED | 68×1 | `source_control_reconciles=APPROVED`; `model_mapping_admissible=REJECTED`. The code-keyed T013/T016 arithmetic is reproducible, but it does not identify a use-cell valuation allocation. |
 | social_benefits | line_mapping | APPROVED | 1 | Government social benefits to persons. |
 | mixed_income | line_mapping | APPROVED | 1 | Proprietors' income. |
 | capital_taxes | line_mapping | APPROVED | 1 | Federal and state/local estate and gift taxes. |
