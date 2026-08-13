@@ -14,11 +14,22 @@ using Runic
     include("utils/estimations.jl")
     include("utils/modify.jl")
     include("utils/calibration_valuation_bridge.jl")
-    include("utils/zenodo_calibration.jl")
+    if lowercase(get(ENV, "BEFOREIT_RUN_REMOTE_TESTS", "false")) ==
+            "true"
+        include("utils/zenodo_calibration.jl")
+    else
+        @testset "Remote Zenodo fixtures (disabled)" begin
+            @test true
+        end
+    end
     include("utils/correlation_utils.jl")
     include("utils/analysis_utils.jl")
+    include("utils/forecast_inference.jl")
     include("utils/austria_baselines.jl")
     include("utils/us_baselines.jl")
+
+    # U.S. ABM: builds and steps the model from both committed 2024 artifacts
+    include("us_abm_smoke.jl")
 
     # search_and_matching
     include("markets/search_and_matching.jl")
