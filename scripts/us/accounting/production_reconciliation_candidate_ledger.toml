@@ -14,7 +14,7 @@ target_currency = "USD"
 target_unit = "MILLIONS_CURRENT_DOLLARS"
 target_price_basis = "PRODUCERS_PRICES"
 target_axis = "BEA_AFTER_REDEFINITIONS_68_CORE_PLUS_EXPLICIT_USED_OTHER_CLOSURE"
-problem_scope_hash = "scope1:9b41bd41ba5ba7f421aac0a3244cd58bf663fef36dcd507628af4d009cb69088"
+problem_scope_hash = "scope1:c5431dd4b2691fa29e57c35cbe8dc2b5e5a325fc2b637602df83d5399d142903"
 
 source_fixture_sha256 = "6c0c44ca0ac3f70c5d51d6b3a58fca2a02283e9e6f50a254ae663d12f187f0ac"
 source_manifest_sha256 = "ff555043829e5d12ba787ba9ad7d58ef4f0d2ee306740d6847bdfec800935030"
@@ -23,7 +23,7 @@ source_metadata_sha256 = "8be9fbef6e2c18a7388cd61bd14312159fc3984d4dbc2c60158e97
 model_mapping_sha256 = "546b3dc15cbb194210ce564a44626b146551b161ca0ce5ffb90a8a5261b4553c"
 sector_mapping_sha256 = "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
 producer_adapter_contract_sha256 = "de524df56ad47fb1f26534019386b27f1fc45ebc927bda5f39c3ad812259cf58"
-inventory_evidence_contract_sha256 = "a82f6dd0be400f323d9630c33efa567a985521734f3cac72d763ee3db9d9d3ea"
+inventory_evidence_contract_sha256 = "4714723961175ae7b6acbd9504ce6a1fb8931ab925b64064fe785e932b9a8767"
 used_other_evidence_contract_sha256 = "326dc50276692c5623e23fe63085cb82742435b6c6b3d0a04676451426d9d128"
 
 canonical_key_policy = "Stable raw keys use typed length-prefixed source-member, year, projection, row/column type and code, unit, and price-basis fields. They exclude release hashes, values, positions, descriptions, and local view identifiers. Aggregated keys hash the normalized sorted parent-key functional."
@@ -198,7 +198,7 @@ role = "TYPED_UPSTREAM_ADAPTER_CANDIDATE"
 [[artifact]]
 artifact_id = "inventory_evidence_contract"
 path = "scripts/us/accounting/inventory_transition_evidence_ledger.toml"
-sha256 = "a82f6dd0be400f323d9630c33efa567a985521734f3cac72d763ee3db9d9d3ea"
+sha256 = "4714723961175ae7b6acbd9504ce6a1fb8931ab925b64064fe785e932b9a8767"
 role = "F030_SEMANTIC_VIEW_CONTRACT"
 
 [[artifact]]

@@ -53,7 +53,7 @@ const TRANSITION_SCHEMA =
 const REPORT_SCHEMA =
     "beforeit-us-inventory-transition-evidence-report.v1"
 const APPROVED_CONTRACT_SHA256 =
-    "a82f6dd0be400f323d9630c33efa567a985521734f3cac72d763ee3db9d9d3ea"
+    "4714723961175ae7b6acbd9504ce6a1fb8931ab925b64064fe785e932b9a8767"
 const EMPTY_SHA256 =
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 const DEFAULT_CONTRACT_PATH =

@@ -151,7 +151,7 @@ role = "INDEPENDENT_SOURCE_AXIS_VALUATION_CHALLENGER"
 [[artifact]]
 artifact_id = "inventory_transition_evidence"
 path = "scripts/us/accounting/inventory_transition_evidence_ledger.toml"
-sha256 = "a82f6dd0be400f323d9630c33efa567a985521734f3cac72d763ee3db9d9d3ea"
+sha256 = "4714723961175ae7b6acbd9504ce6a1fb8931ab925b64064fe785e932b9a8767"
 role = "FLOW_STOCK_AND_STAGE_NAMESPACE_EVIDENCE"
 
 [[artifact]]
@@ -187,13 +187,13 @@ role = "CURRENT_MAPPING_APPROVAL_STATE"
 [[artifact]]
 artifact_id = "production_reconciliation_candidate_ledger"
 path = "scripts/us/accounting/production_reconciliation_candidate_ledger.toml"
-sha256 = "12bc6cd1d514d9a2224cbfe709ebb3b1d1944bc6fdcf804f209690d0c69313a0"
+sha256 = "79a029665e45f5b981b6333e278d4ee35486980f39037de4e921e066695292c5"
 role = "AUTHENTICATED_PRODUCTION_SCHEMA_LINEAGE_AND_QUARANTINE_GATE"
 
 [[artifact]]
 artifact_id = "production_reconciliation_admission_evidence"
 path = "scripts/us/accounting/production_reconciliation_admission_evidence.toml"
-sha256 = "35ca8e8b0cbb1ff6d50e510ae1a49a11f4f87fe0c0495aebe3e89012e410d67b"
+sha256 = "3b6eb1157d60e68bdb4d4058e0cd99ef1f4f0ad30905e9b0d5e830a7787d9b1f"
 role = "AUTHENTICATED_ADMISSION_OVERLAY_CONTRACT"
 
 [[admission_blocker_mapping]]
@@ -599,7 +599,7 @@ probe_id = "ledger_problem_scope_hash"
 artifact_id = "production_reconciliation_candidate_ledger"
 field_path = ["problem_scope_hash"]
 expected_type = "STRING"
-expected_string = "scope1:9b41bd41ba5ba7f421aac0a3244cd58bf663fef36dcd507628af4d009cb69088"
+expected_string = "scope1:c5431dd4b2691fa29e57c35cbe8dc2b5e5a325fc2b637602df83d5399d142903"
 
 [[probe]]
 probe_id = "ledger_cell_schema"
@@ -860,21 +860,21 @@ probe_id = "admission_candidate_problem_scope_hash"
 artifact_id = "production_reconciliation_admission_evidence"
 field_path = ["candidate_problem_scope_hash"]
 expected_type = "STRING"
-expected_string = "scope1:9b41bd41ba5ba7f421aac0a3244cd58bf663fef36dcd507628af4d009cb69088"
+expected_string = "scope1:c5431dd4b2691fa29e57c35cbe8dc2b5e5a325fc2b637602df83d5399d142903"
 
 [[probe]]
 probe_id = "admission_candidate_problem_hash"
 artifact_id = "production_reconciliation_admission_evidence"
 field_path = ["candidate_problem_hash"]
 expected_type = "STRING"
-expected_string = "problem1:07607869be848a0016e5de1ea861b6350593369b92f973eac8b417648803a3d3"
+expected_string = "problem1:f8469e00492d34ffb4f7f1a1eefc7fa715f558b983cb8206862721a5c22ab1b2"
 
 [[probe]]
 probe_id = "admission_candidate_ledger_contract_sha256"
 artifact_id = "production_reconciliation_admission_evidence"
 field_path = ["candidate_ledger_contract_sha256"]
 expected_type = "STRING"
-expected_string = "12bc6cd1d514d9a2224cbfe709ebb3b1d1944bc6fdcf804f209690d0c69313a0"
+expected_string = "79a029665e45f5b981b6333e278d4ee35486980f39037de4e921e066695292c5"
 
 [[probe]]
 probe_id = "admission_solver_admissible"

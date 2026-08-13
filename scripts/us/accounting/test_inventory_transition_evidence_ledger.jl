@@ -19,7 +19,7 @@ using .USInventoryTransitionEvidenceLedger
 const INVENTORY_TRANSITION_CONTRACT_PATH =
     joinpath(@__DIR__, "inventory_transition_evidence_ledger.toml")
 const INVENTORY_TRANSITION_CONTRACT_SHA256 =
-    "a82f6dd0be400f323d9630c33efa567a985521734f3cac72d763ee3db9d9d3ea"
+    "4714723961175ae7b6acbd9504ce6a1fb8931ab925b64064fe785e932b9a8767"
 const F030_SOURCE_ID =
     "bea_after_redefinitions_producer_price_2024_f030"
 

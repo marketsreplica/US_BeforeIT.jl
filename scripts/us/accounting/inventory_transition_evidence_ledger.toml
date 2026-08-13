@@ -203,7 +203,7 @@ role = "PINNED_READER"
 [[artifact]]
 artifact_id = "reader_model_core"
 path = "scripts/us/accounting/USAfterRedefinitionsModelCore.jl"
-sha256 = "3f560a9d711a2d52c9da0faf8c5aa8269f572405e3ec2d0ad6d8b974618f5ef9"
+sha256 = "b461f207d2b5995943b82ab0514be1a09229dc83e3e899bc689a1578b49a5b29"
 role = "PINNED_READER"
 
 [[artifact]]
