@@ -125,25 +125,6 @@ JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
 The contract permanently forbids class-H inputs, truth/forecast/score output,
 inference, origin admission, promotion, and production registration.
 
-The separately versioned base-model origin firewall closes the v1
-whole-object time-axis gap without constructing a model:
-
-```sh
-JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
-  julia --startup-file=no --depwarn=error --check-bounds=yes \
-  --project=scripts/us \
-  scripts/us/forecasting/diagnostics/test_revised_data_abm_origin_firewall_v2.jl
-```
-
-It validates the installed 66-parameter/34-initial-condition envelope, strips
-unused full-panel controls and diagnostics, and hashes only the exact
-60-parameter, 17-static-field, five-history base-constructor projection
-through 2026Q1. Post-origin and valid excluded-field changes cannot alter the
-qualified hash or 32-path seed plan. Period labels and input lineage remain
-unauthenticated, and the contract still forbids model construction, stepping,
-forecasting, scoring, origin admission, and promotion. See
-`ABM_ORIGIN_FIREWALL_V2.md`.
-
 ## New York Fed notice
 
 © 2026 Federal Reserve Bank of New York. Content from the New York Fed subject

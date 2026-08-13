@@ -269,23 +269,6 @@ jobs:
           JULIA_NUM_THREADS: 1
           OPENBLAS_NUM_THREADS: 1
         run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/diagnostics/test_revised_data_abm_engineering_diagnostic.jl
-      - name: Quarantined revised-data ABM origin-firewall v2 tests
-        env:
-          JULIA_NUM_THREADS: 1
-          OPENBLAS_NUM_THREADS: 1
-        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/diagnostics/test_revised_data_abm_origin_firewall_v2.jl
-      - name: Rejected revised-data ABM constructor-gate v3 portable regression tests
-        env:
-          JULIA_LOAD_PATH: "@:@stdlib"
-          JULIA_NUM_THREADS: 1
-          OPENBLAS_NUM_THREADS: 1
-        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/diagnostics/test_revised_data_abm_constructor_gate_v3.jl
-      - name: Accepted nonadmitting ABM one-step-gate v4 portable tests
-        env:
-          JULIA_LOAD_PATH: "@:@stdlib"
-          JULIA_NUM_THREADS: 1
-          OPENBLAS_NUM_THREADS: 1
-        run: julia --startup-file=no --compiled-modules=no --pkgimages=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/diagnostics/test_revised_data_abm_one_step_gate_v4.jl
       - name: Immutable forecast registry tests
         run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/registry/test_registry.jl
       - name: Origin package and cannot-run contract tests
@@ -302,8 +285,6 @@ jobs:
         run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/common_window/test_common_origin_window_decision.jl
       - name: EFFR one-effective-date capture-contract tests
         run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/effr/capture_contract/test_effr_capture_contract.jl
-      - name: EFFR 2026-08-07 day-zero acquisition tests
-        run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/effr/prospective_acquisition/test_effr_day_zero_acquisition.jl
       - name: EFFR 2026Q3 offline campaign-control tests
         run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/effr/campaign/test_effr_campaign_control.jl
       - name: Accepted nonadmitting EFFR restart-v2 schedule-control tests

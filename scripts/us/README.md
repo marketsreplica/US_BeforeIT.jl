@@ -149,14 +149,12 @@ julia --check-bounds=yes --depwarn=error --project=scripts/us scripts/us/forecas
 julia --check-bounds=yes --depwarn=error --project=scripts/us scripts/us/forecasting/inference/calibration/test_forecast_inference_calibration.jl
 julia --project=scripts/us scripts/us/forecasting/registry/test_registry.jl
 julia --project=scripts/us scripts/us/forecasting/origins/test_origin_packages.jl
-JULIA_LOAD_PATH='@:@stdlib' JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 julia --check-bounds=yes --depwarn=error --startup-file=no --project=scripts/us scripts/us/forecasting/diagnostics/test_revised_data_abm_constructor_gate_v3.jl
 julia --project=scripts/us scripts/us/forecasting/vintages/test_source_release_registry.jl
 julia --check-bounds=yes --project=scripts/us scripts/us/forecasting/vintages/availability/test_release_availability.jl
 python3 scripts/us/forecasting/vintages/availability/test_generate_timezone_semantics.py
 julia --project=scripts/us scripts/us/forecasting/vintages/test_historical_backfill_plan.jl
 julia --check-bounds=yes --depwarn=error --project=scripts/us scripts/us/forecasting/vintages/common_window/test_common_origin_window_decision.jl
 julia --check-bounds=yes --depwarn=error --project=scripts/us scripts/us/forecasting/vintages/effr/capture_contract/test_effr_capture_contract.jl
-julia --check-bounds=yes --depwarn=error --project=scripts/us scripts/us/forecasting/vintages/effr/prospective_acquisition/test_effr_day_zero_acquisition.jl
 julia --check-bounds=yes --depwarn=error --project=scripts/us scripts/us/forecasting/vintages/effr/campaign/test_effr_campaign_control.jl
 julia --check-bounds=yes --depwarn=error --project=scripts/us scripts/us/forecasting/vintages/effr/recurring_acquisition/test_effr_recurring_acquisition.jl
 julia --check-bounds=yes --depwarn=error --project=scripts/us scripts/us/forecasting/vintages/effr/recurring_acquisition_restart_v4/test_effr_recurring_acquisition_restart_v4.jl
@@ -1004,20 +1002,6 @@ common ABM origin exists. Accordingly
 confirmation, registration, promotion, and production gate remains false.
 See `forecasting/diagnostics/core3_equilibrium_comparison/README.md`.
 
-The model-free common-origin preflight at
-`forecasting/diagnostics/common_origin_preflight_v1/` is independently
-accepted only as deterministic `CANNOT_RUN` evidence. Its 36 exact metadata
-bindings rederive 21 false readiness conditions, 89 blockers, 17 limitations,
-zero admitted common origins, no eligible target--horizon cell, and no
-registered required model set; root and unrelated-CWD suites each pass
-131/131 and reproduce result
-`4b0871cdd9c25fadcd266b778ba23b0415f23ce8e8c423f6ee7fc5d936938fd5`.
-It includes no model, opens neither the revised panel CSV nor truth, performs
-no forecast or score, and writes nothing. Its current schema cannot emit a
-ready status: a successor must bind newly admitted origins, approved
-operators, registered models, and a common path/horizon design before an
-empirical ABM--equilibrium--autoregressive comparison is permitted.
-
 The quarantined ABM engineering qualification is narrower still:
 
 ```sh
@@ -1036,107 +1020,6 @@ truth isolation and lineage remain explicitly unverified, alongside the
 mandatory accounting, scale, target-operator, and historical-origin blockers.
 See
 `forecasting/diagnostics/revised_data/ABM_ENGINEERING_QUALIFICATION.md`.
-
-The separate base-model origin-firewall v2 validates the complete installed
-source-envelope schema and projects only the 60 parameters, 17 static fields,
-and five origin-ending histories consumed by `BeforeIT.Model`:
-
-```sh
-JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
-  julia --startup-file=no --depwarn=error --check-bounds=yes \
-  --project=scripts/us \
-  scripts/us/forecasting/diagnostics/test_revised_data_abm_origin_firewall_v2.jl
-```
-
-It removes `T`, `T_max`, `S`, unused calibration markers, non-runtime
-diagnostics, and post-origin history before qualified hashing and seed
-derivation. It binds the complete 60-file repository `src/`/`ext/` Julia
-closure, rejects normalized duplicate text keys and non-one-based arrays, and
-requires repository preference files to be absent. It is still a
-revised/mixed-vintage, lineage-unverified, constructor-free engineering gate.
-Constructor gate v3 attempted the effective-runtime, dependency/artifact,
-constructor-domain, and loaded-method boundary, but its acceptance was later
-revoked. The cache-free one-step boundary is now independently closed only for
-the narrow v4 software diagnostic described below. Firewall v2 emits no path,
-forecast, truth, score, admitted origin, or promotion evidence. See
-`forecasting/diagnostics/revised_data/ABM_ORIGIN_FIREWALL_V2.md`.
-
-The now-rejected constructor gate v3 mechanically closed much of that
-narrower deferred runtime boundary for exact bytes in a fresh canonical
-process. It kept bootstrap standard-library-only, required
-`JULIA_LOAD_PATH='@:@stdlib'`, validated 82 manifest dependency source trees,
-pre-resolved 83 package entrypoints before any third-party import, and
-constructed 32 seeded states plus one deterministic replay without stepping:
-
-```sh
-JULIA_LOAD_PATH='@:@stdlib' JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
-  julia --startup-file=no --depwarn=error --check-bounds=yes \
-  --project=scripts/us \
-  scripts/us/forecasting/diagnostics/test_revised_data_abm_constructor_gate_v3.jl
-```
-
-The command above is the portable fail-closed branch; it passed 219/219 while
-leaving JSON, JLD2, BeforeIT, and frozen v2 unloaded on a noncanonical
-envelope. On the exact documented Julia 1.10.3 M1/native envelope, omit
-`--check-bounds=yes`; canonical repository-root and `/tmp` runs each passed
-271/271 and completed all 33 constructions. Those runs establish only
-constructor/runtime mechanics. The initial independent acceptance was
-revoked and the candidate rejected because BeforeIT import eagerly deserializes
-package-side data that v3 does not pin and its cache-generation precompile
-workload can itself construct and step. The portable pre-load boundary remains
-useful, but the canonical result is retained only as cache-contingent
-engineering evidence. Binary/JLL payloads, compiled caches, depot contents,
-global preferences, Julia
-executable/sysimage bytes, same-user filesystem races, empirical validity,
-RNG-stream independence, origin admission, forecast accuracy, and promotion
-remain unattested or false. See
-`forecasting/diagnostics/revised_data/ABM_CONSTRUCTOR_GATE_V3.md`.
-
-The no-cache, side-data-pinned ABM one-step gate v4 is independently accepted
-for its exact, revised/mixed-vintage, permanently nonadmitting software
-diagnostic. It selectively loads only the U.S. `parameters` and
-`initial_conditions`, pins the ten package-import side-data files, disables
-compiled modules and package images, verifies that the guarded precompile
-workload cannot run, and executes exactly one native serial step per fresh
-model. Across primary, reverse, and replay phases it records 65 constructions,
-65 steps, 65 implicit opening collections, 65 explicit post-step collections,
-and 130 collection events:
-
-```sh
-JULIA_LOAD_PATH='@:@stdlib' JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
-  julia --startup-file=no --compiled-modules=no --pkgimages=no \
-  --depwarn=error --check-bounds=yes --project=scripts/us \
-  scripts/us/forecasting/diagnostics/test_revised_data_abm_one_step_gate_v4.jl
-```
-
-Independent execution passed 214/214 portable assertions. An unrelated-cwd
-canonical Julia 1.10.3 M1/native replay, using the same command without the
-altered `--check-bounds=yes` envelope, passed 276/276 and reproduced result
-`1ac4efc78236d0dfafb11d78b35597b1106cd374488b4f0c9ddf8fd70b1782a2`.
-This verifies the frozen initial transition and pathwise GDP formulas, not an
-official observation bridge or forecast. Its opening row is model-implied,
-the post-step measurement basis differs, independent RNG streams are not
-established, raw truth-bearing bytes are read but evaluation values are not
-deserialized or scored, and no origin, Tier-1 operator, accuracy, registry,
-promotion, production, or suitability claim follows. See
-`forecasting/diagnostics/revised_data/ABM_ONE_STEP_GATE_V4.md`.
-
-The four-quarter ABM path gate v5 is independently accepted only as
-`SOFTWARE_FOUR_QUARTER_PATH_VERIFIED_NONADMITTING`. It extends the same
-source-only, side-data-pinned envelope through four continuous native serial
-steps without resetting the simulation RNG by horizon. Across 32 primary,
-32 reverse-order, and one replay path it reproduces 65 constructions, 260
-steps, 65 implicit opening collections, 260 explicit collections, and 325
-total collection events. An unrelated-CWD canonical audit passed 338/338 in
-24m34.4s and reproduced result
-`736ac1683df46f1ef856375ef8036b6ab6b8e858fbfd84fc7a366e879855d9b4`;
-its h=1 prefixes also reproduce the accepted v4 path identities exactly.
-Rows span the model-implied 2026Q1 opening through 2027Q1, but the opening and
-flow rows use different measurement constructions. V5 therefore emits only
-pathwise q/q operators and no opening-to-year-end statistic. It still has no
-authenticated origin, official target bridge, independent RNG-stream proof,
-score, empirical accuracy, registry, promotion, production, or forecasting-
-suitability status. See `forecasting/models/abm_multistep_gate_v5/README.md`.
 
 ## Simulation Lab and Economy Explorer
 

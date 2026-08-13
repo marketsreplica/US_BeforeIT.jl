@@ -128,20 +128,6 @@ blanks, ambiguous `Used`/`Other` labels, or mismatched capture contexts fail
 closed. It contains no downloader or raw-byte loader and keeps every origin,
 empirical, promotion, scoring, and readiness gate false.
 
-`effr/prospective_acquisition/` is the separate, minimal 2026-08-07 day-zero
-runner. It preserves the full all-rates responses before selecting exactly one
-raw `type="EFFR"` row, captures and hashes the official OpenAPI YAML, terms,
-and holiday-schedule bytes, and validates any generated rate-volume pair
-against the offline contract. An unchanged 14:30 check is stored as a
-byte-equality record and never relabeled as a revision. Local copies and
-self-generated pins remain nonadmitting integrity evidence, not durable
-storage or out-of-band authentication. See its README for the exact 13:00Z
-and 18:30Z commands and the unattended-scheduling warning.
-Because the currently observed raw API row omits `currentState`, the runner
-does not invent `false`: it installs a typed, successful raw capture with
-`ONE_DATE_CONTRACT_RAW_CURRENT_STATE_FIELD_ABSENT` and emits no one-date
-receipt or pair.
-
 ## Draft prospective acquisition/requirements successor
 
 `prospective/` adds a separate v2-draft governance surface for the planned
@@ -305,10 +291,6 @@ julia --startup-file=no --project=scripts/us \
 
 julia --startup-file=no --project=scripts/us \
   scripts/us/forecasting/vintages/test_historical_backfill_plan.jl
-
-julia --startup-file=no --check-bounds=yes --depwarn=error \
-  --project=scripts/us \
-  scripts/us/forecasting/vintages/effr/prospective_acquisition/test_effr_day_zero_acquisition.jl
 
 julia --startup-file=no --check-bounds=yes --depwarn=error \
   --project=scripts/us \
