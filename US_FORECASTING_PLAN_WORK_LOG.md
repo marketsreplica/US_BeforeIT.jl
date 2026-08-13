@@ -19256,3 +19256,28 @@ Seven matplotlib vector figures regenerate from committed CSVs via `paper/figure
 two TikZ diagrams draw the pipeline and the defect mechanism. Compiles with 0 errors, 0 overfull
 boxes, 0 undefined references. Note: the RAS iteration count is 623 per the committed
 reconciliation report, not the 543 quoted in `US_ABM_FORECAST_REPORT.md` §7.1.
+
+## 2026-08-13 — release preparation for `main`
+
+Prepared the campaign for release. **Workflow safety:** deleted the two scheduled prospective-capture
+workflows (`us-bls-202607-rehearsal.yml`, `us-prospective-capture-deadline.yml`) before they could
+reach the default branch, and dropped the weekly cron from `remote-fixtures.yml`, leaving it
+`workflow_dispatch` only. **Pruning:** removed the four permanently-nonadmitting ABM gate modules
+(origin-firewall v2, constructor gate v3, one-step gate v4, multi-step gate v5), the EFFR day-zero
+acquisition tree, and the two sealed auditors that existed only to hash-pin gate v5 — 30 files, plus
+their CI steps and README hookups. `USOriginPackages.jl` was kept: it is sha256-pinned by three
+non-pruned sealed policies, so removing it would have cascaded through the prospective-capture web.
+
+**Runic:** the package suite's repository-wide format check had failed since before this campaign; the
+seven remaining offenders are now formatted (trailing commas in split index expressions, an explicit
+`return`, a parenthesised `end - 1`, `0.10`/`0.90` quantile literals → `0.1`/`0.9`). Reformatting
+`USRevisedDataABMComparison.jl` invalidated `comparison_code_sha256` in every result manifest, so all
+seven output directories were re-scored from their committed ensemble caches: **every score table is
+byte-identical**, `monte_carlo_errors.csv` changes only in its `model_family` label (the stale
+`beforeit_abm_us_v1` on v2 rows is fixed and now derives from the run variant), and
+`current_outlook.csv` is set-identical under the writer's deterministic row order.
+
+**CI now runs the ABM:** `test/us_abm_smoke.jl` builds the model from both committed 2024 artifacts at
+scale 1e-5, steps four quarters, asserts finite positive real/nominal GDP and deflator, pins
+`expectation_rw_drift` default-off/marker-on, and asserts the reconciled opening commodity balance
+clears (1.0e-13) while the shipped one does not (0.706). Package suite: 838 pass, 0 fail.

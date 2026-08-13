@@ -1,6 +1,55 @@
 # U.S. BeforeIT calibration: data, acquisition, and storage plan
 
 Last investigated and link-checked: **2026-08-06**.
+Status refreshed: **2026-08-13**.
+
+## Current status (2026-08-13)
+
+The plan below is the original specification. What is actually built and
+shipped in this repository today:
+
+- **Phases 0–3 are complete.** Both baselines exist
+  (`data/us/baselines/US_2024Q4_structural.jld2`,
+  `US_2026Q1_nowcast.jld2`), and the U.S. hermetic validation job in
+  `.github/workflows/test.yml` runs the pipeline, accounting and forecasting
+  contract suites on every push and pull request to `main`. The package suite
+  additionally builds and steps the ABM itself (`test/us_abm_smoke.jl`).
+- **The calibration firewall is in place.** Artifact metadata carries a
+  `calibration_firewall` marker separating raw structural parameters from
+  forecast-fitted ones, enforced by
+  [`scripts/us/migrate_calibration_firewall.jl`](scripts/us/migrate_calibration_firewall.jl);
+  a baseline with neither a legacy pre-override block nor a valid
+  raw-parameter marker is rejected, and forecast-error-fitted raw parameters
+  are refused outright.
+- **A second, reconciled calibration artifact ships alongside the raw one.**
+  `data/us/calibration/US_2024_calibration_object_reconciled.jld2`
+  (sha256 `57e23f4aea54aa82319f81f1aabb4a11843890b0d20c5037e0162a4c6e514760`)
+  is built by
+  [`scripts/us/calibration/reconcile_commodity_balance.jl`](scripts/us/calibration/reconcile_commodity_balance.jl).
+  It applies a biproportional (RAS) adjustment to the use side only, holding
+  measured BEA industry output and T262 imports as row controls
+  (`use_explicit_trade` stays `true`), and clears the opening commodity
+  balance to `max |uses/supply - 1| = 1.0e-13`. The one accounting choice is
+  explicit: the four final-demand aggregates are scaled by
+  `lambda = 0.983460` to anchor the expenditure aggregates on the production
+  account. It also sets `use_commodity_balance_inventory = false` and carries
+  the `expectation_rw_drift` marker, which switches growth expectations from a
+  mis-specified log-level AR(1) to a random walk with drift. That flag is
+  **default-off**, so Austria and Italy remain bit-identical to upstream.
+- **Phase 4 is partially done, as a diagnostic only.** The revised-data
+  comparison in
+  [`US_ABM_FORECAST_REPORT.md`](US_ABM_FORECAST_REPORT.md) scores the model
+  against ten statistical benchmarks over 61 origins. Every number there
+  carries `real_time = false`, `origin_admissible = false`,
+  `promotion_eligible = false` and `mixed_vintage_structural_year = 2024`: it
+  is a revised-data, mixed-vintage diagnostic, **not** the archived-vintage
+  backtest this section specifies, which remains open.
+- **Two measured open defects limit what any of it means.** Capital never
+  accumulates (`K24/K0 = 1.0000`), so the model is validated at `h <= 12`
+  only; and unemployment collapses to about 1 % once goods rationing stops,
+  which is why `unemployment_rate` is excluded from every weighted score.
+  Item 9 of the unresolved-decisions list below is where the capacity-
+  expansion term belongs.
 
 This document is the implementation specification for building a United States
 calibration of BeforeIT. It is based on the actual fields read by
@@ -497,7 +546,8 @@ data/us/
     calibration_manifest.json
     validation_report.json
   calibration/
-    US_2024_calibration_object.jld2
+    US_2024_calibration_object.jld2            # raw, firewalled
+    US_2024_calibration_object_reconciled.jld2 # commodity-balance reconciled
   baselines/
     US_2024Q4_structural.jld2
     US_2026Q1_nowcast.jld2

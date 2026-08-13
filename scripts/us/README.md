@@ -1021,6 +1021,66 @@ mandatory accounting, scale, target-operator, and historical-origin blockers.
 See
 `forecasting/diagnostics/revised_data/ABM_ENGINEERING_QUALIFICATION.md`.
 
+## ABM stage-2 comparison (current entry points)
+
+The stage-2 comparison scores the agent-based model against the ten
+statistical benchmarks on the revised-data panel, in two variants: `v1`, the
+model as shipped, and `v2`, the model initialised from the commodity-balance
+reconciled artifact with random-walk-with-drift growth expectations. Results
+and their labels are in [`../../US_ABM_FORECAST_REPORT.md`](../../US_ABM_FORECAST_REPORT.md)
+and in `forecasting/diagnostics/abm_revised_comparison/RESULTS_V2.md`.
+
+Build the reconciled calibration artifact (~40 s):
+
+```sh
+julia --project=scripts/us \
+  scripts/us/calibration/reconcile_commodity_balance.jl \
+  --mode=final_demand_scaled --expectations=rw_drift
+```
+
+Run an ensemble. The runner appends to `abm_ensemble_summaries.csv` after every
+origin, so an interrupted run resumes and a completed run re-scores from cache
+in seconds instead of re-simulating:
+
+```sh
+JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
+  julia --startup-file=no --project=scripts/us \
+  scripts/us/forecasting/diagnostics/abm_revised_comparison/run_revised_data_abm_comparison.jl \
+  <output-directory> [paths] [variant] [max-origins] \
+  [--calibration=<path>] [--also-score=<dir>]
+```
+
+`variant` is one of `headline`, `burnin`, `burninN`, `outlook`, `headline_v2`
+or `outlook_v2`. The `_v2` variants default to the reconciled artifact;
+`--calibration` overrides that. `--also-score` takes a completed run's
+directory and scores its ABM columns on the same common cells, which is how
+the v1-versus-v2 table is produced in a single pass.
+
+Committed outputs, one directory per run:
+
+| directory | variant | contents |
+|---|---|---|
+| `output/us_forecasting/abm_revised_comparison/` | `headline` | v1 first-pass scores plus `RESULTS.md` |
+| `output/us_forecasting/abm_revised_comparison_burnin{,4}/` | `burnin`, `burnin4` | opening-row burn-in sensitivity |
+| `output/us_forecasting/abm_revised_comparison_outlook/` | `outlook` | v1 unscored current outlook |
+| `output/us_forecasting/abm_v2_comparison/v1_headline/` | `headline` | v1 column of the joint v1/v2 run |
+| `output/us_forecasting/abm_v2_comparison/v2_headline/` | `headline_v2` | joint v1/v2 scores and interval coverage |
+| `output/us_forecasting/abm_v2_comparison_outlook/` | `outlook_v2` | v2 unscored current outlook |
+| `output/us_forecasting/commodity_balance_reconciliation/` | — | RAS report and per-commodity table |
+
+Every `manifest.toml` seals the comparison module's own sha256 in
+`comparison_code_sha256`, so editing that module invalidates the seals and the
+affected runs must be re-scored.
+
+Render the tables:
+
+```sh
+julia --project=scripts/us \
+  scripts/us/forecasting/diagnostics/abm_revised_comparison/report_v2_comparison.jl \
+  output/us_forecasting/abm_v2_comparison/v2_headline \
+  output/us_forecasting/abm_v2_comparison_outlook
+```
+
 ## Simulation Lab and Economy Explorer
 
 The web application loads the structural and nowcast artifacts directly
