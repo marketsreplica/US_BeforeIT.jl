@@ -12,7 +12,7 @@ model_numeric_tolerance = 0.000001
 domain_tolerance = 0.0000000001
 
 candidate_manifest_path = "data/us/validation/OPENING_MACRO_CANDIDATES.toml"
-candidate_manifest_sha256 = "8f4db3fe2702d504958aeaa6ebe6008beaef9b3e1a8d8aaa669413d0497bfb14"
+candidate_manifest_sha256 = "57ee2b8df6614b87fc253824a9109c488bdef1e7eb5a4277b19351931c94dbc7"
 candidate_builder_path = "scripts/us/accounting/build_opening_accounting_candidate.jl"
 candidate_builder_sha256 = "f808750861cf7e6f7de117fc84390c514da7380339385e2c394afc69f1d43814"
 candidate_execution_envelope_dependency_path = "scripts/us/accounting/USJuliaExecutionEnvelope.jl"

@@ -1,5 +1,5 @@
 build_contract_path = "scripts/us/accounting/opening_macro_candidates.toml"
-build_contract_sha256 = "508e7db1bdc0182f9cf9e8f3bee15a66249fc437aead875931a1bc4c9e3a5d02"
+build_contract_sha256 = "4adb32acabb207cc4d0ec5ac391daaaaceef8bdc2b44316e2ac31d93f0f1c466"
 builder_path = "scripts/us/accounting/build_opening_accounting_candidate.jl"
 builder_sha256 = "f808750861cf7e6f7de117fc84390c514da7380339385e2c394afc69f1d43814"
 byte_reproducibility_scope = "same_frozen_local_execution_envelope_only"
@@ -28,7 +28,7 @@ t10105_reader_sha256 = "bed5f489b7096bc94f613a8c36449d386e81bf8fb238aad090a02551
 
 [[candidate]]
 artifact_path = "data/us/accounting/candidates/US_2024Q4_opening_accounting_candidate_v1.jld2"
-artifact_sha256 = "8f42bb7761b31d67defaad9797fa01bc2a39eaf663a2b7c04f7163e13fbdb3d2"
+artifact_sha256 = "18aa6678c2ddb75e5d85ddf264958bc8f1452706f095c4d07682dbcce888000e"
 candidate_id = "structural_2024Q4_opening_accounting_v1"
 classification = "REVISED_CURRENT_VINTAGE_DIAGNOSTIC"
 diagnostic_seed = 20261003
@@ -43,7 +43,7 @@ origin_admissible = false
 origin_period = "2024-12-31"
 overall_accounting_promotion = "FAIL"
 promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
-semantic_sha256 = "a8bc2d7b08b1e2f8ba9ea1c5b90e3f6b7c9d271d72a713b189de16e076ecd7f0"
+semantic_sha256 = "0b6d86b176f7ea4886f5376a9559f9fd3584648ff07597a7e67642d335abca14"
 source_expenditure_residual = 0.25
 structural_supply_use = "FAIL"
 unreconciled_commodity_gap_annual_sum = -99596.0625219554
@@ -79,7 +79,7 @@ unreconciled_commodity_gap_annual_sum = -99596.0625219554
     nominal_inventory_investment = 4447.25
 [[candidate]]
 artifact_path = "data/us/accounting/candidates/US_2026Q1_opening_accounting_candidate_v1.jld2"
-artifact_sha256 = "38f2eb27690a58f49d235376880148e99f026dbb68bf0b5a72ad4f34fe4f4933"
+artifact_sha256 = "e5d59e2073c3c70d8cbcebf64367845e7aa389b8426a2cbf6022475281342d65"
 candidate_id = "nowcast_2026Q1_opening_accounting_v1"
 classification = "REVISED_CURRENT_VINTAGE_DIAGNOSTIC"
 diagnostic_seed = 20261004
@@ -94,7 +94,7 @@ origin_admissible = false
 origin_period = "2026-03-31"
 overall_accounting_promotion = "FAIL"
 promotion_status = "RESEARCH_ONLY_NOT_PROMOTED"
-semantic_sha256 = "97572eb705e562daf861ac67059cde2bb4a543af83f556b2c930d8aae7ba0c92"
+semantic_sha256 = "a4356afcded07c0db4fb8ffc6a158f4e000547ae7de9cb1dfe5e9770069e9478"
 source_expenditure_residual = -0.5
 structural_supply_use = "FAIL"
 unreconciled_commodity_gap_annual_sum = -99596.0625219554

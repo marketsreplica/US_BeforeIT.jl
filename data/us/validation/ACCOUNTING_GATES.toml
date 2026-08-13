@@ -38,9 +38,9 @@ origin_admissible = false
 
 [candidate_evidence]
 manifest = "data/us/validation/OPENING_MACRO_CANDIDATES.toml"
-manifest_sha256 = "8f4db3fe2702d504958aeaa6ebe6008beaef9b3e1a8d8aaa669413d0497bfb14"
+manifest_sha256 = "c681d0db489afe44824921aa66e4322a603b07ae27a5755e7e72f4be127e9d71"
 build_contract = "scripts/us/accounting/opening_macro_candidates.toml"
-build_contract_sha256 = "508e7db1bdc0182f9cf9e8f3bee15a66249fc437aead875931a1bc4c9e3a5d02"
+build_contract_sha256 = "4adb32acabb207cc4d0ec5ac391daaaaceef8bdc2b44316e2ac31d93f0f1c466"
 builder = "scripts/us/accounting/build_opening_accounting_candidate.jl"
 builder_sha256 = "f808750861cf7e6f7de117fc84390c514da7380339385e2c394afc69f1d43814"
 execution_envelope_module = "scripts/us/accounting/USJuliaExecutionEnvelope.jl"
