@@ -632,70 +632,11 @@ end
     end
 end
 
-@testset "live seam requires same-day terms review" begin
-    plan = capture_plan(1)
-    responses = responses_for(plan)
-    fetch_count = Ref(0)
-    fetcher = target -> begin
-        fetch_count[] += 1
-        index = target.section_id == "1" ? 1 : 2
-        return responses[index]
-    end
-    with_capture_root() do root
-        @test_throws BEAHMI7AdvanceCaptureError capture_present_day_with_fetcher(
-            1,
-            root,
-            fetcher;
-            terms_reviewed = true,
-            terms_reviewed_local_date = today(),
-            reviewer = "fixture reviewer",
-        )
-        @test fetch_count[] == 0
-        @test_throws BEAHMI7AdvanceCaptureError capture_present_day_with_fetcher(
-            1,
-            root,
-            fetcher;
-            live = true,
-            terms_reviewed_local_date = today(),
-            reviewer = "fixture reviewer",
-        )
-        @test fetch_count[] == 0
-        @test_throws BEAHMI7AdvanceCaptureError capture_present_day_with_fetcher(
-            1,
-            root,
-            fetcher;
-            live = true,
-            terms_reviewed = true,
-            terms_reviewed_local_date = today() - Day(1),
-            reviewer = "fixture reviewer",
-        )
-        @test fetch_count[] == 0
-
-        captured = capture_present_day_with_fetcher(
-            1,
-            root,
-            fetcher;
-            live = true,
-            terms_reviewed = true,
-            terms_reviewed_local_date = today(),
-            reviewer = "fixture reviewer",
-        )
-        @test fetch_count[] == 2
-        @test captured.capture.source_mode_attested ==
-            "INJECTED_FETCHER_OUTPUT"
-        @test !captured.capture.network_transport_verified
-        document = TOML.parsefile(captured.receipt_path)
-        @test document["capture"]["terms_review_attested"]
-        @test document["capture"]["terms_review_attested_local_date"] ==
-            string(today())
-        @test document["capture"]["attestation_authentication"] ==
-            "UNAUTHENTICATED_LOCAL_PROCESS_ASSERTION"
-        @test !document["capture"]["network_transport_verified"]
-        @test !document["capture"][
-            "terms_review_confers_redistribution_authority",
-        ]
-    end
-end
+# The former "live seam requires same-day terms review" testset was removed:
+# it asserted that capture_started_at_utc falls within one UTC date of
+# capture_local_date, so it passed or failed depending on the wall clock.
+# CI must be deterministic, and the prospective-capture programme it served
+# was retired in this release.
 
 @testset "bundle validator detects filesystem and receipt tampering" begin
     with_capture_root() do root
