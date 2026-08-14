@@ -1,5 +1,12 @@
 # BLS July 2026 capture rehearsal runbook
 
+> **Retired.** The July 2026 window has passed and the prospective-capture
+> programme was retired in this release. The scheduled workflow, the collector
+> runner (`capture_bls_202607_rehearsal.jl`) and its wall-clock-dependent test
+> were removed; the commands below no longer resolve. This document is kept as
+> the historical record of the intended procedure. `USBLS202607RehearsalCapture.jl`
+> is retained because the receipt contract hashes it.
+
 This is a one-shot, nonadmitting rehearsal for the July 2026 Employment
 Situation release. It cannot create or promote a prospective origin.
 

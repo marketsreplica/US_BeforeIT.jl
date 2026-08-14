@@ -347,5 +347,3 @@ jobs:
         run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/evidence/test_evidence_verifier.jl
       - name: BLS July 2026 rehearsal receipt tests
         run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/evidence/test_bls_202607_rehearsal_receipt.jl
-      - name: BLS July 2026 rehearsal collector tests
-        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/evidence/test_bls_202607_rehearsal_capture.jl
