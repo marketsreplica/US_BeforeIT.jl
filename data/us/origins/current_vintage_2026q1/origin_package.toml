@@ -1,7 +1,7 @@
 [artifact]
 schema_version = "beforeit-us-origin-package.v1"
 canonicalization = "sorted_typed_v1_excluding_artifact_content_sha256"
-content_sha256 = "dbadd9008743f5745cd7152cc5b90fe17c26b5b25f34b1cee91f60b21c72df27"
+content_sha256 = "966af1b956f39f570a427a484a8cac8254cb6d5647f54d4aaaab91eb53c9a82f"
 
 [origin]
 origin_id = "origin.2026q1.current-vintage-audit"
@@ -12,7 +12,7 @@ created_at_utc = "2026-08-05T19:42:02Z"
 protocol_sha256 = "88519e5b04936f528396cf5243ff270844d0d38651fd84fc3b1c76fef997b584"
 environment_sha256 = "c2e596cf8452c5b890bb0ef66c05bc72a57fa25ab6f8fe790f8db4600b035263"
 macro_control_sha256 = "ed75c563d10509c6e13d2fb34bd97757ceecdc89f1ed355017cccbec53539bee"
-mapping_registry_sha256 = "a5afb57a8551b06c6583aa81a1f79f41575a334eca95960167d9b2a9e6f1d665"
+mapping_registry_sha256 = "febe49f6f71425f170c1fd3ed6f95aea8f921751018f5457218e355f55e61047"
 model_variant_sha256 = "1fbdf6fcbeedc07fb9971b7e39c18852f74ace8fb07055b4f1ad2f43dcb29728"
 parameter_registry_sha256 = "7b24a4548247e7e0122681d75a3e2f9eb1a302e06c989c418b41bc49e2edcdda"
 information_track = "revised_mixed_vintage_diagnostic"
@@ -39,8 +39,8 @@ artifact_sha256 = "unavailable"
 as_of_timestamp_utc = "unavailable"
 reason = "The current 2024 structure is revised/current-vintage. Its source observation row passes, but latent-state, inventory-stock, and full supply/make-valuation reconciliation remain failed and are not forecast-admissible."
 evidence = [
-    "Source-aware structural candidate SHA-256 8f42bb7761b31d67defaad9797fa01bc2a39eaf663a2b7c04f7163e13fbdb3d2.",
-    "data/us/validation/ACCOUNTING_GATES.toml SHA-256 adac4e2cb6280673d8b5686dcafbd779e739c4a0a909bfc398b5d0e605dc6dd6: observation PASS, latent/inventory/supply/full accounting FAIL.",
+    "Source-aware structural candidate SHA-256 18aa6678c2ddb75e5d85ddf264958bc8f1452706f095c4d07682dbcce888000e.",
+    "data/us/validation/ACCOUNTING_GATES.toml SHA-256 8884f6946ea76de65d3f99ce92bacd0bf5b7aa0a5f4717b8a7b8c12439018d7a: observation PASS, latent/inventory/supply/full accounting FAIL.",
 ]
 
 [[blocks]]
@@ -134,7 +134,7 @@ reason = "The BEA-anchored opening observation identity passes at source roundin
 evidence = [
     "2024Q4 observed residual +0.25 million dollars; model-implied latent residual -137674.939893 million dollars.",
     "2026Q1 observed residual -0.50 million dollars; model-implied latent residual -147094.197894 million dollars.",
-    "data/us/validation/ACCOUNTING_GATES.toml SHA-256 adac4e2cb6280673d8b5686dcafbd779e739c4a0a909bfc398b5d0e605dc6dd6 retains full_accounting_status=FAIL.",
+    "data/us/validation/ACCOUNTING_GATES.toml SHA-256 8884f6946ea76de65d3f99ce92bacd0bf5b7aa0a5f4717b8a7b8c12439018d7a retains full_accounting_status=FAIL.",
 ]
 
 [[gates]]
@@ -158,7 +158,7 @@ gate_id = "semantic_mapping"
 status = "fail"
 reason = "None of the seven opening NIPA-to-model mappings is approved and the inventory flow-to-stock mapping is explicitly rejected."
 evidence = [
-    "scripts/us/forecasting/origins/opening_macro_mapping.toml content SHA-256 a5afb57a8551b06c6583aa81a1f79f41575a334eca95960167d9b2a9e6f1d665 remains OPEN; observation-only evidence confers no mapping approval.",
+    "scripts/us/forecasting/origins/opening_macro_mapping.toml content SHA-256 febe49f6f71425f170c1fd3ed6f95aea8f921751018f5457218e355f55e61047 remains OPEN; observation-only evidence confers no mapping approval.",
 ]
 
 [[gates]]

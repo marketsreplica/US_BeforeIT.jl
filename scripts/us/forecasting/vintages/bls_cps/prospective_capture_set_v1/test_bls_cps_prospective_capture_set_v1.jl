@@ -8,7 +8,7 @@ include(MODULE_PATH)
 using .USBLSCPSProspectiveCaptureSetV1
 
 const Candidate = USBLSCPSProspectiveCaptureSetV1
-const EXPECTED_MODULE_SHA256 = "549b0001a41051d587d46ed2979345cb5a7897b9b6fe2d54d06f9e75bf0b0caa"
+const EXPECTED_MODULE_SHA256 = "d85ce3c07d27f3f698611b2510744b802d43e9e5a85f59dc01ffcd60a404ad98"
 const MISSING_TEXT = "Data unavailable due to the 2025 lapse in appropriations."
 
 bytes(text) = Vector{UInt8}(codeunits(text))
@@ -197,7 +197,7 @@ end
 @testset "frozen profile, pins, and request plan" begin
     profile = validate_profile()
     @test profile["artifact"]["content_sha256"] == "68e8d7a1a366c9409e4a29f83dfa90864fbcb0024fcbd91aa53cc16dcbd04e8b"
-    @test bytes2hex(sha256(read(PROFILE_PATH))) == "d6bad6ffc6279cacee09ae3fcdec688df1b460515e12ffc2f17d918b40ae7081"
+    @test bytes2hex(sha256(read(PROFILE_PATH))) == "426c312ba290a11ae117c595e16936c189a64fc4aaa3e0a5273b13aecb92d33a"
     @test bytes2hex(sha256(read(MODULE_PATH))) == EXPECTED_MODULE_SHA256
     @test length(profile["source_pins"]) == 11
     @test [entry["series_id"] for entry in profile["profiles"]] == ["LNU02000000", "LNU05000000", "LNU01000000", "LNU00000000", "LNU03000000", "LNS14000000"]

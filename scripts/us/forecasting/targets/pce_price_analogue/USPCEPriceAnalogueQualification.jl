@@ -19,7 +19,7 @@ const REPOSITORY_ROOT =
     normpath(joinpath(@__DIR__, "..", "..", "..", "..", ".."))
 const PROTOCOL_PATH = joinpath(@__DIR__, "analogue_qualification.toml")
 const EXPECTED_PROTOCOL_BYTE_SHA256 =
-    "a52413dc95042ccc6f8c2952ab5c3996e15ac6a96fb4c9ab1a26ecf8e56f1552"
+    "47232dc099addfb9ffe4e7a8cb4d3ae533f0fea38ec79cb3b1100b842de7ec4e"
 const PROTOCOL_SCHEMA =
     "beforeit-household-consumption-implicit-price-analogue-qualification.v1"
 const PROTOCOL_CANONICALIZATION =
@@ -34,7 +34,7 @@ const MEASUREMENT_REGIME = "SYNTHETIC_POST_STEP_HOMOGENEOUS"
 const TIER1_INVENTORY_CONTENT_SHA256 =
     "bdbbeb48a39c7fdd03972626cf7f1e421ba7c5dd254f5537a40dda0eb4ae1fcb"
 const OPENING_MAPPING_CONTENT_SHA256 =
-    "a5afb57a8551b06c6583aa81a1f79f41575a334eca95960167d9b2a9e6f1d665"
+    "febe49f6f71425f170c1fd3ed6f95aea8f921751018f5457218e355f55e61047"
 
 const EXPECTED_BLOCKERS = (
     "BEA_FISHER_CHAIN_EQUIVALENCE_UNVALIDATED",
@@ -106,7 +106,7 @@ const EXPECTED_SOURCE_PINS = (
     (
         path = "scripts/us/forecasting/origins/opening_macro_mapping.toml",
         sha256 =
-            "55402fd1620cb5094c267bb8d34145cefdc0c6946c84ef5876dc83cbab838850",
+            "3bd3af8f9eca135d3f9246999b45f58f902d6debd2b16df09deac9a21653eacd",
         role = "unresolved_opening_pce_mapping",
     ),
 )

@@ -9,9 +9,9 @@ using .USClassificationMapsProfileV1
 
 const Candidate = USClassificationMapsProfileV1
 const EXPECTED_MODULE_SHA256 =
-    "f5890e959dc80c8fdda1507d73dba3658d4fa5720daaa3adc7cfb8e64732cfb1"
+    "4248d329618cb1397e983f0df60d6e9047e5dbf6d4ec4786487cabc63fe5c2a0"
 const EXPECTED_PROFILE_PHYSICAL_SHA256 =
-    "abef7ace9ecc5799a0f09c060a3ee6371e45330b2d6dbac21a09c3b6f97598f8"
+    "9bc1934a66adc19d981b89adf81a2d5f3e8c61ba268c6267fcc968eead2423e2"
 const EXPECTED_PROFILE_SEMANTIC_SHA256 =
     "1ea4517532226a4d7026fd5e2061f32a2866e057a73e1064351ffb55ac33c992"
 

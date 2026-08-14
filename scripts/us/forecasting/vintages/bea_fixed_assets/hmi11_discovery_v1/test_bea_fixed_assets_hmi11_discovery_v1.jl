@@ -205,7 +205,7 @@ end
     @test Discovery.profile_content_sha256(profile) ==
         profile["artifact"]["content_sha256"]
     @test Discovery.sha256_hex(read(PROFILE_PATH)) ==
-        "656717ea525efd341004004f3f9be9d22ffccd7d36e5e84e90aabac9cad9d44c"
+        "9f03947315bdcb8ba602b664dd0015e03921d5a7867f02c66883d01590db5af4"
     @test profile["hmi11"]["main_name"] == "Fixed Asset"
     @test profile["hmi11"]["folder_pattern"] ==
         "FA\\dataYear\\vintage_NewReleaseDate"
@@ -242,7 +242,7 @@ end
     @test source_bindings["legacy_v2_contract"]["semantic_sha256"] ==
         "5d1e7f34eea0470877c7bed096d8b2fb26590f95bd06febb90813faf6063708a"
     @test source_bindings["common_origin_v3_module"]["physical_sha256"] ==
-        "9654eb61b92b2655391b00952ed4cbee0e9fa58224339f1fb0440c51570e719e"
+        "b82c6ab5c2830b8f23ec92971ed3930790f60fd3d09e0beaf4c98a66938cdf57"
     @test source_bindings["common_origin_v3_policy"]["semantic_sha256"] ==
         "a69392029c2221ab5f490311c02d09a667e71982c486a1612100c1d6dcd96d13"
     @test source_bindings["current_inventory"]["physical_sha256"] ==

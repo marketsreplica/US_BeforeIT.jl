@@ -661,10 +661,10 @@ end
     @test package_result.information_track ==
         "revised_mixed_vintage_diagnostic"
     @test package_result.sha256 ==
-        "dbadd9008743f5745cd7152cc5b90fe17c26b5b25f34b1cee91f60b21c72df27"
+        "966af1b956f39f570a427a484a8cac8254cb6d5647f54d4aaaab91eb53c9a82f"
     @test mapping_gate(mapping).status == "OPEN"
     @test mapping_registry_sha256(mapping) ==
-        "a5afb57a8551b06c6583aa81a1f79f41575a334eca95960167d9b2a9e6f1d665"
+        "febe49f6f71425f170c1fd3ed6f95aea8f921751018f5457218e355f55e61047"
     @test all(
         row -> any(
             evidence -> occursin("no mapping approval", evidence),
@@ -684,7 +684,7 @@ end
     )
     @test record_result.failure_count == 21
     @test record_result.sha256 ==
-        "2cd145bbbe50556dfd1d10c86aa70feea4725ca590e618c3b4dd5e009662ee65"
+        "d9b91e566deeee91dbff0057bb3d0f39bb809325750a0155439d2ebede1c93d8"
     @test vintage_audit["protocol_admissible_historical_origins"] == 0
     @test !vintage_audit["strict_no_download_pilot_runnable"]
     @test vintage_audit["tier1_coverage"]["required_target_count"] == 8

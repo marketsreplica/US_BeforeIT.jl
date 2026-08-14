@@ -1,7 +1,7 @@
 [artifact]
 schema_version = "beforeit-household-consumption-implicit-price-analogue-qualification.v1"
 canonicalization = "sorted_typed_v1_excluding_artifact_content_sha256"
-content_sha256 = "5cc1f2a17e454ac454ab208c1712608051bd613b3be579f8e7ca2ef714d20379"
+content_sha256 = "a46757c3c73c946d2d6012f91a78f595439c56e2b20065634c140dbe6d762541"
 
 [contract]
 economic_object = "beforeit-household-consumption-implicit-price-analogue.v1"
@@ -98,7 +98,7 @@ role = "direct_total_and_core_pce_target_contracts_and_false_approval_state"
 
 [[source_files]]
 path = "scripts/us/forecasting/origins/opening_macro_mapping.toml"
-sha256 = "55402fd1620cb5094c267bb8d34145cefdc0c6946c84ef5876dc83cbab838850"
+sha256 = "3bd3af8f9eca135d3f9246999b45f58f902d6debd2b16df09deac9a21653eacd"
 role = "unresolved_opening_pce_mapping"
 
 [[official_sources]]

@@ -28,7 +28,7 @@ workbooks and one repository-local TOML mapping. The first profile projects
 two existing shared-parent objects instead of inventing a seventh official
 classification workbook. Its parent bindings are the accepted
 after-redefinitions profile
-`4f8ce3d53d11964c1268ee7ecfe18701b90b46ff73816b4a9af246e36db753a5`
+`57c71a1d9a1a8f4ecad7fbc4dbc284590792aa3b2966388bf138397dc0e10d11`
 and member hashes:
 
 - summary producer-use:
@@ -211,10 +211,10 @@ files. The frozen candidate identities are:
 
 | Artifact | SHA-256 |
 |---|---|
-| `USClassificationMapsProfileV1.jl` | `f5890e959dc80c8fdda1507d73dba3658d4fa5720daaa3adc7cfb8e64732cfb1` |
-| `classification_maps_profile_v1.toml` physical bytes | `abef7ace9ecc5799a0f09c060a3ee6371e45330b2d6dbac21a09c3b6f97598f8` |
+| `USClassificationMapsProfileV1.jl` | `4248d329618cb1397e983f0df60d6e9047e5dbf6d4ec4786487cabc63fe5c2a0` |
+| `classification_maps_profile_v1.toml` physical bytes | `9bc1934a66adc19d981b89adf81a2d5f3e8c61ba268c6267fcc968eead2423e2` |
 | profile canonical semantic identity | `1ea4517532226a4d7026fd5e2061f32a2866e057a73e1064351ffb55ac33c992` |
-| `test_classification_maps_profile_v1.jl` | `4237ec1aba9dfd89d0d63c1995c3c20aa557bed3f42e275bf1eeb20764763dff` |
+| `test_classification_maps_profile_v1.jl` | `5abc564866bb420c2cff851a68090cebb1d83388f99783a6cb45a96441c11ab2` |
 
 These are local fixity assertions for an authored candidate. Independent
 audit is still required before even the narrow offline-mechanics candidate is

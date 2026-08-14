@@ -174,10 +174,10 @@ These physical and semantic hashes are local, unauthenticated fixity
 assertions; they do not lift any blocker or establish provenance.
 
 The accepted v3 module/policy/parent/leaf/custody/tests/README SHA-256 values
-remain respectively `9654eb61b92b2655391b00952ed4cbee0e9fa58224339f1fb0440c51570e719e`,
-`0deff5e3e6c950b5682bba96fcefa1fa2304bbbadae6227a940376dc7699bd3e`,
+remain respectively `b82c6ab5c2830b8f23ec92971ed3930790f60fd3d09e0beaf4c98a66938cdf57`,
+`1cdd7834e76fb414761c41470319dfeded97f5dd5e9f0cf420893717d5f2d8ce`,
 `cf4060554a6c53de079d728c2a2ac179309e9a7b888edc3bfa0a931ced5442a2`,
 `6bcd6f26efba67bb92053dabdc20c08f6b36d9c3569a92a5e980c5117265a4cd`,
 `94eb2a1bdbd1346b4918d63bdf1befcf506a8b6d39c6eeaa1b50e87eb2c79598`,
-`e3ee90a943e26fd6ce5db37644035c4dff3edfdb1f364921ea1353e782cded53`,
-and `a93226a2fed8bf25d611472483b46a15dfa8c695853026439cd5e9dd0323b631`.
+`d8a5d47ee1acaf319d5761c07fd0f7cc9d84f165f5367c6eeb4cbd074c76ba7a`,
+and `991039f5e73a9aa5b3795915f9939247ca04757c9029784d7bdfc93e35b0b07d`.

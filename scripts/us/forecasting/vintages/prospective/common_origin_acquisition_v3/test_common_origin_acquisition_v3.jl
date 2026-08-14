@@ -6,9 +6,9 @@ const TEST_DIRECTORY = @__DIR__
 const MODULE_PATH = joinpath(TEST_DIRECTORY, "USCommonOriginAcquisitionV3.jl")
 const POLICY_PATH = joinpath(TEST_DIRECTORY, "common_origin_acquisition_v3_policy.toml")
 const EXPECTED_MODULE_SHA256 =
-    "9654eb61b92b2655391b00952ed4cbee0e9fa58224339f1fb0440c51570e719e"
+    "b82c6ab5c2830b8f23ec92971ed3930790f60fd3d09e0beaf4c98a66938cdf57"
 const EXPECTED_POLICY_SHA256 =
-    "0deff5e3e6c950b5682bba96fcefa1fa2304bbbadae6227a940376dc7699bd3e"
+    "1cdd7834e76fb414761c41470319dfeded97f5dd5e9f0cf420893717d5f2d8ce"
 const FORBIDDEN_MODULES = Set(
     ["BeforeIT", "CSV", "DataFrames", "Downloads", "HTTP", "JLD2", "JSON", "Pkg"],
 )

@@ -217,7 +217,7 @@ kind = "source"
 [[source_bindings]]
 binding_id = "origin_kernel_tests"
 path = "scripts/us/forecasting/origins/test_origin_packages.jl"
-sha256 = "d548b944d71fbd49f272ac2b91c47e247347df5e5e7af69ffe2f617b4cefcaa4"
+sha256 = "81cbeab3af1c3a33bb0ec733abb4394a6f0fd8f945b406525f4a5a3244e317eb"
 kind = "source"
 
 [[source_bindings]]

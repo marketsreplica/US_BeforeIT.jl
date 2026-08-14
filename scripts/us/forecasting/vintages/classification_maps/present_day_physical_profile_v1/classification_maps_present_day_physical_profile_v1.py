@@ -42,7 +42,7 @@ PROFILE_PATH = MODULE_PATH.with_name(
     "classification_maps_present_day_physical_profile_v1.json"
 )
 EXPECTED_PROFILE_PHYSICAL_SHA256 = (
-    "57eefdcb3421a5f63ec8214b6c55feb0700fda4018340ea584863e55f89398fc"
+    "812acfa1a4d225bf80c9e6a6ddccbe6fe985eb6701600dfbe32a1abbd52ea786"
 )
 
 MAX_RAW_BYTES = 16 * 1024 * 1024
@@ -523,10 +523,10 @@ def validate_profile_document(document: Mapping[str, Any]) -> None:
         fail("profile gates are not exactly hard false")
     pins = document["logical_profile_pins"]
     expected_logical = (
-        ("module_sha256", "f5890e959dc80c8fdda1507d73dba3658d4fa5720daaa3adc7cfb8e64732cfb1"),
-        ("profile_physical_sha256", "abef7ace9ecc5799a0f09c060a3ee6371e45330b2d6dbac21a09c3b6f97598f8"),
+        ("module_sha256", "4248d329618cb1397e983f0df60d6e9047e5dbf6d4ec4786487cabc63fe5c2a0"),
+        ("profile_physical_sha256", "9bc1934a66adc19d981b89adf81a2d5f3e8c61ba268c6267fcc968eead2423e2"),
         ("profile_semantic_sha256", "1ea4517532226a4d7026fd5e2061f32a2866e057a73e1064351ffb55ac33c992"),
-        ("tests_sha256", "4237ec1aba9dfd89d0d63c1995c3c20aa557bed3f42e275bf1eeb20764763dff"),
+        ("tests_sha256", "5abc564866bb420c2cff851a68090cebb1d83388f99783a6cb45a96441c11ab2"),
     )
     if type(pins) is not dict or tuple(pins.items()) != expected_logical:
         fail("accepted logical-profile pins drifted")
@@ -2410,17 +2410,17 @@ def _verify_repository_bindings(profile: Mapping[str, Any]) -> dict[str, Any]:
         (
             "logical_module",
             logical_dir / "USClassificationMapsProfileV1.jl",
-            "f5890e959dc80c8fdda1507d73dba3658d4fa5720daaa3adc7cfb8e64732cfb1",
+            "4248d329618cb1397e983f0df60d6e9047e5dbf6d4ec4786487cabc63fe5c2a0",
         ),
         (
             "logical_profile",
             logical_dir / "classification_maps_profile_v1.toml",
-            "abef7ace9ecc5799a0f09c060a3ee6371e45330b2d6dbac21a09c3b6f97598f8",
+            "9bc1934a66adc19d981b89adf81a2d5f3e8c61ba268c6267fcc968eead2423e2",
         ),
         (
             "logical_tests",
             logical_dir / "test_classification_maps_profile_v1.jl",
-            "4237ec1aba9dfd89d0d63c1995c3c20aa557bed3f42e275bf1eeb20764763dff",
+            "5abc564866bb420c2cff851a68090cebb1d83388f99783a6cb45a96441c11ab2",
         ),
         (
             "local_bea71_bridge",

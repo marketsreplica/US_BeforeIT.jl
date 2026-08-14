@@ -113,9 +113,9 @@ opens a socket or leaves its temporary root.
 
 Frozen implementation identities for this version are:
 
-- adapter module: `6384181f9cd2afdc9693fd0e01f313cd52004efe41fdafec6f18916ee27d3dc6`
+- adapter module: `11be31c23033593c140d056093b82752ffe151d185ec88f27261e4e476dc4018`
 - adapter normalized module: `9bd6b1e249d010ceecd8a9deac5b17b7541ce58838642b3decbb8ef688babe31`
-- profile contract: `4f8ce3d53d11964c1268ee7ecfe18701b90b46ff73816b4a9af246e36db753a5`
+- profile contract: `57c71a1d9a1a8f4ecad7fbc4dbc284590792aa3b2966388bf138397dc0e10d11`
 - derived capture policy: `ef97acfcbd31fca34e2466e9199c06aa26f43dc67f80fda04386186db1075212`
 - tests: `d334a3bfdaf68ea6940a52edb4ed4428fb27c0dc9887d3703082ccf2434c9024`
 - reusable envelope: `cb8fffd626c019fa6ce65a32664a46d1ecd87d3337f72ea378900d2d4f05b165`
