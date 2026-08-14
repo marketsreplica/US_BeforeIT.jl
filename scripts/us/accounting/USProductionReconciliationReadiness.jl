@@ -54,7 +54,7 @@ const STATUS_SCHEMA =
 const REPORT_MANIFEST_SCHEMA =
     "beforeit-us-production-reconciliation-readiness-manifest.v2"
 const APPROVED_CONTRACT_SHA256 =
-    "87e98c2c66b054835484d3515ddcb41e204dd5fe99fad2bcc21fef5ee3c572cd"
+    "a0d1c9bfb6ede2360e371e72d97d7e6c48157af392c99b05870750a6667b82ee"
 const DEFAULT_CONTRACT_PATH =
     joinpath(@__DIR__, "production_reconciliation_readiness.toml")
 const DEFAULT_REPO_ROOT = normpath(joinpath(@__DIR__, "..", "..", ".."))

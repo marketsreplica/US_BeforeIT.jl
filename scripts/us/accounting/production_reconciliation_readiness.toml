@@ -175,7 +175,7 @@ role = "SYNTHETIC_METHOD_QUALIFICATION_ONLY"
 [[artifact]]
 artifact_id = "opening_accounting_gates"
 path = "data/us/validation/ACCOUNTING_GATES.toml"
-sha256 = "8b311569563968f56accdf8f34af69693353380366e4b47aed8f0fefc8689d57"
+sha256 = "8884f6946ea76de65d3f99ce92bacd0bf5b7aa0a5f4717b8a7b8c12439018d7a"
 role = "CURRENT_FAIL_CLOSED_ACCOUNTING_GATE_STATE"
 
 [[artifact]]
