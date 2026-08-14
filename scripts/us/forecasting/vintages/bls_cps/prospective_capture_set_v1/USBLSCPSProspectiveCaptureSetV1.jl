@@ -20,7 +20,7 @@ const CANONICALIZATION = "sorted-typed-length-aware-excluding-artifact-content-s
 const EXPECTED_CONTRACT_ID =
     "bls-cps-final-structural-pre-origin-offline-candidate.audit-repaired.v2"
 const EXPECTED_PROFILE_PHYSICAL_SHA256 =
-    "d6bad6ffc6279cacee09ae3fcdec688df1b460515e12ffc2f17d918b40ae7081"
+    "426c312ba290a11ae117c595e16936c189a64fc4aaa3e0a5273b13aecb92d33a"
 const EXPECTED_PROFILE_SEMANTIC_SHA256 =
     "68e8d7a1a366c9409e4a29f83dfa90864fbcb0024fcbd91aa53cc16dcbd04e8b"
 const HASH_PATTERN = r"^[0-9a-f]{64}$"
@@ -92,8 +92,8 @@ const EXPECTED_LIMITS = Dict{String, Any}(
 const EXPECTED_SOURCE_PINS = [
     ("prospective_v2_module", "scripts/us/forecasting/vintages/prospective/USProspectiveAcquisitionContractV2.jl", "435df6c4b4de879c0f24d3f9bb9f7504fc6172ae34e94db8cb6ba84282d6e379"),
     ("prospective_v2_contract", "scripts/us/forecasting/vintages/prospective/prospective_2026q3_contract_v2.toml", "b24ff0c40172d2a23991fbe75c2fe42c6ba6c6c1f5fd46d079ac6d51429bf98f"),
-    ("common_origin_v3_module", "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/USCommonOriginAcquisitionV3.jl", "9654eb61b92b2655391b00952ed4cbee0e9fa58224339f1fb0440c51570e719e"),
-    ("common_origin_v3_policy", "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/common_origin_acquisition_v3_policy.toml", "0deff5e3e6c950b5682bba96fcefa1fa2304bbbadae6227a940376dc7699bd3e"),
+    ("common_origin_v3_module", "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/USCommonOriginAcquisitionV3.jl", "b82c6ab5c2830b8f23ec92971ed3930790f60fd3d09e0beaf4c98a66938cdf57"),
+    ("common_origin_v3_policy", "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/common_origin_acquisition_v3_policy.toml", "1cdd7834e76fb414761c41470319dfeded97f5dd5e9f0cf420893717d5f2d8ce"),
     ("accepted_snapshot_envelope_module", "scripts/us/forecasting/vintages/bea_industry/prospective_snapshot_envelope_v1/USProspectiveSnapshotEnvelopeV1.jl", "cb8fffd626c019fa6ce65a32664a46d1ecd87d3337f72ea378900d2d4f05b165"),
     ("accepted_snapshot_envelope_tests", "scripts/us/forecasting/vintages/bea_industry/prospective_snapshot_envelope_v1/test_prospective_snapshot_envelope_v1.jl", "ae36445f9b7af77fa8a93a945bab2109382c881e2942c71c78f9252a29470d1e"),
     ("sources_toml", "scripts/us/sources.toml", "41b2bf73b92fb0cf9d9e02ae836beb91d07cd6a3bd20ecf668882350c86f23c9"),

@@ -24,7 +24,7 @@ const CONTRACT_ID = "classification-maps-six-profile-offline-parser-candidate.v1
 const CANONICALIZATION =
     "sorted-typed-length-aware-excluding-artifact-content-sha256.v1"
 const EXPECTED_PROFILE_PHYSICAL_SHA256 =
-    "abef7ace9ecc5799a0f09c060a3ee6371e45330b2d6dbac21a09c3b6f97598f8"
+    "9bc1934a66adc19d981b89adf81a2d5f3e8c61ba268c6267fcc968eead2423e2"
 const EXPECTED_PROFILE_SEMANTIC_SHA256 =
     "1ea4517532226a4d7026fd5e2061f32a2866e057a73e1064351ffb55ac33c992"
 const XLSX_MEDIA_TYPE =
@@ -116,12 +116,12 @@ const EXPECTED_SOURCE_PINS = (
     (
         "after_redefinitions_adapter_module",
         "scripts/us/forecasting/vintages/bea_industry/after_redefinitions_2025_adapter_v1/USBEAAfterRedefinitions2025AdapterV1.jl",
-        "6384181f9cd2afdc9693fd0e01f313cd52004efe41fdafec6f18916ee27d3dc6",
+        "11be31c23033593c140d056093b82752ffe151d185ec88f27261e4e476dc4018",
     ),
     (
         "after_redefinitions_profile",
         "scripts/us/forecasting/vintages/bea_industry/after_redefinitions_2025_adapter_v1/bea_after_redefinitions_2025_profile_v1.toml",
-        "4f8ce3d53d11964c1268ee7ecfe18701b90b46ff73816b4a9af246e36db753a5",
+        "57c71a1d9a1a8f4ecad7fbc4dbc284590792aa3b2966388bf138397dc0e10d11",
     ),
     (
         "beforeit_bea71_model_bridge",

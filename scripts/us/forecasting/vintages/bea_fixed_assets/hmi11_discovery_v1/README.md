@@ -336,13 +336,13 @@ The root and unrelated-directory strict suites each pass 252 assertions, and
 Runic 1.7.0 check/diff passes. The frozen replacement-candidate identities are:
 
 - module physical SHA-256:
-  `342c2a4586386734e17cfc36ca09d44e59f42441a4e6eb5a6d340ff5f033b5b4`
+  `c3a506f844cb87d4662c04d4079e3e6c29947e13f5922a3777639bf28bd0ee6d`
 - profile physical SHA-256:
-  `656717ea525efd341004004f3f9be9d22ffccd7d36e5e84e90aabac9cad9d44c`
+  `9f03947315bdcb8ba602b664dd0015e03921d5a7867f02c66883d01590db5af4`
 - profile semantic SHA-256:
   `96d0f93b4bf538b45fac44843f47dfd0e8aa8ca4a8e9125cfd3861e2de9e6921`
 - tests physical SHA-256:
-  `afc3587019694d1127e9d1f073ab85355dd074775f49d7de000fbe03ba132030`
+  `49634f0606a860be7bbaaca185575a6094ec9d12c9f7c797a32cc2dd0586aab6`
 
 These are candidate pins pending a fresh independent audit. They are not an
 integration, admission, origin, source-capture, or accuracy claim.

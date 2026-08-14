@@ -175,9 +175,9 @@ physical identity is rejected.
 The formatted audit candidate freezes these identities:
 
 - module physical SHA-256
-  `9654eb61b92b2655391b00952ed4cbee0e9fa58224339f1fb0440c51570e719e`;
+  `b82c6ab5c2830b8f23ec92971ed3930790f60fd3d09e0beaf4c98a66938cdf57`;
 - policy physical/semantic SHA-256
-  `0deff5e3e6c950b5682bba96fcefa1fa2304bbbadae6227a940376dc7699bd3e` /
+  `1cdd7834e76fb414761c41470319dfeded97f5dd5e9f0cf420893717d5f2d8ce` /
   `a69392029c2221ab5f490311c02d09a667e71982c486a1612100c1d6dcd96d13`;
 - parent-schema physical/semantic SHA-256
   `cf4060554a6c53de079d728c2a2ac179309e9a7b888edc3bfa0a931ced5442a2` /
@@ -190,7 +190,7 @@ The formatted audit candidate freezes these identities:
   `2c6d6840a3396d5ced8e4e20b3bf0c5cc1fce68fdb927b796258fbf7a72382c3`;
   and
 - test-suite physical SHA-256
-  `e3ee90a943e26fd6ce5db37644035c4dff3edfdb1f364921ea1353e782cded53`.
+  `d8a5d47ee1acaf319d5761c07fd0f7cc9d84f165f5367c6eeb4cbd074c76ba7a`.
 
 The policy self-hash excludes only its own `artifact.content_sha256`; each
 schema uses the same documented exclusion. The test suite independently pins

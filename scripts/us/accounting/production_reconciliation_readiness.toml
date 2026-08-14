@@ -181,7 +181,7 @@ role = "CURRENT_FAIL_CLOSED_ACCOUNTING_GATE_STATE"
 [[artifact]]
 artifact_id = "opening_macro_mapping"
 path = "scripts/us/forecasting/origins/opening_macro_mapping.toml"
-sha256 = "55402fd1620cb5094c267bb8d34145cefdc0c6946c84ef5876dc83cbab838850"
+sha256 = "3bd3af8f9eca135d3f9246999b45f58f902d6debd2b16df09deac9a21653eacd"
 role = "CURRENT_MAPPING_APPROVAL_STATE"
 
 [[artifact]]

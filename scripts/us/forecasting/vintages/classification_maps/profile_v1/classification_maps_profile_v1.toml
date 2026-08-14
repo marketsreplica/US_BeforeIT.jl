@@ -112,7 +112,7 @@ official_body_present = false
 local_bytes_present = false
 current_origin_receipt_present = false
 provider_layout_evidenced = false
-shared_parent_profile_sha256 = "4f8ce3d53d11964c1268ee7ecfe18701b90b46ff73816b4a9af246e36db753a5"
+shared_parent_profile_sha256 = "57c71a1d9a1a8f4ecad7fbc4dbc284590792aa3b2966388bf138397dc0e10d11"
 shared_parent_object_sha256 = "9e3791d657909843ce202161bae00cf8a425d7e1bf866cc8a0462810f0ae00c7"
 repository_path = "NOT_APPLICABLE"
 repository_sha256 = "UNAVAILABLE"
@@ -129,7 +129,7 @@ official_body_present = false
 local_bytes_present = false
 current_origin_receipt_present = false
 provider_layout_evidenced = false
-shared_parent_profile_sha256 = "4f8ce3d53d11964c1268ee7ecfe18701b90b46ff73816b4a9af246e36db753a5"
+shared_parent_profile_sha256 = "57c71a1d9a1a8f4ecad7fbc4dbc284590792aa3b2966388bf138397dc0e10d11"
 shared_parent_object_sha256 = "073b87c7e52e76fb78ad7ddafb0c2e60f9188fc5a4e56dc0094f4a7ae3f529c6"
 repository_path = "NOT_APPLICABLE"
 repository_sha256 = "UNAVAILABLE"
@@ -242,7 +242,7 @@ sha256 = "84e74d236f0e0ac781a482b996be95fceefe56f2a349be089b51054c3edd8834"
 [[source_pins]]
 pin_id = "after_redefinitions_adapter_module"
 path = "scripts/us/forecasting/vintages/bea_industry/after_redefinitions_2025_adapter_v1/USBEAAfterRedefinitions2025AdapterV1.jl"
-sha256 = "6384181f9cd2afdc9693fd0e01f313cd52004efe41fdafec6f18916ee27d3dc6"
+sha256 = "11be31c23033593c140d056093b82752ffe151d185ec88f27261e4e476dc4018"
 
 [[source_pins]]
 pin_id = "after_redefinitions_profile"

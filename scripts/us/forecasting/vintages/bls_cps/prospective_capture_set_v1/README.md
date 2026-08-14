@@ -134,11 +134,11 @@ Audit-repaired hashes:
 - profile semantic SHA-256:
   `68e8d7a1a366c9409e4a29f83dfa90864fbcb0024fcbd91aa53cc16dcbd04e8b`
 - profile physical SHA-256:
-  `d6bad6ffc6279cacee09ae3fcdec688df1b460515e12ffc2f17d918b40ae7081`
+  `426c312ba290a11ae117c595e16936c189a64fc4aaa3e0a5273b13aecb92d33a`
 - module SHA-256:
-  `549b0001a41051d587d46ed2979345cb5a7897b9b6fe2d54d06f9e75bf0b0caa`
+  `d85ce3c07d27f3f698611b2510744b802d43e9e5a85f59dc01ffcd60a404ad98`
 - test SHA-256:
-  `669d0ce7bddd0d1a849e09736e69a66e93fbacd48002b729736d0c64c711d031`
+  `c982dbb7ead6e0b1eb28a28cd24dc0dbc683ee2b9735865d4d444533dc43d3c1`
 
 ## Why common-origin-v3 remains false
 

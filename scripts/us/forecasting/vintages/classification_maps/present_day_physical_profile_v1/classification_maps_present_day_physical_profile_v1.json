@@ -43,10 +43,10 @@
     "sha256": "2e0fb0a6d8190e4488810653a2638edeff9ceae2a1ea463f28730106752b183f"
   },
   "logical_profile_pins": {
-    "module_sha256": "f5890e959dc80c8fdda1507d73dba3658d4fa5720daaa3adc7cfb8e64732cfb1",
-    "profile_physical_sha256": "abef7ace9ecc5799a0f09c060a3ee6371e45330b2d6dbac21a09c3b6f97598f8",
+    "module_sha256": "4248d329618cb1397e983f0df60d6e9047e5dbf6d4ec4786487cabc63fe5c2a0",
+    "profile_physical_sha256": "9bc1934a66adc19d981b89adf81a2d5f3e8c61ba268c6267fcc968eead2423e2",
     "profile_semantic_sha256": "1ea4517532226a4d7026fd5e2061f32a2866e057a73e1064351ffb55ac33c992",
-    "tests_sha256": "4237ec1aba9dfd89d0d63c1995c3c20aa557bed3f42e275bf1eeb20764763dff"
+    "tests_sha256": "5abc564866bb420c2cff851a68090cebb1d83388f99783a6cb45a96441c11ab2"
   },
   "mismatch_contract": {
     "accepted_logical_special_order": [

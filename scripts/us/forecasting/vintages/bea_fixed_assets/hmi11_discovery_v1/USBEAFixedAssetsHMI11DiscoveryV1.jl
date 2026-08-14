@@ -19,7 +19,7 @@ const CANONICALIZATION =
 const PROFILE_CONTENT_SHA256 =
     "96d0f93b4bf538b45fac44843f47dfd0e8aa8ca4a8e9125cfd3861e2de9e6921"
 const PROFILE_PHYSICAL_SHA256 =
-    "656717ea525efd341004004f3f9be9d22ffccd7d36e5e84e90aabac9cad9d44c"
+    "9f03947315bdcb8ba602b664dd0015e03921d5a7867f02c66883d01590db5af4"
 const PROFILE_PATH =
     joinpath(@__DIR__, "bea_fixed_assets_hmi11_discovery_profile_v1.toml")
 const REPOSITORY_ROOT =
@@ -244,7 +244,7 @@ const EXPECTED_SOURCE_BINDINGS = [
         path =
             "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/USCommonOriginAcquisitionV3.jl",
         physical_sha256 =
-            "9654eb61b92b2655391b00952ed4cbee0e9fa58224339f1fb0440c51570e719e",
+            "b82c6ab5c2830b8f23ec92971ed3930790f60fd3d09e0beaf4c98a66938cdf57",
         semantic_sha256 = "NOT_APPLICABLE",
         semantic_canonicalization = "NOT_APPLICABLE",
         role = "common_origin_composition_validator",
@@ -254,7 +254,7 @@ const EXPECTED_SOURCE_BINDINGS = [
         path =
             "scripts/us/forecasting/vintages/prospective/common_origin_acquisition_v3/common_origin_acquisition_v3_policy.toml",
         physical_sha256 =
-            "0deff5e3e6c950b5682bba96fcefa1fa2304bbbadae6227a940376dc7699bd3e",
+            "1cdd7834e76fb414761c41470319dfeded97f5dd5e9f0cf420893717d5f2d8ce",
         semantic_sha256 =
             "a69392029c2221ab5f490311c02d09a667e71982c486a1612100c1d6dcd96d13",
         semantic_canonicalization = "common_origin_v3",

@@ -26,10 +26,10 @@ The six prospective profile identifiers are preserved exactly:
 
 The accepted offline logical-profile pins are:
 
-- module: `f5890e959dc80c8fdda1507d73dba3658d4fa5720daaa3adc7cfb8e64732cfb1`
-- profile bytes: `abef7ace9ecc5799a0f09c060a3ee6371e45330b2d6dbac21a09c3b6f97598f8`
+- module: `4248d329618cb1397e983f0df60d6e9047e5dbf6d4ec4786487cabc63fe5c2a0`
+- profile bytes: `9bc1934a66adc19d981b89adf81a2d5f3e8c61ba268c6267fcc968eead2423e2`
 - profile semantic hash: `1ea4517532226a4d7026fd5e2061f32a2866e057a73e1064351ffb55ac33c992`
-- tests: `4237ec1aba9dfd89d0d63c1995c3c20aa557bed3f42e275bf1eeb20764763dff`
+- tests: `5abc564866bb420c2cff851a68090cebb1d83388f99783a6cb45a96441c11ab2`
 
 The repository-local `scripts/us/bea71.toml` receipt is also checked at 8,146
 bytes and SHA-256
@@ -180,13 +180,13 @@ present; all synthetic adversarial tests remain runnable. No Julia source exists
 in this isolated artifact, so Runic is not applicable.
 
 For the six pinned audit bodies, the frozen generator module SHA-256 is
-`f562825dd5985f889de89597103bc840f4fb27d362054a935951f85882f7bc7a`.
+`b09faf8e9448644d0715b8a418c99cd4f120eb2c129c4ff158abd01d8789f251`.
 It emits 7,079,600 canonical bytes with physical SHA-256
 `c39a22dcc2ffe6bd23a93185ddde082c3ee08b79c6ba6eda81fb7ccacc6f0d85`
 and derivative content SHA-256
 `54b79027ff55717910024b22693540f0aa20580b29dd6b52e9fb4c670600ee0c`.
 The physical profile is
-`57eefdcb3421a5f63ec8214b6c55feb0700fda4018340ea584863e55f89398fc`
+`812acfa1a4d225bf80c9e6a6ddccbe6fe985eb6701600dfbe32a1abbd52ea786`
 with semantic SHA-256
 `aad29e6493ab7d0d03e2da32b9be36ce1632ecce8bdf920c7bd3888454ac1147`.
 These identities describe the candidate submitted for independent audit; they
