@@ -5,6 +5,7 @@
 #
 #   usage: run_revised_data_abm_comparison.jl <output-directory> [paths] [variant] [max-origins]
 #                                             [--calibration=<path>] [--also-score=<dir>]
+#                                             [--force-recompute] [--adopt-cache-identity]
 #
 #   variant = headline | burnin | outlook | headline_v2 | outlook_v2  (default headline)
 #   --calibration  calibration artifact to initialise the model from. Defaults to the
@@ -20,6 +21,7 @@
 # so an interrupted run resumes from the cache instead of restarting.
 
 using LinearAlgebra
+using SHA
 
 include("USRevisedDataABMComparison.jl")
 using .USRevisedDataABMComparison
@@ -72,20 +74,77 @@ function select_variant(name)
 end
 
 """
-    load_extra_abm_column(directory)
+    load_extra_abm_column(directory, own_identity)
 
-Read a completed run's cached ensemble summaries and return the `(variant, summaries)`
-pair so its ABM columns can be scored beside this run's on identical common cells.
+Read another run's cached ensemble summaries so its ABM columns can be scored beside
+this run's. The sourced cache is only admitted after its own identity document
+agrees with this run on every field that would change a forecast: the scoring panel,
+the requested path count, the seed contract and the code that produced it. A variant
+label alone is not provenance.
 """
-function load_extra_abm_column(directory)
+function load_extra_abm_column(directory, own_identity)
     cache = joinpath(directory, "abm_ensemble_summaries.csv")
     isfile(cache) || throw(ArgumentError("no abm_ensemble_summaries.csv in $directory"))
+    identity_path = joinpath(directory, ABM.CACHE_IDENTITY_FILENAME)
+    stored = ABM.read_cache_identity(identity_path)
+    for field in (
+            "panel_sha256",
+            "panel_manifest_sha256",
+            "paths_requested",
+            "seed_contract_id",
+            "contract_id",
+            "base_diagnostic_code_sha256",
+            "model_scale",
+        )
+        want = own_identity[field]
+        got = stored[field]
+        matched = (want isa Real && got isa Real) ? want == got :
+            string(want) == string(got)
+        matched || throw(
+            ABM.CacheIdentityError(
+                field,
+                "--also-score source $directory has $(repr(got)) but this run has " *
+                    "$(repr(want)); the two columns would not be comparable",
+            ),
+        )
+    end
+    diagnostics_path = joinpath(directory, "abm_origin_diagnostics.csv")
+    if isfile(diagnostics_path)
+        other_diagnostics =
+            ABM.read_struct_csv(diagnostics_path, ABM.ABMOriginDiagnostic)
+        unresolved = count(
+            row -> row.paths_used != row.paths_requested,
+            other_diagnostics,
+        )
+        unresolved == 0 || throw(
+            ABM.CacheIdentityError(
+                "paths_used",
+                "--also-score source $directory has $unresolved origin(s) with " *
+                    "unresolved path failures; its columns are smaller ensembles",
+            ),
+        )
+    end
     summaries = ABM.read_struct_csv(cache, ABM.EnsembleSummary)
     isempty(summaries) && throw(ArgumentError("empty ensemble cache in $directory"))
     names = unique(getfield.(summaries, :variant))
     length(names) == 1 ||
         throw(ArgumentError("cache in $directory mixes variants $(names)"))
-    return (select_variant(only(names)), summaries)
+    provenance = Dict{String, Any}(
+        "source_directory" =>
+            relpath(abspath(directory), ABM.REPOSITORY_ROOT),
+        "variant" => stored["variant"],
+        "paths_requested" => stored["paths_requested"],
+        "calibration_object_path" => stored["calibration_object_path"],
+        "calibration_object_sha256" => stored["calibration_object_sha256"],
+        "comparison_code_sha256" => stored["comparison_code_sha256"],
+        "panel_sha256" => stored["panel_sha256"],
+        "julia_version" => stored["julia_version"],
+        "adopted_from_legacy_cache" =>
+            get(stored, "adopted_from_legacy_cache", false),
+        "ensemble_cache_sha256" => bytes2hex(SHA.sha256(read(cache))),
+        "identity_sha256" => bytes2hex(SHA.sha256(read(identity_path))),
+    )
+    return (select_variant(only(names)), summaries, provenance)
 end
 
 function scored_origins(panel)
@@ -119,7 +178,8 @@ function main(raw_args)
     1 <= length(args) <= 4 || throw(
         ArgumentError(
             "usage: run_revised_data_abm_comparison.jl <output-directory> [paths] [variant] " *
-                "[max-origins] [--calibration=<path>] [--also-score=<dir>]",
+                "[max-origins] [--calibration=<path>] [--also-score=<dir>] " *
+                "[--force-recompute] [--adopt-cache-identity]",
         ),
     )
     output_directory = abspath(args[1])
@@ -136,6 +196,8 @@ function main(raw_args)
         throw(ArgumentError("calibration artifact not found: $calibration_path"))
     ABM.ACTIVE_CALIBRATION_PATH[] = calibration_path
     also_score_directory = cli_option("also-score", nothing)
+    force_recompute = "--force-recompute" in raw_args
+    adopt_cache_identity = "--adopt-cache-identity" in raw_args
 
     Threads.nthreads() == 1 || @warn "JULIA_NUM_THREADS is not 1; statistical benchmark reproduction may differ"
     BLAS.get_num_threads() == 1 || @warn "OPENBLAS_NUM_THREADS is not 1; statistical benchmark reproduction may differ"
@@ -162,6 +224,15 @@ function main(raw_args)
     println("origins=$(length(origins))")
     println("output_directory=$output_directory")
 
+    identity_path = joinpath(output_directory, ABM.CACHE_IDENTITY_FILENAME)
+    identity = ABM.build_cache_identity(
+        variant,
+        origins;
+        paths = paths,
+        calibration_path = calibration_path,
+        panel = panel,
+    )
+
     simulated = ABM.simulate_abm_ensembles(
         variant,
         origins;
@@ -170,8 +241,14 @@ function main(raw_args)
         diagnostics_path = diagnostics_path,
         calibration_path = calibration_path,
         path_failures_path = path_failures_path,
+        identity_path = identity_path,
+        identity = identity,
+        force_recompute = force_recompute,
+        adopt_legacy_identity = adopt_cache_identity,
     )
     check_cached_path_count(simulated.diagnostics, paths)
+    println("cache_identity=$(relpath(identity_path, ABM.REPOSITORY_ROOT))")
+    println("cache_identity_adopted_from_legacy=$(simulated.identity_adopted)")
 
     println("abm_origins_simulated=$(length(simulated.diagnostics))")
     println(
@@ -192,11 +269,14 @@ function main(raw_args)
     end
 
     extra_columns = Tuple{ABM.ABMVariant, Vector{ABM.EnsembleSummary}}[]
+    extra_provenance = Dict{String, Any}[]
     if also_score_directory !== nothing
-        other = load_extra_abm_column(abspath(also_score_directory))
-        push!(extra_columns, other)
+        other = load_extra_abm_column(abspath(also_score_directory), identity)
+        push!(extra_columns, (other[1], other[2]))
+        push!(extra_provenance, other[3])
         println("also_scored_variant=$(other[1].name)")
         println("also_scored_rows=$(length(other[2]))")
+        println("also_scored_source=$(other[3]["source_directory"])")
     end
 
     result = ABM.run_abm_comparison(
@@ -206,10 +286,15 @@ function main(raw_args)
         variant;
         paths = paths,
         extra_columns = extra_columns,
+        extra_column_provenance = extra_provenance,
     )
     written = ABM.write_abm_comparison(result, output_directory)
 
     println("contract_id=$(result.contract_id)")
+    println("canonical_origin_count=$(result.canonical_origin_count)")
+    println("observed_origin_count=$(result.observed_origin_count)")
+    println("path_incomplete_origin_count=$(result.path_incomplete_origin_count)")
+    println("minimum_paths_used=$(result.minimum_paths_used)")
     println("information_track=$(result.information_track)")
     println("models=$(length(result.model_ids))")
     println("comparison_targets=$(length(result.target_ids))")

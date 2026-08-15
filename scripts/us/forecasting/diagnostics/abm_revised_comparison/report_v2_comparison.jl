@@ -13,6 +13,7 @@
 # the panel actuals, which are also both on disk.
 
 using Printf
+using TOML
 using Statistics
 
 include("USRevisedDataABMComparison.jl")
@@ -35,6 +36,37 @@ const FIXTURE_DIRECTORY = normpath(
 
 read_csv(directory, name, T) =
     ABM.read_struct_csv(joinpath(directory, name), T)
+
+"""
+    require_canonical_sample(directory)
+
+Refuse to render a report from a run that is not a canonical comparison. A truncated
+or path-incomplete run still produces well-formed score tables, so the only thing
+standing between a smoke test and a published ranking is this check.
+"""
+function require_canonical_sample(directory)
+    manifest_path = joinpath(directory, "manifest.toml")
+    isfile(manifest_path) ||
+        error("no manifest.toml in $directory; cannot establish sample adequacy")
+    document = TOML.parsefile(manifest_path)
+    haskey(document, "sample_is_canonical") || error(
+        "manifest in $directory predates canonical-sample accounting; re-score the " *
+            "run before reporting from it",
+    )
+    document["sample_is_canonical"] === true || error(
+        "refusing to report: $directory covers " *
+            "$(get(document, "abm_observed_origin_count", "?")) of " *
+            "$(get(document, "abm_canonical_origin_count", "?")) canonical origins " *
+            "(INSUFFICIENT_ORIGINS_SMOKE_ONLY)",
+    )
+    incomplete = get(document, "abm_path_incomplete_origin_count", 0)
+    incomplete == 0 || error(
+        "refusing to report: $directory has $incomplete origin(s) whose ensembles " *
+            "lost paths (INCOMPLETE_PATH_COVERAGE_NOT_RANKED); minimum paths used " *
+            "was $(get(document, "abm_minimum_paths_used", "?"))",
+    )
+    return nothing
+end
 
 function track_label(track)
     track == ABM.ALL_AVAILABLE_TRACK && return "all-available"
@@ -260,6 +292,9 @@ function main(args)
     directory = abspath(args[1])
     outlook_directory = length(args) >= 2 ? abspath(args[2]) : nothing
     v1_directory = length(args) >= 3 ? abspath(args[3]) : nothing
+
+    require_canonical_sample(directory)
+    v1_directory === nothing || require_canonical_sample(v1_directory)
 
     weighted = read_csv(directory, "weighted_relative_scores.csv", ABM.ABMWeightedScore)
     relative = read_csv(directory, "relative_scores.csv", BASE.RelativeScore)
