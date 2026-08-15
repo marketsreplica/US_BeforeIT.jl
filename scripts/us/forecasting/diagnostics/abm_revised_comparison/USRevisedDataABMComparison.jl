@@ -6,6 +6,7 @@ using LinearAlgebra
 using Random
 using SHA
 using Statistics
+using TOML
 
 import BeforeIT as Bit
 
@@ -29,6 +30,15 @@ export ABMVariant,
     OUTLOOK_V2_VARIANT,
     RECONCILED_CALIBRATION_OBJECT_PATH,
     ACTIVE_CALIBRATION_PATH,
+    CACHE_IDENTITY_FILENAME,
+    CACHE_IDENTITY_SCHEMA,
+    SEED_CONTRACT_ID,
+    CacheIdentityError,
+    build_cache_identity,
+    read_cache_identity,
+    write_cache_identity,
+    validate_cache_identity,
+    canonical_origin_count,
     simulate_abm_ensembles,
     run_abm_comparison,
     write_abm_comparison,
@@ -70,6 +80,7 @@ const RECONCILED_CALIBRATION_OBJECT_PATH = joinpath(
 # Set by the runner before `simulate_abm_ensembles`; the manifests seal whatever was
 # actually used, never the default.
 const ACTIVE_CALIBRATION_PATH = Ref(CALIBRATION_OBJECT_PATH)
+
 
 """
     calibration_provenance_lines()
@@ -201,6 +212,188 @@ const SEED_STREAM_ALIASES =
     Dict("headline_v2" => "headline", "outlook_v2" => "outlook")
 seed_stream_name(name::AbstractString) = get(SEED_STREAM_ALIASES, name, String(name))
 
+# ---------------------------------------------------------------------------
+# cache identity
+#
+# An ensemble cache is only resumable by a run that would have produced the same
+# rows. Keying resumption on (variant, origin_index) alone lets a second run with
+# a different calibration artifact, path count or code version adopt stale
+# forecasts and then relabel them in its own manifest. The identity document
+# below is written beside the cache at first generation and revalidated in full
+# before any cached row is loaded.
+# ---------------------------------------------------------------------------
+
+const CACHE_IDENTITY_FILENAME = "cache_identity.toml"
+const CACHE_IDENTITY_SCHEMA = "beforeit-us-revised-data-abm-cache-identity.v1"
+
+# The seed stream is `hash((:beforeit_us_abm_revised_comparison_v1, variant, origin, path))`
+# reduced modulo 0x40000000 and consumed through the default global RNG. Both
+# `Base.hash` and the global RNG are version-bound, so the contract id travels with
+# the Julia version that produced the cache.
+const SEED_CONTRACT_ID =
+    "beforeit_us_abm_revised_comparison_v1/base_hash_mod_0x40000000/global_rng"
+
+# Fields that must agree exactly before a cached row may be reused. Order is fixed
+# so the document is deterministic.
+const CACHE_IDENTITY_FIELDS = (
+    "schema_version",
+    "contract_id",
+    "seed_contract_id",
+    "variant",
+    "burn_in_quarters",
+    "simulated_quarters",
+    "paths_requested",
+    "model_scale",
+    "calibration_object_path",
+    "calibration_object_sha256",
+    "comparison_code_sha256",
+    "base_diagnostic_code_sha256",
+    "panel_sha256",
+    "panel_manifest_sha256",
+    "julia_version",
+    "origin_indices",
+)
+
+struct CacheIdentityError <: Exception
+    field::String
+    message::String
+end
+
+function Base.showerror(io::IO, error::CacheIdentityError)
+    print(io, "cache identity mismatch on `", error.field, "`: ", error.message)
+    return nothing
+end
+
+"""
+    build_cache_identity(variant, origins; paths, calibration_path, panel)
+
+The identity a run would stamp on the cache it generates. Every field is either a
+content hash or an exact run parameter; nothing here is derived from CLI text.
+"""
+function build_cache_identity(
+        variant::ABMVariant,
+        origins::Vector{Tuple{Int, String}};
+        paths::Int,
+        calibration_path::AbstractString,
+        panel::QuarterlyPanel,
+    )
+    return Dict{String, Any}(
+        "schema_version" => CACHE_IDENTITY_SCHEMA,
+        "contract_id" => CONTRACT_ID,
+        "seed_contract_id" => SEED_CONTRACT_ID,
+        "variant" => variant.name,
+        "burn_in_quarters" => variant.burn_in_quarters,
+        "simulated_quarters" => SIMULATION_HORIZON + variant.burn_in_quarters,
+        "paths_requested" => paths,
+        "model_scale" => MODEL_SCALE,
+        "calibration_object_path" =>
+            relpath(abspath(calibration_path), REPOSITORY_ROOT),
+        "calibration_object_sha256" => sha256_hex(read(abspath(calibration_path))),
+        "comparison_code_sha256" => sha256_hex(read(abspath(@__FILE__))),
+        "base_diagnostic_code_sha256" => sha256_hex(read(BASE_DIAGNOSTIC_PATH)),
+        "panel_sha256" => panel.panel_sha256,
+        "panel_manifest_sha256" => panel.manifest_sha256,
+        "julia_version" => string(VERSION),
+        "origin_indices" => [entry[1] for entry in origins],
+    )
+end
+
+"""
+    write_cache_identity(path, identity; adopted_from_legacy_cache = false)
+
+Persist the identity document beside its cache.
+"""
+function write_cache_identity(
+        path::AbstractString,
+        identity::AbstractDict;
+        adopted_from_legacy_cache::Bool = false,
+    )
+    lines = String[]
+    for field in CACHE_IDENTITY_FIELDS
+        value = identity[field]
+        rendered = if value isa AbstractString
+            "\"$(value)\""
+        elseif value isa AbstractVector
+            "[$(join(value, ", "))]"
+        elseif value isa Bool
+            string(value)
+        else
+            string(value)
+        end
+        push!(lines, "$(field) = $(rendered)")
+    end
+    push!(lines, "adopted_from_legacy_cache = $(adopted_from_legacy_cache)")
+    push!(lines, "written_at = \"$(Dates.format(Dates.now(Dates.UTC), "yyyy-mm-ddTHH:MM:SSZ"))\"")
+    open(path, "w") do io
+        for line in lines
+            println(io, line)
+        end
+    end
+    return path
+end
+
+"""
+    read_cache_identity(path)
+
+Parse a stored identity document, rejecting one that omits any required field.
+"""
+function read_cache_identity(path::AbstractString)
+    isfile(path) || throw(
+        CacheIdentityError(
+            "path",
+            "no identity document at $path; the cache cannot be authenticated",
+        ),
+    )
+    document = TOML.parsefile(path)
+    for field in CACHE_IDENTITY_FIELDS
+        haskey(document, field) ||
+            throw(CacheIdentityError(field, "absent from $path"))
+    end
+    return document
+end
+
+"""
+    validate_cache_identity(expected, stored; location)
+
+Compare the identity this run would stamp against the one the cache carries and
+throw a `CacheIdentityError` naming the first field that disagrees. A cached row
+is never loaded before this returns.
+"""
+function validate_cache_identity(
+        expected::AbstractDict,
+        stored::AbstractDict;
+        location::AbstractString = "cache",
+    )
+    for field in CACHE_IDENTITY_FIELDS
+        want = expected[field]
+        got = stored[field]
+        if field == "origin_indices"
+            # A resumable cache may hold a prefix of the requested origins, but it
+            # must never hold an origin this run did not ask for.
+            extra = setdiff(Set(got), Set(want))
+            isempty(extra) || throw(
+                CacheIdentityError(
+                    field,
+                    "$location holds origins $(sort!(collect(extra))) that this run does not request",
+                ),
+            )
+            continue
+        end
+        if want isa Real && got isa Real
+            want == got && continue
+        elseif string(want) == string(got)
+            continue
+        end
+        throw(
+            CacheIdentityError(
+                field,
+                "this run has $(repr(want)) but $location was generated with $(repr(got))",
+            ),
+        )
+    end
+    return nothing
+end
+
 struct EnsembleSummary
     variant::String
     origin_index::Int
@@ -292,6 +485,11 @@ struct ABMComparisonResult
     abm_mean_model_id::String
     abm_median_model_id::String
     abm_path_failure_count::Int
+    canonical_origin_count::Int
+    observed_origin_count::Int
+    path_incomplete_origin_count::Int
+    minimum_paths_used::Int
+    extra_column_provenance::Vector{Dict{String, Any}}
 end
 
 sha256_hex(bytes) = bytes2hex(SHA.sha256(bytes))
@@ -556,7 +754,53 @@ function simulate_abm_ensembles(
         calibration_path::AbstractString = CALIBRATION_OBJECT_PATH,
         path_failures_path::Union{Nothing, AbstractString} = nothing,
         progress::Bool = true,
+        identity_path::Union{Nothing, AbstractString} = nothing,
+        identity::Union{Nothing, AbstractDict} = nothing,
+        force_recompute::Bool = false,
+        adopt_legacy_identity::Bool = false,
     )
+    identity_adopted = false
+    if identity_path !== nothing && identity !== nothing
+        cache_present = isfile(cache_path) && filesize(cache_path) > 0
+        if force_recompute
+            for stale in (cache_path, diagnostics_path, identity_path)
+                isfile(stale) && rm(stale)
+            end
+            progress && println(
+                "  --force-recompute: wiped the existing cache, diagnostics and identity",
+            )
+            cache_present = false
+        end
+        if !cache_present
+            write_cache_identity(identity_path, identity)
+        elseif !isfile(identity_path)
+            # A cache produced before identity documents existed. Adoption is never
+            # automatic: it records an assertion the operator is making.
+            adopt_legacy_identity || throw(
+                CacheIdentityError(
+                    "path",
+                    "$cache_path predates cache identity documents. Rerun with " *
+                        "--adopt-cache-identity to stamp the current run identity onto " *
+                        "it, or --force-recompute to regenerate it from scratch.",
+                ),
+            )
+            write_cache_identity(
+                identity_path,
+                identity;
+                adopted_from_legacy_cache = true,
+            )
+            identity_adopted = true
+            progress && println(
+                "  --adopt-cache-identity: stamped this run's identity onto a legacy cache",
+            )
+        else
+            validate_cache_identity(
+                identity,
+                read_cache_identity(identity_path);
+                location = relpath(identity_path, REPOSITORY_ROOT),
+            )
+        end
+    end
     summaries = read_struct_csv(cache_path, EnsembleSummary)
     diagnostics = read_struct_csv(diagnostics_path, ABMOriginDiagnostic)
     completed = Set(
@@ -575,7 +819,7 @@ function simulate_abm_ensembles(
         progress && println(
             "  all $(length(origins)) origins already cached for variant $(variant.name)",
         )
-        return (; summaries, diagnostics, path_failures)
+        return (; summaries, diagnostics, path_failures, identity_adopted)
     end
     progress && println(
         "  simulating $(length(pending)) of $(length(origins)) origins " *
@@ -671,7 +915,7 @@ function simulate_abm_ensembles(
         summaries;
         by = row -> (row.origin_index, row.target_id, row.horizon),
     )
-    return (; summaries, diagnostics, path_failures)
+    return (; summaries, diagnostics, path_failures, identity_adopted)
 end
 
 # ---------------------------------------------------------------------------
@@ -779,13 +1023,44 @@ function comparison_relative_scores(summaries, model_ids, benchmark_model_id)
     return relative
 end
 
+"""
+    canonical_origin_count(panel)
+
+The number of scored origins a full run of this contract covers, derived from the
+panel rather than from CLI arguments. A run that covers fewer origins is a smoke
+test and must not be labelled or ranked as a comparison.
+"""
+canonical_origin_count(panel::QuarterlyPanel) =
+    length(BASE.MINIMUM_TRAINING_QUARTERS:(length(panel.periods) - 1))
+
+"""
+    path_complete_origins(diagnostics)
+
+`(complete, incomplete, minimum_paths_used)` over the ABM origin diagnostics. An
+origin counts as complete only when every requested path survived: paths are never
+resampled, so a partially failed origin is a smaller ensemble wearing the same
+label, not a complete one.
+"""
+function path_complete_origins(diagnostics)
+    isempty(diagnostics) && return (0, 0, 0)
+    complete = count(row -> row.paths_used == row.paths_requested, diagnostics)
+    incomplete = length(diagnostics) - complete
+    return (complete, incomplete, minimum(getfield.(diagnostics, :paths_used)))
+end
+
 function comparison_weighted_scores(
         relative,
         model_ids,
         benchmark_model_id,
-        failures,
+        failures;
+        canonical_origins::Int = 0,
+        observed_origins::Int = 0,
+        path_incomplete_origins::Int = 0,
     )
     all_model_failure_count = length(failures)
+    # Sample adequacy is a property of the run, not of any one model column.
+    origins_sufficient = canonical_origins > 0 && observed_origins >= canonical_origins
+    paths_sufficient = path_incomplete_origins == 0
     output = ABMWeightedScore[]
     for track in TRACKS
         for (set_name, target_ids) in SCORED_TARGET_SETS
@@ -817,7 +1092,8 @@ function comparison_weighted_scores(
                 model_failure_count =
                     count(failure -> failure.model_id == model, failures)
                 failure_free = all_model_failure_count == 0
-                if complete && total_weight ≈ 1.0 && failure_free
+                if complete && total_weight ≈ 1.0 && failure_free &&
+                        origins_sufficient && paths_sufficient
                     weighted_rmse = sum(
                         target_weight *
                             BASE.HORIZON_WEIGHTS[row.horizon] *
@@ -834,7 +1110,11 @@ function comparison_weighted_scores(
                 else
                     weighted_rmse = NaN
                     weighted_mae = NaN
-                    status = if complete && total_weight ≈ 1.0
+                    status = if !origins_sufficient
+                        "INSUFFICIENT_ORIGINS_SMOKE_ONLY"
+                    elseif !paths_sufficient
+                        "INCOMPLETE_PATH_COVERAGE_NOT_RANKED"
+                    elseif complete && total_weight ≈ 1.0
                         "MATCHED_GRID_WITH_MODEL_FAILURES_NOT_RANKED"
                     else
                         "INCOMPLETE_MATCHED_GRID_NOT_RANKED"
@@ -930,6 +1210,7 @@ function run_abm_comparison(
         paths::Int,
         extra_columns::Vector{Tuple{ABMVariant, Vector{EnsembleSummary}}} =
             Tuple{ABMVariant, Vector{EnsembleSummary}}[],
+        extra_column_provenance::Vector{Dict{String, Any}} = Dict{String, Any}[],
     )
     BASE.validate_panel(panel)
     base_result = BASE.run_revised_benchmark_diagnostic(panel)
@@ -1009,11 +1290,18 @@ function run_abm_comparison(
         model_ids,
         base_result.benchmark_model_id,
     )
+    _, path_incomplete_origins, minimum_paths_used =
+        path_complete_origins(diagnostics)
+    observed_origins = length(unique(getfield.(diagnostics, :origin_index)))
+    canonical_origins = canonical_origin_count(panel)
     weighted = comparison_weighted_scores(
         relative,
         model_ids,
         base_result.benchmark_model_id,
-        failures,
+        failures;
+        canonical_origins = canonical_origins,
+        observed_origins = observed_origins,
+        path_incomplete_origins = path_incomplete_origins,
     )
 
     return ABMComparisonResult(
@@ -1042,6 +1330,11 @@ function run_abm_comparison(
         variant.mean_model_id,
         variant.median_model_id,
         sum(getfield.(diagnostics, :paths_failed); init = 0),
+        canonical_origins,
+        observed_origins,
+        path_incomplete_origins,
+        minimum_paths_used,
+        extra_column_provenance,
     )
 end
 
@@ -1215,7 +1508,14 @@ function write_manifest(path, result::ABMComparisonResult, output_hashes)
         "failure_count = $(length(result.failures))",
         "failure_free = $(isempty(result.failures))",
         "abm_origin_count = $(length(result.abm_origin_diagnostics))",
+        "abm_canonical_origin_count = $(result.canonical_origin_count)",
+        "abm_observed_origin_count = $(result.observed_origin_count)",
+        "sample_is_canonical = $(result.observed_origin_count >= result.canonical_origin_count)",
+        "sample_completeness_semantics = \"a run earns COMPLETE_MATCHED only when it covers the canonical origin grid derived from the panel and every requested path survived at every origin; anything narrower is INSUFFICIENT_ORIGINS_SMOKE_ONLY or INCOMPLETE_PATH_COVERAGE_NOT_RANKED and is not a ranking\"",
         "abm_path_failure_count = $(result.abm_path_failure_count)",
+        "abm_path_incomplete_origin_count = $(result.path_incomplete_origin_count)",
+        "abm_minimum_paths_used = $(result.minimum_paths_used)",
+        "abm_paths_are_never_resampled = true",
         "abm_origin_indices = [$(join(getfield.(result.abm_origin_diagnostics, :origin_index), ", "))]",
         "abm_origin_failed_path_counts = [$(join(getfield.(result.abm_origin_diagnostics, :paths_failed), ", "))]",
         "abm_origin_used_path_counts = [$(join(getfield.(result.abm_origin_diagnostics, :paths_used), ", "))]",
@@ -1239,7 +1539,20 @@ function write_manifest(path, result::ABMComparisonResult, output_hashes)
         "julia_version = \"$(VERSION)\"",
         "blas_threads = $(BLAS.get_num_threads())",
         "julia_threads = $(Threads.nthreads())",
+        "seed_contract_id = \"$(SEED_CONTRACT_ID)\"",
+        "cache_identity_schema = \"$(CACHE_IDENTITY_SCHEMA)\"",
+        "reproducibility_note = \"seeds derive from Base.hash and are consumed through the default global RNG; both are version-bound, so exact regeneration requires the julia_version recorded above. Cross-version reruns are new experiments, not reproductions.\"",
     ]
+    for (index, provenance) in enumerate(result.extra_column_provenance)
+        push!(lines, "")
+        push!(lines, "[[also_scored_column]]")
+        push!(lines, "index = $index")
+        for key in sort!(collect(keys(provenance)))
+            value = provenance[key]
+            rendered = value isa AbstractString ? "\"$(value)\"" : string(value)
+            push!(lines, "$(key) = $(rendered)")
+        end
+    end
     for (track, label) in (
             (ALL_AVAILABLE_TRACK, "all_available"),
             (BALANCED_H12_TRACK, "balanced_h12"),

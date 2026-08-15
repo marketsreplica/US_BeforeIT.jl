@@ -65,7 +65,7 @@ actually stands; where the two disagree, this block is current.
   statistical benchmarks over 61 origins (2010Q2–2025Q2), a structural defect
   was diagnosed by matched-seed experiment, repaired on accounting grounds and
   re-scored on identical cells and seeds. The repaired model
-  `beforeit_abm_us_v2` takes 1st of 14 on the headline pair {real GDP,
+  `beforeit_abm_us_v2` takes best of the 14 scored forecast columns on the headline pair {real GDP,
   GDP deflator} in all three sample tracks (0.830 / 0.829 / 0.796 weighted
   RMSE ratio against a VAR(1) anchor), against v1's 0.905 / 0.894 / 1.272.
   Full write-up: [US_ABM_FORECAST_REPORT.md](US_ABM_FORECAST_REPORT.md);

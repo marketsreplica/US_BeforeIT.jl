@@ -8,12 +8,44 @@
 # is recomputed from a separate simulation.
 
 using Printf
+using TOML
 using Statistics
 
 include("USRevisedDataABMComparison.jl")
 using .USRevisedDataABMComparison
 
 const ABM = USRevisedDataABMComparison
+
+"""
+    require_canonical_sample(directory)
+
+Refuse to render a report from a run that is not a canonical comparison. A truncated
+or path-incomplete run still produces well-formed score tables, so the only thing
+standing between a smoke test and a published ranking is this check.
+"""
+function require_canonical_sample(directory)
+    manifest_path = joinpath(directory, "manifest.toml")
+    isfile(manifest_path) ||
+        error("no manifest.toml in $directory; cannot establish sample adequacy")
+    document = TOML.parsefile(manifest_path)
+    haskey(document, "sample_is_canonical") || error(
+        "manifest in $directory predates canonical-sample accounting; re-score the " *
+            "run before reporting from it",
+    )
+    document["sample_is_canonical"] === true || error(
+        "refusing to report: $directory covers " *
+            "$(get(document, "abm_observed_origin_count", "?")) of " *
+            "$(get(document, "abm_canonical_origin_count", "?")) canonical origins " *
+            "(INSUFFICIENT_ORIGINS_SMOKE_ONLY)",
+    )
+    incomplete = get(document, "abm_path_incomplete_origin_count", 0)
+    incomplete == 0 || error(
+        "refusing to report: $directory has $incomplete origin(s) whose ensembles " *
+            "lost paths (INCOMPLETE_PATH_COVERAGE_NOT_RANKED); minimum paths used " *
+            "was $(get(document, "abm_minimum_paths_used", "?"))",
+    )
+    return nothing
+end
 const BASE = USRevisedDataABMComparison.BASE
 
 const ANCHOR = "beforeit_var_p1_constant"
@@ -443,6 +475,7 @@ function main(args)
             "usage: report_abm_comparison.jl <headline-dir> <burnin-dir> <outlook-dir> [long-burnin-dir]",
         ),
     )
+    require_canonical_sample(abspath(args[1]))
     headline = load_run(
         args[1],
         ABM.HEADLINE_VARIANT.mean_model_id,

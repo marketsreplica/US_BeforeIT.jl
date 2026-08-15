@@ -11,18 +11,27 @@
 This report documents a complete cycle: an agent-based model was scored against ten statistical
 benchmarks, found to carry a large and systematic real-growth bias, diagnosed to two specific
 defects by matched-seed experiment, repaired by restoring an accounting identity and correcting a
-mis-specified estimator — using no post-origin information and no forecast-error fitting — and then
-re-scored on identical cells with identical seeds. **That arc is the result.** The rank improvement
+mis-specified estimator — neither repair *selected* using forecast errors — and then
+re-scored on identical cells with identical seeds. The exercise remains explicitly mixed-vintage:
+2024 structure and current-vintage data are used at historical origins, which is information those
+origins did not have. **That arc is the result.** The rank improvement
 is a consequence of it, not the object of it.
 
 **Verdict.** On a matched grid of 61 quarterly origins (2010Q2–2025Q2), five horizons and 500 paths
-per origin, the repaired model (`beforeit_abm_us_v2`) attains the **best weighted RMSE ratio of all
-14 scored models on the headline pair {real GDP growth, GDP-deflator inflation} in all three sample
+per origin, the repaired model (`beforeit_abm_us_v2`) attains the **best weighted RMSE ratio of the
+14 scored forecast columns on the headline pair {real GDP growth, GDP-deflator inflation} in all three sample
 tracks**: 0.830 all-available, 0.829 balanced-h12, 0.796 pandemic-masked, against a VAR(1) anchor.
-The pre-repair model (`v1`) scored 0.905, 0.894 and 1.272 — 5th, 5th and 11th of 14. On the secondary
+The pre-repair model (`v1`) scored 0.905, 0.894 and 1.272 — 5th, 5th and 11th of the 14 columns. On the secondary
 pair {nominal GDP growth, effective federal funds rate}, v2 is 1st all-available (0.716) and 1st
 balanced-h12 (0.703), and **2nd pandemic-masked (0.739), behind AR(4) at 0.719** — a loss, reported
 as such.
+
+**What "14 columns" means.** The field is 14 *forecast columns*, not 14 independent
+models: ten benchmark models (VAR, BVAR, AR variants and naive rules) plus four ABM
+ensemble columns — mean and median, for each of two runs (v1 and v2). The two ABM
+runs share a seed stream and differ only in the calibration artifact, so the four
+ABM columns are not independent of one another. Ranks below are positions among
+these 14 scored columns.
 
 **The defect that was found.** v1 under-forecast real GDP growth by −1.3 to −2.9 pp at every horizon,
 and by −7.3 pp at h=2. The cause was not tuning. The shipped calibration artifact's opening commodity
@@ -441,13 +450,13 @@ were scored jointly. The v1 column reproduced the standalone v1 run bit-identica
 
 ### 5.1 Headline standings, v1
 
-| Track | v1 mean ratio (rank of 14) | v1 median ratio (rank) | Best statistical |
+| Track | v1 mean ratio (rank of 14 columns) | v1 median ratio (rank) | Best statistical |
 |---|---|---|---|
 | all-available | 0.905 (5th) | 0.903 (4th) | `naive_historical_mean` 0.879 |
 | balanced-h12 | 0.894 (5th) | 0.893 (4th) | `naive_historical_mean` 0.884 |
 | pandemic-masked | 1.272 (11th) | 1.264 (10th) | `univariate_ar_p1` 0.848 |
 
-Competitive on the first two tracks, and **11th of 14 once the COVID cells are removed**.
+Competitive on the first two tracks, and **11th of the 14 columns once the COVID cells are removed**.
 
 ### 5.2 Per-target, per-horizon detail, v1
 
@@ -820,7 +829,7 @@ removes the sensitivity.
 
 ### 7.4 Per-cell detail and the v1 → v2 delta
 
-*RMSE ratio vs `beforeit_var_p1_constant`, rank among all 14 scored models, `all-available` track.*
+*RMSE ratio vs `beforeit_var_p1_constant`, rank among the 14 scored forecast columns, `all-available` track.*
 
 | Target | h | n | v1 RMSE | v2 RMSE | v1 ratio | v2 ratio | v1 rank | v2 rank | v1 bias | **v2 bias** |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -940,7 +949,7 @@ independent information but costs nothing. The policy-rate operator maps the mod
 Taylor-rule rate to an annualized percentage point; **this is explicitly not an approved EFFR bridge**,
 and the caveat travels with every number below.
 
-| Track | v2 mean (rank of 14) | v2 median | v1 mean (rank) | Best statistical |
+| Track | v2 mean (rank of 14 columns) | v2 median | v1 mean (rank) | Best statistical |
 |---|---|---|---|---|
 | `all-available` | **0.716 (1st)** | 0.716 (2nd) | 0.782 (5th) | `univariate_ar_bic` 0.780 |
 | `balanced h=12` | **0.703 (1st)** | 0.704 (2nd) | 0.761 (4th) | `univariate_ar_bic` 0.770 |
@@ -972,7 +981,7 @@ forecast ranges from **3.492 % to 3.679 %** — a span of 0.187 pp, cross-origin
 | 2022Q4 | 3.639 | 3.533 | +0.105 |
 | 2025Q2 | 3.564 | 4.333 | −0.769 |
 
-Had it been scored, v1 would have ranked 1st or 2nd of 14 at h=8 and h=12. **Those are not wins.** They
+Had it been scored, v1 would have ranked 1st or 2nd of the 14 columns at h=8 and h=12. **Those are not wins.** They
 are a constant landing near the sample mean — and the giveaway is that `naive_historical_mean`, a
 constant by construction, is the best statistical model in exactly those cells.
 
@@ -1135,7 +1144,7 @@ is the cheaper first step.
 ### 10.8 Inference
 
 No formal inference was performed: no Diebold–Mariano or HAC-adjusted test, no bootstrap, no
-multiple-comparison control across the 14 models × 5 targets × 5 horizons × 3 tracks grid. The rankings
+multiple-comparison control across the 14 forecast columns × 5 targets × 5 horizons × 3 tracks grid. The rankings
 are descriptive. The v2-versus-v1 contrast is the most defensible comparison in the report because it
 is matched-seed on identical cells with one deliberate change; the v2-versus-statistical-model
 comparisons are not, and margins of a few per cent — such as v2's 0.830 against
@@ -1212,7 +1221,7 @@ Under `output/us_forecasting/`:
 
 | Directory | Contents | Used in |
 |---|---|---|
-| `abm_v2_comparison/v2_headline/` | **the canonical scored result** — both ABM columns, 14 models, 500 paths; `manifest.toml`, `score_summaries.csv`, `relative_scores.csv`, `weighted_relative_scores.csv`, `monte_carlo_errors.csv`, `abm_v2_interval_coverage.csv`, `abm_ensemble_summaries.csv`, `abm_origin_diagnostics.csv`, `failures.csv` | §5, §7, §8 |
+| `abm_v2_comparison/v2_headline/` | **the canonical scored result** — both ABM columns, 14 forecast columns, 500 paths; `manifest.toml`, `score_summaries.csv`, `relative_scores.csv`, `weighted_relative_scores.csv`, `monte_carlo_errors.csv`, `abm_v2_interval_coverage.csv`, `abm_ensemble_summaries.csv`, `abm_origin_diagnostics.csv`, `failures.csv` | §5, §7, §8 |
 | `abm_v2_comparison/v1_headline/` | v1 ensemble cache, re-run under the patched tree (gate G4) | §7.2 |
 | `abm_v2_comparison_outlook/` | 2025Q4 and 2026Q1 origins on the reconciled artifact, unscored | §9 |
 | `commodity_balance_reconciliation/` | `reconciliation_report_rho1.txt`, `reconciliation_by_commodity_rho1.csv` | §7.1 |
@@ -1292,3 +1301,30 @@ model. *European Economic Review*, 151, 104306.
 
 Gneiting, T. (2011). Making and evaluating point forecasts. *Journal of the American Statistical
 Association*, 106(494), 746–762. — the basis for the mean/median functional split in §4.3.
+
+---
+
+## Reproducibility
+
+The committed ensemble caches **are** the reproducibility artifact. Each run
+directory carries `cache_identity.toml` recording the calibration artifact and its
+sha256, the comparison and base-diagnostic code hashes, the panel hashes, the
+requested path count, the variant, the seed-contract id and the Julia version. The
+runner revalidates all of it before reusing a single cached row, and refuses by
+field name on any mismatch.
+
+Exact regeneration requires **Julia 1.10.3**. Seeds derive from `Base.hash` and are
+drawn through the default global RNG; both are version-bound, so the same seed
+produces a different path under a different Julia. A cross-version rerun is a new
+experiment, not a reproduction of these numbers — and the identity check will say
+so rather than silently reusing the cache. The U.S. hermetic validation job pins
+1.10.3 for this reason.
+
+Re-scoring a committed cache (seconds, no simulation):
+
+```sh
+JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 julia --project=scripts/us \
+  scripts/us/forecasting/diagnostics/abm_revised_comparison/run_revised_data_abm_comparison.jl \
+  output/us_forecasting/abm_v2_comparison/v2_headline 500 headline_v2 \
+  --also-score=output/us_forecasting/abm_v2_comparison/v1_headline
+```
