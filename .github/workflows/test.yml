@@ -51,7 +51,11 @@ jobs:
       - uses: actions/checkout@v6
       - uses: julia-actions/setup-julia@v3
         with:
-          version: '1.10'
+          # Pinned exactly: the ABM seed stream derives from Base.hash and is drawn
+          # through the default global RNG, both of which are version-bound. A
+          # different 1.10.x would produce different paths from the same seeds and
+          # could not reproduce the committed ensemble caches.
+          version: '1.10.3'
       - uses: actions/cache@v5
         env:
           cache-name: cache-us-offline
@@ -269,6 +273,11 @@ jobs:
           JULIA_NUM_THREADS: 1
           OPENBLAS_NUM_THREADS: 1
         run: julia --startup-file=no --depwarn=error --check-bounds=yes --project=scripts/us scripts/us/forecasting/diagnostics/test_revised_data_abm_engineering_diagnostic.jl
+      - name: ABM comparison runner regression tests
+        env:
+          JULIA_NUM_THREADS: 1
+          OPENBLAS_NUM_THREADS: 1
+        run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/diagnostics/abm_revised_comparison/test_abm_comparison_runner.jl
       - name: Immutable forecast registry tests
         run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/registry/test_registry.jl
       - name: Origin package and cannot-run contract tests
