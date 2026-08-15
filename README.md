@@ -70,11 +70,11 @@ version with figures is in [`paper/`](paper/US_ABM_Forecasting_Paper.tex).
 
 **Headline result.** On a matched grid of 61 quarterly origins (2010Q2–2025Q2),
 five horizons and 500 paths per origin, the repaired model
-`beforeit_abm_us_v2` has the best weighted RMSE ratio of all 14 scored models
+`beforeit_abm_us_v2` has the best weighted RMSE ratio of the 14 scored forecast columns
 on the headline pair {real GDP growth, GDP-deflator inflation} in all three
 sample tracks: **0.830** all-available, **0.829** balanced-h12, **0.796**
 pandemic-masked, against a VAR(1) anchor. The pre-repair model scored 0.905,
-0.894 and 1.272 — 5th, 5th and 11th of 14. Real-GDP bias by horizon collapses
+0.894 and 1.272 — 5th, 5th and 11th of the 14 columns. Real-GDP bias by horizon collapses
 from −1.32 / −7.28 / −2.94 / −2.15 / −2.02 pp to −0.03 / −0.10 / −0.14 / −0.12
 / −0.20 pp, the weighted MAE ratio moves from 1.137 to 0.814, and empirical
 90 % interval coverage for real GDP moves from 0.654 to 0.929.
@@ -83,8 +83,11 @@ from −1.32 / −7.28 / −2.94 / −2.15 / −2.02 pp to −0.03 / −0.10 / �
 behavioural parameters: a biproportional (RAS) reconciliation of the opening
 commodity balance on the use side, which clears it to
 `max |uses/supply − 1| = 1.0e-13`; and growth expectations re-specified as a
-random walk with drift, flag-gated and default-off. Neither used post-origin
-information or any forecast-error fitting.
+random walk with drift, flag-gated and default-off. Neither repair was
+*selected* using forecast errors: each follows from an accounting identity or a
+correctly specified estimator. The exercise as a whole remains explicitly
+mixed-vintage — 2024 input–output structure and current-vintage data are used at
+historical origins — so it does use information unavailable at those origins.
 
 **Labels that must travel with every number above.** This is a **revised-data,
 mixed-vintage diagnostic**, not a real-time backtest: `real_time = false`,
@@ -101,6 +104,15 @@ about 1 % once goods rationing stops, and is excluded from every weighted
 score rather than reported as a result.
 
 ### Reproduce
+
+The committed ensemble caches are the reproducibility artifact. Each run directory
+carries a `cache_identity.toml` that the runner revalidates in full — calibration
+artifact, code hashes, panel hashes, path count, seed contract, Julia version —
+before it reuses a single cached row, refusing by field name on any mismatch.
+Exact regeneration requires **Julia 1.10.3**: seeds derive from `Base.hash` through
+the default global RNG, both version-bound, so a cross-version rerun is a new
+experiment rather than a reproduction.
+
 
 ```sh
 # Hermetic smoke test: builds and steps the ABM from both 2024 artifacts.

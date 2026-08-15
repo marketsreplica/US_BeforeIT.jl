@@ -95,6 +95,13 @@ comparisons stay aligned.
 
 ## 3. Headline standings
 
+**What "14 columns" means.** The field is 14 *forecast columns*, not 14 independent
+models: ten benchmark models (VAR, BVAR, AR variants and naive rules) plus four ABM
+ensemble columns — mean and median, for each of two runs (v1 and v2). The two ABM
+runs share a seed stream and differ only in the calibration artifact, so the four
+ABM columns are not independent of one another. Ranks below are positions among
+these 14 scored columns.
+
 **Headline pair {real_gdp, gdp_deflator} — `all-available`**
 
 | rank | model | status | weighted RMSE ratio | weighted MAE ratio |
@@ -532,3 +539,30 @@ julia --project=scripts/us \
 
 Step 2 resumes from `abm_ensemble_summaries.csv`, so an interrupted run continues instead of
 restarting, and step 3 is a re-score off the cache (~15 s) rather than a re-simulation.
+
+---
+
+## Reproducibility
+
+The committed ensemble caches **are** the reproducibility artifact. Each run
+directory carries `cache_identity.toml` recording the calibration artifact and its
+sha256, the comparison and base-diagnostic code hashes, the panel hashes, the
+requested path count, the variant, the seed-contract id and the Julia version. The
+runner revalidates all of it before reusing a single cached row, and refuses by
+field name on any mismatch.
+
+Exact regeneration requires **Julia 1.10.3**. Seeds derive from `Base.hash` and are
+drawn through the default global RNG; both are version-bound, so the same seed
+produces a different path under a different Julia. A cross-version rerun is a new
+experiment, not a reproduction of these numbers — and the identity check will say
+so rather than silently reusing the cache. The U.S. hermetic validation job pins
+1.10.3 for this reason.
+
+Re-scoring a committed cache (seconds, no simulation):
+
+```sh
+JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 julia --project=scripts/us \
+  scripts/us/forecasting/diagnostics/abm_revised_comparison/run_revised_data_abm_comparison.jl \
+  output/us_forecasting/abm_v2_comparison/v2_headline 500 headline_v2 \
+  --also-score=output/us_forecasting/abm_v2_comparison/v1_headline
+```
