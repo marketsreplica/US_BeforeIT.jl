@@ -238,21 +238,41 @@ function load_extra_abm_column(
                 "$(length(diagnostic_origins)); the identity does not describe the cache",
         ),
     )
-    row_counts = Dict{Int, Int}()
+    # Per-origin structure is validated with the SAME module helpers the primary
+    # cache uses. This loader has now lagged the module three review rounds running
+    # by re-implementing weaker checks here; unify rather than patch.
+    grouped = Dict{Int, Vector{ABM.EnsembleSummary}}()
     for row in summaries
-        row_counts[row.origin_index] = get(row_counts, row.origin_index, 0) + 1
+        push!(get!(grouped, row.origin_index, ABM.EnsembleSummary[]), row)
     end
-    bad_rows = sort!(
+    companion_diagnostic_counts = Dict{Int, Int}()
+    for row in other_diagnostics
+        companion_diagnostic_counts[row.origin_index] =
+            get(companion_diagnostic_counts, row.origin_index, 0) + 1
+    end
+    bad_grid = sort!(
         [
-            index for (index, count) in row_counts
-                if count != ABM.ENSEMBLE_ROWS_PER_ORIGIN
+            index for (index, rows) in grouped
+                if !ABM.origin_grid_complete(rows)
         ],
     )
-    isempty(bad_rows) || throw(
+    isempty(bad_grid) || throw(
         ABM.CacheIdentityError(
             "ensemble_row_count",
-            "--also-score source $directory has origin(s) $bad_rows with a row " *
-                "count other than $(ABM.ENSEMBLE_ROWS_PER_ORIGIN)",
+            "--also-score source $directory has origin(s) $bad_grid whose rows are " *
+                "not the expected target x horizon grid",
+        ),
+    )
+    duplicated = sort!(
+        [
+            index for (index, count) in companion_diagnostic_counts if count != 1
+        ],
+    )
+    isempty(duplicated) || throw(
+        ABM.CacheIdentityError(
+            "abm_origin_diagnostics.csv",
+            "--also-score source $directory has origin(s) $duplicated with a " *
+                "diagnostic row count other than one",
         ),
     )
 

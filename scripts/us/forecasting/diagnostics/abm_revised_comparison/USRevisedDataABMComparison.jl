@@ -214,8 +214,9 @@ include(joinpath(@__DIR__, "USRevisedDataABMKernel.jl"))
 # ---------------------------------------------------------------------------
 
 const CACHE_IDENTITY_FILENAME = "cache_identity.toml"
-const CACHE_IDENTITY_SCHEMA = "beforeit-us-revised-data-abm-cache-identity.v2"
+const CACHE_IDENTITY_SCHEMA = "beforeit-us-revised-data-abm-cache-identity.v3"
 const CACHE_IDENTITY_SCHEMA_V1 = "beforeit-us-revised-data-abm-cache-identity.v1"
+const CACHE_IDENTITY_SCHEMA_V2 = "beforeit-us-revised-data-abm-cache-identity.v2"
 
 
 # The simulation owns these files. --force-recompute must remove all of them:
@@ -227,6 +228,8 @@ const RUN_OWNED_SIMULATION_ARTIFACTS = (
     CACHE_IDENTITY_FILENAME,
 )
 
+const NUMERICAL_KERNEL_PATH =
+    joinpath(@__DIR__, "USRevisedDataABMKernel.jl")
 const RUNNER_PATH =
     joinpath(@__DIR__, "run_revised_data_abm_comparison.jl")
 const ENVIRONMENT_MANIFEST_PATH =
@@ -295,6 +298,7 @@ const CACHE_IDENTITY_FIELDS = (
     "comparison_code_sha256",
     "base_diagnostic_code_sha256",
     "runtime_source_tree_sha256",
+    "numerical_kernel_sha256",
     "runner_sha256",
     "environment_manifest_sha256",
     "panel_sha256",
@@ -340,6 +344,30 @@ const CACHE_IDENTITY_EXPERIMENT_FIELDS = (
 )
 
 # What schema 1 recorded. Retained so a v1 document can be verified before upgrade.
+# Schema 2 recorded the runtime tree, runner and environment but not the
+# numerical kernel, which had not yet been extracted.
+const CACHE_IDENTITY_FIELDS_V2 = (
+    "schema_version",
+    "contract_id",
+    "seed_contract_id",
+    "variant",
+    "burn_in_quarters",
+    "simulated_quarters",
+    "paths_requested",
+    "model_scale",
+    "calibration_object_path",
+    "calibration_object_sha256",
+    "comparison_code_sha256",
+    "base_diagnostic_code_sha256",
+    "runtime_source_tree_sha256",
+    "runner_sha256",
+    "environment_manifest_sha256",
+    "panel_sha256",
+    "panel_manifest_sha256",
+    "julia_version",
+    "origin_indices",
+)
+
 const CACHE_IDENTITY_FIELDS_V1 = (
     "schema_version",
     "contract_id",
@@ -504,6 +532,7 @@ function build_cache_identity(
         "comparison_code_sha256" => sha256_hex(read(abspath(@__FILE__))),
         "base_diagnostic_code_sha256" => sha256_hex(read(BASE_DIAGNOSTIC_PATH)),
         "runtime_source_tree_sha256" => runtime_source_tree_sha256(),
+        "numerical_kernel_sha256" => sha256_hex(read(NUMERICAL_KERNEL_PATH)),
         "runner_sha256" => sha256_hex(read(RUNNER_PATH)),
         "environment_manifest_sha256" =>
             isfile(ENVIRONMENT_MANIFEST_PATH) ?
@@ -570,7 +599,13 @@ function write_cache_identity(
                 "runtime_source_tree_sha256, runner_sha256, " *
                 "environment_manifest_sha256. The guarantee that those code changes " *
                 "did not move the numbers is the byte-identical re-score of every " *
-                "committed score table, not this document.\"",
+                "committed score table, not this document. Attestation chain for " *
+                "numerical_kernel_sha256: the schema-1 module hash preserved above " *
+                "generated these rows; the numerical kernel was then extracted out " *
+                "of that module by an auditable pure-move commit (refactor: extract " *
+                "the numerical forecast kernel) which moved no line and left every " *
+                "score table byte-identical; the kernel digest is enforced on every " *
+                "run from that point on, migrated identity or not.\"",
         )
     end
     push!(lines, "written_at = \"$(Dates.format(Dates.now(Dates.UTC), "yyyy-mm-ddTHH:MM:SSZ"))\"")
@@ -599,8 +634,13 @@ function read_cache_identity(path::AbstractString)
     )
     document = TOML.parsefile(path)
     schema = get(document, "schema_version", "")
-    required = schema == CACHE_IDENTITY_SCHEMA_V1 ?
-        CACHE_IDENTITY_FIELDS_V1 : CACHE_IDENTITY_FIELDS
+    required = if schema == CACHE_IDENTITY_SCHEMA_V1
+        CACHE_IDENTITY_FIELDS_V1
+    elseif schema == CACHE_IDENTITY_SCHEMA_V2
+        CACHE_IDENTITY_FIELDS_V2
+    else
+        CACHE_IDENTITY_FIELDS
+    end
     for field in required
         haskey(document, field) ||
             throw(CacheIdentityError(field, "absent from $path"))
@@ -645,10 +685,20 @@ function upgrade_cache_identity(stored::AbstractDict, expected::AbstractDict)
     # Preserve, never overwrite, what schema 1 actually recorded. Replacing these
     # with current hashes would erase the only record of the code that produced
     # the cache, which is the opposite of what an identity document is for.
-    upgraded["original_schema1_comparison_code_sha256"] =
-        String(stored["comparison_code_sha256"])
-    upgraded["original_schema1_base_diagnostic_code_sha256"] =
-        String(stored["base_diagnostic_code_sha256"])
+    # A schema-2 document already carries the preserved originals; only a schema-1
+    # document's own hashes are the generation hashes.
+    upgraded["original_schema1_comparison_code_sha256"] = String(
+        get(
+            stored, "original_schema1_comparison_code_sha256",
+            stored["comparison_code_sha256"],
+        ),
+    )
+    upgraded["original_schema1_base_diagnostic_code_sha256"] = String(
+        get(
+            stored, "original_schema1_base_diagnostic_code_sha256",
+            stored["base_diagnostic_code_sha256"],
+        ),
+    )
     upgraded["migration_verified_fields"] =
         collect(CACHE_IDENTITY_EXPERIMENT_FIELDS)
     # Adoption is sticky: a cache that was once adopted from an unauthenticated
@@ -959,14 +1009,15 @@ function simulate_abm_ensembles(
             )
         else
             stored = read_cache_identity(identity_path)
-            if String(get(stored, "schema_version", "")) == CACHE_IDENTITY_SCHEMA_V1
+            stored_schema = String(get(stored, "schema_version", ""))
+            if stored_schema in (CACHE_IDENTITY_SCHEMA_V1, CACHE_IDENTITY_SCHEMA_V2)
                 upgrade_identity_schema || throw(
                     CacheIdentityError(
                         "schema_version",
-                        "$identity_path is schema 1 and does not record the model " *
-                            "runtime tree, the runner or the environment manifest. " *
-                            "Rerun with --upgrade-cache-identity to verify and raise " *
-                            "it to schema 2, or --force-recompute to regenerate.",
+                        "$identity_path predates the current identity schema and " *
+                            "does not record every sealed component. Rerun with " *
+                            "--upgrade-cache-identity to verify and raise it, or " *
+                            "--force-recompute to regenerate.",
                     ),
                 )
                 write_cache_identity(
@@ -975,7 +1026,8 @@ function simulate_abm_ensembles(
                 )
                 identity_upgraded = true
                 progress && println(
-                    "  --upgrade-cache-identity: verified and raised the identity to schema 2",
+                    "  --upgrade-cache-identity: verified and raised $stored_schema to " *
+                        "$CACHE_IDENTITY_SCHEMA",
                 )
             else
                 validate_cache_identity(

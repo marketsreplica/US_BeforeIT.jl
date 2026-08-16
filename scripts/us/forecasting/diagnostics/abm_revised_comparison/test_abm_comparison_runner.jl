@@ -844,6 +844,113 @@ end
         end
     end
 
+    @testset "loader rejects both live grid forgeries through the real path" begin
+        # Both of these previously passed the loader: it row-counted and Set-deduped
+        # instead of using the module helpers. These go through
+        # load_extra_abm_column, not the helper, so a loader that drifts from the
+        # module fails here.
+        mktempdir() do root
+            source = joinpath(root, "companion")
+            generated = generate_tiny_cache(source, BASELINE_CALIBRATION)
+            cache_path = joinpath(source, "abm_ensemble_summaries.csv")
+            diagnostics_path = joinpath(source, "abm_origin_diagnostics.csv")
+            own = ABM.build_cache_identity(
+                ABM.HEADLINE_VARIANT,
+                generated.selected;
+                paths = 4,
+                calibration_path = BASELINE_CALIBRATION,
+                panel = generated.panel,
+            )
+            own_origins = [entry[1] for entry in generated.selected]
+            pristine_cache = read(cache_path)
+            pristine_diagnostics = read(diagnostics_path)
+
+            # Repro 1: substitute a unique horizon-13 cell. Row count stays 60 and
+            # every pair is still unique, so a count-and-dedup check passes.
+            rows = ABM.read_struct_csv(cache_path, ABM.EnsembleSummary)
+            victim = findfirst(
+                row -> row.origin_index == own_origins[1] &&
+                    row.target_id == "real_gdp" && row.horizon == 1,
+                rows,
+            )
+            @test victim !== nothing
+            original = rows[victim]
+            rows[victim] = ABM.EnsembleSummary(
+                original.variant, original.origin_index, original.origin_period,
+                original.target_period, original.target_id,
+                ABM.SIMULATION_HORIZON + 1, original.paths_used,
+                original.ensemble_mean, original.ensemble_median,
+                original.ensemble_sd, original.monte_carlo_standard_error,
+                original.percentile_05, original.percentile_10,
+                original.percentile_25, original.percentile_75,
+                original.percentile_90, original.percentile_95,
+            )
+            ABM.rewrite_struct_csv(cache_path, rows, ABM.EnsembleSummary)
+            thrown = nothing
+            try
+                load_extra_abm_column(source, own, own_origins)
+            catch error
+                thrown = error
+            end
+            @test thrown isa ABM.CacheIdentityError
+            @test thrown.field == "ensemble_row_count"
+            println("  refusal (loader, horizon-13 substitution): ", sprint(showerror, thrown))
+            write(cache_path, pristine_cache)
+
+            # Repro 2: duplicate a companion diagnostic row. Set membership of
+            # origins is unchanged, so a Set-based check passes.
+            diagnostics =
+                ABM.read_struct_csv(diagnostics_path, ABM.ABMOriginDiagnostic)
+            ABM.rewrite_struct_csv(
+                diagnostics_path,
+                vcat(diagnostics, [diagnostics[1]]),
+                ABM.ABMOriginDiagnostic,
+            )
+            duplicated = nothing
+            try
+                load_extra_abm_column(source, own, own_origins)
+            catch error
+                duplicated = error
+            end
+            @test duplicated isa ABM.CacheIdentityError
+            @test duplicated.field == "abm_origin_diagnostics.csv"
+            println("  refusal (loader, duplicated diagnostic): ", sprint(showerror, duplicated))
+            write(diagnostics_path, pristine_diagnostics)
+
+            # And an untampered companion still loads.
+            @test load_extra_abm_column(source, own, own_origins)[1].name == "headline"
+        end
+    end
+
+    @testset "the numerical kernel digest is enforced on every run" begin
+        mktempdir() do directory
+            generated = generate_tiny_cache(directory, BASELINE_CALIBRATION)
+            identity_path = joinpath(directory, ABM.CACHE_IDENTITY_FILENAME)
+            stored = ABM.read_cache_identity(identity_path)
+            @test haskey(stored, "numerical_kernel_sha256")
+            @test stored["numerical_kernel_sha256"] ==
+                bytes2hex(SHA.sha256(read(ABM.NUMERICAL_KERNEL_PATH)))
+
+            # Even a MIGRATED identity must not excuse a changed kernel: the kernel
+            # is not a harness field.
+            @test !("numerical_kernel_sha256" in ABM.HARNESS_IDENTITY_FIELDS)
+            migrated = copy(stored)
+            migrated["upgraded_from_schema_1"] = true
+            migrated["original_schema1_comparison_code_sha256"] = repeat("a", 64)
+            migrated["original_schema1_base_diagnostic_code_sha256"] = repeat("b", 64)
+            migrated["numerical_kernel_sha256"] = repeat("f", 64)
+            thrown = nothing
+            try
+                ABM.validate_cache_identity(generated.identity, migrated)
+            catch error
+                thrown = error
+            end
+            @test thrown isa ABM.CacheIdentityError
+            @test thrown.field == "numerical_kernel_sha256"
+            println("  refusal (migrated identity, changed kernel): ", sprint(showerror, thrown))
+        end
+    end
+
     @testset "committed v2 headline cache validates and re-scores byte-identically" begin
         if !isdir(COMMITTED_V2_HEADLINE) || !isdir(COMMITTED_V1_HEADLINE)
             @info "committed v2 headline run absent; skipping"
