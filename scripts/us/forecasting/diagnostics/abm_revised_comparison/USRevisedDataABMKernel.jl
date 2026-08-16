@@ -249,3 +249,88 @@ function summarize_ensemble(
     end
     return summaries
 end
+
+"""
+    generate_origin_ensemble(variant, origin_index, origin_period, paths, calibration_object)
+
+The COMPLETE per-origin numerical generation operation: origin date derivation,
+calibration inputs, simulated-quarter selection, the path loop with its seed call
+arguments, the path acceptance policy, and the ensemble summarisation. Returns
+the summarised rows, the origin diagnostic, and any path-failure messages.
+
+This lives in the sealed kernel because calling a sealed function does not seal
+its arguments or the control flow around it: with the loop in the harness,
+changing `path` to `path + 1` at the seed call site moved every forecast number
+while only comparison_code_sha256 changed -- a field a migrated identity skips.
+The boundary is now explicit: everything that can move a number lives in an
+always-hashed file, and the harness may only validate, resume, repair, persist
+and report.
+"""
+function generate_origin_ensemble(
+        variant::ABMVariant,
+        origin_index::Int,
+        origin_period::AbstractString,
+        paths::Int,
+        calibration_object,
+    )
+    path_failures = String[]
+    build_period = shift_period(origin_period, -variant.burn_in_quarters)
+    calibration_date = period_to_quarter_end(build_period)
+    started = time()
+    parameters, initial_conditions =
+        abm_origin_inputs(calibration_object, calibration_date)
+    calibration_seconds = time() - started
+
+    quarters = SIMULATION_HORIZON + variant.burn_in_quarters
+    started = time()
+    simulated = SimulatedPath[]
+    failed = 0
+    for path in 1:paths
+        seed = path_seed(seed_stream_name(variant.name), origin_period, path)
+        try
+            candidate = simulate_path(
+                parameters,
+                initial_conditions,
+                quarters,
+                seed,
+            )
+            if path_is_usable(candidate)
+                push!(simulated, candidate)
+            else
+                failed += 1
+                push!(
+                    path_failures,
+                    "$(variant.name) $origin_period path $path seed $seed: non_finite_or_nonpositive_path",
+                )
+            end
+        catch exception
+            failed += 1
+            push!(
+                path_failures,
+                "$(variant.name) $origin_period path $path seed $seed: " *
+                    first(split(sprint(showerror, exception), "\n")),
+            )
+        end
+    end
+    simulation_seconds = time() - started
+
+    diagnostic = ABMOriginDiagnostic(
+        variant.name,
+        origin_index,
+        String(origin_period),
+        build_period,
+        string(Date(calibration_date)),
+        variant.burn_in_quarters,
+        quarters,
+        Int(parameters["T_prime"]),
+        Int(parameters["T_max"]),
+        paths,
+        length(simulated),
+        failed,
+        calibration_seconds,
+        simulation_seconds,
+    )
+    origin_summaries = isempty(simulated) ? EnsembleSummary[] :
+        summarize_ensemble(variant, origin_index, origin_period, simulated)
+    return (; summaries = origin_summaries, diagnostic, path_failures)
+end

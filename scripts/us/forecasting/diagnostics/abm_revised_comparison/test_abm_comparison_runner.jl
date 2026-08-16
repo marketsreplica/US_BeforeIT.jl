@@ -951,6 +951,95 @@ end
         end
     end
 
+    @testset "generation primitives exist only in sealed files" begin
+        # Structural boundary. The review's principle: calling a sealed function does
+        # not seal its arguments or the control flow around it. So every primitive
+        # that can produce or perturb a forecast number must appear ONLY in files
+        # whose digest is enforced on every run.
+        kernel = read(ABM.NUMERICAL_KERNEL_PATH, String)
+        harness = read(
+            joinpath(@__DIR__, "USRevisedDataABMComparison.jl"),
+            String,
+        )
+        runner = read(RUNNER, String)
+
+        primitives = (
+            "Bit.Model(",
+            "Bit.step!",
+            "Bit.collect_data!",
+            "Random.seed!",
+            "Bit.get_params_and_initial_conditions",
+            "path_seed(",
+            "simulate_path(",
+            "summarize_ensemble(",
+        )
+        for primitive in primitives
+            @test occursin(primitive, kernel)
+            @test !occursin(primitive, harness)
+            @test !occursin(primitive, runner)
+        end
+        println(
+            "  all $(length(primitives)) generation primitives confined to the sealed kernel",
+        )
+
+        # The whole per-origin operation is one sealed entry point, so the harness
+        # cannot re-derive origin dates, quarters or seeds around it.
+        @test occursin("function generate_origin_ensemble(", kernel)
+        @test occursin("generate_origin_ensemble(", harness)
+        # The generation DECISIONS must be kernel-side. The harness may still record
+        # simulated_quarters as identity/manifest metadata -- recording a value is
+        # not choosing it -- so the assertion targets the assignments that drive the
+        # simulation, not every mention of the quantity.
+        for decision in (
+                "shift_period(origin_period",
+                "quarters = SIMULATION_HORIZON + variant.burn_in_quarters",
+                "seed_stream_name(variant.name)",
+                "for path in 1:paths",
+            )
+            @test occursin(decision, kernel)
+            @test !occursin(decision, harness)
+        end
+        println("  origin dates, quarters, the path loop and seed arguments are kernel-side")
+    end
+
+    @testset "a comparison-only change is non-numerical by construction" begin
+        # The reviewer's repro was: perturb the seed call site (then in the harness)
+        # so every number moves while only comparison_code_sha256 changes -- a field
+        # a migrated identity skips. That repro class is now impossible: the seed call
+        # site is in the kernel, so the same edit moves numerical_kernel_sha256, which
+        # is enforced for migrated and native identities alike.
+        @test occursin("path_seed(", read(ABM.NUMERICAL_KERNEL_PATH, String))
+
+        mktempdir() do directory
+            generated = generate_tiny_cache(directory, BASELINE_CALIBRATION)
+            stored = ABM.read_cache_identity(
+                joinpath(directory, ABM.CACHE_IDENTITY_FILENAME),
+            )
+            # A migrated identity skips the harness hash ...
+            migrated = copy(stored)
+            migrated["upgraded_from_schema_1"] = true
+            migrated["original_schema1_comparison_code_sha256"] = repeat("a", 64)
+            migrated["original_schema1_base_diagnostic_code_sha256"] = repeat("b", 64)
+            migrated["comparison_code_sha256"] = repeat("9", 64)
+            @test ABM.validate_cache_identity(generated.identity, migrated) === nothing
+
+            # ... but never the kernel, which is where every number now comes from.
+            migrated["numerical_kernel_sha256"] = repeat("f", 64)
+            thrown = nothing
+            try
+                ABM.validate_cache_identity(generated.identity, migrated)
+            catch error
+                thrown = error
+            end
+            @test thrown isa ABM.CacheIdentityError
+            @test thrown.field == "numerical_kernel_sha256"
+            println(
+                "  comparison-only change accepted (non-numerical by construction); ",
+                "kernel change refused on `", thrown.field, "`",
+            )
+        end
+    end
+
     @testset "committed v2 headline cache validates and re-scores byte-identically" begin
         if !isdir(COMMITTED_V2_HEADLINE) || !isdir(COMMITTED_V1_HEADLINE)
             @info "committed v2 headline run absent; skipping"
