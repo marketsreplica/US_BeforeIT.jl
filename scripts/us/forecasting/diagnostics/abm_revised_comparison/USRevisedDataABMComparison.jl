@@ -47,9 +47,6 @@ export ABMVariant,
 const CONTRACT_ID = "beforeit-us-revised-data-abm-comparison.v1"
 const INFORMATION_TRACK = "revised_mixed_vintage_diagnostic"
 const MIXED_VINTAGE_STRUCTURAL_YEAR = 2024
-const MODEL_SCALE = 1.0e-5
-const SIMULATION_HORIZON = 12
-const EXOGENOUS_TRUNCATION_KEYS = ("C_G", "C_E", "Y_I")
 const PANEL_FIRST_PERIOD = "2000Q3"
 
 const REPOSITORY_ROOT =
@@ -130,13 +127,6 @@ end
 # The five targets the ABM serves with a native operator. `pce_price_index`,
 # `core_pce_price_index` and `payroll_employment` need measurement bridges the
 # model does not provide and are deliberately absent.
-const ABM_TARGET_IDS = [
-    "real_gdp",
-    "gdp_deflator",
-    "nominal_gdp",
-    "unemployment_rate",
-    "effective_federal_funds_rate",
-]
 const HEADLINE_TARGET_IDS = ["real_gdp", "gdp_deflator"]
 const SECONDARY_TARGET_IDS = ["nominal_gdp", "effective_federal_funds_rate"]
 
@@ -206,11 +196,11 @@ const OUTLOOK_V2_VARIANT = ABMVariant(
     500,
 )
 
-# v2 draws the SAME seed stream as its v1 counterpart, so the v1 -> v2 delta is a
-# matched-seed contrast and not a Monte-Carlo artifact. Only the cache key differs.
-const SEED_STREAM_ALIASES =
-    Dict("headline_v2" => "headline", "outlook_v2" => "outlook")
-seed_stream_name(name::AbstractString) = get(SEED_STREAM_ALIASES, name, String(name))
+# The numerical forecast kernel is a separately sealed file: everything whose
+# change can move a forecast number lives there, and its digest is compared on
+# every run. See USRevisedDataABMKernel.jl.
+include(joinpath(@__DIR__, "USRevisedDataABMKernel.jl"))
+
 
 # ---------------------------------------------------------------------------
 # cache identity
@@ -224,19 +214,10 @@ seed_stream_name(name::AbstractString) = get(SEED_STREAM_ALIASES, name, String(n
 # ---------------------------------------------------------------------------
 
 const CACHE_IDENTITY_FILENAME = "cache_identity.toml"
-const CACHE_IDENTITY_SCHEMA = "beforeit-us-revised-data-abm-cache-identity.v2"
+const CACHE_IDENTITY_SCHEMA = "beforeit-us-revised-data-abm-cache-identity.v3"
 const CACHE_IDENTITY_SCHEMA_V1 = "beforeit-us-revised-data-abm-cache-identity.v1"
+const CACHE_IDENTITY_SCHEMA_V2 = "beforeit-us-revised-data-abm-cache-identity.v2"
 
-# Every origin writes exactly one row per (horizon, target). A cache holding a
-# different count for an origin was interrupted between the ensemble append and
-# the diagnostics append, and must not be resumed as if it were whole.
-const ENSEMBLE_ROWS_PER_ORIGIN = SIMULATION_HORIZON * length(ABM_TARGET_IDS)
-
-# The exact (target, horizon) grid every origin must carry.
-const EXPECTED_FORECAST_GRID = Set(
-    (target_id, horizon)
-        for target_id in ABM_TARGET_IDS, horizon in 1:SIMULATION_HORIZON
-)
 
 # The simulation owns these files. --force-recompute must remove all of them:
 # leaving a stale failure log beside a fresh, clean cache misreports the run.
@@ -247,6 +228,8 @@ const RUN_OWNED_SIMULATION_ARTIFACTS = (
     CACHE_IDENTITY_FILENAME,
 )
 
+const NUMERICAL_KERNEL_PATH =
+    joinpath(@__DIR__, "USRevisedDataABMKernel.jl")
 const RUNNER_PATH =
     joinpath(@__DIR__, "run_revised_data_abm_comparison.jl")
 const ENVIRONMENT_MANIFEST_PATH =
@@ -315,6 +298,7 @@ const CACHE_IDENTITY_FIELDS = (
     "comparison_code_sha256",
     "base_diagnostic_code_sha256",
     "runtime_source_tree_sha256",
+    "numerical_kernel_sha256",
     "runner_sha256",
     "environment_manifest_sha256",
     "panel_sha256",
@@ -360,6 +344,30 @@ const CACHE_IDENTITY_EXPERIMENT_FIELDS = (
 )
 
 # What schema 1 recorded. Retained so a v1 document can be verified before upgrade.
+# Schema 2 recorded the runtime tree, runner and environment but not the
+# numerical kernel, which had not yet been extracted.
+const CACHE_IDENTITY_FIELDS_V2 = (
+    "schema_version",
+    "contract_id",
+    "seed_contract_id",
+    "variant",
+    "burn_in_quarters",
+    "simulated_quarters",
+    "paths_requested",
+    "model_scale",
+    "calibration_object_path",
+    "calibration_object_sha256",
+    "comparison_code_sha256",
+    "base_diagnostic_code_sha256",
+    "runtime_source_tree_sha256",
+    "runner_sha256",
+    "environment_manifest_sha256",
+    "panel_sha256",
+    "panel_manifest_sha256",
+    "julia_version",
+    "origin_indices",
+)
+
 const CACHE_IDENTITY_FIELDS_V1 = (
     "schema_version",
     "contract_id",
@@ -524,6 +532,7 @@ function build_cache_identity(
         "comparison_code_sha256" => sha256_hex(read(abspath(@__FILE__))),
         "base_diagnostic_code_sha256" => sha256_hex(read(BASE_DIAGNOSTIC_PATH)),
         "runtime_source_tree_sha256" => runtime_source_tree_sha256(),
+        "numerical_kernel_sha256" => sha256_hex(read(NUMERICAL_KERNEL_PATH)),
         "runner_sha256" => sha256_hex(read(RUNNER_PATH)),
         "environment_manifest_sha256" =>
             isfile(ENVIRONMENT_MANIFEST_PATH) ?
@@ -590,7 +599,13 @@ function write_cache_identity(
                 "runtime_source_tree_sha256, runner_sha256, " *
                 "environment_manifest_sha256. The guarantee that those code changes " *
                 "did not move the numbers is the byte-identical re-score of every " *
-                "committed score table, not this document.\"",
+                "committed score table, not this document. Attestation chain for " *
+                "numerical_kernel_sha256: the schema-1 module hash preserved above " *
+                "generated these rows; the numerical kernel was then extracted out " *
+                "of that module by an auditable pure-move commit (refactor: extract " *
+                "the numerical forecast kernel) which moved no line and left every " *
+                "score table byte-identical; the kernel digest is enforced on every " *
+                "run from that point on, migrated identity or not.\"",
         )
     end
     push!(lines, "written_at = \"$(Dates.format(Dates.now(Dates.UTC), "yyyy-mm-ddTHH:MM:SSZ"))\"")
@@ -619,8 +634,13 @@ function read_cache_identity(path::AbstractString)
     )
     document = TOML.parsefile(path)
     schema = get(document, "schema_version", "")
-    required = schema == CACHE_IDENTITY_SCHEMA_V1 ?
-        CACHE_IDENTITY_FIELDS_V1 : CACHE_IDENTITY_FIELDS
+    required = if schema == CACHE_IDENTITY_SCHEMA_V1
+        CACHE_IDENTITY_FIELDS_V1
+    elseif schema == CACHE_IDENTITY_SCHEMA_V2
+        CACHE_IDENTITY_FIELDS_V2
+    else
+        CACHE_IDENTITY_FIELDS
+    end
     for field in required
         haskey(document, field) ||
             throw(CacheIdentityError(field, "absent from $path"))
@@ -665,10 +685,20 @@ function upgrade_cache_identity(stored::AbstractDict, expected::AbstractDict)
     # Preserve, never overwrite, what schema 1 actually recorded. Replacing these
     # with current hashes would erase the only record of the code that produced
     # the cache, which is the opposite of what an identity document is for.
-    upgraded["original_schema1_comparison_code_sha256"] =
-        String(stored["comparison_code_sha256"])
-    upgraded["original_schema1_base_diagnostic_code_sha256"] =
-        String(stored["base_diagnostic_code_sha256"])
+    # A schema-2 document already carries the preserved originals; only a schema-1
+    # document's own hashes are the generation hashes.
+    upgraded["original_schema1_comparison_code_sha256"] = String(
+        get(
+            stored, "original_schema1_comparison_code_sha256",
+            stored["comparison_code_sha256"],
+        ),
+    )
+    upgraded["original_schema1_base_diagnostic_code_sha256"] = String(
+        get(
+            stored, "original_schema1_base_diagnostic_code_sha256",
+            stored["base_diagnostic_code_sha256"],
+        ),
+    )
     upgraded["migration_verified_fields"] =
         collect(CACHE_IDENTITY_EXPERIMENT_FIELDS)
     # Adoption is sticky: a cache that was once adopted from an unauthenticated
@@ -910,200 +940,6 @@ end
 # ---------------------------------------------------------------------------
 
 """
-    historical_calibration_object(calibration_object, calibration_date)
-
-Return a shallow copy of the shipped calibration object whose annual index
-resolves at `calibration_date`. Every annual/structural array in the artifact
-has length one (the 2024 vintage), so this only makes the single available
-structural row addressable at historical dates; it does not invent data. The
-resulting origin is therefore mixed-vintage by construction.
-"""
-function historical_calibration_object(calibration_object, calibration_date::DateTime)
-    calibration = copy(calibration_object.calibration)
-    structural_date = DateTime(year(calibration_date), 12, 31)
-    calibration["years_num"] = [Bit.date2num(structural_date)]
-    return Bit.CalibrationData(
-        calibration,
-        calibration_object.figaro,
-        calibration_object.data,
-        calibration_object.ea,
-        structural_date,
-        calibration_object.estimation_date,
-    )
-end
-
-"""
-    abm_origin_inputs(calibration_object, calibration_date)
-
-Derive raw parameters and initial conditions at `calibration_date`, then
-truncate the exogenous government/export/import arrays to `1:T_prime`. The
-truncation is past-only hygiene: simulated paths are provably invariant to the
-post-origin entries, which the model never reads.
-"""
-function abm_origin_inputs(calibration_object, calibration_date::DateTime)
-    parameters, initial_conditions = Bit.get_params_and_initial_conditions(
-        historical_calibration_object(calibration_object, calibration_date),
-        calibration_date;
-        scale = MODEL_SCALE,
-        use_growth_rate_ar1 = false,
-    )
-    t_prime = Int(parameters["T_prime"])
-    for key in EXOGENOUS_TRUNCATION_KEYS
-        haskey(initial_conditions, key) || continue
-        initial_conditions[key] =
-            reshape(vec(initial_conditions[key])[1:t_prime], t_prime, 1)
-    end
-    return parameters, initial_conditions
-end
-
-struct SimulatedPath
-    real_gdp::Vector{Float64}
-    nominal_gdp::Vector{Float64}
-    policy_rate::Vector{Float64}
-    unemployment_rate::Vector{Float64}
-end
-
-path_seed(variant_name, origin_period, path) = Int(
-    hash(
-        (
-            :beforeit_us_abm_revised_comparison_v1,
-            variant_name,
-            origin_period,
-            path,
-        )
-    ) % 0x40000000,
-)
-
-"""
-    simulate_path(parameters, initial_conditions, quarters, seed)
-
-Construct a fresh model after seeding the global RNG and step it serially.
-`Bit.Model` draws the initial microstate from the global RNG, so the seed must
-be set immediately before construction. The unemployment rate has no `Data`
-field and must be read off the worker state after every step, which is why this
-loop does not use `Bit.run!`.
-"""
-function simulate_path(parameters, initial_conditions, quarters::Int, seed::Int)
-    Random.seed!(seed)
-    model = Bit.Model(parameters, initial_conditions)
-    active_population = Int(model.prop.H_act)
-    unemployment =
-        Float64[100.0 * count(==(0), model.w_act.O_h) / active_population]
-    for _ in 1:quarters
-        Bit.step!(model; parallel = false)
-        Bit.collect_data!(model)
-        push!(
-            unemployment,
-            100.0 * count(==(0), model.w_act.O_h) / active_population,
-        )
-    end
-    return SimulatedPath(
-        copy(model.data.real_gdp),
-        copy(model.data.nominal_gdp),
-        100.0 .* ((1.0 .+ copy(model.data.euribor)) .^ 4 .- 1.0),
-        unemployment,
-    )
-end
-
-function path_is_usable(path::SimulatedPath)
-    all(isfinite, path.real_gdp) || return false
-    all(isfinite, path.nominal_gdp) || return false
-    all(isfinite, path.policy_rate) || return false
-    all(isfinite, path.unemployment_rate) || return false
-    all(>(0.0), path.real_gdp) || return false
-    all(>(0.0), path.nominal_gdp) || return false
-    return true
-end
-
-annualized_log_growth(current, previous) =
-    400.0 * (log(current) - log(previous))
-
-"""
-    pathwise_values(paths, target_id, current_row, previous_row)
-
-Apply the target operator to each path separately. Ensemble statistics are
-taken afterwards, so the reported mean is the mean of transformed paths and not
-the transform of the mean path.
-"""
-function pathwise_values(paths, target_id, current_row::Int, previous_row::Int)
-    if target_id == "real_gdp"
-        return [
-            annualized_log_growth(
-                    path.real_gdp[current_row],
-                    path.real_gdp[previous_row],
-                ) for path in paths
-        ]
-    elseif target_id == "nominal_gdp"
-        return [
-            annualized_log_growth(
-                    path.nominal_gdp[current_row],
-                    path.nominal_gdp[previous_row],
-                ) for path in paths
-        ]
-    elseif target_id == "gdp_deflator"
-        return [
-            400.0 * (
-                    (
-                        log(path.nominal_gdp[current_row]) -
-                        log(path.real_gdp[current_row])
-                    ) - (
-                        log(path.nominal_gdp[previous_row]) -
-                        log(path.real_gdp[previous_row])
-                    )
-                ) for path in paths
-        ]
-    elseif target_id == "unemployment_rate"
-        return [path.unemployment_rate[current_row] for path in paths]
-    elseif target_id == "effective_federal_funds_rate"
-        return [path.policy_rate[current_row] for path in paths]
-    end
-    throw(ArgumentError("no ABM operator for target $target_id"))
-end
-
-function summarize_ensemble(
-        variant::ABMVariant,
-        origin_index::Int,
-        origin_period::AbstractString,
-        paths::Vector{SimulatedPath},
-    )
-    summaries = EnsembleSummary[]
-    origin_row = variant.burn_in_quarters + 1
-    used = length(paths)
-    for horizon in 1:SIMULATION_HORIZON
-        current_row = origin_row + horizon
-        previous_row = current_row - 1
-        for target_id in ABM_TARGET_IDS
-            values =
-                pathwise_values(paths, target_id, current_row, previous_row)
-            dispersion = used > 1 ? std(values) : NaN
-            push!(
-                summaries,
-                EnsembleSummary(
-                    variant.name,
-                    origin_index,
-                    String(origin_period),
-                    shift_period(origin_period, horizon),
-                    target_id,
-                    horizon,
-                    used,
-                    mean(values),
-                    median(values),
-                    dispersion,
-                    dispersion / sqrt(used),
-                    quantile(values, 0.05),
-                    quantile(values, 0.1),
-                    quantile(values, 0.25),
-                    quantile(values, 0.75),
-                    quantile(values, 0.9),
-                    quantile(values, 0.95),
-                ),
-            )
-        end
-    end
-    return summaries
-end
-
-"""
     simulate_abm_ensembles(variant, origins; paths, ...)
 
 Free-run `paths` independent ensembles at every origin and reduce them to
@@ -1173,14 +1009,15 @@ function simulate_abm_ensembles(
             )
         else
             stored = read_cache_identity(identity_path)
-            if String(get(stored, "schema_version", "")) == CACHE_IDENTITY_SCHEMA_V1
+            stored_schema = String(get(stored, "schema_version", ""))
+            if stored_schema in (CACHE_IDENTITY_SCHEMA_V1, CACHE_IDENTITY_SCHEMA_V2)
                 upgrade_identity_schema || throw(
                     CacheIdentityError(
                         "schema_version",
-                        "$identity_path is schema 1 and does not record the model " *
-                            "runtime tree, the runner or the environment manifest. " *
-                            "Rerun with --upgrade-cache-identity to verify and raise " *
-                            "it to schema 2, or --force-recompute to regenerate.",
+                        "$identity_path predates the current identity schema and " *
+                            "does not record every sealed component. Rerun with " *
+                            "--upgrade-cache-identity to verify and raise it, or " *
+                            "--force-recompute to regenerate.",
                     ),
                 )
                 write_cache_identity(
@@ -1189,7 +1026,8 @@ function simulate_abm_ensembles(
                 )
                 identity_upgraded = true
                 progress && println(
-                    "  --upgrade-cache-identity: verified and raised the identity to schema 2",
+                    "  --upgrade-cache-identity: verified and raised $stored_schema to " *
+                        "$CACHE_IDENTITY_SCHEMA",
                 )
             else
                 validate_cache_identity(
