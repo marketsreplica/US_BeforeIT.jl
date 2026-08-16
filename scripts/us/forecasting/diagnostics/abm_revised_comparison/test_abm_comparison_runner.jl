@@ -509,6 +509,188 @@ end
         end
     end
 
+    @testset "migration preserves provenance instead of laundering it" begin
+        mktempdir() do directory
+            generated = generate_tiny_cache(directory, BASELINE_CALIBRATION)
+            identity_path = joinpath(directory, ABM.CACHE_IDENTITY_FILENAME)
+
+            # Recreate a schema-1 document carrying its own code hashes and an
+            # adoption flag, as the committed caches did.
+            schema1 = Dict{String, Any}()
+            for field in ABM.CACHE_IDENTITY_FIELDS_V1
+                schema1[field] = generated.identity[field]
+            end
+            schema1["schema_version"] = ABM.CACHE_IDENTITY_SCHEMA_V1
+            schema1["comparison_code_sha256"] = repeat("c", 64)
+            schema1["base_diagnostic_code_sha256"] = repeat("d", 64)
+            schema1["adopted_from_legacy_cache"] = true
+            open(identity_path, "w") do io
+                for field in ABM.CACHE_IDENTITY_FIELDS_V1
+                    value = schema1[field]
+                    rendered = value isa AbstractString ? "\"$(value)\"" :
+                        value isa AbstractVector ? "[$(join(value, ", "))]" :
+                        string(value)
+                    println(io, "$(field) = $(rendered)")
+                end
+                println(io, "adopted_from_legacy_cache = true")
+            end
+
+            upgraded = ABM.upgrade_cache_identity(
+                ABM.read_cache_identity(identity_path),
+                generated.identity,
+            )
+            # The schema-1 code hashes survive verbatim.
+            @test upgraded["original_schema1_comparison_code_sha256"] == repeat("c", 64)
+            @test upgraded["original_schema1_base_diagnostic_code_sha256"] ==
+                repeat("d", 64)
+            # Adoption is sticky.
+            @test upgraded["adopted_from_legacy_cache"] === true
+            @test upgraded["upgraded_from_schema_1"] === true
+            @test "origin_indices" in upgraded["migration_verified_fields"]
+
+            ABM.write_cache_identity(identity_path, upgraded)
+            written = ABM.read_cache_identity(identity_path)
+            @test written["adopted_from_legacy_cache"] === true
+            @test written["original_schema1_comparison_code_sha256"] == repeat("c", 64)
+            println(
+                "  migration preserved original schema-1 hashes and kept adoption sticky",
+            )
+
+            # And it still refuses when an experiment-describing field disagrees.
+            schema1_bad = copy(schema1)
+            schema1_bad["paths_requested"] = 999
+            thrown = nothing
+            try
+                ABM.upgrade_cache_identity(schema1_bad, generated.identity)
+            catch error
+                thrown = error
+            end
+            @test thrown isa ABM.CacheIdentityError
+            @test thrown.field == "paths_requested"
+            println("  refusal (migration, changed experiment): ", sprint(showerror, thrown))
+        end
+    end
+
+    @testset "companion parity covers runner and environment manifest" begin
+        mktempdir() do root
+            source = joinpath(root, "companion")
+            generated = generate_tiny_cache(source, BASELINE_CALIBRATION)
+            identity_path = joinpath(source, ABM.CACHE_IDENTITY_FILENAME)
+            own = ABM.build_cache_identity(
+                ABM.HEADLINE_VARIANT,
+                generated.selected;
+                paths = 4,
+                calibration_path = BASELINE_CALIBRATION,
+                panel = generated.panel,
+            )
+            own_origins = [entry[1] for entry in generated.selected]
+            for field in ("environment_manifest_sha256", "runner_sha256")
+                document = ABM.read_cache_identity(identity_path)
+                document[field] = repeat("e", 64)
+                ABM.write_cache_identity(identity_path, document)
+                thrown = nothing
+                try
+                    load_extra_abm_column(source, own, own_origins)
+                catch error
+                    thrown = error
+                end
+                @test thrown isa ABM.CacheIdentityError
+                @test thrown.field == field
+                println("  refusal (companion $field): ", sprint(showerror, thrown))
+                ABM.write_cache_identity(identity_path, generated.identity)
+            end
+        end
+    end
+
+    @testset "origin-set expansion refreshes the identity" begin
+        mktempdir() do directory
+            panel = load_panel()
+            one = tiny_origins(panel, 1)
+            two = tiny_origins(panel, 2)
+            generate_tiny_cache(directory, BASELINE_CALIBRATION; origins = 1)
+            identity_path = joinpath(directory, ABM.CACHE_IDENTITY_FILENAME)
+            @test length(ABM.read_cache_identity(identity_path)["origin_indices"]) == 1
+
+            expanded_identity = ABM.build_cache_identity(
+                ABM.HEADLINE_VARIANT,
+                two;
+                paths = 4,
+                calibration_path = BASELINE_CALIBRATION,
+                panel = panel,
+            )
+            result = ABM.simulate_abm_ensembles(
+                ABM.HEADLINE_VARIANT,
+                two;
+                paths = 4,
+                cache_path = joinpath(directory, "abm_ensemble_summaries.csv"),
+                diagnostics_path = joinpath(directory, "abm_origin_diagnostics.csv"),
+                calibration_path = BASELINE_CALIBRATION,
+                identity_path = identity_path,
+                identity = expanded_identity,
+                progress = false,
+            )
+            @test length(result.diagnostics) == 2
+            # The stored identity must now describe the expanded cache, not the
+            # single origin it began with.
+            stored = ABM.read_cache_identity(identity_path)
+            @test Set(stored["origin_indices"]) ==
+                Set(getfield.(result.diagnostics, :origin_index))
+            @test length(stored["origin_indices"]) == 2
+            println("  identity refreshed after 1 -> 2 origin expansion")
+        end
+    end
+
+    @testset "interruption repair is durable and idempotent" begin
+        mktempdir() do directory
+            generated = generate_tiny_cache(directory, BASELINE_CALIBRATION)
+            cache_path = joinpath(directory, "abm_ensemble_summaries.csv")
+            diagnostics_path = joinpath(directory, "abm_origin_diagnostics.csv")
+            lines = readlines(cache_path)
+            write(cache_path, join(lines[1:(end - 3)], "\n") * "\n")
+
+            function resume()
+                return ABM.simulate_abm_ensembles(
+                    ABM.HEADLINE_VARIANT,
+                    generated.selected;
+                    paths = 4,
+                    cache_path = cache_path,
+                    diagnostics_path = diagnostics_path,
+                    calibration_path = BASELINE_CALIBRATION,
+                    identity_path = joinpath(directory, ABM.CACHE_IDENTITY_FILENAME),
+                    identity = generated.identity,
+                    progress = false,
+                )
+            end
+
+            resume()
+            # (a) reread from disk: the pruned rows must be gone, not merely
+            # filtered in memory.
+            on_disk = ABM.read_struct_csv(cache_path, ABM.EnsembleSummary)
+            counts = Dict{Int, Int}()
+            for row in on_disk
+                counts[row.origin_index] = get(counts, row.origin_index, 0) + 1
+            end
+            @test all(==(ABM.ENSEMBLE_ROWS_PER_ORIGIN), values(counts))
+            @test length(on_disk) == 2 * ABM.ENSEMBLE_ROWS_PER_ORIGIN
+            disk_diagnostics =
+                ABM.read_struct_csv(diagnostics_path, ABM.ABMOriginDiagnostic)
+            @test length(disk_diagnostics) == 2
+            @test length(unique(getfield.(disk_diagnostics, :origin_index))) == 2
+            rows_after_first = length(on_disk)
+
+            # (b) a second resume must be a no-op: no re-detection, no growth.
+            resume()
+            second = ABM.read_struct_csv(cache_path, ABM.EnsembleSummary)
+            @test length(second) == rows_after_first
+            @test length(
+                ABM.read_struct_csv(diagnostics_path, ABM.ABMOriginDiagnostic),
+            ) == 2
+            println(
+                "  repair durable on disk ($rows_after_first rows) and idempotent across resumes",
+            )
+        end
+    end
+
     @testset "committed v2 headline cache validates and re-scores byte-identically" begin
         if !isdir(COMMITTED_V2_HEADLINE) || !isdir(COMMITTED_V1_HEADLINE)
             @info "committed v2 headline run absent; skipping"

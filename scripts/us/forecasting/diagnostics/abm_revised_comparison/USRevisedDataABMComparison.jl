@@ -373,6 +373,45 @@ function Base.showerror(io::IO, error::CacheIdentityError)
 end
 
 """
+    rewrite_struct_csv(path, rows, T)
+
+Atomically replace a struct CSV: write a sibling temporary and rename over the
+original, so an interrupted prune can never leave a half-written file.
+"""
+function rewrite_struct_csv(path::AbstractString, rows, ::Type{T}) where {T}
+    temporary = path * ".tmp"
+    isfile(temporary) && rm(temporary)
+    if isempty(rows)
+        open(temporary, "w") do io
+            println(io, join(String.(fieldnames(T)), ","))
+        end
+    else
+        append_struct_csv(temporary, rows, T)
+    end
+    mv(temporary, path; force = true)
+    return path
+end
+
+"""
+    origin_grid_complete(rows)
+
+Whether an origin's ensemble rows are exactly the expected target x horizon grid:
+the right number of rows, no duplicates, and every (target, horizon) pair present
+once. A bare row count would accept a block that lost one cell and gained a
+duplicate of another.
+"""
+function origin_grid_complete(rows)
+    length(rows) == ENSEMBLE_ROWS_PER_ORIGIN || return false
+    seen = Set{Tuple{String, Int}}()
+    for row in rows
+        key = (row.target_id, row.horizon)
+        key in seen && return false
+        push!(seen, key)
+    end
+    return length(seen) == ENSEMBLE_ROWS_PER_ORIGIN
+end
+
+"""
     build_cache_identity(variant, origins; paths, calibration_path, panel)
 
 The identity a run would stamp on the cache it generates. Every field is either a
@@ -435,7 +474,24 @@ function write_cache_identity(
         end
         push!(lines, "$(field) = $(rendered)")
     end
-    push!(lines, "adopted_from_legacy_cache = $(adopted_from_legacy_cache)")
+    sticky_adoption =
+        adopted_from_legacy_cache ||
+        get(identity, "adopted_from_legacy_cache", false) === true
+    push!(lines, "adopted_from_legacy_cache = $(sticky_adoption)")
+    for field in (
+            "original_schema1_comparison_code_sha256",
+            "original_schema1_base_diagnostic_code_sha256",
+        )
+        haskey(identity, field) &&
+            push!(lines, "$(field) = \"$(identity[field])\"")
+    end
+    if haskey(identity, "migration_verified_fields")
+        rendered = join(
+            ("\"$(field)\"" for field in identity["migration_verified_fields"]),
+            ", ",
+        )
+        push!(lines, "migration_verified_fields = [$rendered]")
+    end
     if get(identity, "upgraded_from_schema_1", false) === true
         push!(lines, "upgraded_from_schema_1 = true")
         push!(
@@ -518,6 +574,20 @@ function upgrade_cache_identity(stored::AbstractDict, expected::AbstractDict)
     end
     upgraded = copy(expected)
     upgraded["upgraded_from_schema_1"] = true
+    # Preserve, never overwrite, what schema 1 actually recorded. Replacing these
+    # with current hashes would erase the only record of the code that produced
+    # the cache, which is the opposite of what an identity document is for.
+    upgraded["original_schema1_comparison_code_sha256"] =
+        String(stored["comparison_code_sha256"])
+    upgraded["original_schema1_base_diagnostic_code_sha256"] =
+        String(stored["base_diagnostic_code_sha256"])
+    upgraded["migration_verified_fields"] =
+        collect(CACHE_IDENTITY_EXPERIMENT_FIELDS)
+    # Adoption is sticky: a cache that was once adopted from an unauthenticated
+    # predecessor never becomes natively generated, however many times its
+    # identity is migrated afterwards.
+    upgraded["adopted_from_legacy_cache"] =
+        get(stored, "adopted_from_legacy_cache", false) === true
     return upgraded
 end
 
@@ -1018,14 +1088,20 @@ function simulate_abm_ensembles(
     # between the two writes can leave an origin with a partial row block that
     # still looks "completed". Any origin whose row count is not exactly
     # ENSEMBLE_ROWS_PER_ORIGIN is treated as absent and regenerated.
-    row_counts = Dict{Int, Int}()
+    grouped = Dict{Int, Vector{EnsembleSummary}}()
     for row in summaries
-        row_counts[row.origin_index] = get(row_counts, row.origin_index, 0) + 1
+        push!(get!(grouped, row.origin_index, EnsembleSummary[]), row)
+    end
+    diagnostic_counts = Dict{Int, Int}()
+    for row in diagnostics
+        diagnostic_counts[row.origin_index] =
+            get(diagnostic_counts, row.origin_index, 0) + 1
     end
     inconsistent = sort!(
         [
             index for index in completed
-                if get(row_counts, index, 0) != ENSEMBLE_ROWS_PER_ORIGIN
+                if !origin_grid_complete(get(grouped, index, EnsembleSummary[])) ||
+                get(diagnostic_counts, index, 0) != 1
         ],
     )
     if !isempty(inconsistent)
@@ -1035,7 +1111,9 @@ function simulate_abm_ensembles(
         described = join(
             (
                 "$(get(periods, index, "?")) (index $index, " *
-                    "$(get(row_counts, index, 0)) of $ENSEMBLE_ROWS_PER_ORIGIN rows)"
+                    "$(length(get(grouped, index, EnsembleSummary[]))) of " *
+                    "$ENSEMBLE_ROWS_PER_ORIGIN rows, " *
+                    "$(get(diagnostic_counts, index, 0)) diagnostic row(s))"
                     for index in inconsistent
             ),
             ", ",
@@ -1054,7 +1132,14 @@ function simulate_abm_ensembles(
         setdiff!(completed, inconsistent)
         summaries = filter(row -> row.origin_index in completed, summaries)
         diagnostics = filter(row -> row.origin_index in completed, diagnostics)
+        # Prune on disk before anything is appended. Filtering in memory alone
+        # leaves the bad rows in the file, so the regenerated origin is appended
+        # beside them and every later resume re-detects and re-regenerates it --
+        # the file grows without bound and never converges.
+        rewrite_struct_csv(cache_path, summaries, EnsembleSummary)
+        rewrite_struct_csv(diagnostics_path, diagnostics, ABMOriginDiagnostic)
     end
+
     path_failures = String[]
 
     pending = [entry for entry in origins if !(entry[1] in completed)]
@@ -1158,6 +1243,34 @@ function simulate_abm_ensembles(
         summaries;
         by = row -> (row.origin_index, row.target_id, row.horizon),
     )
+    # The identity permits a cache that holds a subset of the requested origins,
+    # so a run may legitimately expand one (1 origin -> 61). Once that expansion
+    # has happened the stored document no longer describes the cache: it still
+    # claims the old, smaller origin set while the run reports a canonical grid.
+    # Rewrite it atomically to the set now on disk, then revalidate.
+    if identity_path !== nothing && identity !== nothing
+        refreshed = copy(identity)
+        refreshed["origin_indices"] =
+            sort!(unique(getfield.(diagnostics, :origin_index)))
+        if isfile(identity_path)
+            stored_now = read_cache_identity(identity_path)
+            for field in (
+                    "adopted_from_legacy_cache",
+                    "upgraded_from_schema_1",
+                    "original_schema1_comparison_code_sha256",
+                    "original_schema1_base_diagnostic_code_sha256",
+                    "migration_verified_fields",
+                )
+                haskey(stored_now, field) && (refreshed[field] = stored_now[field])
+            end
+        end
+        write_cache_identity(identity_path, refreshed)
+        validate_cache_identity(
+            refreshed,
+            read_cache_identity(identity_path);
+            location = relpath(identity_path, REPOSITORY_ROOT),
+        )
+    end
     return (; summaries, diagnostics, path_failures, identity_adopted, identity_upgraded)
 end
 
