@@ -20,14 +20,16 @@ using TOML
 const HERE = @__DIR__
 const REPO_ROOT = normpath(joinpath(HERE, "..", "..", "..", "..", ".."))
 
-include(joinpath(HERE, "USRevisedDataABMComparison.jl"))
-using .USRevisedDataABMComparison
-const ABM = USRevisedDataABMComparison
-const BASE = USRevisedDataABMComparison.BASE
+const RUNNER = joinpath(HERE, "run_revised_data_abm_comparison.jl")
+
+# The companion loader lives in the runner script, and the runner includes the
+# comparison module and defines the ABM/BASE aliases. Including the runner here
+# means these tests exercise the real entry path rather than a re-implementation
+# of it; `main` does not execute because PROGRAM_FILE is this test file.
+include(RUNNER)
 
 const FIXTURE_DIRECTORY =
     normpath(joinpath(HERE, "..", "revised_data", "fixtures"))
-const RUNNER = joinpath(HERE, "run_revised_data_abm_comparison.jl")
 const BASELINE_CALIBRATION =
     joinpath(REPO_ROOT, "data", "us", "calibration", "US_2024_calibration_object.jld2")
 const RECONCILED_CALIBRATION = joinpath(
@@ -272,29 +274,238 @@ end
         @test minimum_used == 499
     end
 
-    @testset "also-score refuses a mismatched source by name" begin
-        mktempdir() do directory
-            source = joinpath(directory, "source")
-            generate_tiny_cache(source, BASELINE_CALIBRATION)
-            stored = ABM.read_cache_identity(
-                joinpath(source, ABM.CACHE_IDENTITY_FILENAME),
+    @testset "also-score integration: the real loader refuses each forgery" begin
+        # These call load_extra_abm_column itself. The previous version of this
+        # testset re-implemented a three-field comparison by hand and never touched
+        # the loader, which is precisely why the holes below reached CI green.
+        mktempdir() do root
+            source = joinpath(root, "companion")
+            generated = generate_tiny_cache(source, BASELINE_CALIBRATION)
+            identity_path = joinpath(source, ABM.CACHE_IDENTITY_FILENAME)
+            own = ABM.build_cache_identity(
+                ABM.HEADLINE_VARIANT,
+                generated.selected;
+                paths = 4,
+                calibration_path = BASELINE_CALIBRATION,
+                panel = generated.panel,
             )
-            # A run at a different path count must not merge this column.
-            own = copy(stored)
-            own["paths_requested"] = 500
-            mismatch = nothing
-            for field in ("panel_sha256", "paths_requested", "seed_contract_id")
-                want = own[field]
-                got = stored[field]
-                matched = (want isa Real && got isa Real) ? want == got :
-                    string(want) == string(got)
-                if !matched
-                    mismatch = field
-                    break
+            own_origins = [entry[1] for entry in generated.selected]
+
+            # Baseline: an honest companion is accepted.
+            accepted = load_extra_abm_column(source, own, own_origins)
+            @test accepted[1].name == "headline"
+            @test length(accepted[4]) == length(own_origins)
+
+            function refuse(mutate!, label)
+                document = ABM.read_cache_identity(identity_path)
+                mutate!(document)
+                ABM.write_cache_identity(identity_path, document)
+                thrown = nothing
+                try
+                    load_extra_abm_column(source, own, own_origins)
+                catch error
+                    thrown = error
                 end
+                @test thrown isa ABM.CacheIdentityError
+                println("  refusal ($label): ", sprint(showerror, thrown))
+                # restore
+                ABM.write_cache_identity(identity_path, generated.identity)
+                return thrown
             end
-            @test mismatch == "paths_requested"
-            println("  refusal (also-score): named field `", mismatch, "`")
+
+            forged_code = refuse(
+                document -> document["comparison_code_sha256"] = repeat("a", 64),
+                "forged comparison_code_sha256",
+            )
+            @test forged_code.field == "comparison_code_sha256"
+
+            forged_julia = refuse(
+                document -> document["julia_version"] = "1.11.0",
+                "forged julia_version",
+            )
+            @test forged_julia.field == "julia_version"
+
+            forged_runtime = refuse(
+                document -> document["runtime_source_tree_sha256"] = repeat("b", 64),
+                "forged runtime_source_tree_sha256",
+            )
+            @test forged_runtime.field == "runtime_source_tree_sha256"
+
+            # Missing diagnostics: coverage and path accounting are unknowable.
+            diagnostics_path = joinpath(source, "abm_origin_diagnostics.csv")
+            saved = read(diagnostics_path)
+            rm(diagnostics_path)
+            missing_diagnostics = nothing
+            try
+                load_extra_abm_column(source, own, own_origins)
+            catch error
+                missing_diagnostics = error
+            end
+            @test missing_diagnostics isa ABM.CacheIdentityError
+            @test missing_diagnostics.field == "abm_origin_diagnostics.csv"
+            println(
+                "  refusal (missing diagnostics): ",
+                sprint(showerror, missing_diagnostics),
+            )
+            write(diagnostics_path, saved)
+
+            # Incomplete companion paths: a smaller ensemble wearing the same label.
+            rows = ABM.read_struct_csv(diagnostics_path, ABM.ABMOriginDiagnostic)
+            degraded = [
+                ABM.ABMOriginDiagnostic(
+                        row.variant, row.origin_index, row.origin_period,
+                        row.build_period, row.calibration_date, row.burn_in_quarters,
+                        row.simulated_quarters, row.t_prime, row.t_max,
+                        row.paths_requested, row.paths_requested - 1, 1,
+                        row.calibration_seconds, row.simulation_seconds,
+                    ) for row in rows
+            ]
+            rm(diagnostics_path)
+            ABM.append_struct_csv(diagnostics_path, degraded, ABM.ABMOriginDiagnostic)
+            incomplete = nothing
+            try
+                load_extra_abm_column(source, own, own_origins)
+            catch error
+                incomplete = error
+            end
+            @test incomplete isa ABM.CacheIdentityError
+            @test incomplete.field == "paths_used"
+            println("  refusal (incomplete paths): ", sprint(showerror, incomplete))
+            rm(diagnostics_path)
+            write(diagnostics_path, saved)
+        end
+    end
+
+    @testset "the forged one-origin companion is refused" begin
+        # The reviewer's exact scenario: a self-consistent companion covering ONE
+        # origin, offered to a primary run covering more. Previously accepted, and
+        # it produced COMPLETE_MATCHED with minimum_common_counts=[1].
+        mktempdir() do root
+            source = joinpath(root, "one_origin")
+            generated = generate_tiny_cache(source, BASELINE_CALIBRATION; origins = 1)
+            @test length(generated.simulated.diagnostics) == 1
+
+            panel = load_panel()
+            primary_selected = tiny_origins(panel, 2)
+            own = ABM.build_cache_identity(
+                ABM.HEADLINE_VARIANT,
+                primary_selected;
+                paths = 4,
+                calibration_path = BASELINE_CALIBRATION,
+                panel = panel,
+            )
+            thrown = nothing
+            try
+                load_extra_abm_column(
+                    source,
+                    own,
+                    [entry[1] for entry in primary_selected],
+                )
+            catch error
+                thrown = error
+            end
+            @test thrown isa ABM.CacheIdentityError
+            @test thrown.field == "origin_indices"
+            message = sprint(showerror, thrown)
+            @test occursin("must cover exactly the same origins", message)
+            println("  refusal (forged one-origin companion): ", message)
+        end
+    end
+
+    @testset "combined canonicality is the minimum over included columns" begin
+        panel = load_panel()
+        canonical = ABM.canonical_origin_count(panel)
+        # A primary with canonical coverage plus a narrower companion must not be
+        # ranked: the common cell set is the companion's, not the primary's.
+        combined = ABM.comparison_weighted_scores(
+            BASE.RelativeScore[],
+            ["beforeit_abm_us_v2_mean"],
+            "beforeit_var_p1_constant",
+            BASE.DiagnosticFailure[];
+            canonical_origins = canonical,
+            observed_origins = 1,          # narrowest included column
+            path_incomplete_origins = 0,
+        )
+        @test all(row -> row.status == "INSUFFICIENT_ORIGINS_SMOKE_ONLY", combined)
+    end
+
+    @testset "an interrupted cache is detected on resume" begin
+        mktempdir() do directory
+            generated = generate_tiny_cache(directory, BASELINE_CALIBRATION)
+            cache_path = joinpath(directory, "abm_ensemble_summaries.csv")
+            lines = readlines(cache_path)
+            # Drop three rows from the final origin: the ensemble append survived
+            # partially before the process died.
+            write(cache_path, join(lines[1:(end - 3)], "\n") * "\n")
+
+            repaired = ABM.simulate_abm_ensembles(
+                ABM.HEADLINE_VARIANT,
+                generated.selected;
+                paths = 4,
+                cache_path = cache_path,
+                diagnostics_path = joinpath(directory, "abm_origin_diagnostics.csv"),
+                calibration_path = BASELINE_CALIBRATION,
+                identity_path = joinpath(directory, ABM.CACHE_IDENTITY_FILENAME),
+                identity = generated.identity,
+                progress = false,
+            )
+            # The truncated origin is regenerated, so every origin is whole again.
+            counts = Dict{Int, Int}()
+            for row in repaired.summaries
+                counts[row.origin_index] = get(counts, row.origin_index, 0) + 1
+            end
+            @test all(==(ABM.ENSEMBLE_ROWS_PER_ORIGIN), values(counts))
+            @test length(counts) == 2
+
+            # Under no-repair the same cache is refused by named origin.
+            write(cache_path, join(lines[1:(end - 3)], "\n") * "\n")
+            thrown = nothing
+            try
+                ABM.simulate_abm_ensembles(
+                    ABM.HEADLINE_VARIANT,
+                    generated.selected;
+                    paths = 4,
+                    cache_path = cache_path,
+                    diagnostics_path =
+                        joinpath(directory, "abm_origin_diagnostics.csv"),
+                    calibration_path = BASELINE_CALIBRATION,
+                    identity_path = joinpath(directory, ABM.CACHE_IDENTITY_FILENAME),
+                    identity = generated.identity,
+                    progress = false,
+                    allow_repair = false,
+                )
+            catch error
+                thrown = error
+            end
+            @test thrown isa ABM.CacheIdentityError
+            @test thrown.field == "ensemble_row_count"
+            println("  refusal (interrupted cache): ", sprint(showerror, thrown))
+        end
+    end
+
+    @testset "forced recompute removes every run-owned artifact" begin
+        mktempdir() do directory
+            generated = generate_tiny_cache(directory, BASELINE_CALIBRATION)
+            failures_path = joinpath(directory, "abm_path_failures.log")
+            write(failures_path, "stale failure from an earlier run\n")
+            @test isfile(failures_path)
+
+            ABM.simulate_abm_ensembles(
+                ABM.HEADLINE_VARIANT,
+                generated.selected;
+                paths = 4,
+                cache_path = joinpath(directory, "abm_ensemble_summaries.csv"),
+                diagnostics_path = joinpath(directory, "abm_origin_diagnostics.csv"),
+                calibration_path = BASELINE_CALIBRATION,
+                path_failures_path = failures_path,
+                identity_path = joinpath(directory, ABM.CACHE_IDENTITY_FILENAME),
+                identity = generated.identity,
+                force_recompute = true,
+                progress = false,
+            )
+            # The stale log must not survive beside the regenerated cache.
+            @test !isfile(failures_path) || isempty(read(failures_path, String))
+            println("  forced recompute cleared the stale path-failure log")
         end
     end
 
