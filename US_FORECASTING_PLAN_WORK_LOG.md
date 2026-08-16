@@ -8,41 +8,21 @@ passed.
 
 ## Status
 
-- **Plan version:** 2026-08-05
+- **Plan version:** 2026-08-05, status addendum 2026-08-16
 - **Repository baseline:** `6030f7558a9956a99465a09e31c51f37df198c90`
-- **Working branch:** `codex/us-forecasting`
-- **Worktree:** `/Users/sina/Documents/GitHub/MarketsReplica/US_BeforeIT.jl-us-forecasting`
-- **Current stage:** Phase 1 prospective-origin collection and quarantined ABM
-  qualification. The 2026-08-07 EFFR first-state slot is preserved, but its
-  revision window was missed with no request issued; the frozen campaign can
-  reach at most 116/117. The planned 2026-08-10 pair is fresh append-only
-  evidence only and cannot repair that slot. A separate 115-slot restart-v2
-  schedule is independently accepted for offline control, but its runner
-  binding is not yet accepted. After two rejected candidates, recurring
-  collector v3 is independently accepted only for its
-  bounded, append-only, permanently nonadmitting production-CLI capture role.
-  The incompatible EFFR
-  observed-state v3 contract is independently accepted only for offline,
-  locally integrity-checked endpoint classification; its estimand and every
-  provenance/admission gate remain unresolved or false. The base ABM input
-  firewall is independently accepted. A repaired no-step runtime/constructor gate
-  reproduced exact mechanics and initially passed audit, but that disposition
-  was revoked after discovering unpinned import-time package data and a
-  cache-generation precompile workload that can construct and step. The
-  stronger no-cache, side-data-pinned one-step `h=1` v4 boundary is now
-  independently accepted only for its exact, permanently nonadmitting software
-  diagnostic role. A bounded present-day BEA HMI7 archive fetcher is also
-  independently accepted for a permanently nonadmitting local-receipt role.
-  Its first two-request pilot preserved the 2017Q3 Section 1/2 pair and
-  independently reconstructed the intended GDP/PCE cells, but the Section 2
-  bytes were created and last-modified after the release date and all inspected
-  observations use a previously unsupported shared-string cell profile. The
-  pair is quarantined while a separate 2017-era parser is qualified; it is not
-  a historical first state. Exact historical origins, accounting admission,
-  approved runtime target operators, and empirical competition remain
-  blocked.
+- **Working branch:** `main`
+- **Current stage:** Stage 2b — the decisive revised-data experiment. The
+  stage-2 milestone (2026-08-10) stands: `beforeit_abm_us_v2` ranks 1/14 on
+  the headline pair {real GDP, GDP deflator} in all three tracks against ten
+  statistical benchmarks on 61 revised-panel origins. The real-time
+  vintage-capture/provenance apparatus and its CI wiring are parked on the
+  `governance-archive` branch; `main` carries the research platform only.
+  Open Stage-2b workstreams, in dependency order: DSGE column (small-NK,
+  then SW07), labour-block repair, capital accumulation, structural-vintage
+  robustness, formal inference, attribution ablation.
 - **Forecast suitability:** not yet established; research platform under
-  development
+  development. Every current result is a revised-data, mixed-vintage
+  diagnostic; no real-time or promotion claim is permitted.
 - **Promotion gates passed:** none
 
 ## 2026-08-05 - Project start and baseline audit
@@ -19281,3 +19261,56 @@ byte-identical**, `monte_carlo_errors.csv` changes only in its `model_family` la
 scale 1e-5, steps four quarters, asserts finite positive real/nominal GDP and deflator, pins
 `expectation_rw_drift` default-off/marker-on, and asserts the reconciled opening commodity balance
 clears (1.0e-13) while the shipped one does not (0.706). Package suite: 838 pass, 0 fail.
+
+## 2026-08-16 — Stage-2b reorientation: governance apparatus parked, main slimmed to the scientific core
+
+Decision: the program's primary goal is now the Stage-2b decisive
+revised-data experiment (plan status addendum 2026-08-16) — evidence that
+the U.S. ABM forecasts better than statistical and equilibrium challengers,
+at the paper's own revised-data standard. The stage-3/4 real-time
+vintage/provenance apparatus was built ahead of the science it would
+certify; it is preserved, not deleted.
+
+**Archive.** `governance-archive` was branched from `main` at `f879476`
+(the eighth-pass review merge) and pushed. It carries the complete
+apparatus: `scripts/us/forecasting/vintages/` (215 files, ~134k lines of
+capture contracts, sealed metadata manifests, fingerprints, and the seven
+EFFR subsystems), `forecasting/evidence/`, `forecasting/origins/`,
+`forecasting/runner/`, `forecasting/registry/`, the evidence-web reseal
+tool, the production-reconciliation admission/readiness gates, the ABM
+engineering diagnostic, the PCE-price analogue qualification (its synthetic
+protocol hash-pins the deleted origin-package mapping), the
+`data/us/origins/` cannot-run packages, and the 32 hermetic CI steps that
+exercised them.
+
+**Removal from `main`.** 262 files deleted. Retained: the model (`src/`),
+the package suite, the calibration/accounting science (supply/make,
+after-redefinitions basis chain, opening-accounting candidates, portable
+semantics, transition harness, inventory/`Used`/`Other`/Stone/OECD/M3
+diagnostics), `USBitemporal.jl`, the forecast protocol/variant/target
+contracts, the benchmark library with its frozen model registry and the
+unregistered small-NK DSGE mechanics, the scoring and
+Diebold–Mariano/bootstrap inference kernels, the revised-data panel, and
+the full stage-2 ABM comparison (runner, sealed kernel, caches, results).
+The work log keeps all history; nothing in past entries was rewritten.
+
+**CI.** The hermetic job (`us-offline`, 96 run-steps, never green on the
+fork — it first ran 2026-08-16 and failed at its second step) is replaced
+by `us-science` with 24 scientific steps. Two test repairs, neither
+touching any scored artifact: the two exact-equality row sums in
+`test_supply_make.jl` (`== 172_632.0` / `== 133_321.0`) became `≈` with
+`atol = 1.0e-3` because the projected rows come from BLAS products whose
+last-bit rounding is platform-dependent (the linux failure); and the
+Mincer–Zarnowitz HAC simulation fixture replaced `MersenneTwister` draws
+with deterministic sin/cos quasi-noise because `randn` streams are not
+stable across Julia versions (the Julia-1.12 matrix failure) — verified
+locally: slope 0.9911, HAC and HC1 p-values distinct. The Windows checkout
+failure (`Filename too long` on fingerprint JSONs embedding full SHA-256
+digests) disappears with the vintages tree.
+
+**Stop-loss rules now in force on `main`:** no new sealed contract or gate
+module unless on the critical path to the Stage-2b scorecard; external
+review hardening capped at one pass per artifact.
+
+Next slice: register `dsge_small_nk` as a scored column of the revised-data
+comparison (workstream 2b-1), then the labour block (2b-2).

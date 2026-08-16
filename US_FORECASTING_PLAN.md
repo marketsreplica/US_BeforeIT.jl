@@ -56,10 +56,72 @@ all historical inputs needed to reproduce it.
 
 ---
 
-## Status addendum — 2026-08-13
+## Status addendum — 2026-08-16: Stage 2b is the program (current)
 
-The plan body below is unchanged. This block records where the program
-actually stands; where the two disagree, this block is current.
+Where this block disagrees with anything below it, including the 2026-08-13
+addendum, this block is current.
+
+**Reorientation.** The program's primary goal is now a single scientific
+question, answered at the evidentiary standard of Poledna et al. itself (a
+revised-data, recalibrated-origin comparison — the paper has no
+release-timestamp vintage protocol): **does the U.S. ABM forecast better
+than statistical and equilibrium challengers?** Producing that evidence —
+or an honest negative — is Stage 2b. Everything that does not serve it is
+deferred, not deleted: the real-time vintage-capture, release-provenance,
+origin-package, forecast-registry, and prospective-acquisition apparatus
+(the stage-3/4 machinery), its sealed evidence web, and its CI wiring are
+parked intact on the `governance-archive` branch. `main` carries the
+research platform only: the model, calibration and accounting science, the
+revised-data panel, the benchmark/scoring/inference kernels, and the
+stage-2 comparison. The calibration firewall is retained absolutely: no
+behavioral or structural parameter is ever fitted to forecast errors.
+
+**Stage 2b experimental frame (frozen).** Same 61 revised-panel origins
+(2010Q2–2025Q2), h = 1..12, 500 paths per origin, identical common cells,
+three tracks (all-available, balanced-h12, pandemic-masked), current
+revised-vintage truth, labeled mixed-vintage throughout; no promotion or
+real-time claim. The scored field is the existing statistical family
+(naive ×3, AR ×3, VAR ×3, Minnesota BVAR), the semi-structural comparator,
+the frozen ABM v2 — and the additions below.
+
+**Work program, in dependency order:**
+
+| # | Workstream | Gate |
+|---|---|---|
+| 2b-1 | **DSGE column.** Register the validated small-NK gensys module as scored column `dsge_small_nk`; then a recursively re-estimated Smets–Wouters 2007 as `dsge_sw07`. | DSGE scored on identical cells; per-origin estimation/solution status reported; no origin silently dropped |
+| 2b-2 | **Labour block repair.** Diagnose and fix the ~1 % unemployment collapse on accounting/behavioral grounds. | `unemployment_rate` enters scored tables with forecast dispersion comparable to realized dispersion; no parameter touched a forecast error |
+| 2b-3 | **Capital accumulation.** Capacity-expansion term in desired investment calibrated against `net I = ΔK` identities. | Long-run utilization stable; the h ≤ 12 validity restriction lifted; calibration never sees forecast errors |
+| 2b-4 | **Structural-vintage robustness.** Build ≥ 2 historical annual structures from revised BEA supply-use tables (2017 benchmark year and one more); re-score matched cells. | Headline conclusion shown robust to structural vintage, or the dependence reported as a finding |
+| 2b-5 | **Formal inference.** HLN-corrected Diebold–Mariano and Romano–Wolf/MCS over every column of the final scorecard. | Every superiority sentence carries a significance statement and horizon scope |
+| 2b-6 | **Attribution ablation.** Matched-seed v2/v3 with paper AR(1) vs RW-drift expectations; reconciliation on/off is already scored. | The headline gain is attributed to mechanism classes, not to an unexamined statistical patch |
+
+**Preregistered success bar** (frozen before any new scored run): the
+repaired ABM is superior if its weighted headline-pair RMSE ratio beats the
+best non-ABM column, including both DSGE columns, in at least two of the
+three tracks with DM significance reported per horizon, and its density
+scores (CRPS, 90 % coverage) are no worse than the best challenger's. If
+the ABM instead wins only on densities, tails, unemployment, or sector
+detail, that specialized value is the claim published — the honest-success
+clause of §III.12 applies, and a negative result is published with the same
+tables.
+
+**Deliverable.** An updated [US_ABM_FORECAST_REPORT.md](US_ABM_FORECAST_REPORT.md)
+and paper revision with the DSGE-inclusive field, the repaired model,
+robustness, and inference — the evidence base for the claim, either way.
+
+**Deferred until Stage 2b concludes:** WS-1A/1B mass vintage backfill,
+prospective capture operations, stages 3–4, and all promotion machinery.
+Their designs and code remain on `governance-archive`; two stop-loss rules
+apply on `main`: no new sealed contract or gate module unless it is on the
+critical path to the Stage-2b scorecard, and external-review hardening is
+capped at one pass per artifact.
+
+---
+
+## Status addendum — 2026-08-13 (superseded by 2026-08-16 above)
+
+The plan body below is unchanged. This block recorded where the program
+stood on 2026-08-13; the 2026-08-16 block above takes precedence.
 
 - **Stage-2 milestone achieved 2026-08-10.** The ABM was scored against ten
   statistical benchmarks over 61 origins (2010Q2–2025Q2), a structural defect
