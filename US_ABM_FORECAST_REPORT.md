@@ -1173,9 +1173,13 @@ the only route to a promotion claim.
 ### 11.1 Commands
 
 ```bash
-cd /Users/sina/Documents/GitHub/MarketsReplica/US_BeforeIT.jl-us-forecasting
+# Run from the repository root. Julia 1.10.3 exactly (see below).
+julia --project=scripts/us -e 'using Pkg; Pkg.instantiate()'
 
-# 1. build the reconciled calibration artifact (~40 s)
+# 1. OPTIONAL — rebuild the reconciled calibration artifact (~40 s). The artifact is
+#    committed at data/us/calibration/US_2024_calibration_object_reconciled.jld2 and
+#    already matches the sha256 every v2 cache identity records (57e23f4a…), so this
+#    step only re-derives what is already in the tree.
 julia --project=scripts/us scripts/us/calibration/reconcile_commodity_balance.jl \
   --mode=final_demand_scaled --expectations=rw_drift
 
@@ -1198,17 +1202,24 @@ JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 julia --project=scripts/us \
   scripts/us/forecasting/diagnostics/abm_revised_comparison/run_revised_data_abm_comparison.jl \
   output/us_forecasting/abm_v2_comparison_outlook 500 outlook_v2
 
-# 5. tables
+# 5. tables. The third argument is the v1 run directory. It supplies the
+#    `beforeit_abm_us_v1_mean` rows of `abm_v2_interval_coverage.csv` — the v1 half of
+#    the §8.4 coverage comparison. Omit it and the coverage table holds v2 rows only.
 julia --project=scripts/us \
   scripts/us/forecasting/diagnostics/abm_revised_comparison/report_v2_comparison.jl \
   output/us_forecasting/abm_v2_comparison/v2_headline \
-  output/us_forecasting/abm_v2_comparison_outlook
+  output/us_forecasting/abm_v2_comparison_outlook \
+  output/us_forecasting/abm_v2_comparison/v1_headline
 ```
 
-Both environment variables are hard requirements on the benchmark path; the runner throws
-`ArgumentError` unless `Threads.nthreads() == 1` and `BLAS.get_num_threads() == 1`. Step 2 resumes from
-`abm_ensemble_summaries.csv`, so an interrupted run continues rather than restarting; step 3 is a
-re-score off the cache (~15 s) rather than a re-simulation.
+Set both environment variables yourself. `run_revised_data_benchmark_diagnostic.jl`, which produces
+the statistical benchmark columns, throws `ArgumentError` unless `Threads.nthreads() == 1` and
+`BLAS.get_num_threads() == 1`; the ABM comparison runner used in steps 2–4 only emits a warning, so
+nothing stops an unpinned run there. Step 2 resumes from `abm_ensemble_summaries.csv`, so an
+interrupted run continues rather than restarting; step 3 is a re-score off the cache (~15 s) rather
+than a re-simulation. Because the ensemble caches are committed, a fresh clone reproduces the tables
+from steps 3 and 5 alone; steps 2 and 4 re-simulate and are only needed to regenerate the caches
+themselves.
 
 The underlying 10-model and 11-model comparisons are reproduced by
 `run_revised_data_benchmark_diagnostic.jl` and `run_revised_data_semi_structural_comparison.jl`; the

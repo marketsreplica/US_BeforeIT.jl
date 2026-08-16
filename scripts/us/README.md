@@ -1032,6 +1032,16 @@ and in `forecasting/diagnostics/abm_revised_comparison/RESULTS_V2.md`.
 
 Build the reconciled calibration artifact (~40 s):
 
+Instantiate the environment once per clone:
+
+```sh
+julia --project=scripts/us -e 'using Pkg; Pkg.instantiate()'
+```
+
+Rebuilding the reconciled calibration artifact is **optional** — it is committed, and
+the shipped copy already matches the sha256 every `_v2` cache identity records
+(`57e23f4a…`):
+
 ```sh
 julia --project=scripts/us \
   scripts/us/calibration/reconcile_commodity_balance.jl \
@@ -1072,14 +1082,21 @@ Every `manifest.toml` seals the comparison module's own sha256 in
 `comparison_code_sha256`, so editing that module invalidates the seals and the
 affected runs must be re-scored.
 
-Render the tables:
+Render the tables. The third argument is the v1 run directory: it supplies the v1
+rows of `abm_v2_interval_coverage.csv`, which are the v1 half of the interval-coverage
+comparison. Omitting it silently leaves the coverage table with v2 rows only:
 
 ```sh
 julia --project=scripts/us \
   scripts/us/forecasting/diagnostics/abm_revised_comparison/report_v2_comparison.jl \
   output/us_forecasting/abm_v2_comparison/v2_headline \
-  output/us_forecasting/abm_v2_comparison_outlook
+  output/us_forecasting/abm_v2_comparison_outlook \
+  output/us_forecasting/abm_v2_comparison/v1_headline
 ```
+
+`JULIA_NUM_THREADS=1` and `OPENBLAS_NUM_THREADS=1` pin the statistical benchmark
+columns. `run_revised_data_benchmark_diagnostic.jl` throws an `ArgumentError` without
+them; this ABM comparison runner only warns, so set them on every invocation.
 
 ## Simulation Lab and Economy Explorer
 

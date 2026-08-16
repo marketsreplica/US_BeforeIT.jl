@@ -115,10 +115,15 @@ experiment rather than a reproduction.
 
 
 ```sh
+# Instantiate the U.S. script environment (once per clone).
+julia --project=scripts/us -e 'using Pkg; Pkg.instantiate()'
+
 # Hermetic smoke test: builds and steps the ABM from both 2024 artifacts.
 julia --project=. -e 'using Pkg; Pkg.test()'
 
-# Rebuild the commodity-balance reconciled calibration artifact (~40 s).
+# OPTIONAL: rebuild the commodity-balance reconciled calibration artifact (~40 s).
+# The artifact is committed and already matches the sha256 recorded in every v2
+# cache identity (57e23f4a…), so this only re-derives what is already in the tree.
 julia --project=scripts/us scripts/us/calibration/reconcile_commodity_balance.jl \
   --mode=final_demand_scaled --expectations=rw_drift
 
@@ -132,12 +137,19 @@ JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 julia --project=scripts/us \
   output/us_forecasting/abm_v2_comparison/v2_headline 500 headline_v2 \
   --also-score=output/us_forecasting/abm_v2_comparison/v1_headline
 
-# Score tables.
+# Score tables. The third argument is the v1 run directory; it supplies the v1 rows
+# of abm_v2_interval_coverage.csv (the v1 half of the coverage comparison). Omit it
+# and the coverage table holds v2 rows only.
 julia --project=scripts/us \
   scripts/us/forecasting/diagnostics/abm_revised_comparison/report_v2_comparison.jl \
   output/us_forecasting/abm_v2_comparison/v2_headline \
-  output/us_forecasting/abm_v2_comparison_outlook
+  output/us_forecasting/abm_v2_comparison_outlook \
+  output/us_forecasting/abm_v2_comparison/v1_headline
 ```
+
+`JULIA_NUM_THREADS=1` and `OPENBLAS_NUM_THREADS=1` are what make the statistical
+benchmark columns reproducible. `run_revised_data_benchmark_diagnostic.jl` refuses
+to run without them; the ABM comparison runner above only warns, so set them yourself.
 
 ## Origin, citation, and license
 

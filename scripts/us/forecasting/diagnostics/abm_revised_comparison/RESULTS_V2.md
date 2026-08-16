@@ -507,7 +507,12 @@ is the §6.2 defect, not a forecast.
 ## 7. Reproduction
 
 ```bash
-# 1. build the reconciled calibration artifact (one command, ~40 s)
+# 0. instantiate the U.S. script environment (once per clone)
+julia --project=scripts/us -e 'using Pkg; Pkg.instantiate()'
+
+# 1. OPTIONAL — rebuild the reconciled calibration artifact (one command, ~40 s).
+#    It is committed and already matches the sha256 the v2 identities record
+#    (57e23f4a…), so this only re-derives what is already in the tree.
 julia --project=scripts/us scripts/us/calibration/reconcile_commodity_balance.jl \
   --mode=final_demand_scaled --expectations=rw_drift
 
@@ -530,11 +535,13 @@ JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 julia --project=scripts/us \
   scripts/us/forecasting/diagnostics/abm_revised_comparison/run_revised_data_abm_comparison.jl \
   output/us_forecasting/abm_v2_comparison_outlook 500 outlook_v2
 
-# 5. tables
+# 5. tables. The third argument is the v1 run directory; it supplies the v1 rows of
+#    abm_v2_interval_coverage.csv. Omit it and the coverage table is v2-only.
 julia --project=scripts/us \
   scripts/us/forecasting/diagnostics/abm_revised_comparison/report_v2_comparison.jl \
   output/us_forecasting/abm_v2_comparison/v2_headline \
-  output/us_forecasting/abm_v2_comparison_outlook
+  output/us_forecasting/abm_v2_comparison_outlook \
+  output/us_forecasting/abm_v2_comparison/v1_headline
 ```
 
 Step 2 resumes from `abm_ensemble_summaries.csv`, so an interrupted run continues instead of
