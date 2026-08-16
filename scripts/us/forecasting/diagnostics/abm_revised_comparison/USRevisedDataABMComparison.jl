@@ -232,6 +232,12 @@ const CACHE_IDENTITY_SCHEMA_V1 = "beforeit-us-revised-data-abm-cache-identity.v1
 # the diagnostics append, and must not be resumed as if it were whole.
 const ENSEMBLE_ROWS_PER_ORIGIN = SIMULATION_HORIZON * length(ABM_TARGET_IDS)
 
+# The exact (target, horizon) grid every origin must carry.
+const EXPECTED_FORECAST_GRID = Set(
+    (target_id, horizon)
+        for target_id in ABM_TARGET_IDS, horizon in 1:SIMULATION_HORIZON
+)
+
 # The simulation owns these files. --force-recompute must remove all of them:
 # leaving a stale failure log beside a fresh, clean cache misreports the run.
 const RUN_OWNED_SIMULATION_ARTIFACTS = (
@@ -326,6 +332,17 @@ const CACHE_IDENTITY_FIELDS = (
 # equality there would make the upgrade impossible by construction. Those fields
 # are re-baselined and the document says so. The empirical guarantee that the code
 # change did not move the numbers is the byte-identical re-score, not this check.
+# Fields describing the harness rather than the model runtime. A migrated identity
+# has these re-baselined under attestation and they are not re-compared; a native
+# identity must match the current tree. runtime_source_tree_sha256 and
+# environment_manifest_sha256 are deliberately excluded -- those can change the
+# numbers, so they are compared on every run regardless of migration.
+const HARNESS_IDENTITY_FIELDS = (
+    "comparison_code_sha256",
+    "base_diagnostic_code_sha256",
+    "runner_sha256",
+)
+
 const CACHE_IDENTITY_EXPERIMENT_FIELDS = (
     "contract_id",
     "seed_contract_id",
@@ -361,6 +378,33 @@ const CACHE_IDENTITY_FIELDS_V1 = (
     "julia_version",
     "origin_indices",
 )
+
+"""
+    effective_generation_provenance(identity)
+
+The code identity that actually produced the cached rows.
+
+For a migrated document the current `comparison_code_sha256` is a re-baselined
+value describing the tree at migration time, not the tree that generated the
+rows; the generating hashes live in the `original_schema1_*` fields. Comparing
+the re-baselined values would judge two caches with different real provenance to
+be equivalent, which is precisely what preserving the originals was meant to
+prevent.
+"""
+function effective_generation_provenance(identity::AbstractDict)
+    migrated = get(identity, "upgraded_from_schema_1", false) === true
+    comparison = migrated ?
+        get(identity, "original_schema1_comparison_code_sha256", nothing) :
+        get(identity, "comparison_code_sha256", nothing)
+    base = migrated ?
+        get(identity, "original_schema1_base_diagnostic_code_sha256", nothing) :
+        get(identity, "base_diagnostic_code_sha256", nothing)
+    return (
+        comparison = comparison === nothing ? nothing : String(comparison),
+        base_diagnostic = base === nothing ? nothing : String(base),
+        migrated = migrated,
+    )
+end
 
 struct CacheIdentityError <: Exception
     field::String
@@ -408,7 +452,48 @@ function origin_grid_complete(rows)
         key in seen && return false
         push!(seen, key)
     end
-    return length(seen) == ENSEMBLE_ROWS_PER_ORIGIN
+    # Set equality, not cardinality: 60 distinct pairs is not the same as the 60
+    # pairs this contract scores. A horizon-13 cell substituted for an expected
+    # one keeps the count while silently changing the grid.
+    return seen == EXPECTED_FORECAST_GRID
+end
+
+"""
+    finalize_cache_identity(identity_path, identity, diagnostics)
+
+Rewrite the stored identity so it describes the origin set the cache actually
+holds, then revalidate. Called on every successful exit -- including the path
+where nothing was pending -- so an identity left stale by a run that died between
+appending origins and refreshing self-heals on the next invocation instead of
+persisting a claim the cache no longer supports.
+"""
+function finalize_cache_identity(identity_path, identity, diagnostics)
+    (identity_path === nothing || identity === nothing) && return false
+    refreshed = copy(identity)
+    refreshed["origin_indices"] =
+        sort!(unique(getfield.(diagnostics, :origin_index)))
+    changed = true
+    if isfile(identity_path)
+        stored_now = read_cache_identity(identity_path)
+        for field in (
+                "adopted_from_legacy_cache",
+                "upgraded_from_schema_1",
+                "original_schema1_comparison_code_sha256",
+                "original_schema1_base_diagnostic_code_sha256",
+                "migration_verified_fields",
+            )
+            haskey(stored_now, field) && (refreshed[field] = stored_now[field])
+        end
+        changed = Set(get(stored_now, "origin_indices", Int[])) !=
+            Set(refreshed["origin_indices"])
+    end
+    write_cache_identity(identity_path, refreshed)
+    validate_cache_identity(
+        refreshed,
+        read_cache_identity(identity_path);
+        location = relpath(identity_path, REPOSITORY_ROOT),
+    )
+    return changed
 end
 
 """
@@ -509,11 +594,14 @@ function write_cache_identity(
         )
     end
     push!(lines, "written_at = \"$(Dates.format(Dates.now(Dates.UTC), "yyyy-mm-ddTHH:MM:SSZ"))\"")
-    open(path, "w") do io
+    # Atomic: a half-written identity beside a complete cache is worse than none.
+    temporary = path * ".tmp"
+    open(temporary, "w") do io
         for line in lines
             println(io, line)
         end
     end
+    mv(temporary, path; force = true)
     return path
 end
 
@@ -603,7 +691,47 @@ function validate_cache_identity(
         stored::AbstractDict;
         location::AbstractString = "cache",
     )
+    # Code identity. A migrated document records the hashes that actually
+    # generated its rows in original_schema1_*, and the migration itself is the
+    # attestation that the current tree is an accepted successor -- re-comparing
+    # the fresh hash against it on every run would merely re-litigate that
+    # decision and invalidate every migrated cache on any later edit here. So a
+    # migrated identity is required to still carry intact generation provenance;
+    # a native one must match the current tree exactly.
+    # Harness fields describe the code that drove and scored the run. A migration
+    # re-baselines them once, under an explicit attestation; the model runtime and
+    # the environment are NOT in this set and are always compared exactly, so a
+    # change under src/ or in the package environment can never pass silently.
+    stored_provenance = effective_generation_provenance(stored)
+    if stored_provenance.migrated
+        for (label, value) in (
+                ("original_schema1_comparison_code_sha256", stored_provenance.comparison),
+                (
+                    "original_schema1_base_diagnostic_code_sha256",
+                    stored_provenance.base_diagnostic,
+                ),
+            )
+            value === nothing && throw(
+                CacheIdentityError(
+                    label,
+                    "$location is migrated but has lost its generation provenance",
+                ),
+            )
+        end
+    else
+        for label in HARNESS_IDENTITY_FIELDS
+            want = expected[label]
+            got = stored[label]
+            string(want) == string(got) || throw(
+                CacheIdentityError(
+                    label,
+                    "this run has $(repr(want)) but $location was generated with $(repr(got))",
+                ),
+            )
+        end
+    end
     for field in CACHE_IDENTITY_FIELDS
+        field in HARNESS_IDENTITY_FIELDS && continue
         want = expected[field]
         got = stored[field]
         if field == "origin_indices"
@@ -1077,10 +1205,12 @@ function simulate_abm_ensembles(
     completed = Set(
         row.origin_index for row in diagnostics if row.variant == variant.name
     )
-    summaries = filter(
-        row -> row.variant == variant.name && row.origin_index in completed,
-        summaries,
-    )
+    # Keep every row of this variant, including origins whose diagnostic row was
+    # lost. Filtering to `completed` first hides an orphaned ensemble block from
+    # detection, so the origin is regenerated and appended beside rows that were
+    # never pruned -- 180 rows on disk after a "successful" resume.
+    summaries = filter(row -> row.variant == variant.name, summaries)
+    orphaned = setdiff(Set(getfield.(summaries, :origin_index)), completed)
     diagnostics =
         filter(row -> row.variant == variant.name, diagnostics)
 
@@ -1098,11 +1228,17 @@ function simulate_abm_ensembles(
             get(diagnostic_counts, row.origin_index, 0) + 1
     end
     inconsistent = sort!(
-        [
-            index for index in completed
-                if !origin_grid_complete(get(grouped, index, EnsembleSummary[])) ||
-                get(diagnostic_counts, index, 0) != 1
-        ],
+        collect(
+            union(
+                Set(
+                    index for index in completed
+                        if !origin_grid_complete(
+                            get(grouped, index, EnsembleSummary[]),
+                        ) || get(diagnostic_counts, index, 0) != 1
+                ),
+                orphaned,
+            ),
+        ),
     )
     if !isempty(inconsistent)
         periods = Dict(
@@ -1147,6 +1283,11 @@ function simulate_abm_ensembles(
         progress && println(
             "  all $(length(origins)) origins already cached for variant $(variant.name)",
         )
+        if finalize_cache_identity(identity_path, identity, diagnostics)
+            progress && println(
+                "  repaired a stale identity left by an interrupted run",
+            )
+        end
         return (; summaries, diagnostics, path_failures, identity_adopted, identity_upgraded)
     end
     progress && println(
@@ -1243,34 +1384,7 @@ function simulate_abm_ensembles(
         summaries;
         by = row -> (row.origin_index, row.target_id, row.horizon),
     )
-    # The identity permits a cache that holds a subset of the requested origins,
-    # so a run may legitimately expand one (1 origin -> 61). Once that expansion
-    # has happened the stored document no longer describes the cache: it still
-    # claims the old, smaller origin set while the run reports a canonical grid.
-    # Rewrite it atomically to the set now on disk, then revalidate.
-    if identity_path !== nothing && identity !== nothing
-        refreshed = copy(identity)
-        refreshed["origin_indices"] =
-            sort!(unique(getfield.(diagnostics, :origin_index)))
-        if isfile(identity_path)
-            stored_now = read_cache_identity(identity_path)
-            for field in (
-                    "adopted_from_legacy_cache",
-                    "upgraded_from_schema_1",
-                    "original_schema1_comparison_code_sha256",
-                    "original_schema1_base_diagnostic_code_sha256",
-                    "migration_verified_fields",
-                )
-                haskey(stored_now, field) && (refreshed[field] = stored_now[field])
-            end
-        end
-        write_cache_identity(identity_path, refreshed)
-        validate_cache_identity(
-            refreshed,
-            read_cache_identity(identity_path);
-            location = relpath(identity_path, REPOSITORY_ROOT),
-        )
-    end
+    finalize_cache_identity(identity_path, identity, diagnostics)
     return (; summaries, diagnostics, path_failures, identity_adopted, identity_upgraded)
 end
 
