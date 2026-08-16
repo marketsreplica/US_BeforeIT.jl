@@ -100,6 +100,8 @@ function load_extra_abm_column(directory, own_identity, own_origin_indices)
             "base_diagnostic_code_sha256",
             "comparison_code_sha256",
             "runtime_source_tree_sha256",
+            "runner_sha256",
+            "environment_manifest_sha256",
             "julia_version",
             "model_scale",
             "simulated_quarters",

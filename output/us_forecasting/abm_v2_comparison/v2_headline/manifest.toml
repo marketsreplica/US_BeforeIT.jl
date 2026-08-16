@@ -71,9 +71,9 @@ weighted_ratio_formula = "sum(target_weight[target] * horizon_weight[horizon] * 
 weighted_ratio_semantics = "macro_average_of_matched_target_horizon_cellwise_ratios_not_ratio_of_pooled_losses"
 sample_policy = "common target-horizon-origin score cells across the ten statistical models and both ABM columns; all-available, balanced-h12 and pandemic-masked reported separately"
 known_comparability_limit = "statistical models use the registered eight-target panel; the ABM is a structural simulator initialised from its own calibration artifact and shares only the score panel"
-code_commit_sha = "72bc6eb6bf42c926d4652fe6bd30294b560ece9f"
+code_commit_sha = "073b18b88fda11956388e5787094d983cbed61ce"
 code_working_tree_clean = false
-comparison_code_sha256 = "6e687c7e099d9d384f86dec84db2a438b86939f56ff5182feddb7a26907acbe2"
+comparison_code_sha256 = "4d4b4f4792efac08e93cb17dcee38ce2f399ac2056a664950dc31b2d9681b88d"
 base_diagnostic_code_sha256 = "8c75be08ac6b7e63033426192e59a07dfae6d5ea8456e99d73d853b35f82136c"
 calibration_object_path = "data/us/calibration/US_2024_calibration_object_reconciled.jld2"
 calibration_object_sha256 = "57e23f4aea54aa82319f81f1aabb4a11843890b0d20c5037e0162a4c6e514760"
@@ -96,12 +96,12 @@ reproducibility_note = "seeds derive from Base.hash and are consumed through the
 
 [[also_scored_column]]
 index = 1
-adopted_from_legacy_cache = false
+adopted_from_legacy_cache = true
 calibration_object_path = "data/us/calibration/US_2024_calibration_object.jld2"
 calibration_object_sha256 = "4cce5d629e1776cbf67f645703d79a28108562f7f32f78b94b3dd10705e2e136"
-comparison_code_sha256 = "6e687c7e099d9d384f86dec84db2a438b86939f56ff5182feddb7a26907acbe2"
+comparison_code_sha256 = "4d4b4f4792efac08e93cb17dcee38ce2f399ac2056a664950dc31b2d9681b88d"
 ensemble_cache_sha256 = "cce7740f46f8ef0a73ef58d4997aa6feb030410aeecfa12d619af889e139ad97"
-identity_sha256 = "101ab67beb7debf2e705c0e272c62a8c1609746a88bceef9498214fb02e4cd95"
+identity_sha256 = "33b958abb9f89a7e82a356a1ebbd36f6a3a5171c38729240619193729519653d"
 julia_version = "1.10.3"
 origin_count = 61
 panel_sha256 = "f7bb26a467465937060b1e9e734a020b9158a8136db05d2e0df47c3bff851bbe"
