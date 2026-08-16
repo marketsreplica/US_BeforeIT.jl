@@ -214,7 +214,8 @@ include(joinpath(@__DIR__, "USRevisedDataABMKernel.jl"))
 # ---------------------------------------------------------------------------
 
 const CACHE_IDENTITY_FILENAME = "cache_identity.toml"
-const CACHE_IDENTITY_SCHEMA = "beforeit-us-revised-data-abm-cache-identity.v4"
+const CACHE_IDENTITY_SCHEMA = "beforeit-us-revised-data-abm-cache-identity.v5"
+const CACHE_IDENTITY_SCHEMA_V4 = "beforeit-us-revised-data-abm-cache-identity.v4"
 const CACHE_IDENTITY_SCHEMA_V3 = "beforeit-us-revised-data-abm-cache-identity.v3"
 const CACHE_IDENTITY_SCHEMA_V1 = "beforeit-us-revised-data-abm-cache-identity.v1"
 const CACHE_IDENTITY_SCHEMA_V2 = "beforeit-us-revised-data-abm-cache-identity.v2"
@@ -286,6 +287,31 @@ const SEED_CONTRACT_ID =
 # Fields that must agree exactly before a cached row may be reused. Order is fixed
 # so the document is deterministic.
 const CACHE_IDENTITY_FIELDS = (
+    "schema_version",
+    "contract_id",
+    "seed_contract_id",
+    "variant",
+    "burn_in_quarters",
+    "simulated_quarters",
+    "paths_requested",
+    "model_scale",
+    "calibration_object_path",
+    "calibration_object_sha256",
+    "comparison_code_sha256",
+    "base_diagnostic_code_sha256",
+    "runtime_source_tree_sha256",
+    "numerical_kernel_sha256",
+    "runner_sha256",
+    "environment_manifest_sha256",
+    "panel_sha256",
+    "panel_manifest_sha256",
+    "julia_version",
+    "origin_indices",
+    "origin_pairs",
+)
+# Schema 4 recorded every sealed digest but bound only the origin INDICES;
+# schema 5 binds the exact index -> period pairs.
+const CACHE_IDENTITY_FIELDS_V4 = (
     "schema_version",
     "contract_id",
     "seed_contract_id",
@@ -481,6 +507,11 @@ function finalize_cache_identity(identity_path, identity, diagnostics)
     refreshed = copy(identity)
     refreshed["origin_indices"] =
         sort!(unique(getfield.(diagnostics, :origin_index)))
+    refreshed["origin_pairs"] = sort!(
+        unique(
+            "$(row.origin_index)=$(row.origin_period)" for row in diagnostics
+        ),
+    )
     changed = true
     if isfile(identity_path)
         stored_now = read_cache_identity(identity_path)
@@ -542,6 +573,11 @@ function build_cache_identity(
         "panel_manifest_sha256" => panel.manifest_sha256,
         "julia_version" => string(VERSION),
         "origin_indices" => [entry[1] for entry in origins],
+        # The exact index -> period mapping, not just the indices. Origin index
+        # derivation happens in the harness, so binding the pairs is what stops a
+        # change to period arithmetic from silently re-pointing an index at a
+        # different quarter while validation still sees a familiar index set.
+        "origin_pairs" => ["$(entry[1])=$(entry[2])" for entry in origins],
     )
 end
 
@@ -558,6 +594,14 @@ function write_cache_identity(
     lines = String[]
     for field in CACHE_IDENTITY_FIELDS
         value = identity[field]
+        if field == "origin_pairs"
+            push!(
+                lines,
+                "origin_pairs = [" *
+                    join(("\"$(pair)\"" for pair in value), ", ") * "]",
+            )
+            continue
+        end
         rendered = if value isa AbstractString
             "\"$(value)\""
         elseif value isa AbstractVector
@@ -645,6 +689,8 @@ function read_cache_identity(path::AbstractString)
         CACHE_IDENTITY_FIELDS_V1
     elseif schema == CACHE_IDENTITY_SCHEMA_V2
         CACHE_IDENTITY_FIELDS_V2
+    elseif schema in (CACHE_IDENTITY_SCHEMA_V3, CACHE_IDENTITY_SCHEMA_V4)
+        CACHE_IDENTITY_FIELDS_V4
     else
         CACHE_IDENTITY_FIELDS
     end
@@ -668,7 +714,7 @@ function upgrade_cache_identity(stored::AbstractDict, expected::AbstractDict)
     for field in CACHE_IDENTITY_EXPERIMENT_FIELDS
         want = expected[field]
         got = stored[field]
-        if field == "origin_indices"
+        if field in ("origin_indices", "origin_pairs")
             Set(got) == Set(want) || throw(
                 CacheIdentityError(
                     field,
@@ -771,7 +817,7 @@ function validate_cache_identity(
         field in HARNESS_IDENTITY_FIELDS && continue
         want = expected[field]
         got = stored[field]
-        if field == "origin_indices"
+        if field in ("origin_indices", "origin_pairs")
             # A resumable cache may hold a prefix of the requested origins, but it
             # must never hold an origin this run did not ask for.
             extra = setdiff(Set(got), Set(want))
@@ -902,30 +948,6 @@ sha256_hex(bytes) = bytes2hex(SHA.sha256(bytes))
 # period helpers
 # ---------------------------------------------------------------------------
 
-function period_to_quarter_end(period::AbstractString)
-    matched = match(r"^([1-9][0-9]{3})Q([1-4])$", String(period))
-    matched === nothing &&
-        throw(ArgumentError("invalid quarterly period $(repr(period))"))
-    calendar_year = parse(Int, matched.captures[1])
-    quarter = parse(Int, matched.captures[2])
-    return if quarter == 1
-        DateTime(calendar_year, 3, 31)
-    elseif quarter == 2
-        DateTime(calendar_year, 6, 30)
-    elseif quarter == 3
-        DateTime(calendar_year, 9, 30)
-    else
-        DateTime(calendar_year, 12, 31)
-    end
-end
-
-function shift_period(period::AbstractString, offset::Int)
-    ordinal = BASE.quarter_ordinal(period) + offset
-    calendar_year = div(ordinal - 1, 4)
-    quarter = ordinal - 4 * calendar_year
-    return string(calendar_year, "Q", quarter)
-end
-
 origin_index_for_period(period::AbstractString) =
     BASE.quarter_ordinal(period) - BASE.quarter_ordinal(PANEL_FIRST_PERIOD) + 1
 
@@ -1021,6 +1043,7 @@ function simulate_abm_ensembles(
                     CACHE_IDENTITY_SCHEMA_V1,
                     CACHE_IDENTITY_SCHEMA_V2,
                     CACHE_IDENTITY_SCHEMA_V3,
+                    CACHE_IDENTITY_SCHEMA_V4,
                 )
                 upgrade_identity_schema || throw(
                     CacheIdentityError(
@@ -1144,8 +1167,6 @@ function simulate_abm_ensembles(
             "($(length(completed)) resumed from cache), $(paths) paths each",
     )
 
-    calibration_object =
-        JLD2.load(calibration_path)["calibration_object"]
     started_all = time()
     for (origin_index, origin_period) in pending
         generated = generate_origin_ensemble(
@@ -1153,7 +1174,7 @@ function simulate_abm_ensembles(
             origin_index,
             origin_period,
             paths,
-            calibration_object,
+            calibration_path,
         )
         origin_summaries = generated.summaries
         diagnostic = generated.diagnostic
