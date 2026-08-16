@@ -224,7 +224,67 @@ seed_stream_name(name::AbstractString) = get(SEED_STREAM_ALIASES, name, String(n
 # ---------------------------------------------------------------------------
 
 const CACHE_IDENTITY_FILENAME = "cache_identity.toml"
-const CACHE_IDENTITY_SCHEMA = "beforeit-us-revised-data-abm-cache-identity.v1"
+const CACHE_IDENTITY_SCHEMA = "beforeit-us-revised-data-abm-cache-identity.v2"
+const CACHE_IDENTITY_SCHEMA_V1 = "beforeit-us-revised-data-abm-cache-identity.v1"
+
+# Every origin writes exactly one row per (horizon, target). A cache holding a
+# different count for an origin was interrupted between the ensemble append and
+# the diagnostics append, and must not be resumed as if it were whole.
+const ENSEMBLE_ROWS_PER_ORIGIN = SIMULATION_HORIZON * length(ABM_TARGET_IDS)
+
+# The simulation owns these files. --force-recompute must remove all of them:
+# leaving a stale failure log beside a fresh, clean cache misreports the run.
+const RUN_OWNED_SIMULATION_ARTIFACTS = (
+    "abm_ensemble_summaries.csv",
+    "abm_origin_diagnostics.csv",
+    "abm_path_failures.log",
+    CACHE_IDENTITY_FILENAME,
+)
+
+const RUNNER_PATH =
+    joinpath(@__DIR__, "run_revised_data_abm_comparison.jl")
+const ENVIRONMENT_MANIFEST_PATH =
+    joinpath(REPOSITORY_ROOT, "scripts", "us", "Manifest.toml")
+const RUNTIME_SOURCE_ROOT = joinpath(REPOSITORY_ROOT, "src")
+
+"""
+    runtime_source_tree_sha256()
+
+A deterministic digest of the model runtime that actually generates the paths.
+
+Defined as the sha256 of the concatenation, over every `.jl` file under `src/`
+sorted by its `/`-separated path relative to the repository root, of
+`"<relative path>\0<file sha256>\n"`. Sorting makes it filesystem-order
+independent; including the path makes a rename visible; including each file's
+digest makes any content change visible.
+
+Without this a change in `src/agent_actions/` would alter every forecast while
+the caches still validated clean -- exactly the silent staleness the identity
+exists to prevent.
+"""
+function runtime_source_tree_sha256(root::AbstractString = RUNTIME_SOURCE_ROOT)
+    entries = Tuple{String, String}[]
+    for (directory, _, files) in walkdir(root)
+        for file in files
+            endswith(file, ".jl") || continue
+            absolute = joinpath(directory, file)
+            relative = replace(
+                relpath(absolute, REPOSITORY_ROOT),
+                Base.Filesystem.path_separator => "/",
+            )
+            push!(entries, (relative, sha256_hex(read(absolute))))
+        end
+    end
+    sort!(entries; by = first)
+    context = SHA.SHA256_CTX()
+    for (relative, digest) in entries
+        SHA.update!(context, Vector{UInt8}(relative))
+        SHA.update!(context, UInt8[0x00])
+        SHA.update!(context, Vector{UInt8}(digest))
+        SHA.update!(context, UInt8[0x0a])
+    end
+    return bytes2hex(SHA.digest!(context))
+end
 
 # The seed stream is `hash((:beforeit_us_abm_revised_comparison_v1, variant, origin, path))`
 # reduced modulo 0x40000000 and consumed through the default global RNG. Both
@@ -236,6 +296,54 @@ const SEED_CONTRACT_ID =
 # Fields that must agree exactly before a cached row may be reused. Order is fixed
 # so the document is deterministic.
 const CACHE_IDENTITY_FIELDS = (
+    "schema_version",
+    "contract_id",
+    "seed_contract_id",
+    "variant",
+    "burn_in_quarters",
+    "simulated_quarters",
+    "paths_requested",
+    "model_scale",
+    "calibration_object_path",
+    "calibration_object_sha256",
+    "comparison_code_sha256",
+    "base_diagnostic_code_sha256",
+    "runtime_source_tree_sha256",
+    "runner_sha256",
+    "environment_manifest_sha256",
+    "panel_sha256",
+    "panel_manifest_sha256",
+    "julia_version",
+    "origin_indices",
+)
+
+# The fields that describe WHICH EXPERIMENT the cached rows are. These must agree
+# exactly before a schema-1 identity may be upgraded: if any of them moved, the
+# document no longer describes the cache and upgrading would launder it.
+#
+# The code-identity fields are deliberately NOT in this list. Introducing schema 2
+# necessarily changes the module, and the runner changed with it, so demanding
+# equality there would make the upgrade impossible by construction. Those fields
+# are re-baselined and the document says so. The empirical guarantee that the code
+# change did not move the numbers is the byte-identical re-score, not this check.
+const CACHE_IDENTITY_EXPERIMENT_FIELDS = (
+    "contract_id",
+    "seed_contract_id",
+    "variant",
+    "burn_in_quarters",
+    "simulated_quarters",
+    "paths_requested",
+    "model_scale",
+    "calibration_object_path",
+    "calibration_object_sha256",
+    "panel_sha256",
+    "panel_manifest_sha256",
+    "julia_version",
+    "origin_indices",
+)
+
+# What schema 1 recorded. Retained so a v1 document can be verified before upgrade.
+const CACHE_IDENTITY_FIELDS_V1 = (
     "schema_version",
     "contract_id",
     "seed_contract_id",
@@ -291,6 +399,11 @@ function build_cache_identity(
         "calibration_object_sha256" => sha256_hex(read(abspath(calibration_path))),
         "comparison_code_sha256" => sha256_hex(read(abspath(@__FILE__))),
         "base_diagnostic_code_sha256" => sha256_hex(read(BASE_DIAGNOSTIC_PATH)),
+        "runtime_source_tree_sha256" => runtime_source_tree_sha256(),
+        "runner_sha256" => sha256_hex(read(RUNNER_PATH)),
+        "environment_manifest_sha256" =>
+            isfile(ENVIRONMENT_MANIFEST_PATH) ?
+            sha256_hex(read(ENVIRONMENT_MANIFEST_PATH)) : "absent",
         "panel_sha256" => panel.panel_sha256,
         "panel_manifest_sha256" => panel.manifest_sha256,
         "julia_version" => string(VERSION),
@@ -323,6 +436,22 @@ function write_cache_identity(
         push!(lines, "$(field) = $(rendered)")
     end
     push!(lines, "adopted_from_legacy_cache = $(adopted_from_legacy_cache)")
+    if get(identity, "upgraded_from_schema_1", false) === true
+        push!(lines, "upgraded_from_schema_1 = true")
+        push!(
+            lines,
+            "upgrade_note = \"Verified unchanged before upgrade: contract, seed " *
+                "contract, variant, burn-in, simulated quarters, requested paths, " *
+                "model scale, calibration artifact and sha256, panel and manifest " *
+                "sha256, Julia version, origin set. Re-baselined from the tree at " *
+                "upgrade time and NOT attested as observed at cache generation: " *
+                "comparison_code_sha256, base_diagnostic_code_sha256, " *
+                "runtime_source_tree_sha256, runner_sha256, " *
+                "environment_manifest_sha256. The guarantee that those code changes " *
+                "did not move the numbers is the byte-identical re-score of every " *
+                "committed score table, not this document.\"",
+        )
+    end
     push!(lines, "written_at = \"$(Dates.format(Dates.now(Dates.UTC), "yyyy-mm-ddTHH:MM:SSZ"))\"")
     open(path, "w") do io
         for line in lines
@@ -345,11 +474,51 @@ function read_cache_identity(path::AbstractString)
         ),
     )
     document = TOML.parsefile(path)
-    for field in CACHE_IDENTITY_FIELDS
+    schema = get(document, "schema_version", "")
+    required = schema == CACHE_IDENTITY_SCHEMA_V1 ?
+        CACHE_IDENTITY_FIELDS_V1 : CACHE_IDENTITY_FIELDS
+    for field in required
         haskey(document, field) ||
             throw(CacheIdentityError(field, "absent from $path"))
     end
     return document
+end
+
+"""
+    upgrade_cache_identity(stored, expected)
+
+Raise a schema-v1 identity to v2 after checking that everything v1 covered still
+agrees. The three fields v1 never recorded -- the model runtime tree, the runner
+and the environment manifest -- are taken from the current tree and the document
+records that they were re-baselined rather than observed at generation, so the
+upgrade never claims to have witnessed something it did not.
+"""
+function upgrade_cache_identity(stored::AbstractDict, expected::AbstractDict)
+    for field in CACHE_IDENTITY_EXPERIMENT_FIELDS
+        want = expected[field]
+        got = stored[field]
+        if field == "origin_indices"
+            Set(got) == Set(want) || throw(
+                CacheIdentityError(
+                    field,
+                    "schema-1 identity covers a different origin set; refusing to upgrade",
+                ),
+            )
+            continue
+        end
+        matched = (want isa Real && got isa Real) ? want == got :
+            string(want) == string(got)
+        matched || throw(
+            CacheIdentityError(
+                field,
+                "schema-1 identity has $(repr(got)) but this tree has $(repr(want)); " *
+                    "refusing to upgrade an identity that no longer describes the cache",
+            ),
+        )
+    end
+    upgraded = copy(expected)
+    upgraded["upgraded_from_schema_1"] = true
+    return upgraded
 end
 
 """
@@ -758,16 +927,27 @@ function simulate_abm_ensembles(
         identity::Union{Nothing, AbstractDict} = nothing,
         force_recompute::Bool = false,
         adopt_legacy_identity::Bool = false,
+        allow_repair::Bool = true,
+        upgrade_identity_schema::Bool = false,
     )
     identity_adopted = false
+    identity_upgraded = false
     if identity_path !== nothing && identity !== nothing
         cache_present = isfile(cache_path) && filesize(cache_path) > 0
         if force_recompute
-            for stale in (cache_path, diagnostics_path, identity_path)
-                isfile(stale) && rm(stale)
+            directory = dirname(abspath(cache_path))
+            removed = String[]
+            for name in RUN_OWNED_SIMULATION_ARTIFACTS
+                stale = joinpath(directory, name)
+                isfile(stale) && (rm(stale); push!(removed, name))
+            end
+            # Explicit paths may sit outside the directory in tests.
+            for stale in (cache_path, diagnostics_path, identity_path, path_failures_path)
+                stale === nothing && continue
+                isfile(stale) && (rm(stale); push!(removed, basename(stale)))
             end
             progress && println(
-                "  --force-recompute: wiped the existing cache, diagnostics and identity",
+                "  --force-recompute: removed $(join(sort!(unique(removed)), ", "))",
             )
             cache_present = false
         end
@@ -794,11 +974,32 @@ function simulate_abm_ensembles(
                 "  --adopt-cache-identity: stamped this run's identity onto a legacy cache",
             )
         else
-            validate_cache_identity(
-                identity,
-                read_cache_identity(identity_path);
-                location = relpath(identity_path, REPOSITORY_ROOT),
-            )
+            stored = read_cache_identity(identity_path)
+            if String(get(stored, "schema_version", "")) == CACHE_IDENTITY_SCHEMA_V1
+                upgrade_identity_schema || throw(
+                    CacheIdentityError(
+                        "schema_version",
+                        "$identity_path is schema 1 and does not record the model " *
+                            "runtime tree, the runner or the environment manifest. " *
+                            "Rerun with --upgrade-cache-identity to verify and raise " *
+                            "it to schema 2, or --force-recompute to regenerate.",
+                    ),
+                )
+                write_cache_identity(
+                    identity_path,
+                    upgrade_cache_identity(stored, identity),
+                )
+                identity_upgraded = true
+                progress && println(
+                    "  --upgrade-cache-identity: verified and raised the identity to schema 2",
+                )
+            else
+                validate_cache_identity(
+                    identity,
+                    stored;
+                    location = relpath(identity_path, REPOSITORY_ROOT),
+                )
+            end
         end
     end
     summaries = read_struct_csv(cache_path, EnsembleSummary)
@@ -812,6 +1013,48 @@ function simulate_abm_ensembles(
     )
     diagnostics =
         filter(row -> row.variant == variant.name, diagnostics)
+
+    # Ensemble rows and diagnostics are appended separately, so an interruption
+    # between the two writes can leave an origin with a partial row block that
+    # still looks "completed". Any origin whose row count is not exactly
+    # ENSEMBLE_ROWS_PER_ORIGIN is treated as absent and regenerated.
+    row_counts = Dict{Int, Int}()
+    for row in summaries
+        row_counts[row.origin_index] = get(row_counts, row.origin_index, 0) + 1
+    end
+    inconsistent = sort!(
+        [
+            index for index in completed
+                if get(row_counts, index, 0) != ENSEMBLE_ROWS_PER_ORIGIN
+        ],
+    )
+    if !isempty(inconsistent)
+        periods = Dict(
+            row.origin_index => row.origin_period for row in diagnostics
+        )
+        described = join(
+            (
+                "$(get(periods, index, "?")) (index $index, " *
+                    "$(get(row_counts, index, 0)) of $ENSEMBLE_ROWS_PER_ORIGIN rows)"
+                    for index in inconsistent
+            ),
+            ", ",
+        )
+        allow_repair || throw(
+            CacheIdentityError(
+                "ensemble_row_count",
+                "cache at $cache_path is internally inconsistent for origin(s) " *
+                    "$described; rerun with --force-recompute to regenerate, or " *
+                    "restore the interrupted directory",
+            ),
+        )
+        progress && println(
+            "  discarding $(length(inconsistent)) interrupted origin(s): $described",
+        )
+        setdiff!(completed, inconsistent)
+        summaries = filter(row -> row.origin_index in completed, summaries)
+        diagnostics = filter(row -> row.origin_index in completed, diagnostics)
+    end
     path_failures = String[]
 
     pending = [entry for entry in origins if !(entry[1] in completed)]
@@ -819,7 +1062,7 @@ function simulate_abm_ensembles(
         progress && println(
             "  all $(length(origins)) origins already cached for variant $(variant.name)",
         )
-        return (; summaries, diagnostics, path_failures, identity_adopted)
+        return (; summaries, diagnostics, path_failures, identity_adopted, identity_upgraded)
     end
     progress && println(
         "  simulating $(length(pending)) of $(length(origins)) origins " *
@@ -915,7 +1158,7 @@ function simulate_abm_ensembles(
         summaries;
         by = row -> (row.origin_index, row.target_id, row.horizon),
     )
-    return (; summaries, diagnostics, path_failures, identity_adopted)
+    return (; summaries, diagnostics, path_failures, identity_adopted, identity_upgraded)
 end
 
 # ---------------------------------------------------------------------------
@@ -1211,6 +1454,7 @@ function run_abm_comparison(
         extra_columns::Vector{Tuple{ABMVariant, Vector{EnsembleSummary}}} =
             Tuple{ABMVariant, Vector{EnsembleSummary}}[],
         extra_column_provenance::Vector{Dict{String, Any}} = Dict{String, Any}[],
+        extra_origin_sets::Vector{Set{Int}} = Set{Int}[],
     )
     BASE.validate_panel(panel)
     base_result = BASE.run_revised_benchmark_diagnostic(panel)
@@ -1292,7 +1536,13 @@ function run_abm_comparison(
     )
     _, path_incomplete_origins, minimum_paths_used =
         path_complete_origins(diagnostics)
-    observed_origins = length(unique(getfield.(diagnostics, :origin_index)))
+    # Canonicality is a property of the WHOLE scored field, not of the primary
+    # column. A companion column covering fewer origins shrinks the common cell
+    # set, so the narrowest included column governs the combined status.
+    primary_origins = Set(getfield.(diagnostics, :origin_index))
+    observed_origins = minimum(
+        (length(set) for set in [primary_origins; extra_origin_sets]),
+    )
     canonical_origins = canonical_origin_count(panel)
     weighted = comparison_weighted_scores(
         relative,
