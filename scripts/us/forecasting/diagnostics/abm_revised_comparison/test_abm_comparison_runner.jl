@@ -10,8 +10,11 @@
 # a wrong answer.
 #
 # The last test re-scores the committed v2 headline cache and asserts its
-# score_summaries.csv is byte-identical to the committed file, which is what makes
-# the published numbers auditable from this suite.
+# score_summaries.csv reproduces the committed file: identical structure and
+# labels, every numeric field within 1e-12 relative. Byte-identity holds only on
+# the ISA that produced the cache — SIMD reduction order shifts the last ulp of
+# scored floats between Apple Silicon and x86 — so the portable assertion is the
+# numeric one; it is what makes the published numbers auditable from this suite.
 
 using SHA
 using Test
@@ -53,6 +56,30 @@ const COMMITTED_V2_HEADLINE = joinpath(
     "abm_v2_comparison",
     "v2_headline",
 )
+
+# Structure and labels must match exactly; numeric fields may differ by the
+# last-ulp reassociation SIMD reduction order introduces across ISAs.
+function csv_numerically_identical(rescored::Vector{UInt8}, committed::Vector{UInt8})
+    rescored_lines = split(String(copy(rescored)), '\n')
+    committed_lines = split(String(copy(committed)), '\n')
+    length(rescored_lines) == length(committed_lines) || return false
+    for (rescored_line, committed_line) in zip(rescored_lines, committed_lines)
+        rescored_line == committed_line && continue
+        rescored_fields = split(rescored_line, ',')
+        committed_fields = split(committed_line, ',')
+        length(rescored_fields) == length(committed_fields) || return false
+        for (rescored_field, committed_field) in zip(rescored_fields, committed_fields)
+            rescored_field == committed_field && continue
+            rescored_value = tryparse(Float64, rescored_field)
+            committed_value = tryparse(Float64, committed_field)
+            (rescored_value === nothing || committed_value === nothing) &&
+                return false
+            isapprox(rescored_value, committed_value; rtol = 1.0e-12) ||
+                return false
+        end
+    end
+    return true
+end
 
 load_panel() = BASE.load_revised_quarterly_panel(
     joinpath(FIXTURE_DIRECTORY, "quarterly_panel.csv"),
@@ -1374,11 +1401,19 @@ end
                     ),
                 )
                 rescored = read(joinpath(directory, "score_summaries.csv"))
-                @test rescored == committed
-                println(
-                    "  committed cache re-scored: score_summaries.csv byte-identical ",
-                    "($(length(committed)) bytes)",
-                )
+                @test csv_numerically_identical(rescored, committed)
+                if rescored == committed
+                    println(
+                        "  committed cache re-scored: score_summaries.csv ",
+                        "byte-identical ($(length(committed)) bytes)",
+                    )
+                else
+                    println(
+                        "  committed cache re-scored: score_summaries.csv ",
+                        "numerically identical at rtol 1e-12 ",
+                        "(byte-identical only on the producing ISA)",
+                    )
+                end
             end
         end
     end
