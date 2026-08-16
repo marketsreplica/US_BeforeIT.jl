@@ -691,6 +691,159 @@ end
         end
     end
 
+    @testset "effective generation provenance distinguishes migrated caches" begin
+        # Two migrated identities whose re-baselined hashes agree but whose real
+        # generation hashes differ must not be judged equivalent.
+        a = Dict{String, Any}(
+            "upgraded_from_schema_1" => true,
+            "comparison_code_sha256" => repeat("1", 64),
+            "base_diagnostic_code_sha256" => repeat("2", 64),
+            "original_schema1_comparison_code_sha256" => repeat("a", 64),
+            "original_schema1_base_diagnostic_code_sha256" => repeat("b", 64),
+        )
+        b = copy(a)
+        b["original_schema1_comparison_code_sha256"] = repeat("c", 64)
+        pa = ABM.effective_generation_provenance(a)
+        pb = ABM.effective_generation_provenance(b)
+        @test pa.migrated && pb.migrated
+        @test pa.comparison == repeat("a", 64)      # the generating hash, not the re-baselined one
+        @test pa.comparison != pb.comparison
+        # A non-migrated identity reports its own current hashes.
+        native = Dict{String, Any}(
+            "comparison_code_sha256" => repeat("9", 64),
+            "base_diagnostic_code_sha256" => repeat("8", 64),
+        )
+        @test ABM.effective_generation_provenance(native).comparison == repeat("9", 64)
+        @test ABM.effective_generation_provenance(native).migrated == false
+        println("  effective provenance separates caches the re-baselined hashes conflate")
+    end
+
+    @testset "the committed v1/v2 pairing shares generation provenance" begin
+        if isdir(COMMITTED_V1_HEADLINE) && isdir(COMMITTED_V2_HEADLINE)
+            v1 = ABM.read_cache_identity(
+                joinpath(COMMITTED_V1_HEADLINE, ABM.CACHE_IDENTITY_FILENAME),
+            )
+            v2 = ABM.read_cache_identity(
+                joinpath(COMMITTED_V2_HEADLINE, ABM.CACHE_IDENTITY_FILENAME),
+            )
+            pv1 = ABM.effective_generation_provenance(v1)
+            pv2 = ABM.effective_generation_provenance(v2)
+            @test pv1.comparison !== nothing
+            @test pv1.comparison == pv2.comparison
+            @test pv1.base_diagnostic == pv2.base_diagnostic
+            @test pv1.migrated && pv2.migrated
+            println(
+                "  committed pairing shares generation provenance ",
+                first(pv1.comparison, 12),
+            )
+        else
+            @test true
+        end
+    end
+
+    @testset "an orphaned ensemble block is detected and pruned" begin
+        # The inverse interruption: both origins complete, then the SECOND
+        # diagnostic row is lost. Previously the orphaned 60 rows vanished from
+        # detection and regeneration appended beside them -> 180 rows on disk.
+        mktempdir() do directory
+            generated = generate_tiny_cache(directory, BASELINE_CALIBRATION)
+            cache_path = joinpath(directory, "abm_ensemble_summaries.csv")
+            diagnostics_path = joinpath(directory, "abm_origin_diagnostics.csv")
+            rows = ABM.read_struct_csv(diagnostics_path, ABM.ABMOriginDiagnostic)
+            @test length(rows) == 2
+            kept = [rows[1]]
+            rm(diagnostics_path)
+            ABM.append_struct_csv(diagnostics_path, kept, ABM.ABMOriginDiagnostic)
+
+            result = ABM.simulate_abm_ensembles(
+                ABM.HEADLINE_VARIANT,
+                generated.selected;
+                paths = 4,
+                cache_path = cache_path,
+                diagnostics_path = diagnostics_path,
+                calibration_path = BASELINE_CALIBRATION,
+                identity_path = joinpath(directory, ABM.CACHE_IDENTITY_FILENAME),
+                identity = generated.identity,
+                progress = false,
+            )
+            on_disk = ABM.read_struct_csv(cache_path, ABM.EnsembleSummary)
+            @test length(on_disk) == 2 * ABM.ENSEMBLE_ROWS_PER_ORIGIN
+            @test length(result.diagnostics) == 2
+            @test length(
+                ABM.read_struct_csv(diagnostics_path, ABM.ABMOriginDiagnostic),
+            ) == 2
+            println(
+                "  orphaned block pruned and regenerated: $(length(on_disk)) rows on disk (not 180)",
+            )
+        end
+    end
+
+    @testset "the forecast grid must be the exact expected set" begin
+        base = ABM.EnsembleSummary(
+            "headline", 40, "2010Q2", "2010Q3", "real_gdp", 1, 4,
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        )
+        exact = [
+            ABM.EnsembleSummary(
+                    base.variant, base.origin_index, base.origin_period,
+                    base.target_period, target, horizon, base.paths_used,
+                    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                ) for target in ABM.ABM_TARGET_IDS, horizon in 1:ABM.SIMULATION_HORIZON
+        ]
+        @test ABM.origin_grid_complete(vec(exact))
+
+        # Substitute a horizon-13 cell: still 60 unique pairs, wrong grid.
+        smuggled = copy(vec(exact))
+        smuggled[1] = ABM.EnsembleSummary(
+            base.variant, base.origin_index, base.origin_period,
+            base.target_period, "real_gdp", ABM.SIMULATION_HORIZON + 1,
+            base.paths_used, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        )
+        @test length(smuggled) == ABM.ENSEMBLE_ROWS_PER_ORIGIN
+        @test !ABM.origin_grid_complete(smuggled)
+        println("  a horizon-13 cell no longer passes as a complete grid")
+    end
+
+    @testset "a stale identity self-heals on the next run" begin
+        # Simulate a run that appended its origins but died before refreshing the
+        # identity: the document still claims one origin while the cache holds two.
+        mktempdir() do directory
+            panel = load_panel()
+            two = tiny_origins(panel, 2)
+            generated = generate_tiny_cache(directory, BASELINE_CALIBRATION)
+            identity_path = joinpath(directory, ABM.CACHE_IDENTITY_FILENAME)
+            stale = copy(generated.identity)
+            stale["origin_indices"] = [two[1][1]]
+            ABM.write_cache_identity(identity_path, stale)
+            @test length(ABM.read_cache_identity(identity_path)["origin_indices"]) == 1
+
+            before = read(joinpath(directory, "abm_ensemble_summaries.csv"))
+            result = ABM.simulate_abm_ensembles(
+                ABM.HEADLINE_VARIANT,
+                two;
+                paths = 4,
+                cache_path = joinpath(directory, "abm_ensemble_summaries.csv"),
+                diagnostics_path = joinpath(directory, "abm_origin_diagnostics.csv"),
+                calibration_path = BASELINE_CALIBRATION,
+                identity_path = identity_path,
+                identity = ABM.build_cache_identity(
+                    ABM.HEADLINE_VARIANT, two;
+                    paths = 4,
+                    calibration_path = BASELINE_CALIBRATION,
+                    panel = panel,
+                ),
+                progress = false,
+            )
+            healed = ABM.read_cache_identity(identity_path)
+            @test Set(healed["origin_indices"]) ==
+                Set(getfield.(result.diagnostics, :origin_index))
+            @test length(healed["origin_indices"]) == 2
+            # Nothing was regenerated: the cache bytes are untouched.
+            @test read(joinpath(directory, "abm_ensemble_summaries.csv")) == before
+            println("  stale identity healed with no regeneration")
+        end
+    end
+
     @testset "committed v2 headline cache validates and re-scores byte-identically" begin
         if !isdir(COMMITTED_V2_HEADLINE) || !isdir(COMMITTED_V1_HEADLINE)
             @info "committed v2 headline run absent; skipping"
