@@ -214,7 +214,8 @@ include(joinpath(@__DIR__, "USRevisedDataABMKernel.jl"))
 # ---------------------------------------------------------------------------
 
 const CACHE_IDENTITY_FILENAME = "cache_identity.toml"
-const CACHE_IDENTITY_SCHEMA = "beforeit-us-revised-data-abm-cache-identity.v3"
+const CACHE_IDENTITY_SCHEMA = "beforeit-us-revised-data-abm-cache-identity.v4"
+const CACHE_IDENTITY_SCHEMA_V3 = "beforeit-us-revised-data-abm-cache-identity.v3"
 const CACHE_IDENTITY_SCHEMA_V1 = "beforeit-us-revised-data-abm-cache-identity.v1"
 const CACHE_IDENTITY_SCHEMA_V2 = "beforeit-us-revised-data-abm-cache-identity.v2"
 
@@ -605,7 +606,13 @@ function write_cache_identity(
                 "of that module by an auditable pure-move commit (refactor: extract " *
                 "the numerical forecast kernel) which moved no line and left every " *
                 "score table byte-identical; the kernel digest is enforced on every " *
-                "run from that point on, migrated identity or not.\"",
+                "run from that point on, migrated identity or not. The kernel was " *
+                "subsequently EXTENDED to absorb the complete per-origin generation " *
+                "operation (refactor: move per-origin generation orchestration into " *
+                "the sealed kernel), because calling a sealed function does not seal " *
+                "its call arguments or surrounding control flow; that move left every " *
+                "score table byte-identical and numerical_kernel_sha256 was restamped " *
+                "here.\"",
         )
     end
     push!(lines, "written_at = \"$(Dates.format(Dates.now(Dates.UTC), "yyyy-mm-ddTHH:MM:SSZ"))\"")
@@ -1010,7 +1017,11 @@ function simulate_abm_ensembles(
         else
             stored = read_cache_identity(identity_path)
             stored_schema = String(get(stored, "schema_version", ""))
-            if stored_schema in (CACHE_IDENTITY_SCHEMA_V1, CACHE_IDENTITY_SCHEMA_V2)
+            if stored_schema in (
+                    CACHE_IDENTITY_SCHEMA_V1,
+                    CACHE_IDENTITY_SCHEMA_V2,
+                    CACHE_IDENTITY_SCHEMA_V3,
+                )
                 upgrade_identity_schema || throw(
                     CacheIdentityError(
                         "schema_version",
@@ -1137,64 +1148,16 @@ function simulate_abm_ensembles(
         JLD2.load(calibration_path)["calibration_object"]
     started_all = time()
     for (origin_index, origin_period) in pending
-        build_period = shift_period(origin_period, -variant.burn_in_quarters)
-        calibration_date = period_to_quarter_end(build_period)
-        started = time()
-        parameters, initial_conditions =
-            abm_origin_inputs(calibration_object, calibration_date)
-        calibration_seconds = time() - started
-
-        quarters = SIMULATION_HORIZON + variant.burn_in_quarters
-        started = time()
-        simulated = SimulatedPath[]
-        failed = 0
-        for path in 1:paths
-            seed = path_seed(seed_stream_name(variant.name), origin_period, path)
-            try
-                candidate = simulate_path(
-                    parameters,
-                    initial_conditions,
-                    quarters,
-                    seed,
-                )
-                if path_is_usable(candidate)
-                    push!(simulated, candidate)
-                else
-                    failed += 1
-                    push!(
-                        path_failures,
-                        "$(variant.name) $origin_period path $path seed $seed: non_finite_or_nonpositive_path",
-                    )
-                end
-            catch exception
-                failed += 1
-                push!(
-                    path_failures,
-                    "$(variant.name) $origin_period path $path seed $seed: " *
-                        first(split(sprint(showerror, exception), "\n")),
-                )
-            end
-        end
-        simulation_seconds = time() - started
-
-        diagnostic = ABMOriginDiagnostic(
-            variant.name,
+        generated = generate_origin_ensemble(
+            variant,
             origin_index,
-            String(origin_period),
-            build_period,
-            string(Date(calibration_date)),
-            variant.burn_in_quarters,
-            quarters,
-            Int(parameters["T_prime"]),
-            Int(parameters["T_max"]),
+            origin_period,
             paths,
-            length(simulated),
-            failed,
-            calibration_seconds,
-            simulation_seconds,
+            calibration_object,
         )
-        origin_summaries = isempty(simulated) ? EnsembleSummary[] :
-            summarize_ensemble(variant, origin_index, origin_period, simulated)
+        origin_summaries = generated.summaries
+        diagnostic = generated.diagnostic
+        append!(path_failures, generated.path_failures)
 
         append_struct_csv(cache_path, origin_summaries, EnsembleSummary)
         append_struct_csv(diagnostics_path, [diagnostic], ABMOriginDiagnostic)
