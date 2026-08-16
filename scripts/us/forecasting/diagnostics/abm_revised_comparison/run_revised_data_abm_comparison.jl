@@ -87,6 +87,7 @@ function load_extra_abm_column(
         own_identity,
         own_origin_indices;
         own_reference_identity = own_identity,
+        own_origin_pairs = nothing,
     )
     cache = joinpath(directory, "abm_ensemble_summaries.csv")
     isfile(cache) || throw(ArgumentError("no abm_ensemble_summaries.csv in $directory"))
@@ -96,22 +97,48 @@ function load_extra_abm_column(
     # (c) Identity parity. comparison_code_sha256 and julia_version are included:
     # a matched-seed contrast between columns produced by different implementations
     # or different RNG versions is not a contrast at all.
-    for field in (
-            "panel_sha256",
-            "panel_manifest_sha256",
-            "paths_requested",
-            "seed_contract_id",
-            "contract_id",
-            "base_diagnostic_code_sha256",
-            "runtime_source_tree_sha256",
-            "runner_sha256",
-            "environment_manifest_sha256",
-            "julia_version",
-            "model_scale",
-            "simulated_quarters",
-        )
-        haskey(own_identity, field) || continue
-        want = own_identity[field]
+    # INVERTED PARITY LIST. Every field of the current identity schema is compared
+    # by default; only the fields below are exempt, each with its reason. Twice now
+    # a newly added identity field (numerical_kernel_sha256, and origin_pairs before
+    # it) was simply forgotten from an opt-in list, so the failure mode is inverted:
+    # adding a field to the schema now makes it compared automatically, and skipping
+    # it requires writing down why.
+    uncompared = Dict(
+        # --also-score exists precisely to score a DIFFERENT variant beside this one.
+        "variant" => "the companion is a different variant by construction",
+        # Variant-specific; the comparable quantity is simulated_quarters, compared.
+        "burn_in_quarters" => "variant-specific; simulated_quarters is compared instead",
+        # v1 and v2 columns are meant to differ in calibration -- that IS the contrast.
+        "calibration_object_path" => "the calibration difference is the experiment",
+        "calibration_object_sha256" => "the calibration difference is the experiment",
+        # Compared below, more strictly than equality of a stored field: against the
+        # primary's actual origins and with three-way internal consistency.
+        "origin_indices" => "compared separately against the primary's actual origins",
+        "origin_pairs" => "compared separately against the primary's actual pairs",
+        # The runner is the CLI driver: it selects and persists, it does not generate
+        # numbers. Its digest legitimately differs between a companion whose identity
+        # was last refreshed at one time and a primary refreshed at another, without
+        # any difference in what the two columns contain. What actually pins the
+        # numbers is compared: numerical_kernel_sha256, runtime_source_tree_sha256,
+        # environment_manifest_sha256 and the effective generation provenance.
+        "runner_sha256" => "the driver cannot change a cached number; the kernel, " *
+            "runtime and environment digests are what pin the columns",
+        # Compared below as effective generation provenance, because a migrated
+        # document carries re-baselined values in these two fields.
+        "comparison_code_sha256" => "compared as effective generation provenance",
+        "base_diagnostic_code_sha256" => "compared as effective generation provenance",
+    )
+    # Compared against the primary's STORED identity, not a freshly derived one.
+    # Both documents may legitimately be migrated, in which case their harness
+    # fields hold the same re-baselined values; comparing a stored document against
+    # a fresh one would refuse two caches that are in fact perfectly comparable.
+    # The current tree is pinned separately: the primary's own validation checks the
+    # always-enforced digests against it, so matching the companion to the primary
+    # transitively pins the companion too.
+    for field in ABM.CACHE_IDENTITY_FIELDS
+        haskey(uncompared, field) && continue
+        haskey(own_reference_identity, field) || continue
+        want = own_reference_identity[field]
         got = get(stored, field, nothing)
         got === nothing && throw(
             ABM.CacheIdentityError(
@@ -275,6 +302,50 @@ function load_extra_abm_column(
                 "diagnostic row count other than one",
         ),
     )
+
+    # Origin PAIRS, three ways and against the primary. Binding the pairs in the
+    # identity is useless if nothing reads them: a companion that consistently uses
+    # different periods for the same indices matches on indices alone.
+    identity_pairs = Set(String.(get(stored, "origin_pairs", String[])))
+    diagnostic_pairs = Set(
+        "$(row.origin_index)=$(row.origin_period)" for row in other_diagnostics
+    )
+    summary_pairs = Set(
+        "$(row.origin_index)=$(row.origin_period)" for row in summaries
+    )
+    isempty(identity_pairs) && throw(
+        ABM.CacheIdentityError(
+            "origin_pairs",
+            "--also-score source $directory binds no origin pairs; its index -> " *
+                "period mapping cannot be established",
+        ),
+    )
+    identity_pairs == diagnostic_pairs || throw(
+        ABM.CacheIdentityError(
+            "origin_pairs",
+            "--also-score source $directory identity claims pairs " *
+                "$(sort!(collect(setdiff(identity_pairs, diagnostic_pairs)))) that its " *
+                "diagnostics do not carry",
+        ),
+    )
+    diagnostic_pairs == summary_pairs || throw(
+        ABM.CacheIdentityError(
+            "origin_pairs",
+            "--also-score source $directory maps indices to different periods in its " *
+                "diagnostics and its ensemble rows: " *
+                "$(sort!(collect(symdiff(diagnostic_pairs, summary_pairs))))",
+        ),
+    )
+    if own_origin_pairs !== nothing
+        wanted_pairs = Set(String.(own_origin_pairs))
+        wanted_pairs == diagnostic_pairs || throw(
+            ABM.CacheIdentityError(
+                "origin_pairs",
+                "--also-score source $directory maps origins to different quarters " *
+                    "than this run: $(sort!(collect(symdiff(wanted_pairs, diagnostic_pairs))))",
+            ),
+        )
+    end
 
     # (a) Exact origin-set equality with the primary run. A one-origin companion
     # scored beside a 61-origin primary is not a comparison; it silently shrinks
@@ -447,6 +518,7 @@ function main(raw_args)
             identity,
             [entry[1] for entry in origins];
             own_reference_identity = own_stored,
+            own_origin_pairs = ["$(entry[1])=$(entry[2])" for entry in origins],
         )
         push!(extra_columns, (other[1], other[2]))
         push!(extra_provenance, other[3])
