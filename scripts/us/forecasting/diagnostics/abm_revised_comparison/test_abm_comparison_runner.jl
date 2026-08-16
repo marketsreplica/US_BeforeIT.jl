@@ -571,7 +571,7 @@ end
         end
     end
 
-    @testset "companion parity covers runner and environment manifest" begin
+    @testset "companion parity covers the environment and the numerical kernel" begin
         mktempdir() do root
             source = joinpath(root, "companion")
             generated = generate_tiny_cache(source, BASELINE_CALIBRATION)
@@ -584,7 +584,11 @@ end
                 panel = generated.panel,
             )
             own_origins = [entry[1] for entry in generated.selected]
-            for field in ("environment_manifest_sha256", "runner_sha256")
+            # runner_sha256 is deliberately NOT here: the driver cannot change a
+            # cached number, and its digest legitimately differs between documents
+            # refreshed at different times. numerical_kernel_sha256 is the field that
+            # matters and was missing from the parity list entirely.
+            for field in ("environment_manifest_sha256", "numerical_kernel_sha256")
                 document = ABM.read_cache_identity(identity_path)
                 document[field] = repeat("e", 64)
                 ABM.write_cache_identity(identity_path, document)
@@ -1106,19 +1110,39 @@ end
             ABM.period_to_quarter_end,
             ABM.load_calibration_object,
         ]
+        # RECURSIVE worklist. A one-level walk would pass a future kernel function
+        # that calls a harness helper, which is the same drift one layer down.
+        # Every own-module function discovered is itself expanded, with a visited
+        # set so mutual recursion terminates.
         unsealed = Tuple{Symbol, String}[]
-        for generator in generators
-            for name in global_refs(generator)
+        visited = Set{Symbol}()
+        worklist = Any[generators...]
+        discovered = 0
+        while !isempty(worklist)
+            current = pop!(worklist)
+            for name in global_refs(current)
+                name in visited && continue
+                push!(visited, name)
                 name in allowlist && continue
                 isdefined(ABM, name) || continue
                 value = getfield(ABM, name)
                 value isa Function || continue
+                own = false
                 for method in methods(value)
                     file = unsealed_method(method)
                     file === nothing || push!(unsealed, (name, file))
+                    Base.moduleroot(method.module) === ABM && (own = true)
+                end
+                # Expand only our own functions: Base, BeforeIT and package methods
+                # are sealed wholesale by their respective digests, so walking into
+                # them adds nothing and would never terminate usefully.
+                if own
+                    discovered += 1
+                    push!(worklist, value)
                 end
             end
         end
+        println("  walked $(length(visited)) globals, expanded $discovered own-module functions")
         unique!(unsealed)
         for (name, file) in unsealed
             println("  UNSEALED CALLEE: $name defined in $file")
@@ -1169,6 +1193,126 @@ end
             @test thrown isa ABM.CacheIdentityError
             @test thrown.field == "origin_pairs"
             println("  refusal (re-mapped origin pair): ", sprint(showerror, thrown))
+        end
+    end
+
+    @testset "loader refuses a companion that maps indices to other quarters" begin
+        # Binding origin_pairs in the identity is useless if nothing reads them. A
+        # companion that CONSISTENTLY uses different periods for the same indices
+        # matched on indices alone, so its columns were scored against unrelated
+        # quarters.
+        mktempdir() do root
+            source = joinpath(root, "companion")
+            generated = generate_tiny_cache(source, BASELINE_CALIBRATION)
+            identity_path = joinpath(source, ABM.CACHE_IDENTITY_FILENAME)
+            diagnostics_path = joinpath(source, "abm_origin_diagnostics.csv")
+            cache_path = joinpath(source, "abm_ensemble_summaries.csv")
+            own = ABM.build_cache_identity(
+                ABM.HEADLINE_VARIANT,
+                generated.selected;
+                paths = 4,
+                calibration_path = BASELINE_CALIBRATION,
+                panel = generated.panel,
+            )
+            own_origins = [entry[1] for entry in generated.selected]
+            own_pairs = ["$(entry[1])=$(entry[2])" for entry in generated.selected]
+
+            # Honest companion is admitted.
+            @test load_extra_abm_column(
+                source, own, own_origins; own_origin_pairs = own_pairs,
+            )[1].name == "headline"
+
+            # Now shift every period by one quarter, consistently, everywhere: the
+            # identity, the diagnostics and the ensemble rows all agree with each
+            # other, and the index SET is untouched.
+            shifted(period) = ABM.shift_period(period, 1)
+            diagnostics =
+                ABM.read_struct_csv(diagnostics_path, ABM.ABMOriginDiagnostic)
+            ABM.rewrite_struct_csv(
+                diagnostics_path,
+                [
+                    ABM.ABMOriginDiagnostic(
+                            row.variant, row.origin_index, shifted(row.origin_period),
+                            row.build_period, row.calibration_date, row.burn_in_quarters,
+                            row.simulated_quarters, row.t_prime, row.t_max,
+                            row.paths_requested, row.paths_used, row.paths_failed,
+                            row.calibration_seconds, row.simulation_seconds,
+                        ) for row in diagnostics
+                ],
+                ABM.ABMOriginDiagnostic,
+            )
+            rows = ABM.read_struct_csv(cache_path, ABM.EnsembleSummary)
+            ABM.rewrite_struct_csv(
+                cache_path,
+                [
+                    ABM.EnsembleSummary(
+                            row.variant, row.origin_index, shifted(row.origin_period),
+                            row.target_period, row.target_id, row.horizon, row.paths_used,
+                            row.ensemble_mean, row.ensemble_median, row.ensemble_sd,
+                            row.monte_carlo_standard_error, row.percentile_05,
+                            row.percentile_10, row.percentile_25, row.percentile_75,
+                            row.percentile_90, row.percentile_95,
+                        ) for row in rows
+                ],
+                ABM.EnsembleSummary,
+            )
+            document = ABM.read_cache_identity(identity_path)
+            document["origin_pairs"] = [
+                "$(entry[1])=$(shifted(entry[2]))" for entry in generated.selected
+            ]
+            ABM.write_cache_identity(identity_path, document)
+
+            thrown = nothing
+            try
+                load_extra_abm_column(
+                    source, own, own_origins; own_origin_pairs = own_pairs,
+                )
+            catch error
+                thrown = error
+            end
+            @test thrown isa ABM.CacheIdentityError
+            @test thrown.field == "origin_pairs"
+            println("  refusal (companion re-mapped quarters): ", sprint(showerror, thrown))
+        end
+    end
+
+    @testset "upgrade derives origin pairs from the cache, not the request" begin
+        # A pre-v5 identity bound only indices, so an upgrade that copied the
+        # requested pairs would mint a mapping the cache does not evidence.
+        mktempdir() do directory
+            generated = generate_tiny_cache(directory, BASELINE_CALIBRATION)
+            diagnostics = ABM.read_struct_csv(
+                joinpath(directory, "abm_origin_diagnostics.csv"),
+                ABM.ABMOriginDiagnostic,
+            )
+            stored = ABM.read_cache_identity(
+                joinpath(directory, ABM.CACHE_IDENTITY_FILENAME),
+            )
+            legacy = copy(stored)
+            legacy["schema_version"] = ABM.CACHE_IDENTITY_SCHEMA_V4
+            delete!(legacy, "origin_pairs")
+
+            # Upgrading against the cache's own diagnostics yields the true pairs.
+            upgraded = ABM.upgrade_cache_identity(legacy, stored, diagnostics)
+            @test Set(upgraded["origin_pairs"]) == Set(
+                "$(row.origin_index)=$(row.origin_period)" for row in diagnostics
+            )
+            println("  upgrade derived pairs: ", join(sort(upgraded["origin_pairs"]), ", "))
+
+            # A request claiming different quarters for the same indices is refused
+            # rather than stamped over the cache.
+            remapped = copy(stored)
+            remapped["origin_pairs"] =
+                ["$(row.origin_index)=1999Q1" for row in diagnostics]
+            thrown = nothing
+            try
+                ABM.upgrade_cache_identity(legacy, remapped, diagnostics)
+            catch error
+                thrown = error
+            end
+            @test thrown isa ABM.CacheIdentityError
+            @test thrown.field == "origin_pairs"
+            println("  refusal (upgrade, remapped pairs): ", sprint(showerror, thrown))
         end
     end
 

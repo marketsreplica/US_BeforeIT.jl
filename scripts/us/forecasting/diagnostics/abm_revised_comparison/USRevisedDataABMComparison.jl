@@ -710,7 +710,11 @@ and the environment manifest -- are taken from the current tree and the document
 records that they were re-baselined rather than observed at generation, so the
 upgrade never claims to have witnessed something it did not.
 """
-function upgrade_cache_identity(stored::AbstractDict, expected::AbstractDict)
+function upgrade_cache_identity(
+        stored::AbstractDict,
+        expected::AbstractDict,
+        cache_diagnostics = nothing,
+    )
     for field in CACHE_IDENTITY_EXPERIMENT_FIELDS
         want = expected[field]
         got = stored[field]
@@ -733,7 +737,38 @@ function upgrade_cache_identity(stored::AbstractDict, expected::AbstractDict)
             ),
         )
     end
+    # Origin pairs are DERIVED from the diagnostics the cache actually carries, never
+    # copied from the older document or taken on trust from the request. A pre-v5
+    # identity bound only indices, so accepting a claimed mapping would let an
+    # upgrade mint a pairing the cache does not evidence.
+    if cache_diagnostics !== nothing
+        derived = sort!(
+            unique(
+                "$(row.origin_index)=$(row.origin_period)" for row in cache_diagnostics
+            ),
+        )
+        requested = Set(String.(get(expected, "origin_pairs", String[])))
+        unrequested = [pair for pair in derived if !(pair in requested)]
+        isempty(unrequested) || throw(
+            CacheIdentityError(
+                "origin_pairs",
+                "the cache maps origins to quarters this run does not request: " *
+                    "$(unrequested); refusing to upgrade an identity onto a different " *
+                    "index -> period mapping",
+            ),
+        )
+    end
+
     upgraded = copy(expected)
+    if cache_diagnostics !== nothing
+        upgraded["origin_pairs"] = sort!(
+            unique(
+                "$(row.origin_index)=$(row.origin_period)" for row in cache_diagnostics
+            ),
+        )
+        upgraded["origin_indices"] =
+            sort!(unique(getfield.(cache_diagnostics, :origin_index)))
+    end
     upgraded["upgraded_from_schema_1"] = true
     # Preserve, never overwrite, what schema 1 actually recorded. Replacing these
     # with current hashes would erase the only record of the code that produced
@@ -1054,9 +1089,14 @@ function simulate_abm_ensembles(
                             "--force-recompute to regenerate.",
                     ),
                 )
+                on_disk_diagnostics = isfile(diagnostics_path) ?
+                    filter(
+                        row -> row.variant == variant.name,
+                        read_struct_csv(diagnostics_path, ABMOriginDiagnostic),
+                    ) : nothing
                 write_cache_identity(
                     identity_path,
-                    upgrade_cache_identity(stored, identity),
+                    upgrade_cache_identity(stored, identity, on_disk_diagnostics),
                 )
                 identity_upgraded = true
                 progress && println(
