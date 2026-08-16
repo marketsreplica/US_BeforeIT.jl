@@ -1233,11 +1233,15 @@ function simulate_abm_ensembles(
             empty!(path_failures)
         end
 
+        # The per-origin timings and the surviving path count now live on the
+        # diagnostic the sealed kernel returns; they are no longer locals of this
+        # loop. Reading them off `generated` keeps the printed line identical to
+        # the pre-extraction one while leaving the kernel untouched.
         progress && println(
             "  origin $origin_period (index $origin_index): " *
-                "calibration $(round(calibration_seconds, digits = 2))s " *
-                "simulation $(round(simulation_seconds, digits = 2))s " *
-                "paths $(length(simulated))/$paths " *
+                "calibration $(round(diagnostic.calibration_seconds, digits = 2))s " *
+                "simulation $(round(diagnostic.simulation_seconds, digits = 2))s " *
+                "paths $(diagnostic.paths_used)/$paths " *
                 "elapsed $(round(time() - started_all, digits = 1))s",
         )
     end
@@ -1246,6 +1250,17 @@ function simulate_abm_ensembles(
         summaries;
         by = row -> (row.origin_index, row.target_id, row.horizon),
     )
+    # Persist the canonical order. Rows are appended per origin as they are
+    # generated, so without this the file keeps generation order (target order as
+    # declared) while the in-memory vectors -- and therefore every derived table --
+    # are sorted. That split is why a clean regeneration reproduced every score
+    # table byte-for-byte yet could not reproduce the cache's own sha256 seal: the
+    # only writer that ever emitted sorted rows was the repair path below. Writing
+    # the sorted order here makes the on-disk artifact canonical for every run,
+    # so `abm_ensemble_summaries_sha256` and `forecast_cells_sha256` are
+    # reproducible from scratch rather than only after a prune.
+    rewrite_struct_csv(cache_path, summaries, EnsembleSummary)
+    rewrite_struct_csv(diagnostics_path, diagnostics, ABMOriginDiagnostic)
     finalize_cache_identity(identity_path, identity, diagnostics)
     return (; summaries, diagnostics, path_failures, identity_adopted, identity_upgraded)
 end
