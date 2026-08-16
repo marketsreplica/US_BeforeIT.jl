@@ -82,11 +82,15 @@ agrees with this run on every field that would change a forecast: the scoring pa
 the requested path count, the seed contract and the code that produced it. A variant
 label alone is not provenance.
 """
-function load_extra_abm_column(directory, own_identity)
+function load_extra_abm_column(directory, own_identity, own_origin_indices)
     cache = joinpath(directory, "abm_ensemble_summaries.csv")
     isfile(cache) || throw(ArgumentError("no abm_ensemble_summaries.csv in $directory"))
     identity_path = joinpath(directory, ABM.CACHE_IDENTITY_FILENAME)
     stored = ABM.read_cache_identity(identity_path)
+
+    # (c) Identity parity. comparison_code_sha256 and julia_version are included:
+    # a matched-seed contrast between columns produced by different implementations
+    # or different RNG versions is not a contrast at all.
     for field in (
             "panel_sha256",
             "panel_manifest_sha256",
@@ -94,10 +98,22 @@ function load_extra_abm_column(directory, own_identity)
             "seed_contract_id",
             "contract_id",
             "base_diagnostic_code_sha256",
+            "comparison_code_sha256",
+            "runtime_source_tree_sha256",
+            "julia_version",
             "model_scale",
+            "simulated_quarters",
         )
+        haskey(own_identity, field) || continue
         want = own_identity[field]
-        got = stored[field]
+        got = get(stored, field, nothing)
+        got === nothing && throw(
+            ABM.CacheIdentityError(
+                field,
+                "--also-score source $directory has no $field; its columns cannot " *
+                    "be shown to be comparable with this run",
+            ),
+        )
         matched = (want isa Real && got isa Real) ? want == got :
             string(want) == string(got)
         matched || throw(
@@ -108,35 +124,125 @@ function load_extra_abm_column(directory, own_identity)
             ),
         )
     end
+
+    # (b) Diagnostics are mandatory: without them the companion's path accounting
+    # and origin coverage cannot be established at all.
     diagnostics_path = joinpath(directory, "abm_origin_diagnostics.csv")
-    if isfile(diagnostics_path)
-        other_diagnostics =
-            ABM.read_struct_csv(diagnostics_path, ABM.ABMOriginDiagnostic)
-        unresolved = count(
-            row -> row.paths_used != row.paths_requested,
-            other_diagnostics,
-        )
-        unresolved == 0 || throw(
+    isfile(diagnostics_path) || throw(
+        ABM.CacheIdentityError(
+            "abm_origin_diagnostics.csv",
+            "--also-score source $directory has no origin diagnostics; its origin " *
+                "coverage and path accounting cannot be established",
+        ),
+    )
+    other_diagnostics =
+        ABM.read_struct_csv(diagnostics_path, ABM.ABMOriginDiagnostic)
+    isempty(other_diagnostics) && throw(
+        ABM.CacheIdentityError(
+            "abm_origin_diagnostics.csv",
+            "--also-score source $directory has empty origin diagnostics",
+        ),
+    )
+    unresolved = count(row -> row.paths_used != row.paths_requested, other_diagnostics)
+    unresolved == 0 || throw(
+        ABM.CacheIdentityError(
+            "paths_used",
+            "--also-score source $directory has $unresolved origin(s) with " *
+                "unresolved path failures; its columns are smaller ensembles",
+        ),
+    )
+    for row in other_diagnostics
+        row.paths_requested == own_identity["paths_requested"] || throw(
             ABM.CacheIdentityError(
-                "paths_used",
-                "--also-score source $directory has $unresolved origin(s) with " *
-                    "unresolved path failures; its columns are smaller ensembles",
+                "paths_requested",
+                "--also-score source $directory origin $(row.origin_period) used " *
+                    "$(row.paths_requested) paths but this run requests " *
+                    "$(own_identity["paths_requested"])",
             ),
         )
     end
+
     summaries = ABM.read_struct_csv(cache, ABM.EnsembleSummary)
     isempty(summaries) && throw(ArgumentError("empty ensemble cache in $directory"))
     names = unique(getfield.(summaries, :variant))
     length(names) == 1 ||
         throw(ArgumentError("cache in $directory mixes variants $(names)"))
+
+    # (d) Three-way consistency: identity, diagnostics and summaries must agree on
+    # the variant, the origin set and the row counts. A forged identity that claims
+    # origins its diagnostics and rows do not carry is refused here.
+    identity_origins = Set(Int.(stored["origin_indices"]))
+    diagnostic_origins = Set(getfield.(other_diagnostics, :origin_index))
+    summary_origins = Set(getfield.(summaries, :origin_index))
+    diagnostic_variants = unique(getfield.(other_diagnostics, :variant))
+    (
+        length(diagnostic_variants) == 1 && only(diagnostic_variants) == only(names) &&
+            String(stored["variant"]) == only(names)
+    ) || throw(
+        ABM.CacheIdentityError(
+            "variant",
+            "--also-score source $directory disagrees on its own variant: identity " *
+                "$(repr(stored["variant"])), diagnostics $(diagnostic_variants), " *
+                "summaries $(names)",
+        ),
+    )
+    diagnostic_origins == summary_origins || throw(
+        ABM.CacheIdentityError(
+            "origin_indices",
+            "--also-score source $directory has diagnostics for " *
+                "$(length(diagnostic_origins)) origin(s) but ensemble rows for " *
+                "$(length(summary_origins)); the cache is internally inconsistent",
+        ),
+    )
+    identity_origins == diagnostic_origins || throw(
+        ABM.CacheIdentityError(
+            "origin_indices",
+            "--also-score source $directory identity claims " *
+                "$(length(identity_origins)) origin(s) but carries " *
+                "$(length(diagnostic_origins)); the identity does not describe the cache",
+        ),
+    )
+    row_counts = Dict{Int, Int}()
+    for row in summaries
+        row_counts[row.origin_index] = get(row_counts, row.origin_index, 0) + 1
+    end
+    bad_rows = sort!(
+        [
+            index for (index, count) in row_counts
+                if count != ABM.ENSEMBLE_ROWS_PER_ORIGIN
+        ],
+    )
+    isempty(bad_rows) || throw(
+        ABM.CacheIdentityError(
+            "ensemble_row_count",
+            "--also-score source $directory has origin(s) $bad_rows with a row " *
+                "count other than $(ABM.ENSEMBLE_ROWS_PER_ORIGIN)",
+        ),
+    )
+
+    # (a) Exact origin-set equality with the primary run. A one-origin companion
+    # scored beside a 61-origin primary is not a comparison; it silently shrinks
+    # the common cell set while the combined output still claims canonical coverage.
+    own_set = Set(own_origin_indices)
+    own_set == diagnostic_origins || throw(
+        ABM.CacheIdentityError(
+            "origin_indices",
+            "--also-score source $directory covers $(length(diagnostic_origins)) " *
+                "origin(s) but this run covers $(length(own_set)); a companion column " *
+                "must cover exactly the same origins",
+        ),
+    )
+
     provenance = Dict{String, Any}(
         "source_directory" =>
             relpath(abspath(directory), ABM.REPOSITORY_ROOT),
         "variant" => stored["variant"],
         "paths_requested" => stored["paths_requested"],
+        "origin_count" => length(diagnostic_origins),
         "calibration_object_path" => stored["calibration_object_path"],
         "calibration_object_sha256" => stored["calibration_object_sha256"],
         "comparison_code_sha256" => stored["comparison_code_sha256"],
+        "runtime_source_tree_sha256" => get(stored, "runtime_source_tree_sha256", "absent"),
         "panel_sha256" => stored["panel_sha256"],
         "julia_version" => stored["julia_version"],
         "adopted_from_legacy_cache" =>
@@ -144,7 +250,7 @@ function load_extra_abm_column(directory, own_identity)
         "ensemble_cache_sha256" => bytes2hex(SHA.sha256(read(cache))),
         "identity_sha256" => bytes2hex(SHA.sha256(read(identity_path))),
     )
-    return (select_variant(only(names)), summaries, provenance)
+    return (select_variant(only(names)), summaries, provenance, diagnostic_origins)
 end
 
 function scored_origins(panel)
@@ -198,6 +304,7 @@ function main(raw_args)
     also_score_directory = cli_option("also-score", nothing)
     force_recompute = "--force-recompute" in raw_args
     adopt_cache_identity = "--adopt-cache-identity" in raw_args
+    upgrade_cache_identity = "--upgrade-cache-identity" in raw_args
 
     Threads.nthreads() == 1 || @warn "JULIA_NUM_THREADS is not 1; statistical benchmark reproduction may differ"
     BLAS.get_num_threads() == 1 || @warn "OPENBLAS_NUM_THREADS is not 1; statistical benchmark reproduction may differ"
@@ -245,10 +352,12 @@ function main(raw_args)
         identity = identity,
         force_recompute = force_recompute,
         adopt_legacy_identity = adopt_cache_identity,
+        upgrade_identity_schema = upgrade_cache_identity,
     )
     check_cached_path_count(simulated.diagnostics, paths)
     println("cache_identity=$(relpath(identity_path, ABM.REPOSITORY_ROOT))")
     println("cache_identity_adopted_from_legacy=$(simulated.identity_adopted)")
+    println("cache_identity_upgraded_to_schema_2=$(simulated.identity_upgraded)")
 
     println("abm_origins_simulated=$(length(simulated.diagnostics))")
     println(
@@ -270,12 +379,19 @@ function main(raw_args)
 
     extra_columns = Tuple{ABM.ABMVariant, Vector{ABM.EnsembleSummary}}[]
     extra_provenance = Dict{String, Any}[]
+    extra_origin_sets = Set{Int}[]
     if also_score_directory !== nothing
-        other = load_extra_abm_column(abspath(also_score_directory), identity)
+        other = load_extra_abm_column(
+            abspath(also_score_directory),
+            identity,
+            [entry[1] for entry in origins],
+        )
         push!(extra_columns, (other[1], other[2]))
         push!(extra_provenance, other[3])
+        push!(extra_origin_sets, other[4])
         println("also_scored_variant=$(other[1].name)")
         println("also_scored_rows=$(length(other[2]))")
+        println("also_scored_origins=$(length(other[4]))")
         println("also_scored_source=$(other[3]["source_directory"])")
     end
 
@@ -287,6 +403,7 @@ function main(raw_args)
         paths = paths,
         extra_columns = extra_columns,
         extra_column_provenance = extra_provenance,
+        extra_origin_sets = extra_origin_sets,
     )
     written = ABM.write_abm_comparison(result, output_directory)
 
