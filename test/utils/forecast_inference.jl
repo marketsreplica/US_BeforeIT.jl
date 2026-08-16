@@ -157,10 +157,14 @@ end
 end
 
 @testset "Mincer-Zarnowitz HAC simulation fixture" begin
-    rng = MersenneTwister(20260805)
+    # Deterministic quasi-noise: RNG streams (randn) are not stable across
+    # Julia versions, while Float64 sin/cos are bit-identical everywhere.
     n = 80
-    forecast = 100 .+ cumsum(randn(rng, n))
-    innovations = (0.3 .+ 0.01 .* (1:n)) .* randn(rng, n)
+    t = collect(1.0:n)
+    steps = sin.(0.9 .* t .+ 0.2) .+ 0.4 .* cos.(2.7 .* t)
+    quasi_noise = sin.(1.9 .* t) .+ 0.7 .* cos.(4.7 .* t .+ 0.3)
+    forecast = 100 .+ cumsum(steps)
+    innovations = (0.3 .+ 0.01 .* t) .* quasi_noise
     errors = zeros(n)
     for index in 2:n
         errors[index] = 0.65 * errors[index - 1] + innovations[index]

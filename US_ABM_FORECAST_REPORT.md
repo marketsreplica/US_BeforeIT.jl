@@ -1328,8 +1328,8 @@ Exact regeneration requires **Julia 1.10.3**. Seeds derive from `Base.hash` and 
 drawn through the default global RNG; both are version-bound, so the same seed
 produces a different path under a different Julia. A cross-version rerun is a new
 experiment, not a reproduction of these numbers — and the identity check will say
-so rather than silently reusing the cache. The U.S. hermetic validation job pins
-1.10.3 for this reason.
+so rather than silently reusing the cache. The U.S. scientific validation CI job
+pins 1.10.3 for this reason.
 
 Re-scoring a committed cache (seconds, no simulation):
 

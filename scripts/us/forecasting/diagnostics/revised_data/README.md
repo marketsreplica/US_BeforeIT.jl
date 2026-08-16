@@ -109,21 +109,9 @@ eleven native-input models on the same four target/horizon/origin cells. See
 limitations. It remains a revised-data point-forecast diagnostic and does not
 upgrade this panel to origin evidence.
 
-The separate `ABM_ENGINEERING_QUALIFICATION.md` contract does not score this
-panel or run an ABM. It qualifies only a past-sliced `2026Q1` input bundle,
-registry-derived construction/simulation substreams for 32 paths,
-runtime-checked serial/global-RNG declarations, and a failure-only engineering
-manifest. Its strict offline tests are:
-
-```sh
-JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
-  julia --startup-file=no --depwarn=error --check-bounds=yes \
-  --project=scripts/us \
-  scripts/us/forecasting/diagnostics/test_revised_data_abm_engineering_diagnostic.jl
-```
-
-The contract permanently forbids class-H inputs, truth/forecast/score output,
-inference, origin admission, promotion, and production registration.
+The separate ABM engineering qualification contract that once accompanied
+this panel is parked on the `governance-archive` branch together with the
+registry it was bound to.
 
 ## New York Fed notice
 

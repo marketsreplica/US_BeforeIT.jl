@@ -630,18 +630,20 @@ end
                 ("Used", "GFGD", -60.0),
             ],
         )
+        # The projected rows come from BLAS matrix products whose last-bit
+        # rounding differs across platforms, so exact equality is not portable.
         @test sum(
             symmetric.rounding_normalized_symmetric_use.values[
                 symmetric.rounding_normalized_symmetric_use.row_index["Other"],
                 :,
             ],
-        ) == 172_632.0
+        ) ≈ 172_632.0 atol = 1.0e-3
         @test sum(
             symmetric.rounding_normalized_symmetric_use.values[
                 symmetric.rounding_normalized_symmetric_use.row_index["Used"],
                 :,
             ],
-        ) == 133_321.0
+        ) ≈ 133_321.0 atol = 1.0e-3
         @test "NEGATIVE_CELLS_PRESERVED_REQUIRES_GOVERNED_POLICY" in
             symmetric.promotion_blockers
         @test !symmetric.valuation_bridge_applied

@@ -56,9 +56,6 @@ JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
 JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
   julia --project=scripts/us --startup-file=no \
   scripts/us/accounting/test_constrained_stone_reconciliation.jl
-JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
-  julia --project=scripts/us --startup-file=no \
-  scripts/us/accounting/test_production_reconciliation_readiness.jl
 python3 \
   scripts/us/accounting/oecd_valuation/test_generate_oecd_source_axis_fixture.py
 JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
@@ -93,7 +90,6 @@ Census M3 stage evidence:       77 passed
 Census M3 offline/adversarial:    4 passed
 Used/Other evidence ledger:     225 passed
 Constrained Stone qualification: 168 passed
-Production reconciliation readiness: 160 passed
 OECD valuation source axes:     421 passed
 OECD offline regeneration:       1 passed
 Opening-accounting candidates: 185 passed on the canonical build envelope
@@ -1414,59 +1410,12 @@ inventory-discrepancy alias. They are
 
 ## Production reconciliation readiness gate
 
-`USProductionReconciliationReadiness.jl` authenticates nine upstream evidence
-families and evaluates 45 exact semantic probes before a future reconciliation
-can materialize any solver input. The target tuple is frozen as U.S.
-calendar-year 2024 annual accounting flows, in millions of current dollars at
-producers' prices, on the 68-sector core plus explicit `Used`/`Other` closure
-accounts.
-
-The gate deliberately separates evidence validation from solver admission.
-The current report has 20 mandatory criteria: four pass and 16 remain blocked.
-All 24 open blockers are emitted with the exact source families, evidence,
-literature, resolution requirement, and adversarial test needed to close
-them. Current counts remain:
-
-```text
-admitted solver families:       0
-solver input cells:             0
-solver input controls:          0
-production reliability classes: 0
-production covariance classes:  0
-approved exact controls:        0
-reconciliation runs:            0
-adjustment records:             0
-```
-
-This zero-input result is substantive. The annual producer-price core and
-2024 `Used`/`Other` summary share the declared year/basis but still lack cell
-state, sign, import, exact-control, reliability, covariance, and closure
-approval. BEA valuation tables and the OECD challenger are quarantined across
-price, classification, and release boundaries. T10105, T50805B, and M3 are
-flow/stock/stage evidence on different timing, valuation, and holder axes.
-The 2017 special-account detail remains semantic evidence only.
-
-The Stone implementation is also correctly classified as synthetic-only: its
-problem type requires benchmark truth and rejects production sources. A
-separate production observation/control adapter is required; fabricating
-truth fields or bypassing its validator is prohibited. The qualification
-report now distinguishes three adjustable controls, two fixed-only validation
-controls, rank two, and one genuinely dependent adjustable control instead of
-mislabeling all three non-rank rows as redundant.
-
-Generate the deterministic blocked-readiness report with:
-
-```sh
-JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
-  julia --project=scripts/us --startup-file=no \
-  scripts/us/accounting/run_production_reconciliation_readiness.jl \
-  OUTPUT_DIRECTORY
-```
-
-The writer rehashes every bound input before and after its semantic probes and
-emits artifact, source-family, blocker, criterion, candidate-status, and
-manifest reports. It emits no production cell/control file and cannot change
-model state, accounting gates, origins, or forecast scores.
+The fail-closed readiness and admission-evidence gates
+(`USProductionReconciliationReadiness.jl`,
+`USProductionReconciliationAdmissionEvidence.jl`) are parked on the
+`governance-archive` branch. The candidate ledger
+(`USProductionReconciliationLedger.jl`) remains here as the catalog of
+reconciliation closure candidates.
 
 ## Limitations and next boundary
 
