@@ -11,7 +11,7 @@
 #
 # The last test re-scores the committed v2 headline cache and asserts its
 # score_summaries.csv reproduces the committed file: identical structure and
-# labels, every numeric field within 1e-12 relative or 1e-12 absolute. Byte
+# labels, every numeric field within 1e-8 relative or absolute. Byte
 # identity holds only on the ISA that produced the cache — SIMD reduction order
 # shifts the last ulp of scored floats between Apple Silicon and x86 — so the
 # portable assertion is the numeric one; it is what makes the published numbers
@@ -60,8 +60,10 @@ const COMMITTED_V2_HEADLINE = joinpath(
 
 # Structure and labels must match exactly; numeric fields may differ by the
 # last-ulp reassociation SIMD reduction order introduces across ISAs. Near-zero
-# statistics need the absolute floor: their reassociation noise is O(1e-16)
-# absolute but unbounded relative. Returns human-readable mismatch reports so a
+# statistics need the absolute floor: their reassociation noise is unbounded
+# relative. Cancellation-heavy aggregates amplify last-ulp input noise to
+# ~1e-10, so the bound is 1e-8: two orders above observed cross-ISA noise, six
+# below any published digit. Returns human-readable mismatch reports so a
 # hosted failure identifies the exact fields.
 function csv_numeric_mismatches(rescored::Vector{UInt8}, committed::Vector{UInt8})
     mismatches = String[]
@@ -99,8 +101,8 @@ function csv_numeric_mismatches(rescored::Vector{UInt8}, committed::Vector{UInt8
             elseif !isapprox(
                     rescored_value,
                     committed_value;
-                    rtol = 1.0e-12,
-                    atol = 1.0e-12,
+                    rtol = 1.0e-8,
+                    atol = 1.0e-8,
                 )
                 push!(
                     mismatches,
@@ -1447,7 +1449,7 @@ end
                 else
                     println(
                         "  committed cache re-scored: score_summaries.csv ",
-                        "numerically identical at rtol 1e-12 ",
+                        "numerically identical at 1e-8 ",
                         "(byte-identical only on the producing ISA)",
                     )
                 end
