@@ -1040,6 +1040,138 @@ end
         end
     end
 
+    @testset "the seal is transitively closed over the generator call graph" begin
+        # Not a string check: walk the lowered code of every kernel generation
+        # function, resolve each global it calls to a real method, and assert the
+        # method's defining FILE is sealed. A callee defined in the harness can
+        # change a forecast number under an unchanged kernel digest, which is
+        # exactly how period arithmetic escaped the seal.
+        # Closure argument, stated as a principle rather than a list:
+        #   * methods defined in OUR module must live in the kernel file, which is
+        #     hashed by numerical_kernel_sha256 on every run;
+        #   * methods defined in BeforeIT (src/**) are hashed by
+        #     runtime_source_tree_sha256 on every run;
+        #   * methods defined in Base, Core and the stdlibs are pinned by
+        #     julia_version, and methods from packages by
+        #     environment_manifest_sha256.
+        # So classifying by DEFINING MODULE is exhaustive: every method a
+        # generator can reach falls into one of those four always-hashed classes,
+        # and the only one that can silently drift is a method of our own module
+        # defined outside the kernel.
+        kernel_file = abspath(ABM.NUMERICAL_KERNEL_PATH)
+
+        function unsealed_method(method)
+            owner = Base.moduleroot(method.module)
+            owner === ABM || return nothing        # Base/Core/stdlib/BeforeIT/packages
+            file = abspath(String(method.file))
+            file == kernel_file && return nothing
+            return file
+        end
+
+        # Non-numerical callees that may legitimately live in the harness. Each is
+        # justified: none can influence a forecast number.
+        allowlist = Set(
+            [
+                :ABMOriginDiagnostic,   # a record type for reporting the run, not an input
+                :EnsembleSummary,       # the row schema the numbers are written into
+            ]
+        )
+
+        # Collect the GlobalRefs a function's lowered code touches.
+        function global_refs(f)
+            refs = Symbol[]
+            for method in methods(f)
+                lowered = Base.uncompressed_ast(method)
+                stack = Any[lowered.code...]
+                while !isempty(stack)
+                    node = pop!(stack)
+                    if node isa GlobalRef
+                        push!(refs, node.name)
+                    elseif node isa Expr
+                        append!(stack, node.args)
+                    end
+                end
+            end
+            return unique(refs)
+        end
+
+        generators = [
+            ABM.generate_origin_ensemble,
+            ABM.simulate_path,
+            ABM.abm_origin_inputs,
+            ABM.historical_calibration_object,
+            ABM.summarize_ensemble,
+            ABM.path_seed,
+            ABM.shift_period,
+            ABM.period_to_quarter_end,
+            ABM.load_calibration_object,
+        ]
+        unsealed = Tuple{Symbol, String}[]
+        for generator in generators
+            for name in global_refs(generator)
+                name in allowlist && continue
+                isdefined(ABM, name) || continue
+                value = getfield(ABM, name)
+                value isa Function || continue
+                for method in methods(value)
+                    file = unsealed_method(method)
+                    file === nothing || push!(unsealed, (name, file))
+                end
+            end
+        end
+        unique!(unsealed)
+        for (name, file) in unsealed
+            println("  UNSEALED CALLEE: $name defined in $file")
+        end
+        @test isempty(unsealed)
+        println(
+            "  generator call graph closed over $(length(generators)) sealed entry points",
+        )
+    end
+
+    @testset "kernel period arithmetic matches the base diagnostic exactly" begin
+        # kernel_quarter_ordinal duplicates BASE.quarter_ordinal so the kernel has
+        # no dependency on a file whose hash a migrated identity skips. The
+        # duplication is only safe while the two agree.
+        for period in (
+                "2000Q1", "2010Q2", "2019Q4", "2020Q1", "2024Q3", "2025Q2", "1999Q3",
+            )
+            @test ABM.kernel_quarter_ordinal(period) == BASE.quarter_ordinal(period)
+        end
+        @test_throws ArgumentError ABM.kernel_quarter_ordinal("2010Q5")
+        println("  kernel_quarter_ordinal agrees with BASE.quarter_ordinal")
+    end
+
+    @testset "the identity binds exact origin index-period pairs" begin
+        mktempdir() do directory
+            generated = generate_tiny_cache(directory, BASELINE_CALIBRATION)
+            stored = ABM.read_cache_identity(
+                joinpath(directory, ABM.CACHE_IDENTITY_FILENAME),
+            )
+            @test haskey(stored, "origin_pairs")
+            @test length(stored["origin_pairs"]) == length(stored["origin_indices"])
+            @test all(pair -> occursin("=", pair), stored["origin_pairs"])
+
+            # Re-pointing an index at a different quarter is refused even though the
+            # index SET is unchanged -- the failure mode a change to period
+            # arithmetic would produce.
+            remapped = copy(stored)
+            first_pair = first(sort(collect(stored["origin_pairs"])))
+            index = split(first_pair, "=")[1]
+            remapped["origin_pairs"] =
+                [p == first_pair ? "$(index)=1999Q1" : p for p in stored["origin_pairs"]]
+            thrown = nothing
+            try
+                ABM.validate_cache_identity(generated.identity, remapped)
+            catch error
+                thrown = error
+            end
+            @test thrown isa ABM.CacheIdentityError
+            @test thrown.field == "origin_pairs"
+            println("  refusal (re-mapped origin pair): ", sprint(showerror, thrown))
+        end
+    end
+
     @testset "committed v2 headline cache validates and re-scores byte-identically" begin
         if !isdir(COMMITTED_V2_HEADLINE) || !isdir(COMMITTED_V1_HEADLINE)
             @info "committed v2 headline run absent; skipping"

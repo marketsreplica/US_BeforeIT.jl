@@ -251,7 +251,7 @@ function summarize_ensemble(
 end
 
 """
-    generate_origin_ensemble(variant, origin_index, origin_period, paths, calibration_object)
+    generate_origin_ensemble(variant, origin_index, origin_period, paths, calibration_path)
 
 The COMPLETE per-origin numerical generation operation: origin date derivation,
 calibration inputs, simulated-quarter selection, the path loop with its seed call
@@ -271,9 +271,10 @@ function generate_origin_ensemble(
         origin_index::Int,
         origin_period::AbstractString,
         paths::Int,
-        calibration_object,
+        calibration_path::AbstractString,
     )
     path_failures = String[]
+    calibration_object = load_calibration_object(calibration_path)
     build_period = shift_period(origin_period, -variant.burn_in_quarters)
     calibration_date = period_to_quarter_end(build_period)
     started = time()
@@ -333,4 +334,71 @@ function generate_origin_ensemble(
     origin_summaries = isempty(simulated) ? EnsembleSummary[] :
         summarize_ensemble(variant, origin_index, origin_period, simulated)
     return (; summaries = origin_summaries, diagnostic, path_failures)
+end
+
+# ---------------------------------------------------------------------------
+# Self-contained period arithmetic.
+#
+# The generator derives its calibration date from the origin identifier, so the
+# arithmetic that does it must be sealed too: with these defined in the harness,
+# changing `+ offset` to `+ offset + 1` handed the kernel a different calibration
+# date -- every forecast number moved while the kernel digest did not.
+#
+# kernel_quarter_ordinal exists so the kernel has no dependency on the base
+# diagnostic's quarter_ordinal, whose hash a migrated identity skips. It is the
+# same function (4*year + quarter); duplicating four lines is the price of a
+# closed seal, and the equivalence is asserted in the test suite.
+# ---------------------------------------------------------------------------
+
+function kernel_quarter_ordinal(period)
+    matched = match(r"^([1-9][0-9]{3})Q([1-4])$", String(period))
+    matched === nothing &&
+        throw(ArgumentError("invalid quarterly period $(repr(period))"))
+    year = parse(Int, matched.captures[1])
+    quarter = parse(Int, matched.captures[2])
+    return 4year + quarter
+end
+
+function period_to_quarter_end(period::AbstractString)
+    matched = match(r"^([1-9][0-9]{3})Q([1-4])$", String(period))
+    matched === nothing &&
+        throw(ArgumentError("invalid quarterly period $(repr(period))"))
+    calendar_year = parse(Int, matched.captures[1])
+    quarter = parse(Int, matched.captures[2])
+    return if quarter == 1
+        DateTime(calendar_year, 3, 31)
+    elseif quarter == 2
+        DateTime(calendar_year, 6, 30)
+    elseif quarter == 3
+        DateTime(calendar_year, 9, 30)
+    else
+        DateTime(calendar_year, 12, 31)
+    end
+end
+
+function shift_period(period::AbstractString, offset::Int)
+    ordinal = kernel_quarter_ordinal(period) + offset
+    calendar_year = div(ordinal - 1, 4)
+    quarter = ordinal - 4 * calendar_year
+    return string(calendar_year, "Q", quarter)
+end
+
+"""
+    load_calibration_object(path)
+
+Load the calibration artifact the generator initialises from.
+
+Sealed because selection and loading of the input data can change every forecast
+number as surely as the simulation can. The generator takes a PATH, not a loaded
+object, so the harness has no opportunity to transform the calibration between
+loading it and handing it over. Repeated loads of the same path are memoised;
+the cache is keyed by the absolute path and holds the object JLD2 returned.
+"""
+const CALIBRATION_OBJECT_CACHE = Dict{String, Any}()
+
+function load_calibration_object(path::AbstractString)
+    key = abspath(path)
+    return get!(CALIBRATION_OBJECT_CACHE, key) do
+        JLD2.load(key)["calibration_object"]
+    end
 end
