@@ -72,7 +72,13 @@ function tiny_origins(panel, count)
     return all_origins[1:count]
 end
 
-function generate_tiny_cache(directory, calibration_path; paths = 4, origins = 2)
+function generate_tiny_cache(
+        directory,
+        calibration_path;
+        paths = 4,
+        origins = 2,
+        progress = false,
+    )
     mkpath(directory)
     panel = load_panel()
     selected = tiny_origins(panel, origins)
@@ -93,7 +99,7 @@ function generate_tiny_cache(directory, calibration_path; paths = 4, origins = 2
         calibration_path = calibration_path,
         identity_path = joinpath(directory, ABM.CACHE_IDENTITY_FILENAME),
         identity = identity,
-        progress = false,
+        progress = progress,
     )
     return (; panel, selected, identity, simulated)
 end
@@ -1374,6 +1380,98 @@ end
                     "($(length(committed)) bytes)",
                 )
             end
+        end
+    end
+
+    # The generation path had been unreachable from the CLI: moving per-origin
+    # orchestration into the sealed kernel left the progress line referring to
+    # locals that now live inside the kernel, so the first origin of every fresh
+    # run died with `UndefVarError: calibration_seconds`. It survived because
+    # every other test in this file passes `progress = false` and the re-score
+    # path returns before the loop, so no suite ever evaluated that string.
+    @testset "the progress line renders instead of throwing" begin
+        mktempdir() do root
+            directory = joinpath(root, "cache")
+            log_path = joinpath(root, "progress.log")
+            generated = open(log_path, "w") do io
+                redirect_stdout(io) do
+                    generate_tiny_cache(
+                        directory,
+                        BASELINE_CALIBRATION;
+                        paths = 3,
+                        origins = 2,
+                        progress = true,
+                    )
+                end
+            end
+            printed = read(log_path, String)
+
+            @test length(generated.simulated.diagnostics) == 2
+            # One line per generated origin, in the pre-extraction format.
+            for diagnostic in generated.simulated.diagnostics
+                @test occursin(
+                    "origin $(diagnostic.origin_period) " *
+                        "(index $(diagnostic.origin_index)):",
+                    printed,
+                )
+            end
+            @test occursin(
+                r"origin \d{4}Q\d \(index \d+\): calibration \d+(\.\d+)?s " *
+                    r"simulation \d+(\.\d+)?s paths \d+/\d+ elapsed \d+(\.\d+)?s",
+                printed,
+            )
+            # The path count is the surviving ensemble over the requested count,
+            # not the requested count twice.
+            @test occursin("paths 3/3", printed)
+            println("  progress line: ", strip(first(split(printed, '\n'; limit = 2))))
+        end
+    end
+
+    # Rows are appended per origin as they are generated, so the on-disk order was
+    # generation order while every derived table was built from the sorted
+    # in-memory vectors. A clean run therefore reproduced every score table
+    # byte-for-byte but not the cache's own sha256 seal.
+    @testset "generation persists the canonical on-disk order" begin
+        mktempdir() do directory
+            generate_tiny_cache(
+                directory,
+                BASELINE_CALIBRATION;
+                paths = 3,
+                origins = 3,
+            )
+
+            rows = ABM.read_struct_csv(
+                joinpath(directory, "abm_ensemble_summaries.csv"),
+                ABM.EnsembleSummary,
+            )
+            @test !isempty(rows)
+            @test issorted(
+                [(row.origin_index, row.target_id, row.horizon) for row in rows],
+            )
+            # More than one target and horizon must actually be present, or
+            # "sorted" would be vacuous.
+            @test length(unique(getfield.(rows, :target_id))) > 1
+            @test length(unique(getfield.(rows, :horizon))) > 1
+
+            diagnostics = ABM.read_struct_csv(
+                joinpath(directory, "abm_origin_diagnostics.csv"),
+                ABM.ABMOriginDiagnostic,
+            )
+            @test length(diagnostics) == 3
+            @test issorted(getfield.(diagnostics, :origin_index))
+
+            # The file the scorer reads must equal the sorted in-memory order the
+            # scorer is handed, which is what makes the seal reproducible.
+            reread = ABM.read_struct_csv(
+                joinpath(directory, "abm_ensemble_summaries.csv"),
+                ABM.EnsembleSummary,
+            )
+            sorted = sort(
+                reread;
+                by = row -> (row.origin_index, row.target_id, row.horizon),
+            )
+            @test reread == sorted
+            println("  on-disk cache order canonical over $(length(rows)) rows")
         end
     end
 
