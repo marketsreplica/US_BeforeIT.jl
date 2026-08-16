@@ -98,14 +98,16 @@ end
 
     semi_all = M.semi_weighted_score(result, M.ALL_AVAILABLE_TRACK)
     semi_balanced = M.semi_weighted_score(result, M.BALANCED_H12_TRACK)
+    # The Kalman recursions run through BLAS, whose last-bit rounding is
+    # platform-dependent; hosted linux differs from macOS near 1e-11 relative.
     @test semi_all.weighted_macro_average_cellwise_rmse_ratio ≈
-        0.7488895447345775 rtol = 1.0e-12
+        0.7488895447345775 rtol = 1.0e-8
     @test semi_all.weighted_macro_average_cellwise_mae_ratio ≈
-        0.8856658629411573 rtol = 1.0e-12
+        0.8856658629411573 rtol = 1.0e-8
     @test semi_balanced.weighted_macro_average_cellwise_rmse_ratio ≈
-        0.7445969022111804 rtol = 1.0e-12
+        0.7445969022111804 rtol = 1.0e-8
     @test semi_balanced.weighted_macro_average_cellwise_mae_ratio ≈
-        0.8730449475542831 rtol = 1.0e-12
+        0.8730449475542831 rtol = 1.0e-8
 
     for track in (M.ALL_AVAILABLE_TRACK, M.BALANCED_H12_TRACK)
         ranked = sort(
