@@ -7,12 +7,14 @@ using Statistics
 export ExternalPluginBlockLength,
     FixedBlockLength,
     HLNDMResult,
+    MCSResult,
     ResolvedBlockLength,
     RomanoWolfResult,
     StationaryBootstrapIndices,
     StudentizedBootstrapResult,
     hln_dm,
     loss_differential,
+    model_confidence_set,
     resolve_block_length,
     romano_wolf_stepdown,
     stationary_bootstrap_indices,
@@ -187,6 +189,33 @@ struct RomanoWolfResult
     adjusted_p_values::Vector{Float64}
     rejected::Vector{Bool}
     stepdown_order::Vector{Int}
+end
+
+"""
+Hansen--Lunde--Nason Model Confidence Set result.
+
+`elimination_order` lists model columns from first eliminated to the
+final survivor. `step_p_values` aligns with `elimination_order` and holds
+the raw sequential equal-predictive-ability p-values, with the final
+survivor assigned 1 by convention. `mcs_p_values[i]` is the running-max
+monotonized MCS p-value of model column `i`, and `included` is the sorted
+`(1 - alpha)`-MCS: the model columns with `mcs_p_values[i] >= alpha`.
+
+Reference: Hansen, P.R., Lunde, A., Nason, J.M. (2011), "The Model
+Confidence Set", Econometrica 79(2), 453-497.
+"""
+struct MCSResult
+    n::Int
+    models::Int
+    statistic::Symbol
+    alpha::Float64
+    seed::UInt64
+    replicates::Int
+    block_length::ResolvedBlockLength
+    elimination_order::Vector{Int}
+    step_p_values::Vector{Float64}
+    mcs_p_values::Vector{Float64}
+    included::Vector{Int}
 end
 
 """
@@ -729,6 +758,135 @@ function romano_wolf_stepdown(
     )
 end
 
+"""
+    model_confidence_set(losses;
+        block_length,
+        bootstrap_replications,
+        alpha,
+        seed,
+        statistic = :t_max)
+
+Compute the Hansen--Lunde--Nason Model Confidence Set for an
+origin-by-model loss matrix. Column `i` holds the per-origin losses of
+model `i` on a common evaluation sample; lower loss is better. The
+procedure repeatedly tests equal predictive ability over the surviving
+set, eliminates the worst surviving model, and records one p-value per
+step. `statistic = :t_max` uses the `T_max` statistic over loss
+differentials relative to the surviving-set average with elimination rule
+`e_max`. `statistic = :t_range` uses the `T_R` range statistic over all
+pairwise loss differentials with elimination rule `e_R`.
+
+Statistic variances and null distributions come from one shared circular
+Politis--Romano stationary-bootstrap index draw
+([`stationary_bootstrap_indices`](@ref)) generated from the mandatory
+`seed`, with the requested block length used unchanged (no horizon
+floor). Step p-values use the conservative `(1 + exceedances) / (B + 1)`
+finite-resample convention. Per-model MCS p-values monotonize the step
+p-values via running max along the elimination order, the final survivor
+is assigned p-value 1 by convention, and the `(1 - alpha)`-MCS keeps
+every model whose MCS p-value is at least `alpha`. The primary design
+uses 9,999 replicates; this inference API rejects fewer than 999.
+
+Reference: Hansen, P.R., Lunde, A., Nason, J.M. (2011), "The Model
+Confidence Set", Econometrica 79(2), 453-497.
+"""
+function model_confidence_set(
+        losses::AbstractMatrix{<:Real};
+        block_length::AbstractBlockLengthSpec,
+        bootstrap_replications::Integer,
+        alpha::Real,
+        seed::Integer,
+        statistic::Symbol = :t_max
+    )
+    any(value -> value isa Bool, losses) &&
+        throw(ArgumentError("losses must not contain Bool observations"))
+    sample = Matrix{Float64}(losses)
+    n, models = size(sample)
+    n >= 10 ||
+        throw(ArgumentError("losses must have at least 10 rows"))
+    models >= 2 ||
+        throw(ArgumentError("losses must have at least 2 columns"))
+    all(isfinite, sample) ||
+        throw(ArgumentError("losses must contain only finite values"))
+    statistic in (:t_max, :t_range) ||
+        throw(ArgumentError("statistic must be :t_max or :t_range"))
+    significance = _validate_probability(alpha, "alpha")
+    draws = _validate_count(
+        bootstrap_replications,
+        "bootstrap_replications";
+        minimum = 999
+    )
+
+    index_draws = stationary_bootstrap_indices(
+        n,
+        [1];
+        block_length,
+        horizon_floor_policy = :none,
+        seed,
+        replicates = draws,
+    )
+    model_means = vec(mean(sample; dims = 1))
+    all(isfinite, model_means) ||
+        throw(DomainError(model_means, "mean losses are not finite"))
+    bootstrap_means = _mcs_bootstrap_means(sample, index_draws.indices)
+    pairwise_standard_errors = if statistic == :t_range
+        _mcs_pairwise_standard_errors(model_means, bootstrap_means)
+    else
+        nothing
+    end
+
+    surviving = collect(1:models)
+    elimination_order = Vector{Int}(undef, models)
+    step_p_values = Vector{Float64}(undef, models)
+    for step in 1:(models - 1)
+        p_value, worst_position = if statistic == :t_max
+            _mcs_max_step(model_means, bootstrap_means, surviving)
+        else
+            _mcs_range_step(
+                model_means,
+                bootstrap_means,
+                pairwise_standard_errors,
+                surviving,
+            )
+        end
+        step_p_values[step] = p_value
+        elimination_order[step] = surviving[worst_position]
+        deleteat!(surviving, worst_position)
+    end
+    elimination_order[models] = surviving[1]
+    step_p_values[models] = 1.0
+
+    mcs_p_values = Vector{Float64}(undef, models)
+    running_p_value = 0.0
+    for step in 1:models
+        running_p_value = max(running_p_value, step_p_values[step])
+        mcs_p_values[elimination_order[step]] = running_p_value
+    end
+    all(value -> 0 < value <= 1, mcs_p_values) ||
+        throw(
+        DomainError(
+            mcs_p_values,
+            "MCS p-values are outside (0, 1]"
+        )
+    )
+    included =
+        [model for model in 1:models if mcs_p_values[model] >= significance]
+
+    return MCSResult(
+        n,
+        models,
+        statistic,
+        significance,
+        index_draws.seed,
+        index_draws.replicates,
+        index_draws.block_length,
+        elimination_order,
+        step_p_values,
+        mcs_p_values,
+        included,
+    )
+end
+
 function _validate_bootstrap_result(result::StudentizedBootstrapResult)
     result.n >= 2 ||
         throw(ArgumentError("bootstrap result n must be at least 2"))
@@ -1127,6 +1285,212 @@ function _evidence_transform(
         return .-statistics
     end
     return Float64.(statistics)
+end
+
+function _mcs_bootstrap_means(
+        sample::Matrix{Float64},
+        indices::Matrix{Int}
+    )
+    n, models = size(sample)
+    size(indices, 1) == n ||
+        throw(
+        DimensionMismatch(
+            "bootstrap index rows must match the loss sample size"
+        )
+    )
+    replicates = size(indices, 2)
+    means = Matrix{Float64}(undef, replicates, models)
+    totals = Vector{Float64}(undef, models)
+    for replicate in 1:replicates
+        fill!(totals, 0.0)
+        for row in 1:n
+            source_row = indices[row, replicate]
+            for model in 1:models
+                totals[model] += sample[source_row, model]
+            end
+        end
+        for model in 1:models
+            value = totals[model] / n
+            isfinite(value) ||
+                throw(
+                DomainError(
+                    value,
+                    "bootstrap mean loss overflowed for model $model"
+                )
+            )
+            means[replicate, model] = value
+        end
+    end
+    return means
+end
+
+function _mcs_max_step(
+        model_means::Vector{Float64},
+        bootstrap_means::Matrix{Float64},
+        surviving::Vector{Int}
+    )
+    replicates = size(bootstrap_means, 1)
+    m = length(surviving)
+    scale = m / (m - 1)
+    set_mean = 0.0
+    for model in surviving
+        set_mean += model_means[model]
+    end
+    set_mean /= m
+    replicate_set_means = Vector{Float64}(undef, replicates)
+    for replicate in 1:replicates
+        total = 0.0
+        for model in surviving
+            total += bootstrap_means[replicate, model]
+        end
+        replicate_set_means[replicate] = total / m
+    end
+
+    statistics = Vector{Float64}(undef, m)
+    standard_errors = Vector{Float64}(undef, m)
+    for position in 1:m
+        model = surviving[position]
+        relative_effect = model_means[model] - set_mean
+        total = 0.0
+        for replicate in 1:replicates
+            deviation = scale * (
+                bootstrap_means[replicate, model] -
+                    replicate_set_means[replicate] -
+                    relative_effect
+            )
+            total += deviation^2
+        end
+        variance = total / replicates
+        isfinite(variance) && variance > 0 ||
+            throw(
+            DomainError(
+                variance,
+                "MCS bootstrap variance is nonpositive or non-finite " *
+                    "for model $model"
+            )
+        )
+        standard_errors[position] = sqrt(variance)
+        statistic = scale * relative_effect / standard_errors[position]
+        isfinite(statistic) ||
+            throw(
+            DomainError(
+                statistic,
+                "MCS t statistic is not finite for model $model"
+            )
+        )
+        statistics[position] = statistic
+    end
+
+    observed = maximum(statistics)
+    exceedances = 0
+    for replicate in 1:replicates
+        replicate_maximum = -Inf
+        for position in 1:m
+            model = surviving[position]
+            deviation = scale * (
+                bootstrap_means[replicate, model] -
+                    replicate_set_means[replicate] -
+                    (model_means[model] - set_mean)
+            )
+            value = deviation / standard_errors[position]
+            replicate_maximum = max(replicate_maximum, value)
+        end
+        exceedances += replicate_maximum >= observed
+    end
+    p_value = (1 + exceedances) / (replicates + 1)
+    return p_value, argmax(statistics)
+end
+
+function _mcs_pairwise_standard_errors(
+        model_means::Vector{Float64},
+        bootstrap_means::Matrix{Float64}
+    )
+    replicates, models = size(bootstrap_means)
+    standard_errors = zeros(models, models)
+    for first_model in 1:(models - 1)
+        for second_model in (first_model + 1):models
+            effect = model_means[first_model] - model_means[second_model]
+            total = 0.0
+            for replicate in 1:replicates
+                deviation =
+                    bootstrap_means[replicate, first_model] -
+                    bootstrap_means[replicate, second_model] -
+                    effect
+                total += deviation^2
+            end
+            variance = total / replicates
+            isfinite(variance) && variance > 0 ||
+                throw(
+                DomainError(
+                    variance,
+                    "MCS bootstrap variance is nonpositive or " *
+                        "non-finite for model pair " *
+                        "($first_model, $second_model)"
+                )
+            )
+            standard_error = sqrt(variance)
+            standard_errors[first_model, second_model] = standard_error
+            standard_errors[second_model, first_model] = standard_error
+        end
+    end
+    return standard_errors
+end
+
+function _mcs_range_step(
+        model_means::Vector{Float64},
+        bootstrap_means::Matrix{Float64},
+        pairwise_standard_errors::Matrix{Float64},
+        surviving::Vector{Int}
+    )
+    replicates = size(bootstrap_means, 1)
+    m = length(surviving)
+    observed = -Inf
+    worst_position = 1
+    for first_position in 1:m
+        first_model = surviving[first_position]
+        for second_position in 1:m
+            second_position == first_position && continue
+            second_model = surviving[second_position]
+            statistic =
+                (model_means[first_model] - model_means[second_model]) /
+                pairwise_standard_errors[first_model, second_model]
+            isfinite(statistic) ||
+                throw(
+                DomainError(
+                    statistic,
+                    "MCS t statistic is not finite for model pair " *
+                        "($first_model, $second_model)"
+                )
+            )
+            if statistic > observed
+                observed = statistic
+                worst_position = first_position
+            end
+        end
+    end
+
+    exceedances = 0
+    for replicate in 1:replicates
+        replicate_maximum = -Inf
+        for first_position in 1:(m - 1)
+            first_model = surviving[first_position]
+            for second_position in (first_position + 1):m
+                second_model = surviving[second_position]
+                deviation = abs(
+                    bootstrap_means[replicate, first_model] -
+                        bootstrap_means[replicate, second_model] -
+                        (
+                        model_means[first_model] -
+                            model_means[second_model]
+                    )
+                ) / pairwise_standard_errors[first_model, second_model]
+                replicate_maximum = max(replicate_maximum, deviation)
+            end
+        end
+        exceedances += replicate_maximum >= observed
+    end
+    p_value = (1 + exceedances) / (replicates + 1)
+    return p_value, worst_position
 end
 
 const _LANCZOS_COEFFICIENTS = (

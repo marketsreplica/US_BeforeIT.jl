@@ -740,3 +740,287 @@ end
     @test_throws ArgumentError romano_wolf_stepdown(bootstrap)
     bootstrap.statistics[1] = saved_observed_statistic
 end
+
+@testset "model confidence set" begin
+    n = 40
+    raw_first = [
+        0.3sin(0.9index) + 0.2cos(0.31index) for index in 1:n
+    ]
+    raw_second = [
+        0.3sin(0.9index + 2.0) + 0.2cos(0.31index + 1.0) for
+            index in 1:n
+    ]
+    good_first = raw_first .- mean(raw_first)
+    good_second = raw_second .- mean(raw_second)
+    bad = [
+        0.25sin(0.7index + 0.5) + 0.2cos(0.23index) for index in 1:n
+    ]
+    losses = hcat(
+        1.0 .+ good_first,
+        1.0 .+ good_second,
+        3.0 .+ bad,
+    )
+
+    result = model_confidence_set(
+        losses;
+        block_length = FixedBlockLength(4),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 20260817,
+    )
+    @test result.n == n
+    @test result.models == 3
+    @test result.statistic == :t_max
+    @test result.alpha == 0.05
+    @test result.seed == UInt64(20260817)
+    @test result.replicates == 999
+    @test result.block_length.source == :fixed
+    @test result.block_length.effective == 4.0
+    @test result.block_length.horizon_floor_policy == :none
+    @test sort(result.elimination_order) == [1, 2, 3]
+    @test result.elimination_order[1] == 3
+    @test result.step_p_values[1] == 0.001
+    @test result.step_p_values[2] == 1.0
+    @test result.step_p_values[3] == 1.0
+    @test result.mcs_p_values[1] == 1.0
+    @test result.mcs_p_values[2] == 1.0
+    @test result.mcs_p_values[3] == 0.001
+    @test result.included == [1, 2]
+
+    repeated = model_confidence_set(
+        losses;
+        block_length = FixedBlockLength(4),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 20260817,
+    )
+    @test repeated.elimination_order == result.elimination_order
+    @test repeated.step_p_values == result.step_p_values
+    @test repeated.mcs_p_values == result.mcs_p_values
+    @test repeated.included == result.included
+
+    @test issorted(result.mcs_p_values[result.elimination_order])
+    @test result.mcs_p_values[result.elimination_order] ==
+        accumulate(max, result.step_p_values)
+    @test result.mcs_p_values[result.elimination_order[end]] == 1.0
+
+    permutation = [3, 1, 2]
+    permuted = model_confidence_set(
+        losses[:, permutation];
+        block_length = FixedBlockLength(4),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 20260817,
+    )
+    inverse_permutation = invperm(permutation)
+    @test permuted.mcs_p_values[inverse_permutation] ==
+        result.mcs_p_values
+    @test sort(permutation[permuted.included]) == result.included
+
+    range_result = model_confidence_set(
+        losses;
+        block_length = FixedBlockLength(4),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 20260817,
+        statistic = :t_range,
+    )
+    @test range_result.statistic == :t_range
+    @test range_result.elimination_order[1] == 3
+    @test range_result.mcs_p_values[3] == 0.001
+    @test range_result.included == [1, 2]
+    @test issorted(
+        range_result.mcs_p_values[range_result.elimination_order]
+    )
+    @test range_result.mcs_p_values[range_result.elimination_order[end]] ==
+        1.0
+
+    two_losses = hcat(1.0 .+ good_first, 2.5 .+ good_second)
+    two = model_confidence_set(
+        two_losses;
+        block_length = FixedBlockLength(3),
+        bootstrap_replications = 999,
+        alpha = 0.1,
+        seed = 7,
+    )
+    @test two.elimination_order == [2, 1]
+    @test two.step_p_values == [0.001, 1.0]
+    @test two.mcs_p_values == [1.0, 0.001]
+    @test two.mcs_p_values[argmin(vec(mean(two_losses; dims = 1)))] ==
+        1.0
+    @test two.included == [1]
+
+    bad_centered = bad .- mean(bad)
+    binding = hcat(
+        1.0 .+ good_first,
+        1.8 .+ 3.0 .* good_second,
+        1.85 .+ 3.0 .* bad_centered,
+    )
+    monotonized = model_confidence_set(
+        binding;
+        block_length = FixedBlockLength(4),
+        bootstrap_replications = 999,
+        alpha = 0.1,
+        seed = 271828,
+    )
+    @test monotonized.elimination_order[end] == 1
+    @test sort(monotonized.elimination_order[1:2]) == [2, 3]
+    @test 0.005 < monotonized.step_p_values[1] < 0.5
+    @test monotonized.step_p_values[2] <
+        monotonized.step_p_values[1]
+    @test monotonized.mcs_p_values[monotonized.elimination_order[2]] ==
+        monotonized.step_p_values[1]
+    @test issorted(
+        monotonized.mcs_p_values[monotonized.elimination_order]
+    )
+    @test monotonized.mcs_p_values[1] == 1.0
+    @test monotonized.included == [1]
+
+    structural = hcat(
+        1.0 .+ good_first,
+        1.0 .+ good_second,
+        1.12 .+ 0.8 .* good_first .+ 0.2 .* bad,
+        3.0 .+ bad,
+    )
+    four = model_confidence_set(
+        structural;
+        block_length = FixedBlockLength(4),
+        bootstrap_replications = 999,
+        alpha = 0.25,
+        seed = 99,
+    )
+    @test sort(four.elimination_order) == [1, 2, 3, 4]
+    @test four.elimination_order[1] == 4
+    @test four.elimination_order[2] == 3
+    @test all(value -> 0 < value <= 1, four.step_p_values)
+    @test four.mcs_p_values[four.elimination_order] ==
+        accumulate(max, four.step_p_values)
+    @test four.mcs_p_values[3] <= 0.01
+    @test four.mcs_p_values[4] <= 0.01
+    @test four.included == [1, 2]
+
+    healthy = hcat(
+        [1.0 + 0.2sin(0.8index) for index in 1:12],
+        [1.1 + 0.2cos(0.5index) for index in 1:12],
+    )
+    with_nan = copy(healthy)
+    with_nan[4, 2] = NaN
+    with_inf = copy(healthy)
+    with_inf[7, 1] = Inf
+    with_bool = Matrix{Real}(healthy)
+    with_bool[2, 1] = true
+
+    @test_throws ArgumentError model_confidence_set(
+        healthy[1:9, :];
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 1,
+    )
+    @test_throws ArgumentError model_confidence_set(
+        healthy[:, 1:1];
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 1,
+    )
+    @test_throws ArgumentError model_confidence_set(
+        with_nan;
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 1,
+    )
+    @test_throws ArgumentError model_confidence_set(
+        with_inf;
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 1,
+    )
+    @test_throws ArgumentError model_confidence_set(
+        with_bool;
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 1,
+    )
+    @test_throws ArgumentError model_confidence_set(
+        healthy;
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 0.0,
+        seed = 1,
+    )
+    @test_throws ArgumentError model_confidence_set(
+        healthy;
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 1.0,
+        seed = 1,
+    )
+    @test_throws ArgumentError model_confidence_set(
+        healthy;
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = true,
+        seed = 1,
+    )
+    @test_throws ArgumentError model_confidence_set(
+        healthy;
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 1,
+        statistic = :invalid,
+    )
+    @test_throws ArgumentError model_confidence_set(
+        healthy;
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 998,
+        alpha = 0.05,
+        seed = 1,
+    )
+    @test_throws ArgumentError model_confidence_set(
+        healthy;
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = -1,
+    )
+    @test_throws ArgumentError model_confidence_set(
+        healthy;
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = true,
+    )
+    @test_throws ArgumentError model_confidence_set(
+        healthy;
+        block_length = FixedBlockLength(13),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 1,
+    )
+    @test_throws UndefKeywordError model_confidence_set(
+        healthy;
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+    )
+    @test_throws DomainError model_confidence_set(
+        hcat(healthy[:, 1], healthy[:, 1]);
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 1,
+    )
+    @test_throws DomainError model_confidence_set(
+        hcat(healthy[:, 1], healthy[:, 1]);
+        block_length = FixedBlockLength(2),
+        bootstrap_replications = 999,
+        alpha = 0.05,
+        seed = 1,
+        statistic = :t_range,
+    )
+end
