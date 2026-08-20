@@ -4,9 +4,16 @@ This isolated component implements the first, deliberately narrow equilibrium
 mechanics slice in the U.S. forecasting plan. Its repaired bytes remain a
 candidate pending independent re-audit. It is a three-observable
 rational-expectations New Keynesian model adapted from the FRBNY v1.3.0
-`AnSchorfheide` equations. It is not registered as a benchmark, does not read
-the revised U.S. panel, and cannot forecast or score empirical data through the
-project runner.
+`AnSchorfheide` equations. This module itself is not registered in the frozen
+statistical benchmark registry, does not read the revised U.S. panel, and
+defines no `forecast`/`score` entry points.
+
+**Stage-2b consumer (2026-08-17).** The scored column `dsge_small_nk` in the
+Stage-2b comparison wraps this module externally — hash-verified include,
+per-origin posterior-mode estimation, and predictive simulation live in
+`../dsge_columns/USDSGEColumns.jl` with their own tests, model card and
+provenance. Nothing in this directory changed for that registration; the
+sealed bytes and their fingerprints are identical.
 
 Its maximum status is:
 

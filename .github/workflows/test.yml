@@ -108,6 +108,8 @@ jobs:
         run: julia --startup-file=no --project=scripts/us scripts/us/forecasting/benchmarks/test_benchmarks.jl
       - name: Frozen benchmark model-registry tests
         run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/benchmarks/test_benchmark_model_registry.jl
+      - name: Stage-2b DSGE column tests (gensys oracle, SW07, estimation)
+        run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/benchmarks/dsge_columns/test_dsge_columns.jl
       - name: Hermetic forecast-score kernel tests
         run: julia --startup-file=no --check-bounds=yes --project=scripts/us scripts/us/forecasting/scoring/test_forecast_scores.jl
       - name: Forecast-comparison inference kernel tests

@@ -633,6 +633,10 @@ end
     )
 end
 
+# These assertions cover THIS module and the frozen statistical registry.
+# The Stage-2b scored column `dsge_small_nk` wraps the module externally
+# (../dsge_columns/) without defining forecast/score here or touching the
+# frozen registry, so every assertion below remains exact.
 @testset "mechanics remains unregistered and unscored" begin
     registry = read(
         joinpath(@__DIR__, "..", "benchmark_model_registry.toml"),
