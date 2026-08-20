@@ -205,6 +205,11 @@ Bit.@object mutable struct Properties(Object) <: AbstractProperties
     opening_nominal_exports::Bit.typeFloat
     opening_nominal_imports::Bit.typeFloat
     expectation_rw_drift::Bool
+    trend_growth_rate::Bit.typeFloat
+    investment_accelerator_nu::Bit.typeFloat
+    normal_utilization::Bit.typeFloat
+    trend_capital_deepening::Bit.typeFloat
+    trend_capacity_efficiency::Bit.typeFloat
 end
 
 function Properties(parameters::Dict{String, Any}, initial_conditions)
@@ -300,6 +305,33 @@ function Properties(parameters::Dict{String, Any}, initial_conditions)
     # exactly, so calibrations that do not register the parameter are unaffected.
     expectation_rw_drift = Bool(get(parameters, "expectation_rw_drift", false))
 
+    # Balanced-growth repair (US stage 2b). Defaults reproduce the frozen
+    # no-growth economy exactly; calibrations that do not register the
+    # parameters are unaffected. `trend_growth_rate` is the quarterly trend
+    # growth of output per modeled worker (labour productivity plus labour
+    # force growth, estimated from observed series through the forecast
+    # origin, never from forecast errors). `investment_accelerator_nu` is the
+    # per-quarter closure rate of the capacity gap in desired investment;
+    # `normal_utilization` is the calibration's normal-utilization convention
+    # (omega), the same constant used to back out kappa_s at initialization.
+    trend_growth_rate = typeFloat(get(parameters, "trend_growth_rate", 0.0))
+    investment_accelerator_nu =
+        typeFloat(get(parameters, "investment_accelerator_nu", 0.0))
+    normal_utilization = typeFloat(get(parameters, "normal_utilization", 0.85))
+    # When positive, desired investment becomes the printed-paper A.17 form
+    # (replacement scaled by desired, uncapped output) plus the balanced-growth
+    # net-investment flow `g * K_i`, so `net I = Delta K = g K` holds by
+    # construction on the balanced path.
+    trend_capital_deepening =
+        typeFloat(get(parameters, "trend_capital_deepening", 0.0))
+    # When positive, capital productivity `kappa_i` and the depreciation
+    # coefficient `delta_i` grow at this quarterly rate alongside labour
+    # productivity: capacity per unit of book capital tracks trend
+    # (efficiency-units growth) while the replacement share `delta/kappa`
+    # and CFC/output stay exactly stable. No demand flow is injected.
+    trend_capacity_efficiency =
+        typeFloat(get(parameters, "trend_capacity_efficiency", 0.0))
+
     return Properties(
         G, T_prime, H_act, H_inact, J, L, I_s, I, H, tau_INC, tau_FIRM, tau_VAT, tau_SIF,
         tau_SIW, tau_EXPORT, tau_CF, tau_G, theta_UB, psi, psi_H, mu, theta_DIV, theta, zeta, zeta_LTV,
@@ -308,6 +340,8 @@ function Properties(parameters::Dict{String, Any}, initial_conditions)
         opening_nominal_government_consumption_and_investment, opening_nominal_capitalformation,
         opening_nominal_fixed_capitalformation, opening_nominal_inventory_investment,
         opening_nominal_fixed_capitalformation_dwellings, opening_nominal_exports,
-        opening_nominal_imports, expectation_rw_drift
+        opening_nominal_imports, expectation_rw_drift, trend_growth_rate,
+        investment_accelerator_nu, normal_utilization, trend_capital_deepening,
+        trend_capacity_efficiency
     )
 end

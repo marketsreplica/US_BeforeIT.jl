@@ -12,6 +12,40 @@ function cost_push_inflation(firms::AbstractFirms, model::AbstractModel)
     return cost_push_inflation
 end
 
+"""
+    apply_trend_growth!(model)
+
+Balanced-growth repair (US stage 2b): grow labour productivity `alpha_bar_i`
+and the wage base `w_bar_i` by the calibrated quarterly trend rate at the
+start of each simulated quarter. Both scale by the same factor, so the unit
+labour cost `w_bar_i / alpha_bar_i` — and with it the cost-push price channel —
+is invariant; what changes is that trend demand growth no longer has to be
+met one-for-one by employment growth out of a fixed labour pool. A zero rate
+(the default, and every non-US calibration) leaves the model bit-identical.
+"""
+function apply_trend_growth!(model::AbstractModel)
+    growth = model.prop.trend_growth_rate
+    if growth != 0.0
+        factor = 1.0 + growth
+        model.firms.alpha_bar_i .*= factor
+        model.firms.w_bar_i .*= factor
+    end
+    # Capacity-efficiency growth (accepted 2b-3 mechanism): kappa_i and
+    # delta_i grow together, so capacity per unit of book capital tracks
+    # trend while the replacement share delta/kappa — and with it CFC/output
+    # and investment demand — stays exactly stable. No demand flow is
+    # injected, so the mechanism cannot start a demand spiral; `net I = ΔK`
+    # holds trivially (both zero in book units) and trend capacity growth is
+    # carried by the efficiency factor calibrated to the same observed rate.
+    efficiency = model.prop.trend_capacity_efficiency
+    if efficiency != 0.0
+        factor = 1.0 + efficiency
+        model.firms.kappa_i .*= factor
+        model.firms.delta_i .*= factor
+    end
+    return nothing
+end
+
 function desired_capital_material_employment(firms::AbstractFirms, Q_s_i)
     capacity_limited_output =
         min.(Q_s_i, firms.K_i .* firms.kappa_i)
@@ -79,6 +113,35 @@ function firms_expectations_and_decisions(model::AbstractModel)
 
     # target investments in capital, intermediate goods to purchase and employment
     I_d_i, DM_d_i, N_d_i = desired_capital_material_employment(firms, Q_s_i)
+
+    # Capacity expansion (US stage 2b). Two mutually exclusive variants, both
+    # default-off so every non-US calibration reproduces the replacement-only
+    # rule exactly.
+    #
+    # `trend_capital_deepening > 0` (the accepted v3 mechanism): desired
+    # investment becomes the printed-paper A.17 form — replacement scaled by
+    # desired, uncapped output — plus the balanced-growth net-investment flow
+    # `g * K_i`. On the balanced path realized `Delta K = g K` by
+    # construction, the `net I = Delta K` identity the calibration targets.
+    # There is no capacity-gap feedback, so the mechanism cannot start a
+    # multiplier–accelerator spiral.
+    #
+    # `investment_accelerator_nu > 0` (retained, rejected candidate): close a
+    # fraction `nu` of the capacity gap per quarter. Matched-seed diagnostics
+    # showed this destabilizes the economy (demand spiral, unemployment
+    # collapse); it is kept only so the rejection remains reproducible.
+    if model.prop.trend_capital_deepening > 0.0
+        I_d_i = firms.delta_i ./ firms.kappa_i .* Q_s_i .+
+            model.prop.trend_capital_deepening .* firms.K_i
+    elseif model.prop.investment_accelerator_nu > 0.0
+        I_d_i = I_d_i .+ max.(
+            0.0,
+            model.prop.investment_accelerator_nu .* (
+                Q_s_i ./ (model.prop.normal_utilization .* firms.kappa_i) .-
+                    firms.K_i
+            ),
+        )
+    end
 
     # expected profits
     Pi_e_i = firms.Pi_i .* (1 + pi_e) .* (1 + gamma_e)

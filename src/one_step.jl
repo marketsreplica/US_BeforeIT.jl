@@ -55,6 +55,9 @@ function CommonSolve.step!(
     Bit.finance_insolvent_firms!(model)
     opening_state_logger === nothing || opening_state_logger(model)
 
+    # balanced-growth repair: no-op unless `trend_growth_rate` is registered
+    Bit.apply_trend_growth!(model)
+
     ####### GENERAL ESTIMATIONS #######
 
     # expectation on economic growth and inflation
