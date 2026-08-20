@@ -19314,3 +19314,130 @@ review hardening capped at one pass per artifact.
 
 Next slice: register `dsge_small_nk` as a scored column of the revised-data
 comparison (workstream 2b-1), then the labour block (2b-2).
+
+## 2026-08-17 — Stage-2b executed: DSGE-inclusive field, balanced-growth repair, preregistered verdict
+
+The Stage-2b decisive experiment ran end-to-end. Protocol frozen before any
+scored table (`scripts/us/forecasting/diagnostics/stage2b/STAGE2B_PROTOCOL.md`).
+
+**2b-1 (DSGE columns).** `dsge_small_nk`: the sealed An–Schorfheide gensys
+mechanics wrapped externally (hash-verified include; sealed bytes untouched)
+with per-origin posterior-mode estimation on the panel columns
+[real_gdp, gdp_deflator, effr]; 61/61 converged, determinate everywhere.
+`dsge_sw07`: full 49-state Smets–Wouters 2007 transcription
+(`benchmarks/dsge_columns/sw07_model.jl`), solved by a size-generic gensys
+oracle-verified to reproduce the sealed solver exactly (diff 0.0 on the
+small-NK system), estimated recursively from 1966Q1 with the published
+priors on a fixed-provenance FRED retrieval spliced to the frozen panel;
+61/61 budget_exhausted with a +2.45 log-posterior continuation test —
+materially converged. Both: 500-path densities, per-origin status CSVs,
+Okun-bridge unemployment (labeled), EFFR floored at 0.
+
+**2b-2/2b-3 (repair).** Diagnosis: no trend growth in supply anywhere in
+the model. v3 = v2 calibration + two flag-gated mechanisms injected per
+origin by the sealed kernel: alpha_bar/w_bar grow at g; kappa/delta grow at
+g (capacity-efficiency; no demand injection). g = trailing-40q mean of
+observed productivity growth (GDPC1/CE16OV) + labour-force growth (CLF16OV,
+the demographics/immigration margin), SHA-pinned fixture. Two demand-side
+candidates (gap accelerator nu=0.0625; g·K net-investment flow) implemented
+and REJECTED on matched-seed stability diagnostics only (boom + collapse);
+retained as runnable ablation variants. Austria/Italy and v1/v2 unaffected:
+regenerated v1 and v2 caches reproduce the committed caches byte-for-byte
+(3660 rows each); package deterministic suite 282/282.
+
+**Scorecard.** 20 columns, 61 origins, 1415 common cells, three tracks.
+Headline weighted RMSE ratio: v3 0.828/0.828/0.792 (median 0.827/0.827/
+0.791) — best in field in all three tracks. Best non-ABM: dsge_sw07
+0.857/0.856 (full-sample tracks; it beats every statistical model), AR(1)
+0.848 (masked). Unemployment enters scored tables; v3 at VAR(1) parity
+unmasked with dispersion ratio 0.83 at h=12 (v2: degenerate 0.27);
+persistence models win the target. Secondary pair: v3 1st/1st/2nd-3rd
+(AR(4) keeps the masked win).
+
+**Inference (2b-5).** MCS implemented in USForecastInference (HLN 2011,
+T_max/T_R, stationary bootstrap; 70 new tests, suite 236/236). Romano–Wolf:
+v3 beats both DSGE columns at 5% in every track (adj. p 0.0002–0.016);
+statistical family marginal (~0.08). HLN-DM vs SW07: real GDP significant
+h=2,4,8 every track; deflator indistinguishable. MCS retains v3 as best
+member (p=1.0), low power to exclude at n=50.
+
+**Densities.** Exact ensemble CRPS from persisted draws: v3 beats the best
+challenger in all tracks (1.58/1.67/0.88 vs SW07 1.80/1.91/1.12 weighted
+headline). 90% coverage: real GDP 0.86–0.95; deflator 0.70–0.79 — fails the
+"no worse than best challenger" clause in the two full-sample tracks.
+
+**Verdict (preregistered bar).** Point condition met 3/3 tracks; density
+condition fails on deflator interval calibration → the bar is NOT met in
+full; the honest-success clause applies and the published claim is
+point-RMSE + CRPS superiority with the named calibration deficiency.
+`output/us_forecasting/stage2b_scorecard/STAGE2B_VERDICT.md`.
+
+**2b-4 (structural vintages).** 2017 and 2012 annual structures built from
+revised BEA supply–use through the identical ingestion path (golden test:
+2024 rebuild bit-exact), reconciled (lambda 0.98306/0.97911 vs 0.98346) and
+verified; v3 re-scored under each (runs in flight at entry time; results in
+the report addendum §1b.7).
+
+**Deliverable.** US_ABM_FORECAST_REPORT.md §1b (Stage-2b addendum) carries
+the full tables, inference, gate evidence and limitations.
+
+## 2026-08-17 — 2b-4 closed: headline conclusion robust to structural vintage
+
+v3 re-scored at 500 paths x 61 origins under the 2017 and 2012 reconciled
+structures on the identical 20-column field (matched seeds and cells).
+Weighted headline ratios (all/balanced/masked): 2024 = 0.8282/0.8281/0.7921;
+2017 = 0.8281/0.8278/0.7933; 2012 = 0.8288/0.8287/0.7922 — maximum deviation
+0.0007, an order of magnitude below the 500-path Monte-Carlo error; v3 holds
+ranks 1–2 of 20 under every structure. Gate met: the conclusion is shown
+robust, and the structure-specific part of the mixed-vintage worry is
+bounded (counts/taxes/opening labour stock remain 2024-frozen; the
+unemployment level defect stands). Paper updated (Section 12, 42 pp,
+compiles clean); report addendum section 1b complete; Runic formatting
+applied repo-wide and the full package suite is green (837/838 -> formatter
+fixed -> format check true).
+
+## 2026-08-17 — Paper rewritten around the final model (fresh presentation)
+
+`paper/US_ABM_Forecasting_Paper.tex` rewritten end-to-end at the user's
+direction: one model presented with a fresh look (the chronological
+v1→v2→Stage-2b arc retired from the paper; the repository reports keep the
+history). New structure: intro (Poledna programme kept verbatim) → the model
+with its three structural components as first-class citizens (reconciled
+opening accounts, drift expectations with the shrinkage closed form,
+balanced trend supply growth with the g decomposition) → calibration (RAS
+as THE build step; trend-growth inputs; firewall) → Austria→US → assumptions
+register (updated: unemployment scored, trend growth [S], DSGE conventions)
+→ forecast design (20-column field with a non-economist DSGE explainer;
+CRPS/DM/RW/MCS defined at first use) → results (preregistered verdict first,
+standings, per-cell, densities, secondary, unemployment honest loss,
+inference, vintage robustness) → "which components carry the accuracy"
+(matched-seed attribution; unreconciled-bias anatomy compressed; the two
+gates; the rejected demand-side investment designs) → v3 outlook (new
+outlook_v3 run: 2026Q1 growth ≈2.3%, deflator easing 3.1→2.4, u stable
+3.4–3.8) → limitations → conclusion → repro appendix (stage-2b commands).
+Figures regenerated from the stage-2b artifacts (new f7_unemployment
+band-vs-ablation exhibit; f1/f2/f3/f4/f6/f9 re-pointed; f5 unchanged).
+Compiles clean: 36 pages, 0 overfull boxes, 0 undefined references,
+version-independent per-cell numbers verified against the scorecard CSVs.
+
+## 2026-08-18 — Plan revised: cross-scale superiority program (status addendum 2026-08-18)
+
+US_FORECASTING_PLAN.md gains a 2026-08-18 status addendum superseding the
+2026-08-16 block (retitled accordingly). Contents: (a) the Stage-2b outcome
+recorded in the plan itself; (b) seven measured lessons that reprice the
+plan's own priorities — state over structure (0.0007 vintage invariance vs
+the frozen-opening unemployment defect), a balanced-growth adequacy gate
+added to §II.5 ahead of paper fidelity, expectations elevated to a
+first-class workstream (three convergent findings), density bars to be
+decomposed into calibration and sharpness with the class-H recalibration
+layer named, origin-grid extension to ~2006Q4 declared feasible via the
+2b-4 vintage machinery, the matched-seed ablation harness promoted to the
+standard instrument for all model changes, and the full-Bayesian DSGE
+upgrade scoped; (c) the program goal restated as a preregistered claim
+ladder C1–C7 (aggregate point — won; aggregate density; full target
+coverage; sectoral; distributional/micro gated on the §II.6 scale ladder;
+propagation; pseudo-real-time), each rung with its own challenger field,
+frozen protocol and honest-success clause; (d) the Stage-2c work program
+2c-0..2c-7 in dependency order with gates. The §II.1 calibration firewall
+is restated as non-revisable; the 2026-08-16 stop-loss rules carry forward;
+WS-1A/1B and prospective capture remain parked.

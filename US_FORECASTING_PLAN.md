@@ -56,10 +56,151 @@ all historical inputs needed to reproduce it.
 
 ---
 
-## Status addendum — 2026-08-16: Stage 2b is the program (current)
+## Status addendum — 2026-08-18: Stage 2b concluded; the cross-scale superiority program (current)
 
-Where this block disagrees with anything below it, including the 2026-08-13
-addendum, this block is current.
+Where this block disagrees with anything below it, including the 2026-08-16
+and 2026-08-13 addenda, this block is current. The calibration firewall of
+§II.1 is retained absolutely and is not revisable by any addendum: no
+behavioral or structural parameter is ever fitted to forecast errors.
+
+### Stage-2b outcome (2026-08-17)
+
+All six Stage-2b workstreams closed. On the frozen 20-column field (ten
+statistical models, `dsge_small_nk` and `dsge_sw07` recursively re-estimated
+at every origin, six ABM columns), the repaired `beforeit_abm_us_v3` took the
+best weighted headline-pair RMSE ratio in all three tracks
+(0.828 / 0.828 / 0.792 against the best non-ABM column's
+0.857 / 0.856 / 0.848), Romano–Wolf-significant against both DSGE columns at
+5% in every track, with the best headline CRPS in every track — and failed
+the preregistered bar on exactly one leg: 90% interval coverage, where the
+GDP-deflator bands are under-dispersed (0.70–0.79). Per the honest-success
+clause the published claim is the conditional one. The conclusion is robust
+to the annual structural vintage (2024/2017/2012 within 0.0007 weighted-ratio
+points). Evidence: [US_ABM_FORECAST_REPORT.md](US_ABM_FORECAST_REPORT.md)
+§1b, paper §12, frozen protocol
+`scripts/us/forecasting/diagnostics/stage2b/STAGE2B_PROTOCOL.md`.
+
+### What Stage 2b measured about this plan itself
+
+These are empirical findings about the program's own priorities; each one
+revises the plan below where they conflict.
+
+1. **State dominates structure for aggregate forecasting.** Replacing the
+   entire annual I-O structure across a twelve-year vintage span moved the
+   headline ratio by ≤ 0.0007 — an order of magnitude below Monte-Carlo
+   error — while the frozen-2024 *opening labour stock* single-handedly
+   accounts for the one lost target (unemployment level; misses 52–64%
+   above-band at every horizon). Consequence: historical **opening-state
+   acquisition** (annual CPS labour arrays, counts, benefit aggregates —
+   report §2.5 list) moves onto the critical path; full structural-vintage
+   reconstruction is demoted to a per-claim requirement. Stage-3 structural
+   eligibility is relaxed to "nearest available revised structure, labeled,"
+   justified by the 2b-4 invariance evidence.
+2. **Structural adequacy precedes paper fidelity.** The unemployment
+   collapse and capacity drainage were one absence — zero trend growth in
+   supply — harmless for 2010s Austria, fatal for the U.S. A **balanced-
+   growth adequacy gate** is added to the §II.5 calibration gates: any U.S.
+   calibration must carry origin-calibrated trend paths for labour
+   productivity, the labour force (demographics/immigration via CLF16OV),
+   capacity, and wages, mutually consistent with the growth-accounting
+   identity, before replication variants are scored. The paper-faithful
+   frozen-supply economy remains available as a replication variant only —
+   it is no longer the default baseline.
+3. **Expectations are load-bearing.** Three independent findings — the
+   matched-seed instability of both demand-side investment mechanisms
+   (multiplier–accelerator boom under homogeneous adaptive expectations),
+   the under-dispersed deflator bands (one shared inflation signal), and
+   the 0.061 masked-track cost of AR(1) versus RW-drift expectations —
+   converge on the expectations block. **Heterogeneous, survey-disciplined
+   expectations** (cross-sectional dispersion calibrated to observed
+   forecaster disagreement, e.g. SPF; never to forecast errors) becomes a
+   first-class workstream (2c-2). The demand-side investment instability is
+   recorded as a falsifiable descriptive failure of the current model class
+   at this calibration — to be resolved through expectations design, not
+   permanently abstracted away by the capacity-efficiency mechanism.
+4. **Density bars need a sharpness/calibration decomposition.** Stage 2b's
+   flat coverage clause could not see that the ABM was sharper (CRPS won
+   everywhere) while a challenger bought coverage with ~30% wider bands.
+   Future density bars score calibration and sharpness separately (PIT and
+   CRPS-decomposition tables). The §II.1 class-H publication layer
+   explicitly permits an interval-recalibration correction estimated on
+   completed forecast errors only; it is to be built and labeled (2c-1), and
+   never conflated with the model's own densities.
+5. **The origin grid can grow backward.** The 2012 structural build plus
+   quarterly calibration series from 1996Q4 make origins from roughly
+   2006Q4 feasible — putting the Global Financial Crisis inside the test
+   window and adding ~14 origins. Weighted-composite inference at n ≈ 50
+   was measured power-thin (MCS could exclude almost nothing); the grid
+   extension is the cheapest remedy (2c-4).
+6. **The matched-seed ablation harness is the standard instrument.** Every
+   future model change enters through the 2b-6 pattern: flag-gated,
+   default-off, seed-stream-aliased, with byte-identity of all frozen
+   columns re-verified under the extended tree, and design-stage decisions
+   made only on simulation-internal diagnostics.
+7. **Challenger economics.** Per-origin posterior-mode re-estimation of
+   DSGE challengers is cheap (minutes per origin) and produced a strong
+   SW07 column; the full-Bayesian upgrade (SMC/MCMC, at least on a
+   subsample cadence) is scoped to make challenger densities
+   parameter-uncertainty-complete before density rungs are contested.
+
+### The program goal, restated as a claim ladder
+
+The program's goal is to demonstrate superiority of the ABM over the best
+available challenger **in each dimension separately** — forecasting and
+descriptive, micro to macro. Blanket superiority is never claimed; each rung
+below carries its own preregistered protocol, its own challenger field
+(always the strongest challenger *able to produce the object*), its own bar,
+and the honest-success clause: a lost or partial rung is published with the
+same tables as a won one.
+
+| Rung | Claim | Field | Status |
+|---|---|---|---|
+| C1 | Aggregate point accuracy (headline/secondary pairs) | statistical family + recursively re-estimated DSGEs | **Won on revised data** (Stage 2b), 3/3 tracks, RW-significant vs DSGEs |
+| C2 | Aggregate densities | density-capable challengers | CRPS won 3/3; interval calibration open (2c-1/2c-2) |
+| C3 | Full target coverage incl. unemployment level, PCE, payrolls | as C1 | Open — opening-state build + bridges (2c-3) |
+| C4 | Sectoral forecasts (68-industry GVA, prices) | sectoral factor models, sector VARs | Open (2c-6); structure now matters — reuse 2b-4 vintage machinery |
+| C5 | Distributional/micro description (firm sizes, entry/exit, job flows, price-change and household moments) | best per-object challenger (e.g. HANK-class for household distributions; firm-dynamics models) | Open; **gated on the §II.6 scale ladder** (2c-5) — 2,831 modeled people cannot carry a distributional claim |
+| C6 | Propagation (sectoral shock pass-through vs network-econometric evidence) | network econometrics | Open (2c-6) |
+| C7 | Pseudo-real-time and prospective skill | as C1, vintage-clean | Stages 3–4, unchanged; structural eligibility relaxed per lesson 1 |
+
+Known abstractions become falsifiable targets on their rungs, not
+footnotes: one-shot frictionless labour matching (vs JOLTS flows),
+replacement-only firm entry (vs BDS), frozen firm-level investment, the
+single bank, homogeneous expectations, and the exogenous `ea`-block policy
+rule (§II.3) for any transmission claim.
+
+### Stage-2c work program, in dependency order
+
+| # | Workstream | Gate |
+|---|---|---|
+| 2c-0 | **Consolidation.** Commit the Stage-2b tree; crosswalk/variant-registry entries for the new mechanisms; scorecard scripts into CI | registry digests recomputed; CI green |
+| 2c-1 | **Interval recalibration layer** (class H; completed forecast errors only) + sharpness/calibration decomposition tables | headline 90% coverage within a preregistered band at no more than a preregistered CRPS cost; layer labeled, raw densities retained |
+| 2c-2 | **Heterogeneous expectations.** Survey-disciplined dispersion of firm/household inflation and growth expectations; then re-test the demand-side investment mechanisms under it | deflator coverage repaired at the mechanism level; the accelerator re-test is stable or its instability is published as a finding; no forecast error touches calibration |
+| 2c-3 | **Opening states + bridges.** Historical annual labour arrays, counts and benefit aggregates; PCE-price and payroll measurement bridges | every origin opens at its own-year labour market; 8/8 panel targets scored |
+| 2c-4 | **Origin-grid extension** to ~2006Q4 (panel rebuild + era structures via the 2b-4 machinery) | GFC-inclusive scorecard on the extended grid; all Stage-2b conclusions re-stated on it |
+| 2c-5 | **Scale ladder** (§II.6 executed as written) | §II.6 acceptance rule; production scale frozen with convergence evidence |
+| 2c-6 | **Descriptive rungs C4–C6.** Moment dashboards (BDS, JOLTS, price-change facts, household moments), sectoral challenger field, propagation tests | per-rung frozen protocols and bars; honest-success clause per rung |
+| 2c-7 | **Full-Bayesian DSGE densities** (SMC/MCMC cadence) | challenger density bands carry parameter uncertainty in every density table |
+
+Preregistration discipline: each rung's protocol is frozen before its first
+scored run, in the pattern of `STAGE2B_PROTOCOL.md`. The stop-loss rules of
+2026-08-16 carry forward: no new sealed contract or gate module unless on
+the critical path to a rung's scorecard; external-review hardening capped at
+one pass per artifact.
+
+**Deferred, unchanged:** WS-1A/1B mass vintage backfill and prospective
+capture remain parked on `governance-archive`; stages 3–4 proceed on the
+forecasting track (C7) once 2c-1 through 2c-4 land, under the relaxed
+structural-eligibility rule of lesson 1.
+
+---
+
+## Status addendum — 2026-08-16: Stage 2b is the program (superseded by 2026-08-18 above)
+
+This block froze the Stage-2b program on 2026-08-16; Stage 2b completed on
+2026-08-17 and the 2026-08-18 block above takes precedence. Below the
+2026-08-18 block, this block still takes precedence over the 2026-08-13
+addendum and the plan body where they disagree.
 
 **Reorientation.** The program's primary goal is now a single scientific
 question, answered at the evidentiary standard of Poledna et al. itself (a

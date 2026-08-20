@@ -90,9 +90,275 @@ and population are frozen at 2024 and carried backwards to every historical orig
 `real_time = false`, `origin_admissible = false`, `promotion_eligible = false`. No DSGE benchmark is
 in the field, and no formal inference was performed, so adjacent ranks are not distinguishable.
 
+> **2026-08-17.** Both gaps named in the paragraph above are closed by the
+> Stage-2b addendum that follows: two recursively re-estimated DSGE columns
+> are in the field, and every superiority sentence now carries formal
+> inference. Sections 2–10 below remain the unchanged record of the
+> 2026-08-10 v1→v2 cycle.
+
 ---
 
-## 2. Scope, labels, and what this exercise does and does not establish
+## 1b. Stage-2b addendum (2026-08-17) — the equilibrium-inclusive field, the balanced-growth repair, and the preregistered verdict
+
+This addendum reports the Stage-2b decisive experiment (plan status addendum
+2026-08-16) on the identical 61-origin revised-data grid: the field extended
+with two **recursively re-estimated DSGE columns**, the ABM repaired for the
+two defects §1 lists (`beforeit_abm_us_v3`), `unemployment_rate` promoted
+into the scored tables, exact ensemble **CRPS** and interval coverage from
+persisted 500-path draws, and **HLN Diebold–Mariano, Romano–Wolf and
+Hansen–Lunde–Nason MCS inference** over every column. The protocol —
+mechanisms, per-origin calibration rules, and the success bar — was frozen in
+[`STAGE2B_PROTOCOL.md`](scripts/us/forecasting/diagnostics/stage2b/STAGE2B_PROTOCOL.md)
+before any scored table was produced. Everything remains a revised-data,
+mixed-vintage diagnostic (`real_time = false`, `origin_admissible = false`,
+`promotion_eligible = false`).
+
+### 1b.1 Verdict, stated first
+
+On the frozen 20-column field (ten statistical models, four DSGE columns,
+six ABM columns), the repaired ABM takes the **best weighted headline-pair
+RMSE ratio in all three sample tracks** — 0.828 / 0.828 / 0.792 (mean
+column; the median column is marginally better at 0.827 / 0.827 / 0.791) —
+against 0.857 / 0.856 for the best non-ABM column in the two full-sample
+tracks (Smets–Wouters 2007) and 0.848 for the best non-ABM column in the
+pandemic-masked track (AR(1)). Romano–Wolf stepdown on per-origin weighted
+losses rejects equal accuracy **against both DSGE columns at the 5% level in
+every track** (adjusted p = 0.0002–0.016); against the statistical family
+the weighted-loss test is marginal (adjusted p ≈ 0.08). Horizon-wise HLN-DM:
+the real-GDP advantage over SW07 is significant at h = 2, 4, 8 in every
+track (p = 0.0003–0.022), insignificant at h = 1 (unmasked) and h = 12;
+GDP-deflator accuracy is statistically indistinguishable from SW07 at every
+horizon.
+
+On densities, the ABM's exact ensemble CRPS **beats the best challenger in
+all three tracks** on the weighted headline pair (1.58 vs 1.80, 1.67 vs
+1.91, 0.88 vs 1.12 against SW07), but its **90% interval coverage fails the
+preregistered "no worse than the best challenger" clause** in the two
+full-sample tracks (pooled headline coverage 0.832 / 0.812 / 0.906 across
+tracks against a challenger that sits within 0.005–0.008 of nominal). The
+miss is located: real-GDP coverage is 0.86–0.95 at every horizon; the
+**GDP-deflator bands are too narrow** (coverage 0.70–0.79). The DSGE columns
+achieve nominal coverage through intervals roughly 30% wider — which is
+exactly what their CRPS pays for.
+
+**The preregistered superiority bar is therefore NOT met in full**, and per
+the honest-success clause the claim published is the conditional one:
+
+> On revised data, at the paper's own evidentiary standard, the repaired
+> U.S. ABM forecasts the headline pair {real GDP growth, GDP-deflator
+> inflation} **more accurately in point terms than every statistical and
+> equilibrium challenger in the field, in all three tracks** — the margin
+> over both DSGE columns is significant at 5% under multiplicity control,
+> and the real-GDP margin over SW07 is significant at business-cycle
+> horizons — **and more sharply in CRPS terms**, while its GDP-deflator
+> intervals are under-dispersed relative to the best-calibrated challenger.
+> The full preregistered bar fails only on that interval-calibration leg.
+
+The Hansen–Lunde–Nason MCS (α = 0.10, weighted per-origin headline losses)
+retains v3 as its best member (MCS p = 1.0) but cannot exclude most of the
+field at 50–61 weighted observations with pandemic outliers — a power
+statement, reported as such.
+
+### 1b.2 The equilibrium challengers (2b-1)
+
+* **`dsge_small_nk`** — the repository's validated An–Schorfheide-type
+  gensys mechanics (sealed, oracle-tested against FRBNY DSGE.jl v1.3.0),
+  wrapped externally and **re-estimated by posterior mode at every origin**
+  on exactly the panel columns the statistical family sees
+  ([model card](scripts/us/forecasting/benchmarks/dsge_columns/DSGE_COLUMNS_MODEL_CARD.md)).
+  61/61 origins converged, determinate at every origin, Taylor principle
+  satisfied at every posterior mode (ψ₁ ∈ [1.31, 1.54]). Headline weighted
+  ratio 0.890 / 0.885 / 1.134 — mid-field unmasked, and notably
+  pandemic-dependent.
+* **`dsge_sw07`** — a full 49-state transcription of Smets–Wouters (2007)
+  with the flexible-price block, solved by a size-generic gensys transcribed
+  from — and oracle-verified to exactly reproduce — the sealed validated
+  solver, estimated by warm-started posterior mode at every origin on the
+  seven SW07 observables from 1966Q1 (published priors; the two
+  documented modernizations are in the model card). It sees **more history
+  and more series than any other column** — an information advantage granted
+  to the challenger deliberately. Its estimates are canonical across all 61
+  origins (trend 0.29–0.42%/q per capita, Taylor coefficient 1.6–2.0,
+  smoothing ~0.82). Status is `budget_exhausted` at all origins under the
+  fixed evaluation budget; a continuation test at the first origin gained
+  only +2.45 log-posterior from 8 000 further evaluations, so the modes are
+  materially converged. **SW07 is the strongest non-ABM column in both
+  full-sample tracks — it beats every statistical model** — which is what
+  makes the ABM's margin over it informative.
+
+Per-origin estimation/solution status is a published artifact for both
+columns; no origin was dropped or carried forward. DSGE unemployment cells
+come from a labeled per-origin Okun bridge (auxiliary, outside both cores);
+DSGE EFFR paths are floored at zero; densities carry filtered-state and
+shock uncertainty at the mode, without parameter uncertainty (disclosed).
+
+### 1b.3 The repair (2b-2 + 2b-3): balanced supply growth
+
+Both §1 defects trace to one structural absence: **the model economy had no
+trend growth in supply**. Labour productivity `alpha_bar_i`, the wage base
+`w_bar_i`, the labour force, and productive capacity `K_i·kappa_i` were all
+frozen at their opening values, so trend demand growth had to be met
+one-for-one by employment growth out of a fixed labour pool (the
+unemployment collapse), while all real growth drained a fixed 17.6%
+capacity headroom (the h ≤ 12 validity restriction).
+
+v3 registers observed trend growth on the supply side, per origin,
+firewall-clean — `g` is the trailing-40-quarter mean, ending at the origin,
+of observed labour-productivity growth (`Δln(GDPC1/CE16OV)`) **plus**
+observed labour-force growth (`Δln CLF16OV`), the demographics-and-
+immigration margin. Across origins `g` runs 1.5–2.3% annualized, and its
+labour-force component **tripled between the 2020 and 2025 origins**
+(CLF16OV growth 1.26%/yr over 2022–2024 vs 0.75%/yr over 2011–2019): the
+immigration surge enters the model's supply side automatically through the
+origin-local window. Mechanically, `alpha_bar_i` and `w_bar_i` grow by
+`(1+g)` each quarter (unit labour cost invariant ⇒ no direct price-level
+effect), and `kappa_i` and `delta_i` grow by the same factor (capacity per
+unit of book capital tracks trend; the replacement share `delta/kappa`,
+i.e. CFC/output, exactly stable; **no demand flow injected**; `net I = ΔK`
+holds trivially in book units).
+
+Two demand-side capacity mechanisms were implemented first and **rejected on
+matched-seed simulation diagnostics alone** — a capacity-gap accelerator
+(ν = 0.0625) and the balanced-growth net-investment flow (`g·K` added to
+desired investment). Both destabilize the economy: the rationed goods market
+plus adaptive sales expectations amplify any injected investment demand into
+a boom (measured on matched seeds: real growth 5.5–8.2% annualized,
+unemployment to zero within 4–8 quarters). No forecast error entered any of
+these decisions; the rejected variants remain runnable
+(`headline_v3_accel_only`, `headline_v3_deepening_only`) and their pilot
+tables are part of this evidence base. That demand-side fragility is itself
+a finding about the model class at this scale.
+
+**Gate evidence.**
+
+* *Utilization / capacity (2b-3).* Matched-seed 24-quarter simulations at
+  three origins: v2 utilization drifts 0.850 → 0.98–0.99 by quarter 24 with
+  zero capacity growth; v3 utilization stays 0.87–0.91 while capacity grows
+  10–13% over six years — the calibrated trend. The growth mechanism no
+  longer drains a fixed envelope; the h ≤ 12 restriction is lifted for the
+  supply side. (Unemployment remains an h ≤ 12 quantity: on a fixed agent
+  pool it still exhausts beyond roughly four years, stated below.)
+* *Unemployment dispersion (2b-2).* v3's ensemble dispersion rises
+  monotonically to 1.42pp at h = 12 — 0.83× the realized cross-origin
+  dispersion — against v2's degenerate pattern (dispersion collapsing to
+  0.47pp, ratio 0.27, as every path hit the floor). Coverage misses that
+  remain are 52–64% *above-band at every horizon*: the frozen 2024 opening
+  level (§2.2(b)), not the dynamics.
+
+### 1b.4 Scorecard (identical common cells, 20 columns, 1 415 common cells)
+
+Weighted headline-pair RMSE ratios vs VAR(1) (rank of 20 in parentheses;
+full tables, including MAE, secondary and labour sets, in
+[`STAGE2B_TABLES.md`](output/us_forecasting/stage2b_scorecard/STAGE2B_TABLES.md)):
+
+| column | all-available | balanced-h12 | pandemic-masked |
+|---|---:|---:|---:|
+| `beforeit_abm_us_v3_median` | **0.827 (1)** | **0.827 (1)** | **0.791 (1)** |
+| `beforeit_abm_us_v3_mean` | 0.828 (2) | 0.828 (2) | 0.792 (2) |
+| `beforeit_abm_us_v2_mean` | 0.830 (3) | 0.829 (3) | 0.796 (3) |
+| `dsge_sw07` | 0.857 (5) | 0.856 (6) | 0.954 (10) |
+| `naive_historical_mean` | 0.879 (7) | 0.884 (7) | 0.881 (8) |
+| `dsge_small_nk` | 0.890 (9) | 0.885 (9) | 1.134 (14) |
+| `beforeit_abm_us_v1_mean` | 0.905 (11) | 0.894 (11) | 1.272 (17) |
+| Minnesota BVAR | 0.908 (12) | 0.909 (12) | 0.852 (6) |
+| `univariate_ar_p1_constant` | 0.918 (13) | 0.918 (13) | 0.848 (5) |
+
+On the secondary pair {nominal GDP growth, EFFR} v3 is 1st/2nd in the two
+full-sample tracks (0.714/0.715, 0.702) and 2nd–3rd masked (0.736–0.737)
+behind AR(4) at 0.719 — the same loss v2 reported, unchanged in kind. On
+`unemployment_rate` the ABM does **not** win: v3 sits at VAR(1) parity
+unmasked (0.97–1.00, 12th–13th) against persistence models at 0.65, and the
+masked track inflates every level-biased column's ratio (v3 5.3–5.4) because
+masking removes exactly the cells where VAR(1) itself exploded. The binding
+defect is the frozen-2024 opening level, quantified above; the repair fixed
+the dynamics (dispersion, no collapse), not the mixed-vintage level.
+
+v1 and v2 were **regenerated under the extended source tree and reproduce
+their committed caches byte-for-byte** (all 3 660 ensemble rows each) — the
+proof that the v3 source extension moved no frozen number, per the
+repository's own migration precedent.
+
+### 1b.5 Densities
+
+Weighted headline CRPS (exact ensemble form, 500 draws/cell): v3 2.234
+(real GDP) / 0.926 (deflator) on the all-available track against SW07's
+2.697 / 0.894 — v3 clearly sharper on real GDP, marginally worse on the
+deflator; combined, v3 leads in every track. 90% coverage: v3 real GDP
+0.86–0.95 across horizons (nominal 0.90); v3 deflator 0.70–0.79
+(under-dispersed); DSGE columns near-nominal via ~30% wider bands. The
+masked-track pooled coverage is 0.906 — the unmasked shortfall is
+concentrated in pandemic-era cells and the deflator. EFFR interval coverage
+collapses with horizon for the ABM (0.16 at h = 12), a known
+Taylor-block/ELB limitation now measured.
+
+### 1b.6 Attribution (2b-6)
+
+Matched-seed, identical-cell contrasts attribute the v2→v3 headline change
+to mechanism classes:
+
+| contrast | isolates | weighted headline effect (all-av / balanced / masked) |
+|---|---|---|
+| v1 → v2 (scored 2026-08-10, re-verified byte-identical) | commodity-balance reconciliation (+ RW-drift) | −0.075 / −0.065 / −0.476 |
+| v2 → v3 | balanced supply growth (both mechanisms) | −0.002 / −0.001 / −0.004; unemployment repaired from degenerate to dispersion-comparable |
+| v3 vs `v3_ar1` (matched seeds, full 500×61) | RW-drift vs paper AR(1) growth expectations under the repair | AR(1) costs +0.006 / +0.006 / **+0.061** (0.835/0.834/0.853) |
+| design-stage pilots (matched seeds, 64×4) | accelerator / net-investment demand injections | rejected: boom + collapse (§1b.3) |
+
+The mechanism ordering is therefore: the accounting reconciliation carries
+the bulk of the v1→v3 headline gain; the expectations correction matters
+mostly outside the pandemic cells (where the AR(1)'s trend under-delivery
+binds); and the balanced-growth repair is deliberately headline-neutral —
+its payload is the labour block (collapse → dispersion-comparable) and
+long-run supply validity, and it did not purchase headline accuracy at
+their expense. A side finding: under AR(1) expectations the repaired
+economy's unemployment drifts *up* (h = 12 mean 4.7% at the 2010Q2 origin)
+— the two mechanisms interact exactly as the balanced-growth accounting
+predicts.
+
+### 1b.7 Structural-vintage robustness (2b-4)
+
+Two additional annual structures were built from revised BEA supply–use
+tables for reference years **2017 and 2012** through the identical
+ingestion path (golden-tested: the same code rebuilds the 2024 artifact
+bit-exactly), identically reconciled (RAS on the use side; λ = 0.98306 and
+0.97911 vs 2024's 0.98346; residual decompositions published beside the
+artifacts), and verified. v3 was re-run at 500 paths on all 61 origins under
+each — matched seeds, matched cells, the identical 20-column field (the DSGE
+and statistical columns do not depend on the structure and serve as
+invariance controls).
+
+| annual structure | all-available | balanced-h12 | pandemic-masked | headline rank |
+|---|---:|---:|---:|---|
+| 2024 (main run) | 0.8282 | 0.8281 | 0.7921 | 1–2 of 20 |
+| 2017 | 0.8281 | 0.8278 | 0.7933 | 1–2 of 20 |
+| 2012 | 0.8288 | 0.8287 | 0.7922 | 1–2 of 20 |
+
+The maximum deviation across structures is 0.0007 weighted-ratio points —
+an order of magnitude below the ±0.005 Monte-Carlo error of a 500-path
+ensemble. **The headline conclusion is robust to the structural vintage**:
+carrying a 2017 or even a 2012 input–output structure to every origin
+changes nothing material. This also bounds the mixed-vintage asymmetry
+worry of §2.2(b) for the *structure* specifically: if the frozen-2024
+technology matrix were doing unfair work at historical origins, replacing
+it with the vintage the origins actually had access to would show it; it
+does not. (Counts, taxes and the opening labour stock remain 2024-frozen —
+the unemployment level defect stands.)
+
+### 1b.8 What this addendum does and does not establish
+
+It establishes, on revised data at the reference paper's own standard, that
+the repaired ABM's headline point accuracy leads a field that now contains
+a strong, recursively re-estimated SW07 — with multiplicity-controlled
+significance against both equilibrium columns — and that its predictive
+densities are the sharpest in CRPS terms. It does **not** establish: the
+full preregistered bar (deflator interval calibration fails it);
+unemployment-level skill (frozen-opening-limited, honest loss); real-time
+or promotion claims (unchanged flags); or parameter-uncertainty-complete
+DSGE densities. The paper's DSGE comparison used full Bayesian estimation
+with 250 000 MCMC draws per origin; ours is posterior-mode with published
+priors — stronger than fixed parameters, weaker than full MCMC, disclosed
+wherever quoted.
+
+---
 
 ### 2.1 The information track, stated precisely
 
