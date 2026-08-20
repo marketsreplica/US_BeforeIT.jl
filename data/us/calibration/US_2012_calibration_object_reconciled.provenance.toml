@@ -1,0 +1,29 @@
+# Provenance for US_2012_calibration_object_reconciled.jld2 (stage2b workstream 2b-4)
+artifact_path = "data/us/calibration/US_2012_calibration_object_reconciled.jld2"
+artifact_sha256 = "231be4b1aa008c221f1a008c786f17e1b03ce6eacf8f8a22f6fb05c8a76b7fe6"
+source_artifact = "data/us/calibration/US_2012_calibration_object.jld2"
+source_artifact_sha256 = "0cbefbcc7c6bc226007c503711ad8d6849fe3579e38842836bbe33a28999b955"
+mode = "final_demand_scaled"
+expectations = "rw_drift"
+rho = 1.0
+rho_measured_before_mode = 1.0125037127506755
+lambda = 0.9791077413137136
+ras_iterations = 700
+ras_final_control_error = 9.75986339332934e-14
+final_max_abs_uses_over_supply_over_rho_minus_one = 9.781064846947629e-14
+report = "output/us_forecasting/commodity_balance_reconciliation_structural_vintage/US_2012_calibration_object/reconciliation_report_rho1.txt"
+
+[residual_decomposition]
+# sum(uses)-sum(supply) = [expenditure GDP - production GDP] + [CFC - GFCF_nondwelling]
+aggregate_residual_millions_usd = 383820.19147540367
+production_side_va_millions_usd = 1.5681134999999998e7
+expenditure_side_gdp_millions_usd = 1.5953228762517579e7
+production_expenditure_discrepancy_millions_usd = 272093.76251758076
+cfc_minus_nondwelling_gfcf_millions_usd = 111726.42895782366
+
+[pre_reconciliation_gap]
+min = -0.7267882224819967
+max = 0.5985907307726758
+mean_abs = 0.14019960612925603
+sd = 0.20066379996064737
+over_demanded_sectors = 44

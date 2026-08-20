@@ -1,0 +1,90 @@
+============================================================================================================
+COMMODITY-BALANCE RECONCILIATION  (RAS on the use side, supply composition fixed)
+source : /Users/sina/Documents/GitHub/MarketsReplica/US_BeforeIT.jl/data/us/calibration/US_2012_calibration_object.jld2
+date   : 2026-08-17T20:43:28.389
+============================================================================================================
+
+BEFORE
+  sum industry_output  = 2.839005e+07
+  sum imports (BEA)    = 2.306452e+06   (fixed)
+  sum supply           = 3.069650e+07
+  sum uses             = 3.108032e+07
+  aggregate residual   = 3.838202e+05   (uses - supply)  ->  rho = 1.01250371
+  gap (uses-supply)/supply :  min -0.7268  p10 -0.2125  p25 -0.0591  med 0.0225  p75 0.0975  p90 0.2347  max 0.5986
+  over-demanded 44/68 ; |gap|>10% 29 ; |gap|>25% 11 ; mean|gap| 0.1402 ; sd 0.2007
+
+  ACCOUNTING SOURCE OF THE AGGREGATE RESIDUAL (exact decomposition)
+    sum(uses)-sum(supply) = [expenditure GDP - production GDP] + [CFC - GFCF_nondwelling]
+      production-side VA (basic px)     = 1.568113e+07
+      expenditure-side C+G+GFCF+X-M     = 1.595323e+07
+      (a) production/expenditure discrepancy = 2.720938e+05  (1.74% of GDP)
+      capital consumption CFC           = 2.284452e+06
+      non-dwelling GFCF (basic px)      = 2.172726e+06
+      (b) CFC - GFCF_nondwelling        = 1.117264e+05
+      (a)+(b)                           = 3.838202e+05 ; measured residual = 3.838202e+05 ; |diff| = 7.567e-10
+
+MODE = :final_demand_scaled  (rho forced to 1)
+  lambda = (supply - intermediates)/(C+G+I+X) = 0.97910774  (final demand scaled by -2.0892%)
+
+FLOW SYSTEM : 68 commodities x 72 users (68 industries + C + G + I + X)
+  zeros in the flow matrix : 1513 / 4896 (30.9%)
+  rows with zero total : 0 ; columns with zero total : 0
+  row controls  = rho * supply   (sum 3.069650e+07)
+  col controls  = measured budgets (sum 3.069650e+07)
+
+RAS converged in 700 iterations, final max relative control error 9.760e-14
+
+AFTER
+  max |uses_g/supply_g / rho - 1|  = 6.661e-16     (target < 1e-6)
+  max |uses_g/supply_g - 1|        = 0.000000     (= rho-1, the uniform aggregate residual)
+  sd of (uses-supply)/supply       = 2.285e-16     (was 0.2007)
+  max relative column-budget move  = 9.760e-14     (target < 1e-9)
+  zero pattern preserved           = true
+  all entries nonnegative          = true
+
+  per-commodity USE adjustment: sum|d| = 4.039088e+06 (13.00% of total uses), max|d| = 5.568066e+05
+  cellwise: sum|dU| = 4.429784e+06 (14.25% of total flow)
+
+  LARGEST 10 COMMODITY ADJUSTMENTS
+  idx  code        uses_before     uses_after       d (USDm)       d %% gap_before
+  47   5412OP      1.73801e+06    1.18120e+06   -5.56807e+05    -32.04%     47.14%
+  27   42          1.05326e+06    1.46507e+06    4.11810e+05     39.10%    -28.11%
+  66   GSLG        1.53051e+06    1.92527e+06    3.94765e+05     25.79%    -20.50%
+  65   GSLE        8.51308e+04    3.11593e+05    2.26462e+05    266.02%    -72.68%
+  7    23          1.27594e+06    1.05865e+06   -2.17284e+05    -17.03%     20.52%
+  36   4A0         1.02482e+06    1.22190e+06    1.97074e+05     19.23%    -16.13%
+  54   622         8.53574e+05    7.06358e+05   -1.47216e+05    -17.25%     20.84%
+  6    22          5.58449e+05    4.26744e+05   -1.31706e+05    -23.58%     30.86%
+  61   81          6.91694e+05    5.65525e+05   -1.26169e+05    -18.24%     22.31%
+  60   722         6.88114e+05    5.70189e+05   -1.17925e+05    -17.14%     20.68%
+
+  ADJUSTMENT BY USER COLUMN (aggregate shares are unchanged; only composition moves)
+  column                   budget     sum|d cells| %% of budget
+  C_households       1.052049e+07     1.218150e+06     11.58%
+  G_government       3.072644e+06     9.140468e+05     29.75%
+  I_investment       2.656594e+06     3.359062e+05     12.64%
+  X_exports          1.737857e+06     1.926052e+05     11.08%
+  intermediates      1.270891e+07     1.769076e+06     13.92%
+
+WRITE-BACK VERIFICATION (re-derived through the unmodified pipeline)
+  intermediate flows reproduce RAS solution : max rel err 1.224e-14
+  household  flows                          : max rel err 1.167e-14
+  government flows                          : max rel err 9.764e-14
+  export     flows                          : max rel err 1.052e-14
+  investment flows (firm+dwellings)         : max rel err 7.484e-15
+  industry_output UNCHANGED                 : max rel err 6.251e-16
+  imports UNCHANGED                         : max rel err 0.000e+00
+  capital consumption x lambda              : max rel err 0.000e+00
+  aggregate C/G/I/X vs lambda x target      : 2.220e-16 0.000e+00 2.220e-16 0.000e+00
+  FINAL max |uses/supply / rho - 1|         : 9.781e-14
+
+COEFFICIENT MOVEMENT (what Bit.Model receives)
+  a_sg   : max |da| = 0.12620 ; mean |da| = 0.002123 ; L1 per column mean = 0.14438
+  b_HH_g : max |dshare| = 0.02010 ; L1 distance = 0.10953
+  c_G_g  : max |dshare| = 0.13888 ; L1 distance = 0.31068
+  b_CF_g : max |dshare| = 0.03128 ; L1 distance = 0.13060
+  c_E_g  : max |dshare| = 0.01984 ; L1 distance = 0.10711
+  c_I_g  : max |dshare| = 0.00000 ; L1 distance = 0.00000
+
+wrote /Users/sina/Documents/GitHub/MarketsReplica/US_BeforeIT.jl/data/us/calibration/US_2012_calibration_object_reconciled.jld2
+wrote /Users/sina/Documents/GitHub/MarketsReplica/US_BeforeIT.jl/output/us_forecasting/commodity_balance_reconciliation_structural_vintage/US_2012_calibration_object/reconciliation_by_commodity_rho1.csv
