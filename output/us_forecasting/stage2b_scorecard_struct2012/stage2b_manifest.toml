@@ -1,0 +1,16 @@
+schema = "beforeit-us-stage2b-scorecard.v1"
+panel_sha256 = "f7bb26a467465937060b1e9e734a020b9158a8136db05d2e0df47c3bff851bbe"
+information_track = "revised_mixed_vintage_diagnostic"
+real_time = false
+origin_admissible = false
+promotion_eligible = false
+benchmark_model_id = "beforeit_var_p1_constant"
+model_ids = ["naive_no_change", "naive_drift", "naive_historical_mean", "univariate_ar_p1_constant", "univariate_ar_p4_constant", "univariate_ar_bic_p1-2-3-4-5-6-7-8_constant", "beforeit_var_p1_constant", "beforeit_var_p2_constant", "beforeit_var_p3_constant", "bvar_mniw_v1_p1_constant_tight3fc999999999999a_decay3ff0000000000000_own0000000000000000_ivar4059000000000000_iwoff2_iscale3ff0000000000000_floor3e45798ee2308c3a_diffmse_scale", "beforeit_abm_us_v3_mean", "beforeit_abm_us_v3_median", "beforeit_abm_us_v2_mean", "beforeit_abm_us_v2_median", "beforeit_abm_us_v1_mean", "beforeit_abm_us_v1_median", "dsge_small_nk", "dsge_small_nk_median", "dsge_sw07", "dsge_sw07_median"]
+origins = 61
+common_cells = 1415
+pilot_truncated_smoke_only = false
+protocol = "STAGE2B_PROTOCOL.md"
+input_v1 = "output/us_forecasting/stage2b_full/v1_headline"
+input_v2 = "output/us_forecasting/stage2b_full/v2_headline"
+input_v3 = "output/us_forecasting/stage2b_full/v3_struct2012"
+input_dsge = "output/us_forecasting/stage2b_dsge_columns"

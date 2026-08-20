@@ -1,0 +1,23 @@
+schema_version = "beforeit-us-revised-data-abm-cache-identity.v5"
+contract_id = "beforeit-us-revised-data-abm-comparison.v1"
+seed_contract_id = "beforeit_us_abm_revised_comparison_v1/base_hash_mod_0x40000000/global_rng"
+variant = "headline_v3"
+burn_in_quarters = 0
+simulated_quarters = 12
+paths_requested = 500
+model_scale = 1.0e-5
+calibration_object_path = "data/us/calibration/US_2012_calibration_object_reconciled.jld2"
+calibration_object_sha256 = "231be4b1aa008c221f1a008c786f17e1b03ce6eacf8f8a22f6fb05c8a76b7fe6"
+comparison_code_sha256 = "a43ca8918d7eeb07df0a73c22a3a3faec4bc2073ebd5a98e8597cfcd4bafc159"
+base_diagnostic_code_sha256 = "8c75be08ac6b7e63033426192e59a07dfae6d5ea8456e99d73d853b35f82136c"
+runtime_source_tree_sha256 = "c5e35916fbd9f25b4191f39a382dacc7697a1ab15db9031d7b267c2814eea155"
+numerical_kernel_sha256 = "0229286c226b2eba051f4609346a7978e7296ef23c44f4ca66f950b3cedff746"
+runner_sha256 = "e47c506b8dd704fbb9d56adbd5e313f69aef149ae0c0ee1d2021b5caeb3ed581"
+environment_manifest_sha256 = "c2e596cf8452c5b890bb0ef66c05bc72a57fa25ab6f8fe790f8db4600b035263"
+panel_sha256 = "f7bb26a467465937060b1e9e734a020b9158a8136db05d2e0df47c3bff851bbe"
+panel_manifest_sha256 = "fc5209e35bb0d04986c2f8c96563f0c21ad511680753ecc7e6d77f0d8435fb3f"
+julia_version = "1.10.3"
+origin_indices = [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100]
+origin_pairs = ["100=2025Q2", "40=2010Q2", "41=2010Q3", "42=2010Q4", "43=2011Q1", "44=2011Q2", "45=2011Q3", "46=2011Q4", "47=2012Q1", "48=2012Q2", "49=2012Q3", "50=2012Q4", "51=2013Q1", "52=2013Q2", "53=2013Q3", "54=2013Q4", "55=2014Q1", "56=2014Q2", "57=2014Q3", "58=2014Q4", "59=2015Q1", "60=2015Q2", "61=2015Q3", "62=2015Q4", "63=2016Q1", "64=2016Q2", "65=2016Q3", "66=2016Q4", "67=2017Q1", "68=2017Q2", "69=2017Q3", "70=2017Q4", "71=2018Q1", "72=2018Q2", "73=2018Q3", "74=2018Q4", "75=2019Q1", "76=2019Q2", "77=2019Q3", "78=2019Q4", "79=2020Q1", "80=2020Q2", "81=2020Q3", "82=2020Q4", "83=2021Q1", "84=2021Q2", "85=2021Q3", "86=2021Q4", "87=2022Q1", "88=2022Q2", "89=2022Q3", "90=2022Q4", "91=2023Q1", "92=2023Q2", "93=2023Q3", "94=2023Q4", "95=2024Q1", "96=2024Q2", "97=2024Q3", "98=2024Q4", "99=2025Q1"]
+adopted_from_legacy_cache = false
+written_at = "2026-08-17T19:34:34Z"
