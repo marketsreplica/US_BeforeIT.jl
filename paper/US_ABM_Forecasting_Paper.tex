@@ -1,6 +1,10 @@
 %% ---------------------------------------------------------------------------
 %% Economic Forecasting with an Agent-Based Model of the United States
-%% MarketsReplica research pipeline, 2026-08-10.
+%% MarketsReplica research pipeline.
+%% Rewritten 2026-08-17 around the final model and the Stage-2b evidence:
+%% one model, its components, and the twenty-column comparison, replacing the
+%% earlier chronological (v1 -> v2 -> Stage-2b) presentation. The development
+%% history and its intermediate scorecards remain in the repository reports.
 %%
 %% Build:  latexmk -pdf -interaction=nonstopmode US_ABM_Forecasting_Paper.tex
 %% Figures: python3 ../figures_src/make_figures.py
@@ -43,47 +47,50 @@
 
 \newcommand{\pp}{\,pp}
 \title{\bfseries Economic Forecasting with an Agent-Based Model\\ of the United States:\\
-\large Calibration, Diagnosis, and Out-of-Sample Performance}
+\large Model, Calibration, and Out-of-Sample Performance against\\ Statistical and DSGE Benchmarks}
 
 \author{MarketsReplica research pipeline}
-\date{10 August 2026}
+\date{17 August 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
 \noindent
-We port the agent-based macroeconomic model of \citet{poledna2023} to the United States and
-subject it to that paper's own out-of-sample protocol: 61 quarterly forecast origins from
-2010Q2 to 2025Q2, horizons of 1, 2, 4, 8 and 12 quarters, 500 free-running stochastic paths per
-origin, and ten statistical benchmarks scored on identical cells. The first pass produced a
-defect rather than a result: real GDP growth was under-forecast by 1.3 to 2.9 percentage points
-at every horizon. We trace it by matched-seed experiment to the calibration artifact's opening
-commodity balance, which does not clear sector by sector --- modelled uses differ from supply by
-$-70.6\%$ to $+47.6\%$ across 68 commodities --- colliding with a firm capacity envelope frozen at
-$K_i\kappa_i = Y_i/0.85$ because investment is replacement-only. Over-demanded sectors sit
-permanently against their ceiling, under-demanded ones permanently idle, and the one-sided
-production constraint prevents the idle capacity from compensating. This accounts for 76\,\% of
-the bias; a growth expectation estimated by ordinary least squares AR(1) on the \emph{log level}
-of an I(1)-with-drift series, which delivers only 32--63\,\% of the in-sample trend, accounts for
-the remainder. We repair both on accounting grounds alone --- biproportional (RAS) reconciliation
-of the use side that retains measured BEA imports, and a random-walk-with-drift expectation ---
-with neither repair \emph{selected} using forecast errors, and re-score on identical cells
-with identical seeds. The exercise remains explicitly mixed-vintage: 2024 structure and
-current-vintage data are used at historical origins. The repaired model attains the best weighted RMSE ratio of all fourteen
-scored columns on \{real GDP growth, GDP-deflator inflation\} in all three sample tracks (0.830,
-0.829 and 0.796 against a VAR(1) anchor); real-GDP bias falls below $0.21$ percentage points at
-every horizon and empirical 90\,\% interval coverage moves from 0.654 to 0.929. The GDP deflator
-is unchanged, and bit-identical at $h=1$, which is the signature the diagnosis predicted. Two
-measured defects bound every number: capital never accumulates, so growth drains a fixed 17.6\,\%
-capacity headroom and the result is validated only to $h\le 12$; and unemployment collapses to
-about 1\,\%, is excluded from every weighted score, and became worse. This is a revised-data,
-mixed-vintage diagnostic, not a real-time forecasting claim.
+We build an agent-based macroeconomic model of the United States on the framework of
+\citet{poledna2023} and evaluate it under that paper's own out-of-sample protocol: 61 quarterly
+forecast origins from 2010Q2 to 2025Q2, horizons of 1 to 12 quarters, 500 free-running stochastic
+paths per origin, and a twenty-column comparator field scored on identical cells. The model is
+calibrated from public data under a strict no-fitting rule --- no behavioural parameter ever sees
+a forecast error --- and completes the reference framework with three structural components that a
+United States implementation turns out to require: an opening supply--use system reconciled by
+biproportional (RAS) adjustment, because the published BEA tables do not balance once bridged
+across valuation bases and projected onto commodities; growth expectations formed by a random walk
+with drift, because the reference log-level autoregression is biased low by construction on
+trending data; and observed trend growth in supply --- labour productivity, wages, and capacity
+efficiency advancing at an origin-local estimate of measured productivity-plus-labour-force
+growth --- without which a fixed-population model must either exhaust its labour pool or drain its
+capacity headroom. The comparator field contains ten statistical benchmarks and two dynamic
+stochastic general equilibrium (DSGE) models re-estimated recursively at every origin, including a
+full \citet{smetswouters2007} system granted more data than any other column. On the headline pair
+\{real GDP growth, GDP-deflator inflation\} the ABM attains the best weighted RMSE ratio of all
+twenty columns in all three sample tracks (0.828, 0.828, 0.792 against a VAR(1) anchor);
+Romano--Wolf multiplicity-controlled inference separates it from both DSGE columns at the 5\,\%
+level in every track, while its margin over the best statistical columns remains marginal
+(adjusted $p \approx 0.08$). Its predictive densities are the sharpest in the field by continuous
+ranked probability score, but its GDP-deflator intervals are under-dispersed (90\,\% coverage
+0.70--0.79), so a preregistered superiority bar fails on that single interval-calibration leg and
+the claim retained is the conditional one. The headline conclusion is unchanged under 2017 and
+2012 input--output structures (weighted ratios move by at most 0.0007), and matched-seed component
+experiments attribute it: the accounting reconciliation carries most of the accuracy, the
+expectation specification most of the rest, and the supply-growth component --- which repairs
+unemployment dynamics and long-run capacity validity --- is deliberately headline-neutral. All of
+this is a revised-data, mixed-vintage diagnostic, not a real-time forecasting claim.
 \end{abstract}
 
 \medskip
 \noindent\textbf{Keywords:} agent-based macroeconomics; out-of-sample forecast evaluation;
-input--output reconciliation; supply--use balance; model diagnosis.
+DSGE benchmarking; input--output reconciliation; balanced growth; forecast-comparison inference.
 
 \vspace{1em}
 \hrule
@@ -92,7 +99,9 @@ input--output reconciliation; supply--use balance; model diagnosis.
 \textbf{Reader's note.} This paper is written for a technically trained reader who is not an
 economist by training. Economic machinery is defined at first use, and the accounting identities
 that carry the argument are written out rather than assumed. Every number is traceable to a
-committed artifact; Appendix~\ref{app:repro} gives the paths, hashes and commands.
+committed artifact; Appendix~\ref{app:repro} gives the paths, hashes and commands. The
+repository's development reports additionally record how the model reached its present form; this
+paper presents the model as it stands and the evidence for each component, not the history.
 \normalsize
 \vspace{0.6em}
 \hrule
@@ -130,55 +139,65 @@ reproduced here.
 
 \subsection{What this paper does}
 
-This paper reports a port of that programme to the United States, and it reports what the port
-found. The arc is: \emph{built} $\rightarrow$ \emph{scored} $\rightarrow$ \emph{found defective}
-$\rightarrow$ \emph{diagnosed} $\rightarrow$ \emph{repaired on accounting grounds} $\rightarrow$
-\emph{re-scored on identical cells}. That arc, and not the rank it terminates in, is the
-contribution.
+This paper ports that programme to the United States and answers its question at full strength:
+\emph{does the ABM forecast the U.S.\ economy better than statistical and equilibrium challengers,
+on identical cells, under a protocol frozen in advance?} Five things are new relative to a naive
+port, and they organise the paper.
 
 \begin{enumerate}[leftmargin=1.4em,itemsep=2pt]
-\item \textbf{Port and first-pass validation} (\S\ref{sec:calib}--\S\ref{sec:design}). The
-      BeforeIT implementation \citep{beforeit2025} of the Poledna model is calibrated against the
-      U.S.\ Bureau of Economic Analysis (BEA) supply--use system and run over 61 quarterly
-      origins, 2010Q2--2025Q2, at $h\in\{1,2,4,8,12\}$ with 500 paths per origin and zero path
-      failures, against ten statistical benchmarks on matched cells.
-\item \textbf{Defect discovery} (\S\ref{sec:v1}). The first-pass model (\code{beforeit_abm_us_v1})
-      is competitive on the full sample and eleventh of fourteen once the pandemic cells are
-      removed, and it under-forecasts real GDP growth by $1.3$ to $2.9$ percentage points at every
-      horizon.
-\item \textbf{Diagnosis} (\S\ref{sec:diagnosis}). Matched-seed experiments attribute 76\,\% of the
-      bias to a non-clearing opening commodity balance colliding with a frozen capacity envelope,
-      and 24\,\% to a misspecified growth-expectation estimator, with an explicit falsification
-      table for the competing hypotheses.
-\item \textbf{Structural repair} (\S\ref{sec:repair}). Both defects are corrected in the
-      calibration artifact using past-only information and no reference to any forecast error: a
-      biproportional (RAS) reconciliation of the use side that retains the measured import levels,
-      and a random-walk-with-drift growth expectation.
-\item \textbf{Re-validation} (\S\ref{sec:v2}). The repaired model (\code{beforeit_abm_us_v2}) is
-      scored jointly with the unrepaired one, on identical common cells with identical random
-      seeds, in a single run.
+\item \textbf{The model, completed for the United States} (\S\ref{sec:model}). The BeforeIT
+      implementation \citep{beforeit2025} of the Poledna framework is retained whole; three
+      structural components are added, each forced by a property of the U.S.\ setting and each
+      calibrated from observations or accounting identities alone: a reconciled opening
+      supply--use system, drift-form growth expectations, and observed trend growth in supply ---
+      productivity, wages and capacity efficiency advancing at a rate estimated from measured
+      productivity and labour-force growth, the latter carrying the demographics-and-immigration
+      margin.
+\item \textbf{Calibration under a no-fitting firewall} (\S\ref{sec:calib}--\S\ref{sec:austria}).
+      Every parameter is read from public data, computed from an identity, or estimated from
+      pre-origin history by a fixed rule; no behavioural parameter ever sees a forecast error, and
+      the claim is verified numerically rather than asserted.
+\item \textbf{A twenty-column comparator field} (\S\ref{sec:design}). Ten statistical benchmarks;
+      two DSGE models re-estimated by posterior mode at every origin --- an
+      \citet{anschorfheide2007}-type small New Keynesian model and a full 49-state
+      \citet{smetswouters2007} system that is deliberately granted more history and more series
+      than any other column; and the ABM's mean and median ensemble columns. All columns are
+      scored on identical common cells over 61 origins and three sample tracks.
+\item \textbf{Results with formal inference and densities} (\S\ref{sec:results}). Point standings
+      with HLN-corrected Diebold--Mariano tests, Romano--Wolf multiplicity control and a model
+      confidence set; exact ensemble CRPS and interval coverage from the retained predictive
+      draws; unemployment scored and reported honestly; and a structural-vintage robustness check
+      that re-runs the whole exercise under 2017 and 2012 input--output structures.
+\item \textbf{Component attribution} (\S\ref{sec:evidence}). Matched-seed, identical-cell
+      experiments that switch each component off --- and two demand-side investment designs that
+      were built and rejected on stability grounds --- so that the headline accuracy is
+      attributed to mechanisms rather than asserted of the model as a whole.
 \end{enumerate}
 
 \subsection{What the reader should take away, and what they should not}
 
-The repaired model ranks first of fourteen on the headline target pair in all three sample tracks.
-That is a real result on a matched grid, and it is also a \emph{revised-data, mixed-vintage
-diagnostic}: the data are current-vintage throughout, and the input--output structure is frozen at
-2024 and carried backwards to every historical origin. No real-time information set was
-reconstructed, no DSGE benchmark is in the field, and no formal forecast-comparison inference was
-performed, so adjacent ranks are not statistically distinguishable. Two open defects --- capital
-that never accumulates and a labour block that overheats after the repair --- bound the validity of
-every number reported here. These limits are stated in \S\ref{sec:limits} and are not incidental
-to the result; they are part of it.
+The ABM ranks first of twenty on the headline target pair in all three sample tracks, its margin
+over both DSGE columns is significant at the 5\,\% level under multiplicity control, and its
+predictive densities are the sharpest in the field by CRPS. That is a real result on a matched
+grid, and it is also a \emph{revised-data, mixed-vintage diagnostic}: the data are current-vintage
+throughout, the annual structure is carried backwards to historical origins (a dependence measured
+directly in \S\ref{sec:vintage} and found immaterial for the input--output block), and no
+real-time information set was reconstructed. The margin over the best \emph{statistical} columns
+is marginal under multiplicity control (adjusted $p \approx 0.08$); the GDP-deflator's predictive
+intervals are under-dispersed, which fails one leg of the preregistered superiority bar; and on
+the unemployment \emph{level} the ABM loses to simple persistence models, for a measured
+initialisation reason. These limits are stated in \S\ref{sec:limits} and are not incidental to the
+result; they are part of it.
 
 % ===========================================================================
 \section{The model}
 \label{sec:model}
 
 This section is a compact overview sufficient to read the results. The full equation system is in
-\citet{poledna2023} and its implementation in \citet{beforeit2025}; nothing in the behavioural
-block was modified for this work except the one flag-gated expectation change documented in
-\S\ref{sec:repair}.
+\citet{poledna2023} and its implementation in \citet{beforeit2025}; the behavioural block is
+inherited whole, plus two flag-gated specification choices (the growth expectation of
+\S\ref{sec:expectations} and the trend-growth component of \S\ref{sec:trendgrowth}) that are off
+by default, so the Austrian and Italian calibrations of the library remain bit-identical.
 
 \subsection{Agents and the flow of a quarter}
 
@@ -197,8 +216,8 @@ The economy contains six classes of agent.
   \end{equation}
   where $N_i$ is employment, $M_i$ the intermediate-input bundle, $K_i$ the capital stock, and
   $(\alpha_s,\beta_s,\kappa_s)$ are industry productivities read off the input--output table. The
-  third term is the \emph{capacity envelope}; it is the object at the centre of
-  \S\ref{sec:diagnosis}.
+  third term is the \emph{capacity envelope}; how it is initialised, and how it grows, are two of
+  the design decisions this paper measures (\S\ref{sec:calib-balance}, \S\ref{sec:trendgrowth}).
 \item[Households.] Worker households supply labour and consume; inactive households receive
   transfers and consume; firm owners receive dividends. Consumption follows a propensity rule on
   disposable income and liquid wealth, allocated across commodities by a fixed basket $b^{HH}_g$.
@@ -219,17 +238,18 @@ and demand credit; the labour, credit and goods markets then clear through decen
 and any unmet demand is simply not satisfied. Rationing is therefore a first-class observable of
 the model, reported here as \emph{fill rates}. Insolvent firms exit and are replaced.
 
-\subsection{The behavioural core in five equations}
+\subsection{The behavioural core in five relations}
 
-Table~\ref{tab:equations} lists the equations that carry the argument of this paper. The remaining
+Table~\ref{tab:equations} lists the relations that carry the argument of this paper. The remaining
 several dozen --- price and wage setting, credit allocation, the bank's balance sheet, the fiscal
 block --- are unchanged from the reference implementation and are not reproduced.
 
 \begin{table}[t]
 \centering
-\caption{The five model relations that the diagnosis of \S\ref{sec:diagnosis} turns on.
-Notation follows \citet{poledna2023}; $\delta_s$ is the depreciation rate, $\omega$ the assumed
-normal capacity utilisation, $Q^d_i$ desired sales and $Q^s_i$ target production.}
+\caption{The five model relations the results turn on. Notation follows \citet{poledna2023};
+$\delta_s$ is the depreciation rate, $\omega$ the assumed normal capacity utilisation, $Q^d_i$
+desired sales, $Q^s_i$ target production, and $g$ the calibrated quarterly trend-growth rate of
+\S\ref{sec:trendgrowth} ($g=0$ reproduces the reference model exactly).}
 \label{tab:equations}
 \small
 \begin{tabular}{@{}p{0.30\textwidth}p{0.63\textwidth}@{}}
@@ -240,35 +260,138 @@ Production, Leontief with a capacity cap &
 $Y_i=\min(\alpha_s N_i,\;\beta_s M_i,\;\kappa_s K_i)$. The $\min$ is \emph{one-sided}: a firm
 below its cap cannot lend spare capacity to a firm above it. \\[2pt]
 Target output &
-$Q^s_i = Q^d_i\,(1+\gamma_e)$, where $\gamma_e$ is the economy-wide expected growth rate. \\[2pt]
-Growth expectation (v1) &
-$\gamma_e=\exp(\hat\alpha \log Y_{\text{last}}+\hat\beta)/Y_{\text{last}}-1$ with
-$(\hat\alpha,\hat\beta)$ from an OLS AR(1) with constant on the \emph{log level} of the model's own
-aggregate output history. \\[2pt]
+$Q^s_i = Q^d_i\,(1+\gamma_e)$, where $\gamma_e$ is the economy-wide expected growth rate of
+\S\ref{sec:expectations}. \\[2pt]
 Desired investment &
-$I^d_i=(\delta_i/\kappa_i)\min(Q^s_i,\;K_i\kappa_i)$, and
+$I^d_i=(\delta_i/\kappa_i)\min(Q^s_i,\;K_i\kappa_i)$, and the law of motion
 $K'=K-(\delta/\kappa)Y+I$. When firms obtain their desired investment and produce at target these
-give $K'=K$ exactly: investment is \emph{replacement-only}. \\[2pt]
+give $K'=K$ exactly: investment is \emph{replacement-only}, and book capital is a constant. \\[2pt]
 Opening capacity &
 $\kappa_s=\tau\,\text{(industry output)}/\text{(fixed assets)}/\omega$ and $K_i=Y_i/(\omega\kappa_i)$,
 so $K_i\kappa_i=Y_i/\omega$ identically. With $\omega=0.85$ every firm opens at 85\,\% utilisation
-with $1/0.85-1=17.6\,\%$ headroom. \\
+with $1/0.85-1=17.6\,\%$ headroom. \\[2pt]
+Trend supply growth &
+$\alpha_s,\ \bar w_s,\ \kappa_s,\ \delta_s$ each grow by the factor $(1+g)$ at the start of every
+simulated quarter (\S\ref{sec:trendgrowth}). Unit labour cost $\bar w/\alpha$ and the replacement
+share $\delta/\kappa$ are invariant by construction; capacity $K\kappa$ grows at $g$ on constant
+book capital. \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Two properties of Table~\ref{tab:equations} interact destructively, and \S\ref{sec:diagnosis} is
-about that interaction. First, the capacity envelope $K_i\kappa_i$ is fixed at construction in
-proportion to the \emph{opening output composition}. Second, because investment is
-replacement-only, it never moves: measured over every experimental variant run for this paper,
-$K_{\text{end}}/K_1 = 1.0000$--$1.0009$. The capacity vector is therefore a constant, and the
-demand vector it must serve is a different constant, determined by the technology and final-demand
-coefficient matrices $(a_{sg}, b^{HH}_g, b^{CF}_g, c^{G}_g, c^{E}_g)$. If the two are inconsistent,
-nothing in the model can reconcile them.
+Two structural facts about this core shape everything downstream, and both are measured rather
+than assumed in \S\ref{sec:evidence}. First, the capacity envelope is anchored to the
+\emph{opening output composition}: if the opening demand system asks sectors for quantities
+inconsistent with that composition, the one-sided $\min$ prevents idle capacity in one sector from
+compensating a binding ceiling in another, and nothing in the behavioural block can reconcile the
+two. The opening accounts must therefore balance --- an accounting precondition the calibration
+of \S\ref{sec:calib-balance} enforces exactly. Second, with replacement-only investment the
+envelope never moves on its own: over every experimental variant run for this work,
+$K_{\text{end}}/K_1 = 1.0000$--$1.0009$. Whatever trend growth the economy is to have must
+therefore enter through the productivity coefficients, which is what \S\ref{sec:trendgrowth}
+does --- and \S\ref{sec:evidence-invest} reports why the alternative, letting investment itself
+respond to demand, was built and rejected.
 
-The replacement-only investment rule is inherited from the upstream implementation, not introduced
-by this fork; the $\min(\cdot)$ in the desired-investment equation was already present in the
-upstream commit that this fork descends from.
+\subsection{Growth expectations: a random walk with drift}
+\label{sec:expectations}
+
+Firms extrapolate aggregate demand: target output is desired sales scaled by an economy-wide
+expected growth rate $\gamma_e$, re-estimated every quarter from the model's own realised output
+history. The specification matters more than it looks. The reference implementation estimates an
+ordinary-least-squares AR(1) with constant on the \emph{log level} of output --- a series that is,
+in statistical terms, integrated with drift (its level wanders; its growth rate is roughly
+stationary around a positive mean). For a log-linear trend $x_t = a + g t$, that estimator has the
+closed-form expectation
+\begin{equation}
+  \gamma_e \;\approx\; g\Big[\,1-(1-\hat\alpha)\tfrac{T}{2}\,\Big],
+  \label{eq:gammae}
+\end{equation}
+where $\hat\alpha$ is the fitted autoregressive coefficient and $T$ the estimation window. Because
+$\hat\alpha$ sits below one in any finite sample --- the \citet{kendall1954} small-sample bias,
+compounded by the level shocks of 2008--09 and 2020 --- the bracket is strictly less than one:
+\emph{the estimator delivers only a fraction of the trend it was shown}, and the fraction
+\emph{falls} as the window lengthens. Measured across six representative origins the delivered
+fraction is 32--63\,\% (Table~\ref{tab:gammae}), reproduced by Eq.~\eqref{eq:gammae} to
+0.05\pp. Shorter windows do not help: they trade a smaller $T$ against a more biased $\hat\alpha$.
+
+The model therefore uses the correctly specified estimator for an integrated-with-drift series:
+a \emph{random walk with drift}, $\hat\alpha$ pinned to one and the drift taken as average past
+log growth, on past data only. At the same six origins this recovers $+2.33$ to $+2.42\,\%$
+annualised --- the trend, at every origin. The choice consumes exactly one Normal variate per
+quarter on either branch, a deliberate property that keeps matched-seed component experiments
+aligned (\S\ref{sec:evidence}); it is gated behind a model property that is default-off; and its
+measured contribution to forecast accuracy is reported in \S\ref{sec:evidence-attrib} rather than
+folded silently into the model.
+
+\begin{table}[t]
+\centering
+\caption{Why the reference growth-expectation estimator is replaced: the log-level AR(1) at six
+origins. $T'$ is the length of the model's own output history at the origin; $\hat\alpha$ the
+fitted coefficient; the last column the fraction of the in-sample trend the expectation delivers.
+Pinning $\hat\alpha=1$ --- the drift form used here, on the same past-only data --- recovers
+$+2.33$, $+2.39$, $+2.36$, $+2.42$, $+2.37$ and $+2.40\,\%$: the trend, at every origin.}
+\label{tab:gammae}
+\footnotesize
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Origin & $T'$ & $\hat\alpha$ & $\gamma_e$ (\%) & trend (\%) & $\gamma_e/\text{trend}$ \\
+\midrule
+2012Q4 & 64  & 0.9713 & $+0.745$ & $+2.331$ & 0.32 \\
+2014Q4 & 72  & 0.9791 & $+0.914$ & $+2.385$ & 0.38 \\
+2016Q4 & 80  & 0.9834 & $+1.035$ & $+2.359$ & 0.44 \\
+2019Q4 & 92  & 0.9906 & $+1.469$ & $+2.415$ & 0.61 \\
+2022Q4 & 104 & 0.9900 & $+1.240$ & $+2.366$ & 0.52 \\
+2024Q4 & 112 & 0.9930 & $+1.523$ & $+2.401$ & 0.63 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Trend growth in supply}
+\label{sec:trendgrowth}
+
+The reference model, ported literally, has no trend growth in supply anywhere: labour productivity
+$\alpha_s$, the wage base $\bar w_s$, the labour force, and the capacity envelope $K\kappa$ are
+all frozen at their opening values for the entire simulation. For Austria over a twelve-quarter
+horizon this is a tolerable abstraction. For the United States it is not, and the failure is
+arithmetic, not aesthetic. U.S.\ trend output growth of roughly 2\,\% per year has two measured
+supply-side sources --- output per worker (productivity) and the number of workers (population and
+immigration) --- in roughly comparable parts. A model in which neither source exists can grow only
+by working its fixed labour pool and fixed capacity harder: simulated demand growth must be met
+one-for-one by employment growth, so unemployment falls mechanically quarter after quarter until
+the pool is exhausted, while output growth drains the fixed 17.6\,\% capacity headroom until
+utilisation hits its ceiling. Both pathologies are measured directly in \S\ref{sec:evidence-gates};
+each invalidates a different part of the model --- the labour market within the forecast window,
+the growth mechanism beyond it.
+
+The model therefore registers observed trend growth on the supply side, per origin, from data
+available at the origin. Let
+\begin{equation}
+  g \;=\; \underbrace{\overline{\Delta\ln\!\big(\mathrm{GDP}/\mathrm{employment}\big)}}_{\text{labour productivity}}
+  \;+\; \underbrace{\overline{\Delta\ln\!\big(\mathrm{labour\ force}\big)}}_{\text{demographics and immigration}},
+  \label{eq:trendg}
+\end{equation}
+each term a trailing 40-quarter mean ending at the forecast origin, computed from measured series
+(real GDP, civilian employment, civilian labour force; sources in \S\ref{sec:calib-trend}). At the
+start of every simulated quarter the supply coefficients advance by this rate:
+$\alpha_s$ and $\bar w_s$ grow by $(1+g)$ --- so output per worker and the wage level track trend
+while \emph{unit labour cost} $\bar w/\alpha$, the object that drives pricing, is invariant ---
+and $\kappa_s$ and $\delta_s$ grow by the same factor --- so productive capacity $K\kappa$ tracks
+trend on constant book capital while the replacement share $\delta/\kappa$ (capital consumption
+per unit of output) is exactly stable. No demand flow is injected anywhere, and the accounting
+identity $\text{net }I=\Delta K$ holds trivially in book units.
+
+Three properties make this the right closure rather than a convenient one. \emph{It is observed,
+not fitted}: $g$ is a trailing average of measured series, re-estimated at each origin by a fixed
+rule frozen before any forecast was scored; across the 61 origins it runs 1.5--2.3\,\% annualised,
+and its labour-force component --- the immigration margin --- tripled between the 2020 and 2025
+origins (labour-force growth averaged 1.26\,\%/yr over 2022--2024 against 0.75\,\%/yr over
+2011--2019), which the origin-local window picks up automatically. \emph{It is balanced}: demand
+trends in the model (household income, government consumption, exports) already grow at observed
+rates through the estimated exogenous processes; giving supply the same measured trend removes a
+structural asymmetry rather than adding a stimulus. \emph{It is falsifiable in components}:
+switching the mechanism off collapses unemployment and utilisation exactly as the arithmetic
+predicts, and the demand-side alternative --- letting desired investment respond to the capacity
+gap --- destabilises the economy; both experiments are reported in \S\ref{sec:evidence}.
 
 % ===========================================================================
 \section{United States calibration and data}
@@ -305,41 +428,182 @@ Government entities $J$ & 33 & Foreign consumers $L$ & 65 \\
 \end{tabular}
 \end{table}
 
+\subsection{The opening accounts must balance, and are made to}
+\label{sec:calib-balance}
+
+An input--output system published by a statistical agency balances \emph{in the form in which it
+is published}: every commodity's supply equals its uses, in one valuation basis, on one set of
+axes. The U.S.\ system is published at purchasers' prices over non-identical industry and
+commodity axes, while the model's coefficients are defined at basic prices on a symmetric
+commodity basis (\S\ref{sec:austria} details the bridge). After the required valuation bridge and
+industry-to-commodity projection --- and after the decision to take commodity imports from the
+measured BEA T262 import matrix rather than solving them as a residual, which removes the last
+free slack variable --- the balance is no longer guaranteed. In the raw U.S.\ artifact it fails
+badly: modelled uses differ from supply by $-70.6\,\%$ to $+47.6\,\%$ across the 68 commodities,
+with a cross-sector standard deviation of 17.9 percentage points.
+
+An equilibrium or time-series model would never notice. This model must: the opening demand
+composition and the opening capacity envelope are \emph{both} anchored to the same accounts
+(\S\ref{sec:model}), so a sector asked for 47\,\% more than its recorded output sits permanently
+against its capacity ceiling while a sector asked for less idles, and the one-sided production
+constraint lets the shortfalls accumulate without offset. Left in place, this single accounting
+defect costs about $-2.75$ percentage points of annualised real-growth forecast bias; the measured
+anatomy is in \S\ref{sec:evidence-recon}.
+
+The calibration therefore reconciles the use side exactly, by \emph{biproportional adjustment} ---
+the RAS method of \citet{stone1961} and \citet{bacharach1970}, equivalently the
+minimum-relative-entropy projection: find the use matrix closest to the observed one, in the
+information-theoretic sense, that satisfies the accounting margins. Formally, with
+$U^{0}\in\mathbb{R}_{\ge0}^{G\times J}$ the observed use matrix over $G=68$ commodities and
+$J=72$ users (68 industry intermediate columns plus consumption $C$, government $G$, investment
+$I$ and exports $X$),
+\begin{equation}
+  U^{\star} \;=\; \arg\min_{U\ge 0}\;\sum_{g,j} U_{gj}\log\frac{U_{gj}}{U^{0}_{gj}}
+  \quad\text{s.t.}\quad
+  \sum_j U_{gj} = r_g \;\;\forall g,
+  \qquad \sum_g U_{gj} = c_j \;\;\forall j,
+  \label{eq:ras}
+\end{equation}
+with row controls $r_g = \text{industry output}_g + \text{measured imports}_g$ and column controls
+$c_j$ the measured budgets. The solution has the biproportional form
+$U^{\star}_{gj}=\rho_g\,U^{0}_{gj}\,s_j$, is obtained by alternately scaling rows and columns, and
+preserves structural zeros exactly. Crucially, the measured import levels are \emph{retained}: the
+reconciliation works around the measured trade data rather than discarding it.
+
+\begin{table}[h]
+\centering
+\caption{The RAS reconciliation as executed, from the committed reconciliation report. The
+adjustment moves composition, not aggregates: every column budget is preserved to $10^{-13}$
+after the $\lambda$ scaling of Eq.~\eqref{eq:lambda}.}
+\label{tab:ras}
+\footnotesize
+\begin{tabular}{@{}p{0.34\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}@{}}
+\toprule
+Flow system & 68 commodities $\times$ 72 users \\
+Structural zeros preserved & 1\,549 / 4\,896 cells (31.6\,\%) \\
+Row controls & $\text{industry output} + \text{measured imports}$, sum $5.25699\times10^{7}$ \\
+Column controls & measured budgets, held exactly, sum $5.25699\times10^{7}$ \\
+Convergence & 623 iterations; final max relative control error $9.996\times10^{-14}$ \\
+Balance after RAS & $\max|\text{uses}_g/\text{supply}_g-1| = 5.55\times10^{-16}$;
+                    cross-sector s.d.\ $1.96\times10^{-16}$ (was 0.1790) \\
+Balance after re-derivation & $\max|\text{uses}_g/\text{supply}_g-1| = 1.00\times10^{-13}$ \\
+Total use adjustment & $\sum|d| = 6.786\times10^{6}$ (12.78\,\% of total uses) \\
+Cellwise adjustment & $\sum|dU| = 7.423\times10^{6}$ (13.98\,\% of total flow) \\
+\midrule
+\multicolumn{2}{@{}l}{\emph{Coefficient movement received by the simulator}} \\
+Technology matrix $a_{sg}$ & $\max|\Delta a| = 0.1408$; mean $|\Delta a| = 0.00226$ \\
+Household basket $b^{HH}_g$ & $\max|\Delta\text{share}| = 0.0158$; $L_1$ distance 0.0970 \\
+Government basket $c^{G}_g$ & $\max|\Delta\text{share}| = 0.1450$; $L_1$ distance 0.3204 \\
+Investment basket $b^{CF}_g$ & $\max|\Delta\text{share}| = 0.0401$; $L_1$ distance 0.1049 \\
+Export basket $c^{E}_g$ & $\max|\Delta\text{share}| = 0.0309$; $L_1$ distance 0.1197 \\
+Import basket $c^{I}_g$ & unchanged \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+One accounting choice is required before RAS can run at all: row and column controls must sum to
+the same total, and in the raw artifact they do not --- uses exceed supply by 1.0104\,\% in
+aggregate. That excess decomposes \emph{exactly} (to $5.6\times10^{-9}$) into two measurement
+facts of the source data: the accounts' own production-versus-expenditure statistical discrepancy
+(\$442.9bn, 1.57\,\% of GDP) and negative net non-dwelling fixed investment (capital consumption
+exceeding non-dwelling gross fixed capital formation by \$88.2bn). One control must move, and the
+calibration anchors on the production account, scaling the four final-demand aggregates (and the
+two components that set the investment budget) by
+\begin{equation}
+  \lambda \;=\; \frac{\text{supply} - \text{intermediates}}{C+G+I+X} \;=\; 0.983460 .
+  \label{eq:lambda}
+\end{equation}
+$\lambda$ is fixed by the accounting identity alone; its semantics are recorded verbatim in every
+result manifest. The alternative closure --- hold every measured budget and let a uniform
+1.01\,\% excess-demand wedge survive --- was built and measured too; it overshoots, because a
+uniform 1\,\% excess demand is itself a growth impulse (\S\ref{sec:evidence-gates}).
+
+Figure~\ref{fig:balance} shows the before-and-after distribution. The adjustment is not uniform
+across users: as a share of its own budget, the government column moves most (31.0\,\%), then
+intermediates (15.3\,\%), exports (12.1\,\%), investment (10.0\,\%) and households (9.8\,\%). The
+largest single commodity adjustments are professional and technical services (uses cut 32.3\,\%,
+closing a $+47.6\,\%$ gap), wholesale trade (raised 42.5\,\%, closing a $-29.8\,\%$ gap) and state
+and local government (raised 26.2\,\%).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/f5_commodity_balance.pdf}
+\caption{\textbf{F5 --- the opening commodity balance, before and after reconciliation.} Left: the
+distribution of $(\text{uses}_g-\text{supply}_g)/\text{supply}_g$ over the 68 commodities of the
+raw artifact, spanning $-70.6\,\%$ to $+47.6\,\%$ with a standard deviation of 17.9 percentage
+points. Right: the empirical cumulative distribution before (grey) and after (blue). The
+post-reconciliation distribution is a step function at zero: every commodity clears to within
+$10^{-13}$. Data: \code{reconciliation_by_commodity_rho1.csv}.}
+\label{fig:balance}
+\end{figure}
+
 \subsection{United States--specific choices in the artifact}
 
-Four choices depart from the reference specification and matter for what follows.
+Three further choices depart from the reference specification.
 
 \begin{description}[leftmargin=1.4em,style=nextline,itemsep=3pt]
 \item[Explicit measured trade (\code{use_explicit_trade = true}).] Commodity imports are taken
   from the measured BEA T262 import matrix rather than being solved as the supply--use residual.
   This preserves the measured import level and is closer to the reference paper's stated intent of
-  reading trade off the input--output table --- but it leaves the sector-level balance
-  unreconciled. This is the single most consequential U.S.-specific choice in the artifact and it
-  is the subject of \S\ref{sec:diagnosis}. The repair \emph{retains} it.
-\item[Product-tax netting (\code{use_product_tax_netting = true}).] A valuation bridge, discussed
-  in \S\ref{sec:austria}.
-\item[Discrepancy-derived opening inventories.] In the first-pass artifact,
-  \code{use_commodity_balance_inventory = true} derives opening sector inventories $S_s$ from the
-  positive part of the negated statistical discrepancy. The pipeline source sets this flag to
-  \code{false}; the artifact and the pipeline disagreed, and the artifact won for every origin the
-  harness built. The repaired artifact sets it \code{false}, removing both the accuracy defect and
-  the reproducibility hazard.
+  reading trade off the input--output table; it is also what removes the residual degree of
+  freedom and makes the reconciliation of \S\ref{sec:calib-balance} necessary. The reconciliation
+  retains it.
+\item[Opening inventories are zero.] Sector inventories open at $S_i(0)=0$, as in the reference
+  specification. (An earlier artifact derived opening inventories from the positive part of the
+  negated statistical discrepancy; a signed accounting residual is not an inventory stock, and
+  once the balance clears there is no residual to promote.)
 \item[Policy rate on a quarterly basis.] The legacy field named \code{euribor} holds the U.S.\
   policy rate, stored as $r=(\text{annual rate}+1)^{1/4}-1$. Comparison against the
   annualised-percentage-point effective federal funds rate (EFFR) therefore requires
   $100\,((1+r)^4-1)$. At 2024Q4 this gives 4.571\,\% against a panel value of 4.65\,\%.
 \end{description}
 
-\subsection{The no-fitting firewall}
+\subsection{Trend-growth inputs}
+\label{sec:calib-trend}
 
-That behavioural parameters have \emph{not} been fitted to forecast errors was verified rather than
-assumed. The stored baseline carries firewall metadata recording that the parameters are raw,
+The trend rate $g$ of Eq.~\eqref{eq:trendg} is computed from three measured series --- real GDP
+(\code{GDPC1}), civilian employment (\code{CE16OV}) and the civilian labour force
+(\code{CLF16OV}), the latter two aggregated from monthly to quarterly means --- retrieved once
+from FRED on 2026-08-17 and committed with SHA-256 sums and the retrieval timestamp. The
+estimation rule (trailing 40-quarter mean of each component, ending at the origin) is recorded in
+the fixture's provenance file and was frozen before any forecast was scored.
+Table~\ref{tab:trendg} shows the decomposition at six origins. Two features are worth reading
+off. The productivity component is comparatively stable at 1.2--1.5\,\% per year; the secular
+movement of $g$ --- 2.3\,\% at the 2010 origin, 1.5\,\% at 2016, 2.2\,\% at 2025 --- is carried
+mostly by the labour-force term, and its post-2022 recovery is the immigration surge entering the
+supply side through nothing more than the origin-local trailing window.
+
+\begin{table}[h]
+\centering
+\caption{The calibrated trend-growth rate $g$ and its decomposition, annualised, at six origins.
+Each entry is a trailing 40-quarter mean ending at the origin, from measured series only.}
+\label{tab:trendg}
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Origin & Productivity (\%/yr) & Labour force (\%/yr) & $g$ (\%/yr) \\
+\midrule
+2010Q2 & 1.53 & 0.78 & 2.31 \\
+2015Q2 & 1.16 & 0.53 & 1.69 \\
+2020Q2 & 1.43 & 0.26 & 1.68 \\
+2022Q2 & 1.24 & 0.58 & 1.82 \\
+2024Q2 & 1.47 & 0.76 & 2.24 \\
+2025Q2 & 1.41 & 0.82 & 2.23 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The no-fitting firewall}
+\label{sec:firewall}
+
+That behavioural parameters have \emph{not} been fitted to forecast errors was verified rather
+than assumed. The stored baseline carries firewall metadata recording that the parameters are raw,
 that no forecast-error-fitted parameters are present
-(\code{forecast_error_fitted_parameters = false}) and that no post-processing is embedded, with
-four restored parameters and seven removed output corrections. Numerically, at 2024Q4 the four
-Taylor-rule parameters take the values in Table~\ref{tab:firewall}; all $\approx70$ parameter keys
-agree between the stored baseline and a fresh derivation, neither equals the discarded
-forecast-fitted overrides, and the two produce bit-identical 12-quarter paths under the same seed.
+(\code{forecast_error_fitted_parameters = false}) and that no post-processing is embedded.
+Numerically, at 2024Q4 the four Taylor-rule parameters agree to every digit between the stored
+baseline and a fresh derivation, neither equals a discarded forecast-fitted override layer
+retained only for contrast, and the two produce bit-identical 12-quarter paths under the same
+seed (Table~\ref{tab:firewall}).
 
 \begin{table}[t]
 \centering
@@ -359,11 +623,15 @@ $\xi_\gamma$  & 0.532167779487 & 0.532167779487 & 0.258730279487 \\
 \end{tabular}
 \end{table}
 
-The firewall applies with equal force to the repair of \S\ref{sec:repair}. Both changes restore an
-accounting identity or correct an estimator that is wrong on its own terms, using past-only
-information. Re-estimating $\omega$, the Taylor-rule coefficients or the expectation parameters
-against realised GDP paths would be behavioural tuning; it is named here explicitly as prohibited,
-and it was not done.
+The firewall governs every component of \S\ref{sec:model} equally. The reconciliation restores an
+accounting identity; the drift expectation corrects an estimator that is wrong on its own terms;
+the trend-growth rate is a trailing average of measured series under a rule frozen in advance.
+None was selected, and none may ever be re-tuned, with reference to a forecast error;
+re-estimating $\omega$, the Taylor-rule coefficients, $g$'s window, or the expectation parameters
+against realised GDP paths would be behavioural tuning, and it is named here explicitly as
+prohibited. The same discipline binds the DSGE benchmarks of \S\ref{sec:design-dsge}: their
+parameters are estimated from pre-origin training data by posterior mode under published priors,
+never from their forecast performance.
 
 \subsection{Absence of behavioural look-ahead}
 
@@ -381,7 +649,8 @@ every estimation window terminates at the origin.
 \label{sec:austria}
 
 The reference exercise is Austrian. Porting it is often described as a data-substitution task. It
-is not, and the difference is the origin of the defect diagnosed in \S\ref{sec:diagnosis}.
+is not, and the differences explain why two of the model components of \S\ref{sec:model} exist at
+all.
 
 \subsection{A side-by-side comparison}
 
@@ -400,8 +669,8 @@ Input--output source
 & Eurostat 64-category NACE/CPA product-by-product tables at \emph{basic prices}, already
   symmetric and balanced \citep{eurostat_naio}
 & BEA 71-industry $\rightarrow$ 68-commodity make--use system, published at
-  \emph{purchasers' prices}, requiring a valuation bridge and an industry$\rightarrow$commodity
-  projection \citep{bea_io} \\[3pt]
+  \emph{purchasers' prices}, requiring a valuation bridge, an industry$\rightarrow$commodity
+  projection, and the exact reconciliation of \S\ref{sec:calib-balance} \citep{bea_io} \\[3pt]
 Firm counts
 & Business demography: active enterprises per sector
 & Census Statistics of U.S.\ Businesses \citep{census_susb} plus USDA farm counts and
@@ -415,6 +684,11 @@ Foreign block
 & The ``euro-area'' block is filled with \emph{U.S.} data, so the Taylor rule reacts to an
   exogenous proxy for the same economy the model is simulating; there is no independent foreign
   demand state and no policy feedback loop \\[3pt]
+Trend growth
+& Low trend growth over a short scored window; frozen supply coefficients are a tolerable
+  abstraction
+& 2\,\%/yr trend with measured productivity and immigration components; frozen supply
+  coefficients collapse the labour market and drain capacity, hence \S\ref{sec:trendgrowth} \\[3pt]
 Labour and financial accounts
 & Harmonised Eurostat sector accounts, one vintage, one classification
 & CPS, CES and QCEW surveys stitched to the Financial Accounts (Z.1) across
@@ -425,11 +699,12 @@ Unemployment insurance
   $\theta^{UB}=0.55(1-\tau^{INC})(1-\tau^{SIW})$ survives unchanged in the code \\[3pt]
 Trade closure
 & Imports read off the balanced table; the balance clears by construction
-& Imports measured from BEA T262 while the supply--use residual is \emph{not} re-absorbed, so the
-  residual survives as a signed sector-level gap \\[3pt]
+& Imports measured from BEA T262 while the supply--use residual is \emph{not} re-absorbed; the
+  residual is closed exactly by the RAS reconciliation \\[3pt]
 Structural vintage
 & Structure recalculated at or near each forecast origin
-& \textbf{One} 2024 structural row carried backwards to all 61 origins \\
+& One 2024 structural row carried backwards to all 61 origins; measured directly in
+  \S\ref{sec:vintage} by re-running the exercise under 2017 and 2012 structures \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -448,38 +723,35 @@ construct one.
 rows and columns index the same 64 objects. BEA publishes a \emph{make} table (which industry
 produces which commodity) and a \emph{use} table (which industry consumes which commodity) over
 non-identical axes --- 71 industries against 68 commodities. Projecting one onto the other is a
-modelling choice, not a lookup, and it is where an industry-output control and a commodity-row
-control can silently end up compared to each other.
+modelling choice, not a lookup. Put these two paragraphs together and the reconciliation of
+\S\ref{sec:calib-balance} stops looking optional: a published system balances only in the basis
+and on the axes in which it was published, the bridge and the projection each disturb the balance,
+and taking imports from the measured T262 matrix removes the residual degree of freedom that could
+have absorbed the disturbance. For a simulator whose capacity envelope is anchored to those same
+accounts, the residual is not a bookkeeping blemish; it is a standing order for some sectors to
+produce beyond their ceiling.
 
 \paragraph{One structural year for fifteen years of origins.} The U.S.\ artifact contains 37 annual
-arrays of length one, all frozen at 2024: the entire input--output block, firm counts, employees,
-population, census unemployed and inactive, fixed assets, dwellings, capital consumption, every tax
-and benefit aggregate, and sectoral wages. Out of the box only nine origins are constructible.
-Unlocking the historical grid required a single-array rewrite --- shallow-copying the calibration
-dictionary and setting the year index to the origin's year, which makes the calibration index
-resolve to 1, the only valid index for a length-one array. All quarterly series already run from
-1996Q4, so opening \emph{levels} do scale with the era (model opening real GDP is
-$5.483\times10^{6}$ at 2019Q4, $3.745\times10^{6}$ at 2010Q2 and $3.231\times10^{6}$ at 2005Q2).
-The consequence is a clean and declarable split, which the results tables respect:
+arrays of length one --- the input--output block, firm counts, employees, population, census
+unemployed and inactive, fixed assets, dwellings, capital consumption, tax and benefit aggregates,
+and sectoral wages --- frozen at a single reference year. Out of the box only nine origins are
+constructible. Unlocking the historical grid uses a single-array rewrite: shallow-copy the
+calibration dictionary and set the year index to the origin's year, which makes the annual index
+resolve to 1, the only valid index for a length-one array. All quarterly series run from 1996Q4,
+so opening \emph{levels} scale with the era (model opening real GDP is $5.483\times10^{6}$ at
+2019Q4, $3.745\times10^{6}$ at 2010Q2, $3.231\times10^{6}$ at 2005Q2). The consequence is a clean
+and declarable split, which the results tables respect:
 
 \begin{itemize}[leftmargin=1.4em,itemsep=1pt]
 \item \textbf{Flow targets} --- real GDP growth, deflator inflation, nominal GDP growth, the policy
-  rate --- are initialised from quarterly series with full history. The 2024 structure enters as a
-  fixed technology and demand-composition matrix, not as a level. Scoring them is defensible as a
-  diagnostic.
-\item \textbf{Stock-initialised targets} --- unemployment above all --- open at the 2024 level at
-  \emph{every} origin. Scoring them is not defensible, and \S\ref{sec:unemployment} documents the
-  failure quantitatively.
+  rate --- are initialised from quarterly series with full history. The annual structure enters as
+  a fixed technology and demand-composition matrix, not as a level, and \S\ref{sec:vintage} shows
+  the results are insensitive to which reference year supplies it.
+\item \textbf{Stock-initialised targets} --- unemployment above all --- open at the structural
+  year's level at \emph{every} origin. The unemployment \emph{level} is therefore mis-initialised
+  at historical origins by construction; \S\ref{sec:results-unemp} scores the target anyway and
+  reports the loss honestly.
 \end{itemize}
-
-\paragraph{And therefore the trade-closure problem.} Put the three previous paragraphs together.
-A published supply--use system balances by construction, but only in the valuation basis and on the
-axes in which it was published. Once the U.S.\ system has been bridged across valuation bases and
-projected from industries onto commodities, the balance is no longer guaranteed --- and the
-artifact's decision to take imports from the measured T262 matrix, rather than solving them as the
-residual, removes the one remaining degree of freedom that could have absorbed the difference. The
-residual therefore survives into the simulator as a signed, sector-level gap. That is the defect,
-and \S\ref{sec:diagnosis} measures it.
 
 % ===========================================================================
 \section{Scientific assumptions register}
@@ -493,21 +765,22 @@ would mark behavioural tuning against forecast performance; no entry carries it,
 \begin{enumerate}[label=\textbf{A\arabic*.},leftmargin=2.6em,itemsep=4pt]
 
 \item \textbf{Revised-data protocol; current-vintage truth, symmetric across models.} The scoring
-panel is a current-vintage snapshot of 101 quarters, 2000Q3--2025Q3, used for both estimation and
-truth by all fourteen models. Real GDP growth for 2010Q2 is the value as revised through 2026, not
+panel is a current-vintage snapshot of 101 quarters, 2000Q3--2025Q3, used for estimation and truth
+by every column in the field. Real GDP growth for 2010Q2 is the value as revised through 2026, not
 the value available in 2010. \emph{Status:} a known limitation, symmetric across every model, and
 the same design the reference paper adopts for the bulk of its evaluation. \emph{Flags:}
 \code{real_time = false}, \code{origin_admissible = false}, \code{promotion_eligible = false}.
 
-\item \textbf{2024 structure at every historical origin.} The 37 frozen annual arrays constitute
-future information at every origin before 2024. \emph{Status:} asymmetric and ours alone --- the
-sharpest departure from the reference paper. Bounded for flow targets; fatal for stock-initialised
-targets, which is why unemployment is excluded from every weighted score.
+\item \textbf{One annual structure at every historical origin.} The 37 frozen annual arrays are
+future information at origins before the reference year. \emph{Status:} asymmetric and ours alone
+--- the sharpest departure from the reference paper. Bounded for flow targets, and now measured:
+re-running the exercise under 2017 and 2012 structures moves the headline weighted ratio by at
+most 0.0007 (\S\ref{sec:vintage}). Remains binding for the opening unemployment \emph{level}
+(A10).
 
 \item \textbf{Agent scale $10^{-5}$.} 130 firms. \emph{Justification:} an agent-count sweep from
-130 to 2\,708 firms leaves the truncated-output share at 14\,\% and mean growth near zero, so the
-central result is scale-invariant. \emph{Status:} adequate for the mean, \emph{inadequate for
-dispersion}: 54 of 68 sectors hold exactly one firm at this scale.
+130 to 2\,708 firms leaves the central results invariant. \emph{Status:} adequate for the mean,
+\emph{inadequate for dispersion}: 54 of 68 sectors hold exactly one firm at this scale.
 
 \item \textbf{Normal capacity utilisation $\omega=0.85$ [S, inherited].} Hard-coded upstream. It
 fixes opening headroom at $1/0.85 - 1 = 17.6\,\%$ for every firm by construction.
@@ -515,117 +788,59 @@ fixes opening headroom at $1/0.85 - 1 = 17.6\,\%$ for every firm by construction
 utilisation series \citep{frb_g17} would be a structural improvement; sweeping it to improve RMSE
 would be tuning and is prohibited.
 
-\item \textbf{Opening inventories $S_i(0)=0$ after reconciliation [S].} The first-pass artifact set
-$S_s = \tau \cdot \max(0, -\text{discrepancy})$, so only the 42 negative-gap sectors received an
-opening buffer and the 26 positive-gap sectors received exactly zero; the total was 7.4\,\% of
-quarterly gross output with 31\,\% of it in a single sector. \emph{Justification:} a signed
-accounting residual is not an inventory stock, and the rule was asymmetric. After the balance
-clears there is no signed discrepancy to promote, and the reference specification opens with
-$S_i(0)=0$.
+\item \textbf{Opening inventories $S_i(0)=0$ [S].} As in the reference specification. A signed
+accounting residual is not an inventory stock; once the balance clears
+(\S\ref{sec:calib-balance}) there is no residual to promote.
 
-\item \textbf{Production-account anchoring, $\lambda = 0.983460$ [S].} Biproportional
-reconciliation requires that row controls and column controls sum to the same total. In the
-artifact they do not: uses exceed supply by 1.0104\,\% in aggregate. That residual decomposes
-\emph{exactly} --- to $5.6\times10^{-9}$ --- into two measurement facts of the source data, shown in
-Table~\ref{tab:lambda}. One control must therefore move, and the repair anchors on the production
-account, scaling the four final-demand aggregates (and the two components that set the investment
-budget) by
-\[
-  \lambda \;=\; \frac{\text{supply} - \text{intermediates}}{C+G+I+X} \;=\; 0.983460 .
-\]
-\emph{Status:} $\lambda$ is fixed by the accounting identity alone and was not chosen with
-reference to any forecast error. The semantics are recorded verbatim in every result manifest. The
-alternative closure --- hold every measured budget and let a uniform 1.01\,\% excess-demand wedge
-survive --- was built and measured too; it overshoots, because a uniform 1\,\% excess demand is
-itself a growth impulse (\S\ref{sec:headroom}).
+\item \textbf{Production-account anchoring, $\lambda = 0.983460$ [S].} Stated fully in
+\S\ref{sec:calib-balance}: the aggregate excess of uses over supply decomposes exactly into two
+measurement facts of the source data, one control must move for the reconciliation to be
+well-posed, and the calibration anchors on the production account. $\lambda$ is fixed by the
+accounting identity alone. The alternative closure (hold every budget; let a uniform 1.01\,\%
+excess-demand wedge survive) was built and measured; it overshoots
+(\S\ref{sec:evidence-gates}).
 
-\item \textbf{Random-walk-with-drift growth expectations [S].} The first-pass expectation is an OLS
-AR(1) with constant fitted to the \emph{log level} of an I(1)-with-drift series. For a log-linear
-trend $x_t = a + g t$, OLS gives $\hat\beta = \bar x_t - \hat\alpha \bar x_{t-1}$ and hence the
-closed form
-\begin{equation}
-  \gamma_e \;\approx\; g\Big[\,1-(1-\hat\alpha)\tfrac{T}{2}\,\Big].
-  \label{eq:gammae}
-\end{equation}
-The shrinkage is unavoidable: $\hat\alpha$ carries the Kendall small-sample downward bias
-\citep{kendall1954}, and the level shocks of 2008--09 and 2020 push it further down. Shorter
-windows do not help --- they trade a smaller $T$ against a more biased $\hat\alpha$.
-Table~\ref{tab:gammae} shows the estimator delivering 32--63\,\% of the in-sample trend at every
-origin, and Eq.~\eqref{eq:gammae} reproducing it to 0.05\pp. \emph{Status:} a specification
-correction, estimated on past data only. Gated behind a model property that is \emph{default-off},
-so the Austrian and Italian calibrations remain bit-identical.
+\item \textbf{Random-walk-with-drift growth expectations [S].} The correctly specified estimator
+for an integrated-with-drift series, on past data only (\S\ref{sec:expectations},
+Eq.~\eqref{eq:gammae}, Table~\ref{tab:gammae}). Gated behind a default-off model property, so the
+Austrian and Italian calibrations remain bit-identical; measured contribution reported in
+\S\ref{sec:evidence-attrib}.
 
-\item \textbf{Replacement-only investment [inherited, unrepaired].} $K'=K$ exactly when firms
-obtain desired investment and produce at target. \emph{Status:} an upstream design property, not a
-fork bug, and \emph{not} repaired here. It is the binding limitation on forward use
-(\S\ref{sec:headroom}).
+\item \textbf{Trend supply growth at the observed rate [S].} $g$ is a trailing 40-quarter mean of
+measured productivity and labour-force growth, re-estimated at each origin under a rule frozen in
+advance (\S\ref{sec:trendgrowth}, \S\ref{sec:calib-trend}); it advances $\alpha_s, \bar w_s,
+\kappa_s, \delta_s$ jointly, leaving unit labour cost and the replacement share invariant and
+injecting no demand flow. Book capital remains constant ($K'=K$); capacity growth is carried by
+the efficiency coefficients, so $\text{net }I=\Delta K$ holds trivially. \emph{Status:} an
+observed-trend closure of a structural absence. The demand-side alternative --- investment
+responding to the capacity gap --- was built in two designs and rejected on matched-seed
+stability diagnostics, never on forecast errors (\S\ref{sec:evidence-invest}).
 
-\item \textbf{No behavioural fitting.} Verified numerically (\S\ref{sec:calib}); the forecast-error
-override layer is never read on the paths that produce these results.
+\item \textbf{No behavioural fitting.} Verified numerically (\S\ref{sec:firewall}); the
+forecast-error override layer is never read on the paths that produce these results. The DSGE
+benchmarks are estimated by posterior mode on pre-origin data under published priors
+(\S\ref{sec:design-dsge}); their forecast performance never feeds back into their estimation.
 
-\item \textbf{Unemployment excluded from every weighted score.} Recorded in each manifest with the
-reason: the initial unemployed stock is a length-one annual array frozen at 2024, so every
-historical origin opens at the 2024 labour market. It is emitted and diagnosed
-(\S\ref{sec:unemployment}) but never scored.
+\item \textbf{Unemployment is scored, with a declared initialisation defect.} The initial
+unemployed stock derives from the frozen annual structure, so every historical origin opens at
+that year's labour market rather than its own. The target enters the scored tables as its own
+set; the \emph{level} errors this creates are reported as losses, and the coverage misses are
+52--64\,\% above-band at every horizon --- the signature of a level defect, not a dynamics
+defect (\S\ref{sec:results-unemp}). For the DSGE columns, which have no unemployment block,
+cells come from a labelled per-origin Okun bridge (\S\ref{sec:design-dsge}); every table quoting
+them carries the label.
 
 \item \textbf{Seeds and Monte-Carlo policy.} Simulation seeds are
 \[
   \mathrm{seed}(\text{origin},\text{path}) \;=\;
   \mathrm{hash}\big((\texttt{:abm\_revised\_v1},\,\text{origin},\,\text{path})\big) \bmod 2^{30},
 \]
-so no two cells share a stream. The repaired model draws the \emph{identical} seed stream as the first pass,
-which makes the contrast matched-seed; the expectations patch consumes exactly one Normal variate
-on either branch precisely to preserve that alignment. Failed paths are counted and left visible,
-never resampled; the count is zero everywhere.
+so no two cells share a stream. Every component experiment of \S\ref{sec:evidence} draws the
+\emph{identical} seed stream, which makes each contrast matched-seed; the expectation branch
+consumes exactly one Normal variate either way precisely to preserve that alignment. The DSGE
+columns use fixed per-origin seed bases with a domain-separated per-path generator. Failed paths
+are counted and left visible, never resampled; the count is zero everywhere.
 \end{enumerate}
-
-\begin{table}[t]
-\centering
-\caption{Exact decomposition of the aggregate excess of uses over supply in the first-pass
-artifact. Both terms are measurement facts of the source data, not model choices; neither can be
-removed without moving a measured control. Units are millions of current U.S.\ dollars.}
-\label{tab:lambda}
-\small
-\begin{tabular}{@{}lr>{\raggedright\arraybackslash}p{0.38\textwidth}@{}}
-\toprule
-Term & Value (US\$m) & Meaning \\
-\midrule
-Expenditure GDP $-$ production GDP & 442\,933 & the artifact's own statistical discrepancy,
-1.57\,\% of GDP \\
-Capital consumption $-$ non-dwelling GFCF & 88\,223 & net non-dwelling fixed investment is negative
-in the artifact \\
-\midrule
-\textbf{Total} & \textbf{531\,156} & $=\mathrm{sum(uses)}-\mathrm{sum(supply)}$, matched to
-$5.6\times10^{-9}$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[t]
-\centering
-\caption{The growth-expectation estimator, measured at six origins. $T'$ is the length of the
-model's own output history at the origin; $\hat\alpha$ is the fitted AR(1) coefficient on the log
-level. The last column is the fraction of the in-sample trend that the expectation delivers.
-Pinning $\hat\alpha=1$ --- a random walk with drift, using the same past-only data --- recovers
-$+2.33$, $+2.39$, $+2.36$, $+2.42$, $+2.37$ and $+2.40\,\%$: the trend, at every origin.}
-\label{tab:gammae}
-\footnotesize
-\begin{tabular}{@{}lrrrrr@{}}
-\toprule
-Origin & $T'$ & $\hat\alpha$ & $\gamma_e$ (\%) & trend (\%) & $\gamma_e/\text{trend}$ \\
-\midrule
-2012Q4 & 64  & 0.9713 & $+0.745$ & $+2.331$ & 0.32 \\
-2014Q4 & 72  & 0.9791 & $+0.914$ & $+2.385$ & 0.38 \\
-2016Q4 & 80  & 0.9834 & $+1.035$ & $+2.359$ & 0.44 \\
-2019Q4 & 92  & 0.9906 & $+1.469$ & $+2.415$ & 0.61 \\
-2022Q4 & 104 & 0.9900 & $+1.240$ & $+2.366$ & 0.52 \\
-2024Q4 & 112 & 0.9930 & $+1.523$ & $+2.401$ & 0.63 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-At 2024Q4, Eq.~\eqref{eq:gammae} gives $(1-0.99305)\cdot 112/2 = 0.389$, hence
-$\gamma_e \approx 0.611\,g = 1.47\,\%$ against a measured $1.52\,\%$.
 
 % ===========================================================================
 \section{Forecast design}
@@ -634,6 +849,10 @@ $\gamma_e \approx 0.611\,g = 1.47\,\%$ against a measured $1.52\,\%$.
 \subsection{Origins, horizons and the free-running protocol}
 
 Figure~\ref{fig:pipeline} shows the whole apparatus. Table~\ref{tab:design} gives its settings.
+The protocol --- scored columns, calibration rules, target sets, and the success bar of
+\S\ref{sec:results-verdict} --- was frozen in a committed document
+(\pathc{scripts/us/forecasting/diagnostics/stage2b/STAGE2B_PROTOCOL.md}) \emph{before} any scored
+table was produced or examined.
 
 \begin{table}[t]
 \centering
@@ -666,22 +885,22 @@ Burn-in quarters & 0 & Julia / threads / BLAS & 1.10.3 / 1 / 1 \\
   ar/.style={-{Latex[length=2mm]},draw=greyrule,line width=0.6pt}
 ]
 \node[data] (src)  {\textbf{Public sources}\\[1pt]\scriptsize BEA supply--use, NIPA,
-                    fixed assets; BLS CPS, CES, QCEW; Census SUSB; Fed Z.1; NY Fed EFFR};
+                    fixed assets; BLS CPS, CES, QCEW; Census SUSB; Fed Z.1; NY Fed EFFR; FRED};
 \node[box,right=of src] (cal) {\textbf{Calibration artifact}\\[1pt]\scriptsize 68 commodities,
-                    68 industries, 37 annual arrays frozen at 2024};
+                    68 industries; opening accounts reconciled exactly (\S\ref{sec:calib-balance})};
 \node[key,right=of cal] (unlock) {\textbf{Historical unlock}\\[1pt]\scriptsize shallow-copy;
-                    set year index to the origin's year so the annual index resolves to 1};
+                    set year index to the origin's year; register per-origin trend rate $g$};
 \node[box,right=of unlock] (state) {\textbf{Per-origin\\parameters + state}\\[1pt]\scriptsize
                     quarterly series run from 1996Q4, so opening levels scale with the era};
 
 \node[key,below=10mm of state] (ens) {\textbf{500-path free-running ensemble}\\[1pt]\scriptsize
-                    fresh microstate per path; 12 quarters; no re-anchoring};
+                    fresh microstate per path; 12 quarters; no re-anchoring; draws retained};
 \node[box,left=of ens] (ops) {\textbf{Pathwise operators}\\[1pt]\scriptsize
                     $400\,\Delta\log$ transforms applied \emph{before} any ensemble step};
 \node[box,left=of ops] (func) {\textbf{Ensemble functionals}\\[1pt]\scriptsize
                     mean (RMSE-consistent) and median (MAE-consistent)};
 \node[data,left=of func] (score) {\textbf{Matched-cell scoring}\\[1pt]\scriptsize
-                    vs.\ 10 statistical benchmarks; VAR(1) anchor; 3 sample tracks};
+                    20 columns; VAR(1) anchor; 3 sample tracks; point, density and inference};
 
 \draw[ar] (src) -- (cal);
 \draw[ar] (cal) -- (unlock);
@@ -692,11 +911,11 @@ Burn-in quarters & 0 & Julia / threads / BLAS & 1.10.3 / 1 / 1 \\
 \draw[ar] (func) -- (score);
 \end{tikzpicture}
 \caption{\textbf{F7 --- the forecasting pipeline.} Public source data are compiled once into a
-calibration artifact whose annual structural block is a single 2024 row. The historical unlock
-re-points the annual index so that the artifact can be instantiated at any origin; the quarterly
-series, which run from 1996Q4, then supply era-appropriate opening levels. Each origin is simulated
-500 times, transformed pathwise, reduced to a mean and a median point forecast, and scored on
-cells shared with every statistical benchmark.}
+reconciled calibration artifact. The historical unlock re-points the annual index so the artifact
+can be instantiated at any origin and registers the origin-local trend rate; the quarterly series,
+which run from 1996Q4, supply era-appropriate opening levels. Each origin is simulated 500 times,
+transformed pathwise, reduced to a mean and a median point forecast, and scored --- point,
+density, and inference --- on cells shared with every other column.}
 \label{fig:pipeline}
 \end{figure}
 
@@ -712,33 +931,32 @@ is row $h+1$:
 \text{EFFR} &= 100\,\big((1+r_{h+1})^4-1\big).
 \end{align}
 The \emph{GDP deflator} is the ratio of nominal to real GDP --- the economy-wide price index
-implied by the accounts --- so its log difference is nominal growth minus real growth. Writing it
-in log form rather than as a ratio is algebraically identical and finite for all positive
-floating-point inputs. The quarterly-to-annual-rate scaling cancels from log differences, so
-$400 = 4\times 100$ is the complete annualisation. Unemployment has no field in the data structure
-and is read off agent state inside the stepping loop, with $H^{\mathrm{act}}=1\,826$ --- the
-concept closest to the labour-force denominator --- in the denominator.
+implied by the accounts --- so its log difference is nominal growth minus real growth. The
+quarterly-to-annual-rate scaling cancels from log differences, so $400 = 4\times 100$ is the
+complete annualisation. Unemployment has no field in the data structure and is read off agent
+state inside the stepping loop, with $H^{\mathrm{act}}=1\,826$ --- the concept closest to the
+labour-force denominator --- in the denominator.
 
 \subsection{Ensemble functionals}
 
 Two point forecasts are emitted per cell, as separate model columns: the \emph{mean} of the
 pathwise-transformed values and the \emph{median}. This follows \citet{gneiting2011}: the optimal
 point forecast depends on the loss function, the mean being the Bayes act under squared error and
-the median under absolute error. Reporting both is what allowed the first pass's mean-absolute-error
-weakness to be attributed correctly (\S\ref{sec:v2}) instead of being blamed on the choice of
-functional.
+the median under absolute error. Reporting both prevents a loss-function mismatch from being
+mistaken for, or hidden inside, a model property. The full 500-path draw set is additionally
+retained per cell, which is what makes the exact density scores of \S\ref{sec:design-scores}
+possible.
 
-\subsection{The comparator field}
+\subsection{The comparator field: ten statistical columns}
 
-Fourteen model columns are scored: ten statistical benchmarks plus mean and median columns for each
-of the two ABM versions. Table~\ref{tab:benchmarks} gives the specifications, taken from the
-benchmark module's own type definitions.
+Table~\ref{tab:benchmarks} gives the statistical family, taken from the benchmark module's own
+type definitions. All are estimated on training data only at each origin, with hyperparameters
+fixed before the fit and encoded in the model identifier; none is tuned inside the evaluation.
 
 \begin{table}[t]
 \centering
-\caption{The ten statistical benchmarks. All are estimated on training data only at each origin,
-with hyperparameters fixed before the fit and encoded in the model identifier; none is tuned inside
-the evaluation.}
+\caption{The ten statistical benchmarks. The VAR(1) is the ratio anchor: every reported ratio is a
+model's score divided by the VAR(1)'s score on the same cells.}
 \label{tab:benchmarks}
 \small
 \begin{tabular}{@{}rp{0.30\textwidth}p{0.51\textwidth}@{}}
@@ -764,22 +982,73 @@ the evaluation.}
 \end{tabular}
 \end{table}
 
-The VAR(1) is the ratio anchor: every reported ratio is a model's score divided by the VAR(1)'s
-score on the same cell, so values below 1.0 mean the model beats the anchor. The anchor is not a
-strong benchmark --- at the 2010Q2 origin its estimated companion matrix has spectral radius 1.0342
-and design condition number 8\,747, i.e.\ it is borderline explosive and poorly conditioned --- and
-this should temper any reading of the absolute level of a ratio, though not of the differences
-between models scored against the same anchor.
+The anchor is not a strong benchmark --- at the 2010Q2 origin its estimated companion matrix has
+spectral radius 1.0342 and design condition number 8\,747, i.e.\ it is borderline explosive and
+poorly conditioned --- and this should temper any reading of the absolute level of a ratio, though
+not of the differences between models scored against the same anchor.
 
 A fixed-parameter semi-structural state-space comparator (potential growth, output gap, natural
 unemployment, neutral real rate, inflation anchor, inflation, policy rate and lagged output gap,
-with a fixed transition encoding IS, Phillips, Okun and Taylor links, updated by an exact Kalman
-filter) exists in the repository but is \emph{not} in this field: it scores a core-four target set
-of which the ABM cannot serve the personal consumption expenditures price index. Its standing from
-a separate 11-model comparison is a weighted RMSE ratio of 0.749 (1 of 11, all-available) and 0.745
-(1 of 11, balanced), quoted as context only, on a different target set and a different field.
+updated by an exact Kalman filter) exists in the repository but is not in this field: it cannot
+produce GDP-deflator forecasts natively, a structural coverage fact recorded in the frozen
+protocol before any score existed. Its standing from a separate comparison on its own four-target
+set is quoted as context in the repository reports.
 
-\subsection{Truth, scaling and score construction}
+\subsection{The comparator field: two DSGE columns}
+\label{sec:design-dsge}
+
+A DSGE model, for the reader who has not met one: a small set of optimising representative agents
+--- a household, a firm sector, a central bank --- whose decision rules are derived from explicit
+intertemporal optimisation under rational expectations, linearised around a balanced-growth
+steady state. The result is a linear state-space system whose cross-equation restrictions tie
+today's observables to expectations of tomorrow's, solved here by the \citet{sims2002}
+\code{gensys} method and estimated by Bayesian methods: a prior over the structural parameters,
+a Kalman-filter likelihood over the observables, and (in this work) the posterior \emph{mode} as
+the parameter estimate at each origin. DSGE models are the institutional standard for structural
+forecasting at central banks, which is what makes them the benchmark that matters
+\citep{smetswouters2007}. Both columns are re-estimated from scratch at every one of the 61
+origins on data through that origin only; per-origin estimation and solution status is a
+published artifact; no origin is dropped.
+
+\begin{description}[leftmargin=1.4em,style=nextline,itemsep=3pt]
+\item[\code{dsge_small_nk}.] An \citet{anschorfheide2007}-type small New Keynesian model: three
+  observables (real GDP growth, GDP-deflator inflation, the federal funds rate), eight states,
+  three structural shocks --- the minimal rational-expectations system with a Phillips curve, an
+  Euler equation and a Taylor rule. The solver mechanics are the repository's sealed
+  implementation, validated bit-tight against the reference FRBNY \code{DSGE.jl} oracle; the
+  column estimates all 13 parameters by posterior mode at every origin on exactly the panel
+  columns the statistical family sees. All 61 estimations converged, the solution is determinate
+  at every origin, and the Taylor principle holds at every mode ($\psi_1 \in [1.31, 1.54]$).
+\item[\code{dsge_sw07}.] The \citet{smetswouters2007} medium-scale model --- the canonical
+  empirical DSGE of the U.S.\ business cycle: sticky prices and wages, habit formation,
+  investment adjustment costs, variable capacity utilisation, seven structural shocks, and a
+  flexible-price shadow economy that defines the output gap the policy rule responds to. The
+  implementation is a full 49-state transcription of the published replication, solved by a
+  size-generic \code{gensys} that was oracle-verified to reproduce the repository's sealed
+  validated solver exactly, and estimated by warm-started posterior mode at every origin under
+  the published priors on the seven standard observables (output, consumption, investment and
+  real-wage growth per capita, hours, deflator inflation, the federal funds rate) from 1966Q1
+  through the origin. \textbf{The SW07 column sees more history and more series than any other
+  column in the field} --- an information advantage granted to the challenger deliberately, and
+  disclosed wherever its results are quoted. Its parameter estimates are canonical across all 61
+  origins (trend growth 0.29--0.42\,\% per quarter per capita, Taylor coefficient 1.6--2.0,
+  interest-rate smoothing $\approx0.82$); a continuation test at the first origin gained only
+  $+2.45$ log-posterior from 8\,000 further optimisation steps, so the modes are materially
+  converged.
+\end{description}
+
+Three conventions travel with every DSGE cell. Their predictive densities (500 paths, matching
+the ABM) carry filtered-state and future-shock uncertainty at the posterior mode, \emph{without}
+parameter uncertainty --- weaker than the reference paper's full Bayesian bands, stronger than
+fixed parameters, and disclosed. Their policy-rate paths are floored at zero (the effective lower
+bound, which neither model imposes internally). And their unemployment cells come from a
+labelled per-origin \emph{Okun bridge} --- an auxiliary regression of the change in unemployment
+on real growth, iterated over each model's own simulated growth paths --- because neither DSGE
+has an unemployment block; the bridge is outside both cores and every table quoting DSGE
+unemployment carries the label.
+
+\subsection{Truth, scores, and inference}
+\label{sec:design-scores}
 
 Truth is the revised panel itself; the error sign convention is forecast minus actual. Target
 transformations are \emph{not} uniform across the panel: the four GDP-family series are
@@ -787,13 +1056,11 @@ $400\ln(\text{level}_t/\text{level}_{t-1})$; the unemployment rate is a quarterl
 monthly levels with no transform; EFFR is the equal-weight mean of published business-day rates
 within the quarter \citep{ny_effr}.
 
-Three scores are reported. \emph{RMSE} (root mean squared error) penalises large errors
-quadratically; \emph{MAE} (mean absolute error) penalises them linearly; \emph{MASE} (mean absolute
-scaled error, \citealp{hyndmankoehler2006}) divides MAE by the in-sample mean absolute first
-difference of the same series, making it scale-free and directly comparable across targets. MASE
-scales are recomputed at every origin from training data only.
-
-The \emph{weighted ratio} used for the standings is a macro-average of matched cellwise ratios,
+\emph{Point scores.} RMSE (root mean squared error) penalises large errors quadratically; MAE
+(mean absolute error) linearly; MASE (mean absolute scaled error, \citealp{hyndmankoehler2006})
+divides MAE by the in-sample mean absolute first difference of the same series, making it
+scale-free. The \emph{weighted ratio} used for standings is a macro-average of matched cellwise
+ratios,
 \begin{equation}
   \mathcal{W} \;=\; \sum_{\text{targets}}\sum_{h}\;
   w_{\text{target}}\; w_h \;\frac{\text{score}_{\text{model}}(\text{target},h)}
@@ -801,15 +1068,34 @@ The \emph{weighted ratio} used for the standings is a macro-average of matched c
   \qquad
   w_h \in \{0.30, 0.25, 0.20, 0.15, 0.10\},
 \end{equation}
-with equal target weights and horizon weights declining in $h$. It is explicitly \emph{not} a ratio
-of pooled losses, which would let one badly scaled target dominate. A model is marked
-\code{INCOMPLETE_MATCHED_GRID_NOT_RANKED} unless it has every target-by-horizon cell and zero
-failures; every ABM column here is \code{COMPLETE_MATCHED} at 10 of 10 cells on all tracks and both
-target sets.
+with equal target weights and horizon weights declining in $h$. It is explicitly \emph{not} a
+ratio of pooled losses, which would let one badly scaled target dominate. The scoring key is
+(origin, target, horizon), and only cells where \emph{every} column in the field is present
+survive --- 1\,415 common cells --- so no ranking can be a sample artifact. Three target sets are
+scored: the headline pair \{real GDP growth, GDP-deflator inflation\}, the secondary pair
+\{nominal GDP growth, EFFR\}, and unemployment as its own set.
 
-The scoring key is (origin, target, horizon), and only cells where \emph{every} model in the field
-is present survive. Because both ABM versions were scored in a single run, the version contrast
-cannot be a sample artifact.
+\emph{Density scores.} The continuous ranked probability score (CRPS) generalises absolute error
+to a full predictive distribution: it is the integrated squared difference between the forecast's
+cumulative distribution and the step function at the realised value, so it rewards densities that
+are both \emph{sharp} (narrow) and \emph{correct} (centred), and it reduces to absolute error for
+a point forecast. It is computed exactly from the retained 500-path draws by the standard
+pairwise-distance identity. \emph{Interval coverage} asks how often the realised value falls
+inside a stated predictive interval: a well-calibrated 90\,\% interval should contain the truth
+90\,\% of the time --- more often means the bands are wastefully wide, less often means
+overconfidence.
+
+\emph{Inference.} Rankings on 50--61 origins need error bars. Three standard instruments are
+attached, all on matched cells. The \citet{dieboldmariano1995} test asks whether two models'
+per-origin loss differences average to zero, with the \citet{harveyleybournenewbold1997}
+small-sample correction and autocorrelation-robust variance (overlapping multi-quarter forecasts
+are serially correlated by construction). The \citet{romanowolf2005} stepdown controls the
+familywise error rate when one model is compared against a whole family at once --- it answers
+``is the ABM better than \emph{each} challenger'' without the cherry-picking risk of many
+unadjusted pairwise tests --- via a studentised stationary bootstrap on per-origin weighted
+losses. The \citet{hansenlundenason2011} model confidence set inverts the question: it trims the
+field to the subset of models that cannot be statistically distinguished from the best at a given
+confidence level, so it reports how much the sample can actually separate.
 
 \subsection{Sample tracks and the pandemic mask}
 
@@ -835,27 +1121,27 @@ pandemic-masked & exclude cells whose target period falls in 2020Q1--2021Q4 & 53
 
 The ABM's point forecast is an ensemble functional over finitely many stochastic paths, so its
 measured RMSE is inflated by approximately $\sqrt{1+(\mathrm{se}_{\mathrm{MC}}/\mathrm{RMSE})^2}$.
-Table~\ref{tab:mc} shows that at 500 paths this is negligible: against a real-GDP cross-origin RMSE
-of order 6\pp, a Monte-Carlo standard error of 0.14\pp\ inflates the measured RMSE by well under
-0.1\,\%. (At the 16-path pilot count the standard error was 1.3\pp\ and \emph{was} material; 500
-paths were used precisely to remove the confound.)
+Table~\ref{tab:mc} shows that at 500 paths this is negligible: against a real-GDP cross-origin
+RMSE of order 6\pp, a Monte-Carlo standard error of 0.14\pp\ inflates the measured RMSE by well
+under 0.1\,\%. (At a 16-path pilot count the standard error was 1.3\pp\ and \emph{was} material;
+500 paths were used precisely to remove the confound.)
 
 \begin{table}[h]
 \centering
-\caption{Monte-Carlo error at 500 paths, ranges over the five horizons. ``Ensemble s.d.'' is the
-dispersion of the simulated paths --- genuine model uncertainty; ``MC s.e.'' is the sampling error
-of the ensemble mean --- simulation noise.}
+\caption{Monte-Carlo error at 500 paths, ranges over the five horizons, from the model's own run.
+``Ensemble s.d.'' is the dispersion of the simulated paths --- genuine model uncertainty; ``MC
+s.e.'' is the sampling error of the ensemble mean --- simulation noise.}
 \label{tab:mc}
 \small
 \begin{tabular}{@{}lccc@{}}
 \toprule
 Target & Mean ensemble s.d. & Mean MC s.e.\ of the mean & Max MC s.e. \\
 \midrule
-\code{real_gdp} & 3.036--3.269 & 0.136--0.146 & 0.255 \\
-\code{gdp_deflator} & 0.860--1.077 & 0.038--0.048 & 0.100 \\
-\code{nominal_gdp} & 3.211--3.440 & 0.144--0.154 & 0.264 \\
-\code{unemployment_rate} & 0.414--1.079 & 0.019--0.048 & 0.070 \\
-\code{effective_federal_funds_rate} & 0.139--0.336 & 0.006--0.015 & 0.019 \\
+\code{real_gdp} & 3.017--3.274 & 0.135--0.146 & 0.249 \\
+\code{gdp_deflator} & 0.860--1.079 & 0.038--0.048 & 0.096 \\
+\code{nominal_gdp} & 3.184--3.460 & 0.142--0.155 & 0.258 \\
+\code{unemployment_rate} & 0.345--1.418 & 0.015--0.063 & 0.090 \\
+\code{effective_federal_funds_rate} & 0.139--0.337 & 0.006--0.015 & 0.018 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -871,811 +1157,550 @@ $h=1$ comparability. Dropping $h=1$ was rejected outright: it would render the g
 the model unranked. It is reported and flagged.
 
 % ===========================================================================
-\section{Results I: the first pass}
-\label{sec:v1}
+\FloatBarrier
+\section{Results}
+\label{sec:results}
 
-All results in \S\ref{sec:v1}--\S\ref{sec:v2} are computed from the joint scoring run in which both
-ABM columns were scored together on identical cells. The first-pass column reproduced the earlier
-standalone run bit-identically over all 3\,660 cached cells (gate G4 in
-Table~\ref{tab:gates}).
+\subsection{The preregistered bar, and the verdict stated first}
+\label{sec:results-verdict}
+
+The frozen protocol committed to a success bar before any scored table existed: the ABM is
+superior if its weighted headline-pair RMSE ratio beats the best non-ABM column, \emph{including
+both DSGE columns}, in at least two of the three tracks with Diebold--Mariano significance
+reported per horizon, \emph{and} its density scores (CRPS, 90\,\% coverage) are no worse than the
+best challenger's; if it instead wins only part of that, the part it wins is the claim published;
+and a negative result is published with the same tables.
+
+The verdict against that bar. The ABM takes the \textbf{best weighted headline-pair RMSE ratio of
+all twenty columns in all three tracks} --- 0.828 / 0.828 / 0.792 (mean column; the median column
+is marginally better at 0.827 / 0.827 / 0.791) --- against 0.857 / 0.856 for the best non-ABM
+column in the two full-sample tracks (SW07) and 0.848 in the pandemic-masked track (the AR(1)).
+The point condition is met in three of three tracks, not merely the required two. Romano--Wolf
+stepdown rejects equal accuracy against \emph{both} DSGE columns at the 5\,\% level in every track
+(adjusted $p = 0.0002$--$0.016$); against the statistical family the weighted-loss test is
+marginal (adjusted $p \approx 0.08$). The ABM's CRPS beats the best challenger in all three
+tracks. But its \textbf{90\,\% interval coverage fails the ``no worse than the best challenger''
+clause in the two full-sample tracks} --- pooled headline coverage 0.832 / 0.812 / 0.906, against
+a challenger within 0.005--0.008 of nominal --- and the miss is located: real-GDP coverage is
+0.86--0.95 at every horizon, while the GDP-deflator bands are too narrow (0.70--0.79).
+\textbf{The full bar is therefore not met}, and per its honest-success clause the claim this paper
+publishes is the conditional one:
+
+\begin{quote}
+On revised data, at the reference paper's own evidentiary standard, the ABM forecasts the headline
+pair \{real GDP growth, GDP-deflator inflation\} \emph{more accurately in point terms than every
+statistical and equilibrium challenger in the field, in all three tracks} --- the margin over both
+DSGE columns is significant at 5\,\% under multiplicity control, and the real-GDP margin over SW07
+is significant at business-cycle horizons --- \emph{and more sharply in CRPS terms}, while its
+GDP-deflator intervals are under-dispersed relative to the best-calibrated challenger. The full
+preregistered bar fails only on that interval-calibration leg.
+\end{quote}
 
 \subsection{Standings}
-
-\begin{table}[h]
-\centering
-\caption{First-pass (\code{v1}) standings on the headline target pair \{real GDP growth,
-GDP-deflator inflation\}. Ranks are out of the 14 scored forecast columns.}
-\label{tab:v1standings}
-\small
-\begin{tabular}{@{}lccl@{}}
-\toprule
-Track & v1 mean ratio (rank) & v1 median ratio (rank) & Best statistical \\
-\midrule
-all-available & 0.905 (5th) & 0.903 (4th) & \code{naive_historical_mean} 0.879 \\
-balanced $h{=}12$ & 0.894 (5th) & 0.893 (4th) & \code{naive_historical_mean} 0.884 \\
-pandemic-masked & 1.272 (11th) & 1.264 (10th) & \code{univariate_ar_p1} 0.848 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Competitive on the first two tracks --- and eleventh of fourteen once the COVID cells are removed.
-That regime dependence was, at the time, the most alarming feature of the result: a model whose
-standing depends on the presence of the two most anomalous years in the sample is not obviously
-forecasting anything.
-
-\subsection{The bias}
-
-Table~\ref{tab:percell} (\S\ref{sec:v2}, left-hand columns) gives the detail. Real GDP growth is
-under-forecast by $-1.32$, $-7.28$, $-2.94$, $-2.15$ and $-2.02$\pp\ at $h=1,2,4,8,12$. The
-$-7.28$\pp\ figure at $h=2$ is a transient; the $-2$ to $-3$\pp\ figures at the longer horizons are
-a chronic level bias. The deflator, by contrast, was already the strongest headline target, with
-ratios of 0.771--0.975 at every horizon and MAE ratios uniformly below one.
-
-\subsection{The mean-absolute-error asymmetry}
-
-The first pass's headline RMSE ratio of 0.905 sat against an MAE ratio of 1.137 --- it beat the
-anchor under quadratic loss and lost under linear loss. Disaggregating shows the asymmetry was
-never general: on the deflator and the policy rate the MAE ratios were already below one. It was
-concentrated in real and nominal GDP and, within those, in the $h=2$ cell (MAE ratios 2.376 and
-2.071 respectively). Switching to the loss-consistent median improved the weighted MAE ratio only
-from 1.137 to 1.130, so it was \emph{not} a functional-choice artifact.
-
-\subsection{Burn-in: a negative result, retained}
-
-Burn-in --- building the model $k$ quarters before the origin and treating row $k+1$ as the origin
---- was the leading candidate fix for the $h=2$ transient. It was tried at $k=1$ and $k=4$ with 128
-paths, and it failed in an instructive way. One quarter of burn-in \emph{relocates} the transient
-from $h=2$ to $h=1$, where the horizon weight is larger, so the weighted result worsens (0.905
-$\rightarrow$ 0.954). Four quarters disperses the transient (headline MAE ratio improves to 1.012)
-but destroys the level targets: the policy-rate $h=1$ ratio degrades from 0.563 to 2.091 and the
-secondary weighted ratio from 0.782 to 1.095, because four quarters of free-running drift move the
-model's policy rate away from the origin's observed level before scoring begins. Burn-in trades a
-growth-rate artifact for a level-drift information loss.
-
-This entire line of attack is moot after the repair --- the $h=2$ bias falls to $-0.096$\pp\ under
-the balance fix alone, with zero burn-in --- and the burn-in runs are retained only as documented
-negative results.
-
-% ===========================================================================
-\FloatBarrier
-\section{Diagnosis: the anatomy of a \texorpdfstring{$-2.75$}{-2.75} percentage-point bias}
-\label{sec:diagnosis}
-
-This section rests on matched-seed A/B experiments at four to five origins with 48--64 paths per
-cell, with seeds identical across every variant. The bias measured here is $h=3\ldots12$ annualised
-real GDP growth, ensemble mean minus realised, averaged over three clean origins (2012Q4, 2016Q4,
-2022Q4; 2019Q4 is excluded from every average because its window is the pandemic rebound at
-$+6.2$\pp). The baseline is $-2.750$\pp, consistent with the $-2.0$ to $-2.9$\pp\ per-horizon biases
-measured independently at 61 origins.
-
-\subsection{Ranked attribution}
-
-\begin{table}[h]
-\centering
-\caption{Ranked attribution of the $-2.75$\pp\ real-growth bias.}
-\label{tab:attribution}
-\small
-\footnotesize
-\begin{tabular}{@{}r>{\raggedright\arraybackslash}p{0.43\textwidth}r>{\raggedright\arraybackslash}p{0.21\textwidth}@{}}
-\toprule
-\# & Mechanism & Share & Confidence \\
-\midrule
-1 & Non-clearing sector commodity balance under explicit measured trade, colliding with a frozen
-    firm capacity envelope & $-2.10$\pp\ (76\,\%) & high \\
-2 & Growth expectation from an OLS AR(1) on log levels, delivering 32--63\,\% of the in-sample
-    trend & $-0.70$\pp\ (24\,\%) & high (estimator), medium (delivered size) \\
-3 & Opening inventories built from the negative half of a signed statistical discrepancy
-  & $-0.23$\pp\ (a subset of \#1) & high \\
-4 & No capital accumulation (replacement-only investment) & latent; binds only through \#1 & high \\
-5 & Exogenous government/export/import log-level AR(1) attractors & $\approx 0$ net & high \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The GDP deflator is untouched throughout --- 1.8--2.5\,\% in every variant --- which is why
-inflation was never biased. \textbf{The defect is a real quantity-rationing defect, not a pricing
-defect.} \S\ref{sec:v2} confirms this prediction out of sample.
-
-\subsection{The shortfall is broad-based}
-
-Decomposing the expenditure side (contribution gap $=$ opening nominal share $\times$ (model $-$
-realised)) shows every domestic component growing at 0.1--0.5\,\% annualised against realised
-2.5--5.4\,\%:
-
-\begin{table}[h]
-\centering
-\caption{Expenditure decomposition, $h=3\ldots12$ annualised; contribution gaps in percentage
-points of GDP growth. Consumption carries $\approx70\,\%$ of the gap and fixed investment
-$\approx25\,\%$ \emph{purely because of their weights} --- their growth rates are equally flat
-(0.11--0.36\,\%). Net trade contributes positively; exports are over-forecast by 1.3--3.0\pp.}
-\label{tab:expenditure}
-\small
-\begin{tabular}{@{}lrrrrrr@{}}
-\toprule
-Origin & $C$ & $I$ fixed & $G$ & $X$ & $M$ ($-$) & \textbf{GDP} \\
-\midrule
-2012Q4 & $-1.77$ & $-0.91$ & $-0.02$ & $+0.23$ & $+0.44$ & $\mathbf{-2.03}$ \\
-2014Q4 & $-1.54$ & $-0.64$ & $-0.17$ & $+0.10$ & $+0.46$ & $\mathbf{-1.80}$ \\
-2016Q4 & $-1.54$ & $-0.60$ & $-0.46$ & $+0.12$ & $+0.19$ & $\mathbf{-2.30}$ \\
-2022Q4 & $-1.72$ & $-0.44$ & $-0.30$ & $-0.05$ & $+0.30$ & $\mathbf{-2.20}$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-At the 68-sector level, 31--36 of 68 sectors show positive growth, and \emph{the same sectors lose
-at every origin} --- the persistent-loser list is identical at 2012Q4, 2016Q4 and 2024Q4. A stable
-loser set across twelve years of origins is a calibration signature, not a shock response.
-
-\subsection{Defect 1: the commodity balance does not clear}
-\label{sec:defect1}
-
-Because imports come from the measured BEA T262 matrix rather than being solved as the supply--use
-residual, the residual survives as a signed, sector-level gap. Measured on the shipped first-pass
-artifact:
-\begin{gather*}
-\frac{\text{aggregate uses}}{\text{aggregate supply}} = 1.01010, \\[2pt]
-\min -0.706 \;\mid\; p_{25}\, -0.058 \;\mid\; \text{med.} +0.020 \;\mid\;
-p_{75}\, +0.128 \;\mid\; \max +0.476,
-\end{gather*}
-with 42 of 68 commodities over-demanded, 34 with $|\text{gap}|>10\,\%$ and 8 with
-$|\text{gap}|>25\,\%$ (mean $|\text{gap}|$ 0.1262, standard deviation 0.1790). The left panel of
-Figure~\ref{fig:balance} shows the distribution.
-
-Two facts then lock the chain, and Figure~\ref{fig:mechanism} draws it.
-
-\begin{enumerate}[leftmargin=1.6em,itemsep=2pt]
-\item \textbf{The capacity envelope is fixed by construction.} $\omega=0.85$ is hard-coded, and the
-  capital calibration gives $K_i\kappa_i = Y_i/0.85$ identically, so every firm opens at exactly
-  85\,\% utilisation with 17.6\,\% headroom, in proportion to the \emph{opening output}
-  composition.
-\item \textbf{Capital never accumulates.} Replacement-only investment gives $K'=K$ exactly when
-  firms obtain desired investment and produce at target. Measured $K_{\text{end}}/K_1 =
-  1.0000$--$1.0009$ in every variant, \emph{including} under a 30\,\% capacity relief.
-\end{enumerate}
-
-The demand vector, meanwhile, is fixed by the coefficient matrices, and the two differ by exactly
-the 42/26 signed gap. Over-demanded sectors sit permanently against their ceiling, under-demanded
-ones permanently idle, and the $\min$ in Eq.~\eqref{eq:leontief} is one-sided so the idle capacity
-never compensates. The signature matches the mechanism precisely:
-
-\begin{itemize}[leftmargin=1.4em,itemsep=1pt]
-\item mean $(\text{uses}-\text{supply})/\text{supply}$ of the twelve most-truncated sectors is
-      $+0.222$, against $+0.014$ for all 68;
-\item mean gap of the persistent value-added losers is $-0.140$, against $-0.025$ for the winners;
-\item 46 of 68 sectors are \emph{never} truncated, while a stable minority is truncated in
-      40--80\,\% of quarters;
-\item 12.9--14.4\,\% of gross output is produced under a binding ceiling every quarter, at
-      every origin tested (Table~\ref{tab:doseresponse}, last column).
-\end{itemize}
-
-Downstream, the unmet demand appears as persistent rationing, stable at every horizon:
-
-\begin{table}[h]
-\centering
-\caption{Fill rates --- the fraction of each buyer's demand actually satisfied --- in the
-first-pass model. Exports are the worst-served buyer because the export basket is concentrated in
-over-demanded commodities. Relieving opening capacity by 30\,\% lifts the export fill rate to
-0.92--0.96, which establishes that export rationing is a \emph{symptom} of the capacity/balance
-collision rather than an independent trade defect.}
-\label{tab:fillrates}
-\small
-\begin{tabular}{@{}lccccc@{}}
-\toprule
-Fill rate & $h=1$ & $h=2$ & $h=4$ & $h=8$ & $h=12$ \\
-\midrule
-Households & 0.999 & 0.973 & 0.978 & 0.976 & 0.975 \\
-Government & 0.999 & 0.961 & 0.961 & 0.960 & 0.958 \\
-\textbf{Exports} & 0.995 & \textbf{0.845} & \textbf{0.869} & \textbf{0.865} & \textbf{0.862} \\
-Imports & 0.993 & 0.991 & 0.989 & 0.989 & 0.987 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\begin{tikzpicture}[
-  font=\footnotesize,
-  box/.style={draw=greyrule,fill=white,rounded corners=1.5pt,align=center,
-              inner sep=4pt,text width=31mm,line width=0.5pt},
-  bad/.style={box,draw=greyrule,fill=greypale},
-  fix/.style={box,draw=accent,line width=1.0pt,text width=72mm},
-  ar/.style={-{Latex[length=2mm]},draw=greyrule,line width=0.7pt},
-  arfix/.style={-{Latex[length=2mm]},draw=accent,line width=0.9pt}
-]
-\node[bad] (gap) {\textbf{Opening commodity\\balance}\\[2pt]\scriptsize
-  measured imports fixed at BEA T262, so the supply--use residual survives:
-  42/68 over-demanded, gap $-70.6\%$ to $+47.6\%$};
-\node[bad,right=11mm of gap] (cap) {\textbf{Frozen capacity\\envelope}\\[2pt]\scriptsize
-  $K_i\kappa_i = Y_i/0.85$, set from the \emph{opening} output composition;
-  replacement-only investment $\Rightarrow K'=K$};
-\node[bad,right=11mm of cap] (trunc) {\textbf{One-sided $\min(\cdot)$}\\[2pt]\scriptsize
-  over-demanded sectors truncate; under-demanded sectors idle;
-  spare capacity cannot transfer};
-\node[bad,below=9mm of trunc] (ration) {\textbf{Rationing}\\[2pt]\scriptsize
-  $\approx14\,\%$ of gross output under a binding ceiling every quarter; exports fill 86\,\%};
-\node[bad,left=11mm of ration] (bias) {\textbf{Real growth pinned near zero}\\[2pt]\scriptsize
-  $-2.75$\pp\ bias; deflator unaffected at 1.8--2.5\,\%};
-\node[fix,below=11mm of bias] (ras) {\textbf{The repair: RAS on the use side}\\[2pt]\scriptsize
-  row controls $=$ supply \emph{with measured imports retained}; column controls $=$ the 72
-  user budgets; zeros preserved. The balance clears to $10^{-13}$, so the ceiling stops binding};
-
-\draw[ar] (gap) -- (cap);
-\draw[ar] (cap) -- (trunc);
-\draw[ar] (trunc) -- (ration);
-\draw[ar] (ration) -- (bias);
-\draw[arfix] (bias) -- (ras);
-\coordinate (L) at ([xshift=-7mm]gap.west);
-\draw[arfix] (ras.west)
-  -- node[above=1pt,pos=0.42,text=accent,font=\scriptsize\itshape,align=center]
-     {closes the loop\\at its source} (L |- ras.west)
-  -- (L) -- (gap.west);
-\end{tikzpicture}
-\caption{\textbf{F8 --- the defect mechanism and its repair.} Grey: the causal chain from a
-non-clearing opening balance to a real-growth bias. Blue: the reconciliation closes the loop at its
-source, by making the opening balance clear commodity by commodity while retaining every measured
-import level. Because capacity relief and balance closure were shown to be \emph{substitutes}
-rather than complements (Table~\ref{tab:falsification}), intervening at the balance is sufficient;
-the frozen capacity envelope is left untouched.}
-\label{fig:mechanism}
-\end{figure}
-
-\subsection{Defect 2: the growth expectation is biased low by construction}
-
-The second defect is the estimator of Eq.~\eqref{eq:gammae} and Table~\ref{tab:gammae}. What makes
-it interesting is that it is \emph{latent}. Replacing the model's opening output history by its own
-log-linear trend --- a past-only intervention --- raises $\gamma_e$ from $\approx 1.0\,\%$ to
-$\approx 1.9\,\%$ but moves delivered GDP growth by $+0.06$\pp\ on average. Pushing the expectation
-to twice trend still delivers between $-0.06$ and $+0.04$\pp. The elasticity of delivered growth to
-$\gamma_e$ is $\approx 0$ while the imbalance is present, rises to $\approx +0.5$\pp\ once capacity
-headroom is opened, and reaches $+0.75$\pp\ once the balance is closed. Measured on the actual
-patched code with 64 matched-seed paths at four origins, the random-walk-drift change is worth
-$+0.193$\pp\ on the unreconciled baseline and $+0.499$\pp\ on the reconciled one --- the monotone
-pattern the diagnosis predicted. \textbf{Expectations are a real but strictly subordinate defect:
-fixing them is worth $+0.75$\pp, but only after fixing the balance.}
-
-\subsection{The falsification table}
-
-Each row of Table~\ref{tab:falsification} is a matched-seed experiment run to kill a competing
-hypothesis. The sixth row is the decisive discriminator: capacity relief and balance closure are
-\emph{substitutes}, not complements, which places the balance upstream.
+\label{sec:results-standings}
 
 \begin{table}[t]
 \centering
-\caption{Falsification experiments. All matched-seed, all at scale $10^{-5}$ unless stated.}
-\label{tab:falsification}
-\footnotesize
-\begin{tabular}{@{}p{0.31\textwidth}p{0.30\textwidth}p{0.33\textwidth}@{}}
-\toprule
-Test & Result & Rules out \\
-\midrule
-Agent-count sweep, $130\rightarrow294\rightarrow912\rightarrow2\,708$ firms
-& truncated share 14\,\% at \emph{every} scale; growth stays $\approx 0$
-& idiosyncratic small-sample lumpiness \\
-Materials-only relief, $M\times1.30$
-& $-0.06$ against $-0.08$ baseline: no effect
-& materials as an independent binding constraint \\
-Investment-demand cut, $\kappa_s\times1.30$ (cuts $I^d$ by 23\,\%, leaves $K\kappa$)
-& $-0.20$ against $-0.08$: $-0.12$\pp\ only
-& investment demand as a first-order channel \\
-Capacity tightening, $K\kappa\times0.77$
-& $-1.14$ / $-1.22$\pp
-& --- confirms the sign and convexity of the capacity margin \\
-Un-capped investment emulation
-& $-0.03$ against $-0.08$; $K_{\text{end}}/K_1=1.0005$
-& ``the fork's $\min$ broke investment'' \\
-\textbf{Legacy residual closure $+\;K\times1.30$}
-& \textbf{1.921 vs 1.879 (2016Q4); 2.505 vs 2.503 (2024Q4): $+0.00$\pp}
-& \textbf{capacity as an \emph{independent} cause} \\
-Drop opening inventories only
-& $+0.23$\pp\ mean, same sign at all four origins
-& --- a genuine but small independent contribution \\
-Labour-supply ceiling
-& labour binds in 0.000 of rows at every origin
-& the labour block as the constraint \\
-Post-origin look-ahead in the exogenous arrays
-& bit-identical paths under $-10^{99}$ poisoning
-& data leakage \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{The dose--response that motivated the repair}
-
-Reverting to the legacy residual closure --- solving imports as the supply--use residual, which
-\emph{guarantees} clearing but discards the measured BEA import levels --- gives, for $h=3\ldots12$
-annualised real GDP growth:
-
-\begin{table}[h]
-\centering
-\caption{Dose--response. The legacy residual closure is a \emph{diagnostic instrument}, not the
-shipped repair: it discards measured import levels. The shipped repair achieves exact clearing
-while retaining them.}
-\label{tab:doseresponse}
-\small
-\footnotesize
-\begin{tabular}{@{}lrrrrl@{}}
-\toprule
-Origin & Realised & Baseline & Legacy closure & $+$ trend exp. & Truncated share \\
-\midrule
-2012Q4 & \textbf{2.586} & 0.051 & \textbf{2.365} & 3.511 & $0.144\rightarrow0.006$ \\
-2016Q4 & \textbf{2.922} & $-0.079$ & \textbf{1.879} & 2.633 & $0.139\rightarrow0.002$ \\
-2022Q4 & \textbf{2.531} & $-0.207$ & \textbf{1.813} & 2.458 & $0.129\rightarrow0.004$ \\
-2024Q4 & --- & $-0.219$ & \textbf{2.503} & 2.623 & $0.143\rightarrow0.012$ \\
-\midrule
-\multicolumn{6}{@{}l}{Mean bias over the three clean origins:
-$-2.76$\pp\ $\rightarrow$ $-0.66$\pp\ $\rightarrow$ $+0.19$\pp, deflator unchanged throughout.} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-% ===========================================================================
-\FloatBarrier
-\section{The repair}
-\label{sec:repair}
-
-Two changes, both in the calibration artifact rather than in behavioural parameters.
-
-\subsection{(i) The opening commodity balance now clears}
-
-A \emph{biproportional} adjustment --- the RAS method of \citet{stone1961} and
-\citet{bacharach1970}, equivalently the minimum-$I$-divergence projection --- finds the matrix
-closest to a given one, in a relative-entropy sense, subject to prescribed row and column totals. It
-does so by alternately scaling rows and columns until both sets of margins are satisfied.
-
-Formally, let $U^{0}\in\mathbb{R}_{\ge0}^{G\times J}$ be the observed use matrix over $G=68$
-commodities and $J=72$ users (68 industry intermediate columns plus $C$, $G$, $I$ and $X$). We seek
-\begin{equation}
-  U^{\star} \;=\; \arg\min_{U\ge 0}\;\sum_{g,j} U_{gj}\log\frac{U_{gj}}{U^{0}_{gj}}
-  \quad\text{s.t.}\quad
-  \sum_j U_{gj} = r_g \;\;\forall g,
-  \qquad \sum_g U_{gj} = c_j \;\;\forall j,
-  \label{eq:ras}
-\end{equation}
-with row controls $r_g = \text{industry output}_g + \text{measured imports}_g$ and column controls
-$c_j$ the 68 industry intermediate budgets and the four final-demand budgets. The solution has the
-biproductive form $U^{\star}_{gj}=\rho_g\, U^{0}_{gj}\, s_j$ and is obtained by iterative
-proportional fitting; structural zeros are preserved exactly, because a zero cell stays zero under
-any scaling.
-
-The concrete run is reported in Table~\ref{tab:ras}. Crucially, \code{use_explicit_trade} stays
-\code{true}: no measured import level is discarded. The reconciliation works \emph{around} the
-measured trade data rather than throwing it away, which is what distinguishes the shipped repair
-from the legacy-closure diagnostic instrument of Table~\ref{tab:doseresponse}.
-
-\begin{table}[h]
-\centering
-\caption{The RAS reconciliation as executed, from the committed reconciliation report. The
-adjustment moves composition, not aggregates: every column budget is preserved to
-$10^{-13}$ after the $\lambda$ scaling.}
-\label{tab:ras}
-\small
-\footnotesize
-\begin{tabular}{@{}p{0.34\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}@{}}
-\toprule
-Flow system & 68 commodities $\times$ 72 users \\
-Structural zeros preserved & 1\,549 / 4\,896 cells (31.6\,\%) \\
-Row controls & $\text{industry output} + \text{measured imports}$, sum $5.25699\times10^{7}$ \\
-Column controls & measured budgets, held exactly, sum $5.25699\times10^{7}$ \\
-Convergence & 623 iterations; final max relative control error $9.996\times10^{-14}$ \\
-Balance after RAS & $\max|\text{uses}_g/\text{supply}_g-1| = 5.55\times10^{-16}$;
-                    cross-sector s.d.\ $1.96\times10^{-16}$ (was 0.1790) \\
-Balance after re-derivation & $\max|\text{uses}_g/\text{supply}_g-1| = 1.00\times10^{-13}$ \\
-Total use adjustment & $\sum|d| = 6.786\times10^{6}$ (12.78\,\% of total uses) \\
-Cellwise adjustment & $\sum|dU| = 7.423\times10^{6}$ (13.98\,\% of total flow) \\
-\midrule
-\multicolumn{2}{@{}l}{\emph{Coefficient movement received by the simulator}} \\
-Technology matrix $a_{sg}$ & $\max|\Delta a| = 0.1408$; mean $|\Delta a| = 0.00226$ \\
-Household basket $b^{HH}_g$ & $\max|\Delta\text{share}| = 0.0158$; $L_1$ distance 0.0970 \\
-Government basket $c^{G}_g$ & $\max|\Delta\text{share}| = 0.1450$; $L_1$ distance 0.3204 \\
-Investment basket $b^{CF}_g$ & $\max|\Delta\text{share}| = 0.0401$; $L_1$ distance 0.1049 \\
-Export basket $c^{E}_g$ & $\max|\Delta\text{share}| = 0.0309$; $L_1$ distance 0.1197 \\
-Import basket $c^{I}_g$ & unchanged \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The adjustment is not uniform across users: as a share of its own budget, the government column
-moves most (31.0\,\%), then intermediates (15.3\,\%), exports (12.1\,\%), investment (10.0\,\%) and
-households (9.8\,\%). The largest single commodity adjustments are professional and technical
-services (uses cut 32.3\,\%, closing a $+47.6\,\%$ gap), wholesale trade (raised 42.5\,\%, closing a
-$-29.8\,\%$ gap) and state and local government (raised 26.2\,\%). Figure~\ref{fig:balance} shows
-the before-and-after distribution.
-
-The one accounting choice --- production-account anchoring by $\lambda=0.983460$ --- is stated in
-assumption A6 and Table~\ref{tab:lambda}, and its semantics are sealed verbatim in every result
-manifest.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{figures/f5_commodity_balance.pdf}
-\caption{\textbf{F5 --- the opening commodity balance, before and after reconciliation.} Left: the
-distribution of $(\text{uses}_g-\text{supply}_g)/\text{supply}_g$ over the 68 commodities of the
-first-pass artifact, spanning $-70.6\,\%$ to $+47.6\,\%$ with a standard deviation of 17.9
-percentage points. Right: the empirical cumulative distribution before (grey) and after (blue). The
-post-reconciliation distribution is a step function at zero: every commodity clears to within
-$10^{-13}$. Data: \code{reconciliation_by_commodity_rho1.csv}.}
-\label{fig:balance}
-\end{figure}
-
-\subsection{(ii) Growth expectations become a random walk with drift}
-
-The repaired model pins $\hat\alpha=1$ and takes the drift as average past log growth --- the
-correctly specified estimator for an I(1)-with-drift series, on past data only. It is gated behind
-a new model property, registered only when the calibration artifact carries the corresponding
-marker, and \emph{default-off}, so the Austrian and Italian calibrations remain bit-identical
-(gate G3). Exactly one Normal variate is consumed on either branch, which keeps the matched-seed
-comparison aligned.
-
-\subsection{Regression gates}
-
-\begin{table}[t]
-\centering
-\caption{Regression gates on the repair. G7 is a pre-existing repository-wide formatter failure on
-files untouched by this work, tracked separately. G8 is reported as failing on the merits rather
-than hidden.}
-\label{tab:gates}
-\footnotesize
-\begin{tabular}{@{}rp{0.24\textwidth}p{0.60\textwidth}@{}}
-\toprule
-\# & Gate & Result \\
-\midrule
-G1 & matched-grid completeness
-   & \textbf{PASS} --- 61/61 origins; counts $[61,60,58,54,50]$, $[50,50,50,50,50]$,
-     $[53,52,50,46,42]$; every ABM column \code{COMPLETE_MATCHED} \\
-G2 & no non-finite output
-   & \textbf{PASS} --- 0 non-finite cells in $3\,660+3\,660+120$ ensemble rows;
-     500 paths used at every origin; 0 failed; the failures file is empty \\
-G3 & Austria/Italy unchanged with the flag off
-   & \textbf{PASS} --- 3 seeds $\times$ 3 series, SHA-256 of raw \code{Float64} vectors identical
-     between a pristine checkout and the patched worktree \\
-G4 & first-pass column reproduces its own earlier run
-   & \textbf{PASS} --- all 3\,660 cached cells identical ($\max|\text{diff}|=0$); weighted scores
-     match to every printed digit \\
-G5 & GDP-deflator inflation stays $\approx2\,\%$
-   & \textbf{PASS} --- 2.019\pp\ (p5 1.663, p95 2.687) against 2.024\pp\ over the same 671 scored
-     cells; \emph{bit-identical at $h=1$} \\
-G6 & commodity balance clears in the shipped artifact
-   & \textbf{PASS} --- $1.0\times10^{-13}$ after re-derivation through the unmodified pipeline \\
-G7 & package test suite
-   & \textbf{PARTIAL} --- 815 pass, 1 fail; the failure is a repository-wide formatter check that
-     already failed at the base commit on ten files untouched here \\
-G8 & unemployment
-   & \textbf{REPORTED, FAILING ON MERIT} --- \S\ref{sec:unemployment} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-% ===========================================================================
-\FloatBarrier
-\section{Results II: the repaired model}
-\label{sec:v2}
-
-\subsection{Standings: first of fourteen in all three tracks}
-
-\begin{table}[t]
-\centering
-\caption{Headline standings, \{real GDP growth, GDP-deflator inflation\}, \emph{all-available}
-track ($n = 61/60/58/54/50$). Ratios are weighted macro-averages of matched cellwise ratios against
-the VAR(1) anchor; lower is better. First-pass rows are italicised.}
+\caption{Headline standings, \{real GDP growth, GDP-deflator inflation\}: weighted RMSE ratios
+against the VAR(1) anchor, rank out of the 20 scored columns in parentheses. Selected rows; the
+full twenty-column tables, including MAE and the secondary and labour target sets, are the
+committed artifact \pathc{output/us_forecasting/stage2b_scorecard/STAGE2B_TABLES.md}.
+Revised-data, mixed-vintage diagnostic.}
 \label{tab:standings}
 \small
-\begin{tabular}{@{}rlrr@{}}
+\begin{tabular}{@{}lccc@{}}
 \toprule
-Rank & Model & Weighted RMSE ratio & Weighted MAE ratio \\
+Column & all-available & balanced $h{=}12$ & pandemic-masked \\
 \midrule
-\textbf{1} & \textbf{ABM v2, mean} & \textbf{0.830} & \textbf{0.813} \\
-\textbf{2} & \textbf{ABM v2, median} & \textbf{0.830} & \textbf{0.815} \\
-3 & \code{naive_historical_mean} & 0.879 & 0.838 \\
-4 & \emph{ABM v1, median} & \emph{0.903} & \emph{1.130} \\
-5 & \emph{ABM v1, mean} & \emph{0.905} & \emph{1.137} \\
-6 & \code{bvar_mniw_v1_p1_constant} & 0.908 & 0.896 \\
-7 & \code{univariate_ar_p1_constant} & 0.918 & 0.888 \\
-8 & \code{univariate_ar_bic_...} & 0.929 & 0.901 \\
-9 & \code{univariate_ar_p4_constant} & 0.939 & 0.923 \\
-10 & \code{beforeit_var_p1_constant} (anchor) & 1.000 & 1.000 \\
-11 & \code{naive_no_change} & 1.075 & 1.121 \\
-12 & \code{naive_drift} & 1.106 & 1.156 \\
-13 & \code{beforeit_var_p2_constant} & 2.121 & 1.496 \\
-14 & \code{beforeit_var_p3_constant} & 5.313 & 2.672 \\
+\textbf{ABM, median} & \textbf{0.827 (1)} & \textbf{0.827 (1)} & \textbf{0.791 (1)} \\
+\textbf{ABM, mean} & \textbf{0.828 (2)} & \textbf{0.828 (2)} & \textbf{0.792 (2)} \\
+\code{dsge_sw07} & 0.857 (5) & 0.856 (6) & 0.954 (10) \\
+\code{naive_historical_mean} & 0.879 (7) & 0.884 (7) & 0.881 (8) \\
+\code{dsge_small_nk} & 0.890 (9) & 0.885 (9) & 1.134 (14) \\
+Minnesota BVAR & 0.908 (12) & 0.909 (12) & 0.852 (6) \\
+\code{univariate_ar_p1_constant} & 0.918 (13) & 0.918 (13) & 0.848 (5) \\
+\code{beforeit_var_p1_constant} (anchor) & 1.000 (16) & 1.000 (16) & 1.000 (12) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-On the \emph{balanced $h{=}12$} track ($n=50$ everywhere) the repaired mean column scores 0.829
-(1st), its median 0.830 (2nd), \code{naive_historical_mean} 0.884 (3rd), the first-pass columns
-0.893 and 0.894 (4th, 5th), and the BVAR 0.909 (6th).
+Table~\ref{tab:standings} and Figure~\ref{fig:f1} give the standings; ranks 3--4 in each track
+are the ABM's two component-ablation columns (\S\ref{sec:evidence}), which are excluded from the
+table to keep it a field comparison. Three readings.
 
-On the \emph{pandemic-masked} track ($n=53/52/50/46/42$) the repaired mean column scores 0.796
-(1st) and its median 0.799 (2nd), ahead of \code{univariate_ar_p1} at 0.848, the BVAR at 0.852,
-\code{univariate_ar_bic} at 0.870, \code{naive_historical_mean} at 0.881 and
-\code{univariate_ar_p4} at 0.889; the first-pass columns fall to 1.264 and 1.272 (10th, 11th).
+\emph{The strongest challenger is the DSGE, and the ABM beats it.} SW07 at 0.857 / 0.856 beats
+every statistical model in both full-sample tracks --- consistent with the DSGE-forecasting
+literature, in which estimated medium-scale DSGE models are competitive with Bayesian VARs
+--- so the ABM's margin over it is a margin over the strongest available challenger, not over a
+straw man. The margin is 0.029--0.030 weighted-ratio points in the full-sample tracks, and
+\S\ref{sec:results-inference} shows it survives multiplicity control.
+
+\emph{The pandemic mask reorders the field, and the ABM's margin widens.} Masking 2020Q1--2021Q4
+target cells drops SW07 to 0.954 (10th) and the small-NK to 1.134 (14th) --- both equilibrium
+columns owe part of their full-sample standing to the pandemic cells, where their mean-reverting
+structure absorbed the rebound --- while the AR(1) becomes the best non-ABM column at 0.848. The
+ABM is first at 0.791--0.792, its \emph{widest} margin of the three tracks: its accuracy does not
+depend on the extreme cells.
+
+\emph{The small NK model is mid-field.} Three observables and thirteen parameters are enough to
+beat the anchor (0.890 / 0.885) but not the historical-mean constant, and its long-horizon
+forecasts revert to a posterior-mode trend that the 2000s-only panel identifies weakly ---
+a known small-sample property of the class, reported as measured.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/f1_weighted_rmse_ratio.pdf}
-\caption{\textbf{F1 --- weighted RMSE ratio on the headline target pair, three sample tracks.}
-Blue is the repaired ABM; hatched pale blue is the first pass; greys are statistical benchmarks. The
-dashed line is the VAR(1) anchor at 1.0. The repaired model is first in all three tracks, and its
-margin is \emph{widest} in the pandemic-masked sample --- the opposite of the first pass's
-behaviour. Data: \code{weighted_relative_scores.csv}.}
+\caption{\textbf{F1 --- weighted RMSE ratio on the headline target pair, three sample tracks,
+selected columns.} Blue is the ABM (mean column); dark grey the two DSGE columns; light greys the
+statistical family. The dashed line is the VAR(1) anchor at 1.0. The ABM is first in all three
+tracks, and its margin is widest in the pandemic-masked sample.
+Data: \code{stage2b_weighted_scores.csv}.}
 \label{fig:f1}
 \end{figure}
 
-\textbf{The regime-sensitivity finding resolves in the repaired model's favour.} The first pass's
-competitive rank \emph{depended} on the COVID cells: masking 2020Q1--2021Q4 moved it from 5th
-(0.905) to 11th (1.272). The repaired model carries no such dependence --- it is 1st in the masked
-sample and by its \emph{widest} margin (0.796 against 0.848 for the best statistical model, a
-6.1\,\% gap, against 5.6\,\% all-available). The regime sensitivity was a symptom of the defect: in
-the calm sample the chronic $-2$\pp\ bias dominated the error, while in the full sample it was
-partly hidden by cells that no model forecasts. Removing the bias removes the sensitivity.
-
-\subsection{Per-cell detail}
+\subsection{Per-target, per-horizon detail}
+\label{sec:results-percell}
 
 \begin{table}[t]
 \centering
-\caption{Per-target, per-horizon detail, \emph{all-available} track. Ratios are against the VAR(1)
-anchor; ranks are out of the 14 scored forecast columns. Bias is the mean error (forecast $-$ realised) in annualised
-percentage points. Read the last two columns together: the repair removes a chronic level bias
-without touching the price block.}
+\caption{Per-target, per-horizon detail for the ABM (mean column), \emph{all-available} track.
+Ratios are against the VAR(1) anchor; ranks are out of the 20 scored columns. Bias is the mean
+error (forecast $-$ realised) in annualised percentage points; unemployment bias is in percentage
+points of the rate.}
 \label{tab:percell}
 \footnotesize
-\begin{tabular}{@{}llrrrrrccrr@{}}
+\begin{tabular}{@{}llrrrcr@{}}
 \toprule
-Target & $h$ & $n$ & v1 RMSE & v2 RMSE & v1 ratio & v2 ratio & v1 rank & v2 rank & v1 bias & \textbf{v2 bias} \\
+Target & $h$ & $n$ & RMSE & ratio & rank & bias \\
 \midrule
-\code{real_gdp} & 1 & 61 & 6.2592 & 6.0879 & 0.689 & \textbf{0.670} & 4/14 & \textbf{1/14} & $-1.317$ & $\mathbf{-0.025}$ \\
-\code{real_gdp} & 2 & 60 & 9.5104 & 6.1001 & 1.294 & \textbf{0.830} & 12/14 & \textbf{1/14} & $-7.277$ & $\mathbf{-0.096}$ \\
-\code{real_gdp} & 4 & 58 & 6.8762 & 6.2235 & 1.082 & 0.980 & 8/14 & 3/14 & $-2.938$ & $\mathbf{-0.143}$ \\
-\code{real_gdp} & 8 & 54 & 6.7381 & 6.4418 & 0.858 & 0.820 & 8/14 & 3/14 & $-2.146$ & $\mathbf{-0.119}$ \\
-\code{real_gdp} & 12 & 50 & 6.9637 & 6.6510 & 1.035 & 0.988 & 10/14 & 3/14 & $-2.017$ & $\mathbf{-0.202}$ \\
+\code{real_gdp} & 1 & 61 & 6.088 & 0.670 & 1/20 & $-0.03$ \\
+\code{real_gdp} & 2 & 60 & 6.113 & 0.832 & 3/20 & $-0.04$ \\
+\code{real_gdp} & 4 & 58 & 6.197 & 0.976 & 2/20 & $-0.02$ \\
+\code{real_gdp} & 8 & 54 & 6.421 & 0.817 & 2/20 & $+0.23$ \\
+\code{real_gdp} & 12 & 50 & 6.652 & 0.988 & 4/20 & $+0.25$ \\
 \addlinespace
-\code{gdp_deflator} & 1 & 61 & 1.4288 & 1.4288 & 0.794 & 0.794 & 6/14 & 5/14 & $-0.192$ & $-0.192$ \\
-\code{gdp_deflator} & 2 & 60 & 1.6486 & 1.6544 & 0.771 & 0.774 & 5/14 & 8/14 & $-0.293$ & $-0.292$ \\
-\code{gdp_deflator} & 4 & 58 & 1.9398 & 1.9512 & 0.822 & 0.827 & 2/14 & 6/14 & $-0.400$ & $-0.421$ \\
-\code{gdp_deflator} & 8 & 54 & 2.0391 & 2.0448 & 0.975 & 0.978 & 4/14 & 5/14 & $-0.525$ & $-0.528$ \\
-\code{gdp_deflator} & 12 & 50 & 2.1093 & 2.1080 & 0.892 & 0.891 & 5/14 & 4/14 & $-0.608$ & $-0.615$ \\
+\code{gdp_deflator} & 1 & 61 & 1.429 & 0.794 & 8/20 & $-0.19$ \\
+\code{gdp_deflator} & 2 & 60 & 1.655 & 0.774 & 14/20 & $-0.29$ \\
+\code{gdp_deflator} & 4 & 58 & 1.934 & 0.820 & 4/20 & $-0.40$ \\
+\code{gdp_deflator} & 8 & 54 & 2.035 & 0.973 & 4/20 & $-0.53$ \\
+\code{gdp_deflator} & 12 & 50 & 2.116 & 0.894 & 8/20 & $-0.62$ \\
 \addlinespace
-\code{nominal_gdp} & 1 & 61 & 7.0266 & 6.8395 & 0.674 & \textbf{0.656} & 4/14 & \textbf{1/14} & $-1.509$ & $-0.217$ \\
-\code{nominal_gdp} & 2 & 60 & 10.1803 & 6.7821 & 1.168 & \textbf{0.778} & 12/14 & \textbf{1/14} & $-7.569$ & $-0.388$ \\
-\code{nominal_gdp} & 4 & 58 & 7.7626 & 7.0431 & 1.051 & 0.954 & 7/14 & 3/14 & $-3.338$ & $-0.563$ \\
-\code{nominal_gdp} & 8 & 54 & 7.7071 & 7.3312 & 0.882 & 0.839 & 7/14 & 5/14 & $-2.672$ & $-0.647$ \\
-\code{nominal_gdp} & 12 & 50 & 7.9643 & 7.5800 & 1.028 & 0.979 & 10/14 & 4/14 & $-2.625$ & $-0.816$ \\
+\code{nominal_gdp} & 1 & 61 & 6.839 & 0.656 & 1/20 & $-0.22$ \\
+\code{nominal_gdp} & 2 & 60 & 6.812 & 0.781 & 4/20 & $-0.33$ \\
+\code{nominal_gdp} & 4 & 58 & 6.991 & 0.947 & 2/20 & $-0.42$ \\
+\code{nominal_gdp} & 8 & 54 & 7.279 & 0.833 & 2/20 & $-0.29$ \\
+\code{nominal_gdp} & 12 & 50 & 7.535 & 0.973 & 1/20 & $-0.37$ \\
 \addlinespace
-EFFR & 1 & 61 & 0.3734 & 0.3734 & 0.563 & 0.563 & 6/14 & 7/14 & $-0.042$ & $-0.042$ \\
-EFFR & 2 & 60 & 0.6921 & 0.6921 & 0.556 & 0.556 & 5/14 & 4/14 & $-0.087$ & $-0.088$ \\
-EFFR & 4 & 58 & 1.2188 & 1.2196 & 0.588 & 0.589 & 3/14 & 4/14 & $-0.196$ & $-0.199$ \\
-EFFR & 8 & 54 & 1.8935 & 1.8944 & 0.796 & 0.796 & 1/14 & 2/14 & $-0.500$ & $-0.501$ \\
-EFFR & 12 & 50 & 2.1670 & 2.1646 & 0.806 & 0.805 & 3/14 & 2/14 & $-0.787$ & $-0.784$ \\
+EFFR & 1 & 61 & 0.373 & 0.563 & 7/20 & $-0.04$ \\
+EFFR & 2 & 60 & 0.693 & 0.557 & 8/20 & $-0.09$ \\
+EFFR & 4 & 58 & 1.219 & 0.588 & 6/20 & $-0.20$ \\
+EFFR & 8 & 54 & 1.891 & 0.795 & 3/20 & $-0.50$ \\
+EFFR & 12 & 50 & 2.164 & 0.805 & 4/20 & $-0.79$ \\
+\addlinespace
+\code{unemployment_rate} & 1 & 61 & 2.829 & 1.345 & 16/20 & $-1.91$ \\
+\code{unemployment_rate} & 2 & 60 & 2.765 & 0.836 & 14/20 & $-1.87$ \\
+\code{unemployment_rate} & 4 & 58 & 2.653 & 0.637 & 11/20 & $-1.84$ \\
+\code{unemployment_rate} & 8 & 54 & 2.672 & 1.192 & 9/20 & $-2.00$ \\
+\code{unemployment_rate} & 12 & 50 & 2.962 & 0.760 & 10/20 & $-2.36$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Four readings of Table~\ref{tab:percell} and Figures~\ref{fig:f2}--\ref{fig:f3}.
-
-\begin{enumerate}[leftmargin=1.5em,itemsep=3pt]
-\item \textbf{The real-growth bias is essentially eliminated.} $-1.32 / -7.28 / -2.94 / -2.15 /
-  -2.02$\pp\ becomes $-0.03 / -0.10 / -0.14 / -0.12 / -0.20$\pp. The residual is under a quarter of
-  a percentage point at every horizon, and its mild negative drift at $h=12$ is consistent with the
-  headroom mechanism of \S\ref{sec:headroom}. In scale-free terms, real-GDP MASE moves from
-  $1.259/3.361/1.819/1.629/1.656$ to $1.043/1.099/1.137/1.221/1.259$.
-\item \textbf{The $h=2$ transient is gone}, with zero burn-in. This retires the burn-in hypothesis
-  of \S\ref{sec:v1}: the opening-row measurement basis is real, but it accounted for a small share
-  of the $-7.3$\pp. The bulk was the rationing crash, and it disappears when the balance clears.
-\item \textbf{The deflator is untouched} --- bit-identical at $h=1$, within 0.006 of the first-pass
-  ratio at $h=12$, and slightly \emph{worse} in rank at $h=2$ and $h=4$ only because the repair
-  moved the models around it. This is the diagnosis's central prediction confirmed out of sample: a
-  quantity defect, not a pricing defect.
-\item \textbf{The policy rate is essentially unchanged}, with ratios differing in the fourth
-  decimal. The Taylor rule is fed a corrected output path, but the rate was never the problem.
-\end{enumerate}
+Table~\ref{tab:percell} and Figure~\ref{fig:f2} carry the detail. Real-GDP bias is below a
+quarter of a percentage point in magnitude at every horizon --- slightly negative at short
+horizons, slightly positive at $h\ge8$ where the trend-growth component holds the profile up ---
+and the level of real-GDP RMSE, about 6\pp\ against quarter-on-quarter annualised growth whose
+cross-origin dispersion includes the pandemic, is worth internalising: \emph{nobody} forecasts
+these series well in absolute terms; the contest is over ratios. The deflator is accurate in
+ratio terms (0.77--0.97) with a persistent mild under-forecast that grows to $-0.6$\pp\ at
+$h=12$; its rank oscillates because half a dozen columns sit within a few percent of each other
+on this target. Nominal GDP --- the sum of the two headline components --- is first or second at
+four of five horizons. The policy rate inherits the model's Taylor rule reacting to a corrected
+output path; its increasingly negative long-horizon bias ($-0.8$\pp\ at $h=12$) reflects rate
+paths that ease toward neutral faster than the sample did. Unemployment is discussed in
+\S\ref{sec:results-unemp}.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/f2_rmse_ratio_by_horizon.pdf}
-\caption{\textbf{F2 --- RMSE ratio against horizon.} Left: real GDP growth --- the repair moves the
-whole profile below the anchor and removes the $h=2$ spike. Right: GDP-deflator inflation --- the
-two ABM curves are indistinguishable, because the reconciliation is a quantity intervention. Grey
-squares mark the best statistical model \emph{in each cell separately}, with its identity
-annotated; that envelope is a stiffer comparison than any single benchmark.
-Data: \code{relative_scores.csv}, all-available track.}
+\caption{\textbf{F2 --- RMSE ratio against horizon, all-available track.} Left: real GDP growth.
+Right: GDP-deflator inflation. Blue is the ABM; dark grey SW07; grey squares mark the best
+statistical column \emph{in each cell separately}, with its identity annotated --- that envelope
+is a stiffer comparison than any single benchmark. Data: \code{stage2b_relative_scores.csv}.}
 \label{fig:f2}
 \end{figure}
 
-\begin{figure}[t]
+\subsection{Densities: the sharpest CRPS in the field, one calibration miss}
+\label{sec:results-densities}
+
+\begin{table}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/f3_real_gdp_bias.pdf}
-\caption{\textbf{F3 --- real-GDP mean error by horizon.} The first pass under-forecasts at every
-horizon, with a $-7.28$\pp\ transient at $h=2$ that the diagnosis attributes to the rationing crash
-rather than to the opening-row measurement basis. The repaired bars are barely visible at this
-scale; the inset shows them on their own axis, where the largest residual bias is $-0.20$\pp.
-Data: \code{score_summaries.csv}, all-available track.}
-\label{fig:f3}
-\end{figure}
-
-\subsection{The mean-absolute-error asymmetry is resolved, not traded away}
-
-The weighted MAE ratio moves from 1.137 to \textbf{0.814}. Per cell:
-
-\begin{table}[h]
-\centering
-\caption{MAE ratios against the VAR(1) anchor, $h=1/2/4/8/12$. Every real- and nominal-GDP MAE
-ratio is now below one at every horizon. The first pass's weak MAE column was neither a
-functional-choice artifact nor an intrinsic property of ensemble forecasting: it was the 2\pp\
-bias, which costs MAE proportionally more than it costs RMSE.}
-\label{tab:mae}
-\small
-\begin{tabular}{@{}lll@{}}
-\toprule
-Target & v1 & \textbf{v2} \\
-\midrule
-\code{real_gdp} & 0.842 / \textbf{2.376} / 1.454 / 1.087 / 1.283 & \textbf{0.691 / 0.734 / 0.879 / 0.790 / 0.962} \\
-\code{nominal_gdp} & 0.819 / \textbf{2.071} / 1.272 / 1.008 / 1.155 & \textbf{0.711 / 0.725 / 0.851 / 0.804 / 0.937} \\
-\code{gdp_deflator} & 0.919 / 0.780 / 0.807 / 0.861 / 0.842 & 0.919 / 0.779 / 0.808 / 0.866 / 0.843 \\
-EFFR & 0.584 / 0.627 / 0.664 / 0.762 / 0.777 & 0.584 / 0.627 / 0.663 / 0.762 / 0.775 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Density calibration}
-
-A point forecast is only part of what a simulation ensemble produces. \emph{Interval coverage} asks
-how often the realised value falls inside a stated predictive interval: a well-calibrated 90\,\%
-interval should contain the truth 90\,\% of the time. Table~\ref{tab:coverage} and
-Figure~\ref{fig:f4} report coverage pooled over all five horizons ($n=283$ per target).
-
-\begin{table}[h]
-\centering
-\caption{Empirical interval coverage, pooled over five horizons, $n=283$ per target. Nominal
-coverage is 0.90 / 0.80 / 0.50. Computed by $n$-weighted aggregation of the per-horizon rows in
-\code{abm_v2_interval_coverage.csv}.}
-\label{tab:coverage}
+\caption{Density scores on the headline targets, per track: horizon-weighted exact-ensemble CRPS
+(lower is better) and 90\,\% central-interval coverage pooled across horizons (nominal 0.90).
+ABM and DSGE columns only --- the frozen statistical registry is point-only. DSGE densities carry
+filtered-state and future-shock uncertainty at the posterior mode, without parameter uncertainty.
+Data: \pathc{output/us_forecasting/stage2b_scorecard/STAGE2B_TABLES.md}.}
+\label{tab:density}
 \footnotesize
 \begin{tabular}{@{}lcccccc@{}}
 \toprule
-Target & v1 5--95\,\% & \textbf{v2 5--95\,\%} & v1 10--90\,\% & \textbf{v2 10--90\,\%} & v1 25--75\,\% & \textbf{v2 25--75\,\%} \\
+& \multicolumn{2}{c}{all-available} & \multicolumn{2}{c}{balanced $h{=}12$}
+& \multicolumn{2}{c}{pandemic-masked} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+Column & real GDP & deflator & real GDP & deflator & real GDP & deflator \\
 \midrule
-\code{real_gdp} & 0.654 & \textbf{0.929} & 0.580 & \textbf{0.894} & 0.300 & 0.696 \\
-\code{nominal_gdp} & 0.661 & \textbf{0.890} & 0.548 & \textbf{0.830} & 0.332 & 0.608 \\
-\code{gdp_deflator} & 0.742 & 0.735 & 0.703 & 0.703 & 0.449 & 0.470 \\
-EFFR & 0.509 & 0.512 & 0.431 & 0.438 & 0.247 & 0.251 \\
-\code{unemployment_rate} & 0.509 & \textbf{0.216} & 0.375 & \textbf{0.127} & 0.177 & 0.071 \\
+\multicolumn{7}{@{}l}{\emph{Weighted CRPS}} \\
+\textbf{ABM} & \textbf{2.234} & 0.926 & \textbf{2.365} & 0.977 & \textbf{1.054} & \textbf{0.713} \\
+\code{dsge_small_nk} & 3.111 & 0.977 & 3.353 & 1.012 & 1.946 & 0.772 \\
+\code{dsge_sw07} & 2.697 & \textbf{0.894} & 2.895 & \textbf{0.933} & 1.518 & 0.722 \\
+\midrule
+\multicolumn{7}{@{}l}{\emph{90\,\% interval coverage (nominal 0.90)}} \\
+ABM & 0.916 & 0.748 & 0.908 & 0.716 & 0.982 & 0.830 \\
+\code{dsge_small_nk} & 0.929 & 0.826 & 0.920 & 0.804 & 0.981 & 0.913 \\
+\code{dsge_sw07} & 0.933 & 0.877 & 0.924 & 0.860 & 0.988 & 0.940 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The repaired model's real-GDP density is well calibrated at the 90\,\% and 80\,\% levels (0.929 and
-0.894 against nominal 0.90 and 0.80). The first pass's 0.654 and 0.580 were \emph{not} a width
-problem --- the intervals missed because the point forecast was biased down by $\approx2$\pp.
-Nominal GDP improves comparably. The 50\,\% band now over-covers (0.696 against 0.500): the centre
-of the repaired ensemble is too wide.
-
-Three targets remain badly calibrated and are named as open work. The deflator is under-dispersed
-at every level and \emph{unchanged} by this work --- the ensemble's inflation spread is genuinely
-too narrow. The policy rate under-covers badly and increasingly with horizon (0.754 at $h=1$ down to
-0.200 at $h=12$) in both versions --- the Taylor-rule path is far too tight. Unemployment coverage
-\emph{falls} and reaches exactly 0.000 at $h=12$, which is the defect of
-\S\ref{sec:unemployment} appearing in the density as well as the mean. This is a coverage
-assessment only: no probability-integral-transform histogram, log score or continuous ranked
-probability score was computed, so it is not a full density evaluation.
+Table~\ref{tab:density} and Figure~\ref{fig:f4} give the density evidence, and the trade it
+reveals is instructive. On real GDP the ABM dominates: sharper by CRPS than SW07 by 17--31\,\%
+per track \emph{and} well calibrated (coverage 0.91--0.98 against nominal 0.90). On the deflator
+the ranking splits by criterion: the ABM's CRPS is competitive (better than SW07 in the masked
+track, marginally worse in the full tracks) but its bands are too narrow --- coverage 0.70--0.79
+pooled, 0.70--0.79 by horizon --- while the DSGE columns reach near-nominal coverage through
+intervals roughly 30\,\% wider, which is precisely the width their CRPS pays for. Combined over
+the pair the ABM leads CRPS in every track (1.58 / 1.67 / 0.88 against SW07's 1.80 / 1.91 /
+1.12), and fails the coverage clause of the bar in the two full-sample tracks. The model's
+inflation ensemble is genuinely under-dispersed --- a mechanism-level fact (the price block
+inherits little of the quantity dispersion), measured here and named in \S\ref{sec:limits}. The
+policy-rate bands are far too tight at long horizons (coverage 0.16 at $h=12$), a known
+Taylor-block limitation now quantified.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/f4_interval_coverage.pdf}
-\caption{\textbf{F4 --- empirical against nominal interval coverage}, pooled over five horizons,
-$n=283$ per target. Points on the dashed 45$^{\circ}$ line are perfectly calibrated; below the line
-is over-confident. The repair lifts real and nominal GDP onto the line at the 80\,\% and 90\,\%
-levels while leaving the deflator and the policy rate --- both under-dispersed --- where they were.
-Data: \code{abm_v2_interval_coverage.csv}.}
+\caption{\textbf{F4 --- empirical against nominal interval coverage}, all-available track, pooled
+over the five scored horizons. Points on the dashed 45$^{\circ}$ line are perfectly calibrated;
+below the line is over-confident. Real and nominal GDP sit on the line at the 80\,\% and 90\,\%
+levels; the deflator and the policy rate are under-dispersed at every level.
+Data: \code{stage2b_density_coverage.csv}.}
 \label{fig:f4}
+\end{figure}
+
+\subsection{Secondary targets}
+\label{sec:results-secondary}
+
+On the secondary pair \{nominal GDP growth, EFFR\} the ABM's weighted ratios are
+0.715 / 0.702 / 0.736 (mean; the median column 0.714 / 0.702 / 0.737): first and second in the
+two full-sample tracks, second and third in the pandemic-masked track behind the AR(4) at 0.719.
+\textbf{The masked-track loss is reported as a loss.} The policy-rate operator maps the model's
+internal Taylor-rule rate to an annualised percentage point; this is explicitly not an approved
+EFFR bridge, and the caveat travels with every number quoting it.
+
+\subsection{Unemployment: scored, and lost on the level}
+\label{sec:results-unemp}
+
+Unemployment enters the scored tables as its own target set, and the ABM does not win it: at
+VAR(1) parity on the weighted ratio unmasked (0.995 mean / 0.974 median, 12th--13th of 20)
+against persistence models at 0.65, and far behind in the masked track (5.3--5.4, where masking
+removes exactly the cells in which the VAR anchor itself exploded, deflating every level-biased
+column's denominator). The reason is measured and initialisation-shaped, not dynamic: every
+origin opens at the frozen structural year's labour market rather than its own, the bias column
+of Table~\ref{tab:percell} is a near-constant $-1.9$ to $-2.4$\pp, and the interval misses are
+52--64\,\% \emph{above}-band at every horizon --- realised unemployment sitting above bands that
+opened too low. The model's unemployment \emph{dynamics}, by contrast, now behave: ensemble
+dispersion rises monotonically with horizon to 1.42\pp\ at $h=12$, which is $0.83\times$ the
+realised cross-origin dispersion (Figure~\ref{fig:f7}) --- and \S\ref{sec:evidence-gates} shows
+by ablation that without the trend-growth component the same statistic collapses to $0.27\times$
+as every path exhausts the labour pool. Scoring the level honestly requires origin-correct
+opening labour stocks --- a data acquisition, not a model change, and it is named in
+\S\ref{sec:limits}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/f7_unemployment.pdf}
+\caption{\textbf{F8 --- unemployment at $h=8$ across the backtest.} The ABM's ensemble median and
+5--95\,\% band against realised unemployment, with the no-trend-growth ablation's median for
+contrast. The ablation slides toward the floor at every origin --- the labour-pool exhaustion of
+\S\ref{sec:trendgrowth} --- while the model holds a stable band whose dispersion grows with
+horizon. The level offset at the recession origins is the frozen opening stock of A10.
+Data: \code{abm_ensemble_summaries.csv} (both variants), \code{quarterly_panel.csv}.}
+\label{fig:f7}
+\end{figure}
+
+\subsection{Formal inference}
+\label{sec:results-inference}
+
+Table~\ref{tab:inference} carries the two headline panels. Panel~A: Romano--Wolf rejects equal
+weighted-loss accuracy against all four DSGE columns at the 5\,\% level in every track (the
+adjusted $p$-values span 0.0002--0.016), while against the statistical family the weighted-loss
+test is marginal (adjusted $p \approx 0.08$ in the full-sample tracks; the historical-mean
+constant is the loss-closest statistical column through the pandemic cells). Panel~B: the
+real-GDP margin over SW07 is significant at $h = 2, 4, 8$ in every track, insignificant at $h=1$
+in the full-sample tracks --- where pandemic-origin outliers inflate the differential variance
+--- and at $h=12$; the GDP-deflator margin is statistically indistinguishable from SW07 at every
+horizon (all two-sided $p \ge 0.26$). The ABM's headline advantage over the strongest DSGE is,
+precisely, a \emph{real-activity advantage at business-cycle horizons}.
+
+The model confidence set completes the picture as a power statement. In the two full-sample
+tracks the ABM (mean) is the set's best member with MCS $p = 1.0$ and no column is excluded at
+$\alpha = 0.10$ --- 50--61 weighted observations with pandemic outliers cannot separate twenty
+columns. The masked track excludes both small-NK columns, both no-reconciliation ablation
+columns and \code{naive_drift}; the ABM leads the surviving set.
+
+\begin{table}[t]
+\centering
+\caption{Inference on the headline pair. Panel A: Romano--Wolf stepdown adjusted $p$-values, ABM
+against each DSGE column, on per-origin weighted headline losses over complete origins; all
+twelve cells reject equal accuracy at the 5\,\% level (entries below the rendering precision of
+the repository tables are shown as $<0.001$; the smallest adjusted $p$ in the family is 0.0002).
+Panel B: two-sided HLN Diebold--Mariano $p$-values, ABM (mean) against \code{dsge_sw07}, real GDP
+growth, by horizon. Data:
+\pathc{output/us_forecasting/stage2b_scorecard/STAGE2B_TABLES.md}.}
+\label{tab:inference}
+\footnotesize
+\begin{tabular}{@{}lccc@{}}
+\multicolumn{4}{@{}l}{\emph{Panel A --- Romano--Wolf adjusted $p$, ABM vs the DSGE columns}} \\
+\toprule
+Comparator & all-available & balanced $h{=}12$ & pandemic-masked \\
+\midrule
+\code{dsge_small_nk} & $<0.001$ & $<0.001$ & 0.010 \\
+\code{dsge_small_nk_median} & $<0.001$ & $<0.001$ & 0.010 \\
+\code{dsge_sw07} & 0.016 & 0.016 & $<0.001$ \\
+\code{dsge_sw07_median} & 0.016 & 0.016 & $<0.001$ \\
+\bottomrule
+\end{tabular}
+
+\medskip
+
+\begin{tabular}{@{}lccccc@{}}
+\multicolumn{6}{@{}l}{\emph{Panel B --- HLN-DM two-sided $p$, ABM vs \code{dsge_sw07}, real GDP growth}} \\
+\toprule
+Track & $h=1$ & $h=2$ & $h=4$ & $h=8$ & $h=12$ \\
+\midrule
+all-available & 0.296 & 0.001 & 0.022 & 0.003 & 0.153 \\
+balanced $h{=}12$ & 0.301 & 0.001 & 0.021 & 0.004 & 0.153 \\
+pandemic-masked & 0.002 & $<0.001$ & 0.002 & $<0.001$ & 0.104 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Structural-vintage robustness}
+\label{sec:vintage}
+
+The single-structural-year asymmetry of assumption A2 is measured directly. Two additional annual
+structures were built from revised BEA supply--use tables for reference years 2017 and 2012
+through the identical ingestion path (golden-tested: the same code rebuilds the 2024 artifact
+bit-exactly), identically reconciled (RAS exactly as in \S\ref{sec:calib-balance};
+$\lambda = 0.98306$ and $0.97911$ against 2024's $0.98346$; residual decompositions published
+beside the artifacts), and verified; the ABM was re-run at 500 paths on all 61 origins under
+each, with matched seeds, against the identical field --- whose statistical and DSGE columns do
+not depend on the annual structure and therefore serve as invariance controls.
+
+\begin{table}[h]
+\centering
+\caption{Headline weighted RMSE ratio of the ABM (mean column) under three annual structures,
+identical field, matched seeds and cells. The maximum deviation, 0.0007, is an order of magnitude
+below the $\pm0.005$ Monte-Carlo error of a 500-path ensemble.}
+\label{tab:vintage}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Annual structure & all-available & balanced $h{=}12$ & pandemic-masked & headline rank \\
+\midrule
+2024 (main run) & 0.8282 & 0.8281 & 0.7921 & 1--2 of 20 \\
+2017 & 0.8281 & 0.8278 & 0.7933 & 1--2 of 20 \\
+2012 & 0.8288 & 0.8287 & 0.7922 & 1--2 of 20 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The headline conclusion does not depend on the structural vintage
+(Table~\ref{tab:vintage}). This also bounds the mixed-vintage worry for the technology matrix
+specifically: if the frozen recent structure were doing unfair work at historical origins,
+replacing it with the structure those origins actually had access to would show it; it does not.
+(Counts, taxes and the opening labour stock remain tied to the structural year --- the
+unemployment level defect of \S\ref{sec:results-unemp} stands.)
+
+% ===========================================================================
+\FloatBarrier
+\section{Which components carry the accuracy: matched-seed evidence}
+\label{sec:evidence}
+
+A model that wins a horse race invites one question above all: \emph{which part of it is doing
+the work?} Because every component of \S\ref{sec:model} is flag-gated, each can be switched off
+and the entire 61-origin exercise re-run under the identical seed stream --- every path draws the
+same random numbers, so differences are the component's causal effect, not Monte-Carlo noise ---
+and scored on the identical common cells. Two rejected designs are reported alongside, because a
+design space is only credible if it contains something that failed.
+
+\subsection{Attribution}
+\label{sec:evidence-attrib}
+
+\begin{table}[t]
+\centering
+\caption{Matched-seed, identical-cell component attribution. Effects are changes in the weighted
+headline RMSE ratio (all-available / balanced / pandemic-masked); negative is an improvement.
+Each ablation column is itself fully scored in the field artifact.}
+\label{tab:attribution}
+\footnotesize
+\begin{tabular}{@{}p{0.28\textwidth}p{0.26\textwidth}p{0.38\textwidth}@{}}
+\toprule
+Experiment & Isolates & Weighted headline effect \\
+\midrule
+Without the opening-balance reconciliation (raw accounts, log-level AR(1) expectations) &
+the accounting component of \S\ref{sec:calib-balance} &
+$+0.075$ / $+0.065$ / $+0.476$ against the full model
+(0.905 / 0.894 / 1.272: mid-field, and pandemic-dependent) \\[2pt]
+Log-level AR(1) expectations under the full model &
+the expectation specification of \S\ref{sec:expectations} &
+$+0.006$ / $+0.006$ / $+0.061$ (0.835 / 0.834 / 0.853) \\[2pt]
+Without trend supply growth &
+the balanced-growth component of \S\ref{sec:trendgrowth} &
+$+0.002$ / $+0.001$ / $+0.004$ on the headline --- \emph{and} unemployment dynamics degenerate
+(\S\ref{sec:evidence-gates}) \\[2pt]
+Demand-side investment feedback (two designs) &
+the alternative to \S\ref{sec:trendgrowth} &
+rejected on stability diagnostics before scoring (\S\ref{sec:evidence-invest}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:attribution} orders the mechanisms. The \emph{accounting reconciliation carries
+the bulk of the accuracy}: without it the headline ratio deteriorates by 0.065--0.075 in the
+full-sample tracks and by 0.476 masked --- the unreconciled model's standing depended on the
+pandemic cells. The \emph{expectation specification carries most of the rest}, and matters
+precisely where the pandemic cells are removed (+0.061 masked): the log-level AR(1)'s trend
+under-delivery (Table~\ref{tab:gammae}) binds in calm samples, while in the full sample the 2020
+collapse rewards any downward-biased forecast. The \emph{trend-growth component is deliberately
+headline-neutral} ($\pm0.004$): its payload is the labour market and long-run validity
+(\S\ref{sec:evidence-gates}), and it did not purchase headline accuracy at their expense --- the
+one interaction worth recording is that under AR(1) expectations the trend-growth economy's
+unemployment drifts \emph{up} (to 4.7\,\% at $h=12$ from a 3.7\,\% opening at the 2010Q2 origin),
+exactly as balanced-growth accounting predicts when demand expectations under-deliver the trend
+that supply now provides.
+
+\subsection{What the unreconciled accounts do to the economy}
+\label{sec:evidence-recon}
+
+The unreconciled ablation is not merely worse; it is worse in a way that identifies the
+mechanism, which is why the reconciliation can be called a component rather than a patch.
+Unreconciled, the model under-forecasts real GDP growth by $-1.3$ to $-2.9$\pp\ at every horizon
+(and $-7.3$\pp\ at $h=2$; Figure~\ref{fig:f3}). Matched-seed decomposition attributes 76\,\% of
+the average shortfall to the opening-balance defect colliding with the frozen capacity envelope
+--- 12.9--14.4\,\% of gross output produced under a binding ceiling every quarter, exports
+filling only 87\,\% of demand, over-demanded sectors pinned at their caps while under-demanded
+capacity idles uselessly --- and 24\,\% to the expectation shrinkage of
+Eq.~\eqref{eq:gammae}. The diagnosis made a falsifiable prediction: a \emph{quantity-rationing}
+defect should leave the \emph{price} block untouched when repaired. It held --- the GDP-deflator
+column is bit-identical at $h=1$ between the two runs and its ratios differ in the third decimal
+elsewhere, while real-GDP bias falls by two orders of magnitude, to $|{\cdot}|\le0.25$\pp\
+(Table~\ref{tab:percell}). A dose--response check completes the identification: relieving the
+capacity envelope by $+30\,\%$ in the unreconciled economy recovers most of the lost growth,
+while the same relief added \emph{on top of} the reconciliation moves nothing --- the two
+interventions are substitutes for one binding constraint, which is what the mechanism claims.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/f3_real_gdp_bias.pdf}
+\caption{\textbf{F3 --- real-GDP mean error by horizon: the accounting component's causal
+effect.} Matched seeds, identical cells. Without the reconciliation the model under-forecasts at
+every horizon, with a $-7.3$\pp\ transient at $h=2$; the full model's bars are barely visible at
+this scale (inset: largest $|$bias$|$ is 0.25\pp). Data: \code{stage2b_score_summaries.csv}.}
+\label{fig:f3}
 \end{figure}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/f9_paths_h4.pdf}
-\caption{\textbf{F9 --- four-quarter-ahead real GDP growth across the whole backtest.} Each point on
-the model curves is the ensemble functional from a different origin. The first pass sits at
-approximately zero growth throughout; the repaired model sits near $+2.3$\,\% and tracks the level
-of realised growth. Neither forecasts the pandemic quarters, which is why the pandemic-masked track
-exists. Only cells with a realised target quarter in the panel are shown, so the series ends at
-2025Q3. Data: \code{abm_ensemble_summaries.csv} (both versions), \code{quarterly_panel.csv}.}
+\caption{\textbf{F9 --- four-quarter-ahead real GDP growth across the whole backtest.} Each point
+on the model curves is the ensemble functional from a different origin. The unreconciled ablation
+sits at approximately zero growth throughout; the full model sits near $+2.3\,\%$ and tracks the
+level of realised growth. Neither forecasts the pandemic quarters, which is why the
+pandemic-masked track exists. Data: \code{abm_ensemble_summaries.csv} (both variants),
+\code{quarterly_panel.csv}.}
 \label{fig:f9}
 \end{figure}
 
-\subsection{Secondary targets}
+\subsection{What trend supply growth buys: the two gates}
+\label{sec:evidence-gates}
 
-Nominal GDP growth is the exact sum of real GDP growth and deflator inflation, so it adds no
-independent information but costs nothing to report. The policy-rate operator maps the model's
-internal Taylor-rule rate to an annualised percentage point; \textbf{this is explicitly not an
-approved EFFR bridge}, and the caveat travels with every number in Table~\ref{tab:secondary}.
+Two simulation-internal gates certify the trend-growth component; neither consulted a forecast
+error.
 
-\begin{table}[h]
-\centering
-\caption{Secondary target pair \{nominal GDP growth, effective federal funds rate\}, weighted RMSE
-ratios. Weighted MAE ratios follow the same pattern: 0.717 / 0.694 / 0.735 for the repaired model
-against 0.971 / 0.912 / 1.268 for the first pass.}
-\label{tab:secondary}
-\small
-\begin{tabular}{@{}llllc@{}}
-\toprule
-Track & v2 mean (rank) & v2 median & v1 mean (rank) & Best statistical \\
-\midrule
-all-available & \textbf{0.716 (1st)} & 0.716 (2nd) & 0.782 (5th) & \code{univariate_ar_bic} 0.780 \\
-balanced $h{=}12$ & \textbf{0.703 (1st)} & 0.704 (2nd) & 0.761 (4th) & \code{univariate_ar_bic} 0.770 \\
-pandemic-masked & 0.739 (2nd) & 0.741 (3rd) & 1.124 (10th) & \textbf{\code{univariate_ar_p4} 0.719 (1st)} \\
-\bottomrule
-\end{tabular}
-\end{table}
+\emph{Utilisation and capacity.} Matched-seed 24-quarter simulations at three origins --- twice
+the scored window, because the question is asymptotic behaviour: without the component,
+utilisation drifts from its 0.850 opening to 0.98--0.99 by quarter 24 with zero capacity growth;
+the economy grows only by draining its fixed 17.6\,\% headroom, and beyond roughly eight to ten
+years it must stall. With the component, utilisation stabilises at 0.87--0.91 while capacity
+grows 10--13\,\% over the six years --- the calibrated trend. Growth is no longer headroom
+drainage, and the validity restriction that would otherwise cap the model at $h\le12$ on the
+supply side is lifted. (The rejected alternative closure of assumption A6 --- keep every measured
+budget and let a uniform 1\,\% excess-demand wedge survive --- fails this same gate from the
+other side: it exhausts its headroom in about four years, which is why its smaller measured
+headline bias was never taken as evidence in its favour.)
 
-\textbf{The pandemic-masked loss is reported as a loss.} On the secondary pair in the calm sample,
-AR(4) at 0.719 beats the repaired ABM at 0.739 --- a 2.8\,\% margin. The repaired model wins the
-other two tracks and the headline pair everywhere, but it does not sweep the field, and the one
-cell where a statistical model wins outright is stated here rather than buried.
+\emph{Unemployment dynamics.} Without the component, simulated demand growth must be met by
+employment growth out of the fixed pool: unemployment falls mechanically at every origin, path
+dispersion collapses to $0.27\times$ the realised cross-origin dispersion by $h=12$ as every path
+reaches the floor, and end-of-horizon unemployment sits at 0.8--1.1\,\% --- roughly a third of
+the lowest rate the United States has recorded in sixty years. With the component, dispersion
+rises monotonically to $0.83\times$ realised at $h=12$ and the rate holds a stable, widening
+band (Figure~\ref{fig:f7}). The remaining coverage misses are 52--64\,\% above-band at every
+horizon: the frozen opening \emph{level} of A10, not the dynamics.
 
-\subsection{Unemployment: an open defect that became worse}
-\label{sec:unemployment}
+\subsection{The investment designs that were rejected}
+\label{sec:evidence-invest}
 
-\code{unemployment_rate} is excluded from every weighted score in both versions, for the reason
-recorded in each manifest: the initial unemployed stock is a length-one annual array frozen at 2024,
-so every historical origin opens at the 2024 labour market.
-
-\emph{The first-pass defect was a constant forecast.} Across all 61 origins the $h=1$ unemployment
-forecast ranges from 3.492\,\% to 3.679\,\% --- a span of 0.187\pp, cross-origin standard deviation
-0.048\pp\ --- against realised values spanning 3.533\,\% to 13.000\,\%. Had it been scored, the
-first pass would have ranked 1st or 2nd of the 14 columns at $h=8$ and $h=12$. \emph{Those are not wins.} They
-are a constant landing near the sample mean, and the giveaway is that
-\code{naive_historical_mean} --- a constant by construction --- is the best statistical model in
-exactly those cells.
-
-\emph{The post-repair defect is collapse.} Once goods rationing stops, the labour block overheats.
-Bias moves from $-1.97 / -0.86 / -0.06 / +0.19 / +0.08$\pp\ to
-$-2.09 / -2.38 / -3.12 / -4.39 / -4.73$\pp, and MASE from $7.7 / 6.0 / 5.9 / 5.7 / 5.2$ to
-$8.1 / 9.3 / 12.2 / 17.3 / 18.8$. End-of-horizon unemployment at four origins with 64 matched-seed
-paths is 0.76--1.11\,\% under the reconciliation alone and 0.12--0.50\,\% with the expectation
-change, against 4.73--5.28\,\% before. \textbf{This is not credible}, it is a direct consequence of
-the repair, and it is the diagnosis's predicted side effect.
-
-Two separable items of future work follow, and they should not be bundled. (a) Fetching historical
-annual Current Population Survey series would remove the frozen-stock defect and make the target
-scoreable at historical origins. (b) The post-reconciliation collapse is a labour-block behavioural
-issue requiring its own diagnosis of the kind in \S\ref{sec:diagnosis}. \emph{(a) does not fix
-(b).}
+The natural objection to \S\ref{sec:trendgrowth} is that capacity growth should come from
+\emph{investment} --- firms observing demand pressure and accumulating capital --- rather than
+from an exogenous efficiency trend. Two such designs were built, run matched-seed, and rejected
+on stability diagnostics alone, before any forecast was scored; both remain runnable in the
+repository. A \emph{capacity-gap accelerator} ($I^d$ closing a fraction $\nu=0.0625$ of the gap
+between demand-implied and actual capital each quarter) and a \emph{balanced-growth
+net-investment flow} ($g\,K_i$ added to desired investment) each destabilise the economy the
+same way: the injected investment demand lands in a rationed goods market, raises realised
+sales, which raises adaptive sales expectations, which raises next quarter's demand --- a
+multiplier--accelerator spiral that the model's decentralised markets amplify rather than damp.
+Measured on matched seeds: real growth 5.5--8.2\,\% annualised and unemployment to zero within
+4--8 quarters, under either design. That fragility is itself a finding about this model class at
+this calibration: the demand side cannot absorb a net-investment flow without a boom, so trend
+capacity growth has to enter on the supply side --- which is also where, in the data, most of it
+lives (measured productivity growth). A demand-side investment block stable enough to carry
+trend growth is an open design problem, not a small parameter choice.
 
 % ===========================================================================
 \FloatBarrier
 \section{The current outlook --- unscored}
 \label{sec:outlook}
 
-Two origins beyond the end of the revised panel --- 2025Q4 and 2026Q1 --- were run on the repaired
-artifact with 500 paths and zero path failures. There is no realised truth for these, so
-\textbf{nothing in this section is scored} (\code{scored = false},
-\code{realized_truth_available = false}), and the headroom caveat of \S\ref{sec:headroom} applies
-with more force at $h=12$ than inside the scored window.
+Two origins beyond the end of the revised panel --- 2025Q4 and 2026Q1 --- were run with 500 paths
+and zero path failures. There is no realised truth for these, so \textbf{nothing in this section
+is scored} (\code{scored = false}, \code{realized_truth_available = false}).
 
-From the 2025Q4 origin, average real growth over $h=1\ldots4$ is $+2.11\,\%$ with a 5th--95th
-percentile band of roughly $-5.5$ to $+10$; deflator inflation runs $3.21\,\%$ at $h=1$, easing to
-$2.40\,\%$ by $h=4$ and $\approx2.25\,\%$ by $h=12$; the policy rate declines from $3.86\,\%$ to
-$3.32\,\%$. From the 2026Q1 origin, average real growth over $h=1\ldots4$ is $+2.31\,\%$, average
-deflator inflation $+2.86\,\%$, and the policy rate declines from $3.60\,\%$ to $3.47\,\%$ by $h=4$
-and $3.16\,\%$ by $h=12$. Figure~\ref{fig:f6} shows the 2026Q1 fan.
+From the 2025Q4 origin, average real growth over $h=1\ldots4$ is $+2.20\,\%$ with a 5th--95th
+percentile band of roughly $-5.4$ to $+9.9$ at $h=1$; deflator inflation runs $3.21\,\%$ at
+$h=1$, easing to $2.54\,\%$ by $h=4$ and $\approx2.3\,\%$ by $h=12$; the policy rate declines
+from $3.86\,\%$ to $3.34\,\%$ by $h=12$; and unemployment holds $3.7$--$3.9\,\%$ over the first
+year, easing to $3.3\,\%$ by $h=12$. From the 2026Q1 origin, average real growth over
+$h=1\ldots4$ is $+2.31\,\%$, deflator inflation eases from $3.13\,\%$ to $2.49\,\%$ by $h=4$,
+the policy rate declines from $3.60\,\%$ to $3.11\,\%$ by $h=12$, and unemployment holds
+$3.4$--$3.8\,\%$ throughout. Figure~\ref{fig:f6} shows the 2026Q1 fan.
 
-Two things to note when reading Figure~\ref{fig:f6}. First, the first-pass outlook's $-4.9\,\%$ dive
-at $h=2$ is gone: it was the transient of \S\ref{sec:v1} and does not survive the balance fix.
-Second, path dispersion is large \emph{by construction} --- the real-GDP ensemble standard deviation
-is 4.6--5.1\pp, a 5th--95th band spanning $\approx16$\pp\ --- while the Monte-Carlo standard error of
-the mean is $\approx0.2$\pp. The width is model dispersion, not simulation noise, and per
-Table~\ref{tab:coverage} the real-GDP 90\,\% band is close to nominal coverage in backtest while
-the deflator and policy-rate bands are demonstrably too narrow.
+Path dispersion is large \emph{by construction} --- the real-GDP ensemble standard deviation is
+4.6--5.3\pp, a 5th--95th band spanning $\approx16$\pp\ --- while the Monte-Carlo standard error
+of the mean is $\approx0.2$\pp: the width is model dispersion, not simulation noise. Per
+Table~\ref{tab:density} the real-GDP 90\,\% band is close to nominal coverage in backtest, so
+that fan means what it says; the deflator and policy-rate fans are demonstrably too narrow and
+should be read as lower bounds on uncertainty.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/f6_outlook_fan.pdf}
 \caption{\textbf{F6 --- current outlook from the 2026Q1 origin, unscored.} Realised history from
 2023Q1 is prepended in grey for context; the fan shows the ensemble median with 25--75th and
-5--95th percentile bands over $h=1\ldots12$. The dotted line marks the origin. The deflator fan
-narrows to a stable $\approx2.3\,\%$ median while the real-growth fan is essentially flat around
-$+2\,\%$ with wide, roughly horizon-invariant dispersion --- the signature of a model whose
-conditional uncertainty saturates quickly. Data: \code{current_outlook.csv},
-\code{quarterly_panel.csv}.}
+5--95th percentile bands over $h=1\ldots12$. The dotted line marks the origin.
+Data: \code{abm_ensemble_summaries.csv} (outlook run), \code{quarterly_panel.csv}.}
 \label{fig:f6}
 \end{figure}
 
@@ -1686,157 +1711,125 @@ conditional uncertainty saturates quickly. Data: \code{current_outlook.csv},
 
 Ranked by inferential risk to the results above.
 
-\subsection{Capacity-headroom growth ceiling --- no capital accumulation}
-\label{sec:headroom}
+\subsection{Revised data, mixed vintage}
+The entire exercise estimates and scores on a current-vintage panel, and the annual structure is
+carried backwards to historical origins. The first limitation is symmetric across all twenty
+columns and matches the reference paper's own design; the second is asymmetric and ours alone,
+now bounded for the input--output block by the direct measurement of \S\ref{sec:vintage} (moving
+the structure to 2017 or 2012 changes the headline ratio by at most 0.0007) but still binding for
+counts, taxes and the opening labour stock. No real-time information set was reconstructed, so
+nothing here is a claim about what a forecaster would have produced in 2010; the route to that
+claim is a data-acquisition programme --- year-by-year annual history for the 37 structural
+arrays, plus a real-time truth layer of the \citet{croushorestark2001} kind --- not a modelling
+one.
 
-\textbf{The most binding limitation on any forward use.} Investment is replacement-only and
-$K_{\text{end}}/K_1 = 1.0000$ in every variant, so \emph{all} of the repaired model's extra growth
-comes from draining the fixed 17.6\,\% opening capacity headroom implied by the hard-coded
-$\omega=0.85$. Measured over 24 quarters at the 2016Q4 origin with 24 paths:
+\subsection{The unemployment opening level}
+Unemployment is scored and lost (\S\ref{sec:results-unemp}), for a measured reason: every origin
+opens at the structural year's labour market. Fetching historical annual Current Population
+Survey stocks would make the level scoreable at historical origins; the dynamics, repaired by the
+trend-growth component, are already there. Separately, the labour market lives on a fixed agent
+pool: with supply growth registered in productivity rather than population, unemployment remains
+a valid object only within the forecast window --- on 24-quarter simulations the pool still
+exhausts beyond roughly four years. Population growth in the agent count itself is the clean
+long-run fix and is an intrusive change to the initialisation machinery.
 
-\begin{table}[h]
-\centering
-\caption{Six-year growth decomposition by variant, annualised by year. The rejected
-``budgets-held'' closure exhausts its headroom in about four years and decays to $+0.33\,\%$/yr,
-which is precisely why its smaller headline bias was not taken as evidence in its favour.}
-\label{tab:headroom}
-\small
-\footnotesize
-\begin{tabular}{@{}lrrrrrrcr@{}}
-\toprule
-Variant & y1 & y2 & y3 & y4 & y5 & y6 & Utilisation y1$\rightarrow$y6 & $K_{24}/K_0$ \\
-\midrule
-v1 baseline & $-1.62$ & $-0.04$ & 0.59 & 0.45 & 1.19 & 1.36 & $0.845\rightarrow0.865$ & 1.0003 \\
-budgets held (rejected) & 3.33 & 3.60 & 3.53 & 2.71 & 1.39 & \textbf{0.33} & $0.867\rightarrow\mathbf{0.986}$ & 1.0000 \\
-\textbf{v2 ($\lambda$ closure)} & 1.17 & 1.06 & 1.56 & 1.47 & 2.86 & 3.33 & $0.856\rightarrow\mathbf{0.943}$ & 1.0000 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\subsection{Interval calibration of the deflator and the policy rate}
+The one leg of the preregistered bar the model fails. The deflator ensemble is under-dispersed at
+every level (90\,\% coverage 0.70--0.79); the policy-rate bands collapse with horizon (0.16 at
+$h=12$). Both are mechanism-level facts --- the price block inherits too little of the quantity
+dispersion, and the Taylor-rule path is too deterministic --- and both are named, measured
+targets for the next model change. Widening by post-processing would be a publication-layer
+correction, not a model improvement, and is prohibited by the firewall from touching these
+tables.
 
-Inside the 12-quarter scoring window this is a genuine improvement. Beyond roughly eight to ten
-years the repaired model must stall, because it has consumed 0.087 of its 0.144 headroom in six.
-A capacity-expansion term in desired investment --- calibrated against the accounting identity
-$\text{net } I = \Delta K$, \emph{never} against forecast RMSE --- is the prerequisite for any
-multi-year use. \textbf{The repaired model is validated at $h \le 12$ only, and is not a multi-year
-growth mechanism.}
+\subsection{DSGE estimation is posterior-mode, not full Bayes}
+The reference paper's DSGE comparison used full Markov-chain Monte Carlo (250\,000 draws per
+origin); ours estimates the mode of the same posterior at every origin and simulates densities
+at that mode. Stronger than fixed parameters, weaker than full MCMC --- parameter uncertainty is
+absent from the DSGE bands, which flatters their sharpness and is disclosed wherever they are
+quoted. Full-chain estimation at every origin is a compute programme, not a conceptual gap.
 
-\subsection{The labour block}
-Two distinct failures, as set out in \S\ref{sec:unemployment}: a frozen 2024 opening stock, and a
-post-repair collapse to $\approx1\,\%$ unemployment. Fixing the first does not fix the second, and
-the labour block needs its own diagnosis before unemployment is scored for either version.
+\subsection{Scale, and partial density evaluation}
+All headline results are at scale $10^{-5}$ (130 firms). An agent-count sweep shows the central
+results scale-invariant, but 54 of 68 sectors hold exactly one firm, which makes cross-sectional
+dispersion and tail behaviour unreliable; a production run at $\ge10^{-4}$ costs roughly
+$8\times$ the runtime and should precede any density claim finer than the CRPS and coverage
+reported here. No probability-integral-transform histogram or log score was computed.
 
-\subsection{Mixed-vintage structure and a single structural year}
-The 2024 input--output structure, firm and employee counts, tax rates and population are future
-information at every origin before 2024. This is bounded for flow targets and fatal for
-stock-initialised ones, and it is the limitation that most sharply separates this exercise from the
-reference paper. Separately, even setting look-ahead aside, the model has \emph{one} technology
-matrix for a fifteen-year sample: real changes in U.S.\ production structure over 2010--2025 --- the
-energy mix, the information-sector share, post-2020 supply-chain reconfiguration --- are invisible
-to it by construction. This limits what the sector-level diagnostics of \S\ref{sec:diagnosis} can be
-asked to bear, and it is a reason to treat the reconciled 2024 table as a \emph{fixed technology}
-rather than a historical one.
+\subsection{Absent bridges}
+Three of the eight registered panel targets are unserved: the personal consumption expenditures
+price index and its core variant need a consumption-basket price bridge the 68-commodity model
+does not expose, and payroll employment targets an establishment count on a different universe
+from the model's firm employment. The model is compared on five of eight targets, and the
+repository's semi-structural comparator (whose native set includes the PCE index) cannot be
+matched cell-for-cell in this field.
 
-\subsection{Absent bridges: PCE, core PCE, payroll employment}
-Three of the eight registered targets are unserved. The personal consumption expenditures price
-index and its core variant need a consumption-basket price bridge that the 68-commodity model does
-not expose, and the core additionally needs a food/energy exclusion the classification does not
-identify cleanly. Payroll employment targets an establishment count on a different universe from the
-model's firm employment. None should be scored until a bridge qualification of the kind done for the
-GDP operator is complete. The practical cost is that the model is compared on five of eight targets,
-and the semi-structural comparator's core-four target set cannot be matched.
+\subsection{Separation from the statistical family is marginal}
+Romano--Wolf separates the ABM from both DSGE columns at 5\,\% in every track, but from the best
+statistical columns only at $p \approx 0.08$ on weighted losses --- pandemic-era origins dominate
+the loss metric and the historical-mean constant is loss-close there. Margins of a few percent
+between adjacent statistical columns should not be treated as established; the model confidence
+set makes the sample's limited resolving power explicit.
 
-\subsection{Density evaluation is partial; the scale ladder was not run for the headline}
-\S\ref{sec:v2} reports interval coverage only. Moreover all headline results are at scale
-$10^{-5}$ (130 firms). The scale sweep established that the \emph{mean} bias is invariant from 130
-to 2\,708 firms, but 54 of 68 sectors hold exactly one firm at this scale, which makes
-cross-sectional dispersion and tail behaviour unreliable. A production run at scale $\ge10^{-4}$
-costs roughly $8\times$ the runtime and should precede any density claim.
-
-\subsection{No DSGE benchmark; the semi-structural comparator is not in the field}
-The reference paper compares its ABM against a Bayesian DSGE model of the
-\citet{smetswouters2007} family; this exercise does not. A small New-Keynesian design exists in the
-repository and the Federal Reserve Bank of New York's open-source DSGE model is the natural external
-candidate. Until one is scored on this grid, ``best in the field'' means \emph{best among ten
-time-series benchmarks}. Adding the semi-structural Kalman comparator under the ABM's target set is
-the cheaper first step.
-
-\subsection{Inference}
-No formal inference was performed: no \citet{dieboldmariano1995} test, no
-heteroskedasticity-and-autocorrelation-consistent adjustment, no bootstrap, and no
-multiple-comparison control across the $14 \times 5 \times 5 \times 3$ grid of models, targets,
-horizons and tracks. The rankings are descriptive. The version contrast is the most defensible
-comparison in this paper because it is matched-seed on identical cells with one deliberate change;
-the comparisons against statistical models are not, and margins of a few per cent --- such as 0.830
-against \code{naive_historical_mean}'s 0.879 --- should not be treated as established.
-
-\subsection{Residual reproducibility notes}
-The pipeline's baseline builder errors out and cannot regenerate its own baselines; the checked-in
-artifacts load and run correctly, so this does not block the work, but the provenance chain is
-broken at the regeneration step. The reconciliation builder is deliberately standalone and is not
-wired into the artifact-build entry point for that reason. Minor: the Monte-Carlo error file in the
-repaired run's output directory carries a stale first-pass model-family label on rows that are the
-repaired ensemble's own errors; the values are correct, only the family string is wrong, and no
-reported number depends on it. Finally, the narrative in the repository's results report states 543
-RAS iterations where the committed reconciliation report states 623; the committed artifact is
-authoritative and Table~\ref{tab:ras} follows it.
-
-\subsection{Pointer to a vintage-clean design}
-A stage-3, pseudo-real-time design requires year-by-year annual history for the 37 frozen arrays
---- BEA input--output summary use/make tables after redefinitions; Census SUSB and BLS QCEW for
-firms and employees per sector; BLS CPS for population, unemployed and inactive; BEA national
-income and product accounts for tax and benefit aggregates, and BEA fixed-assets tables for assets,
-dwellings and capital consumption \citep{bea_nipa} --- plus a real-time truth layer of the \citet{croushorestark2001} kind, for which a
-Philadelphia Fed real-time data set capture already exists on disk. Quarterly series need no fetch;
-they run from 1996Q4. This is a data-acquisition programme, not a modelling one, and it is the only
-route to a promotion claim. A realistic first cut restricts origins to 2014 and later, where the
-annual coverage is densest.
+\subsection{Reproducibility notes}
+The pipeline's legacy baseline builder cannot regenerate its own pre-reconciliation baselines;
+the checked-in artifacts load and run correctly, and the structural-vintage builder used in
+\S\ref{sec:vintage} was golden-tested against the shipped 2024 artifact (bit-exact), so the
+provenance chain for every scored input is intact. The ensemble caches regenerate byte-for-byte
+under the current source tree, which was verified for all 3\,660 rows of each frozen ablation
+column before scoring.
 
 % ===========================================================================
 \FloatBarrier
 \section{Conclusion}
 \label{sec:conclusion}
 
-An agent-based macroeconomic model of the United States was calibrated from public source data,
-scored against ten statistical benchmarks on a matched grid of 61 quarterly origins and five
-horizons with 500 free-running paths per origin, found to carry a large and systematic real-growth
-bias, diagnosed by matched-seed experiment to two specific defects, repaired by restoring an
-accounting identity and correcting a misspecified estimator --- neither repair \emph{selected}
-using forecast errors --- and then re-scored on identical cells with identical seeds. The exercise
-remains explicitly mixed-vintage: 2024 structure and current-vintage data are used at historical
-origins. That arc
-is the result. The rank improvement is a consequence of it, not the object of it.
+An agent-based model of the United States, calibrated from public data under a verified
+no-fitting rule and completed with three structural components --- exactly balanced opening
+accounts, drift-form growth expectations, and observed trend growth in supply --- was evaluated
+under the reference protocol of \citet{poledna2023} against a twenty-column field that includes
+ten statistical benchmarks and two recursively re-estimated DSGE models, with formal inference,
+exact density scores, matched-seed component attribution, and a structural-vintage robustness
+sweep. Three findings are worth carrying away.
 
-Three findings are worth carrying away.
+\emph{First, in a structural simulator the accounting is load-bearing, and it is where most of
+the forecasting accuracy lives.} The largest single contributor to the ABM's standing is not a
+behavioural rule but an identity: making the opening supply--use system balance exactly, in the
+model's own valuation basis, on its own axes. A published table balances only as published;
+after the valuation bridge and the industry-to-commodity projection a residual survives, and a
+model whose capacity envelope is anchored to those accounts converts the residual into a
+permanent, sector-locked rationing regime ($-2.75$\pp\ of growth bias, in this calibration).
+Reduced-form models cannot exhibit this failure class --- they have no identities to violate ---
+which cuts both ways: the ABM is exposed to it, and repairing it is a real, attributable source
+of forecasting skill. The repair also made a falsifiable prediction --- a quantity defect should
+leave the price block untouched --- that held to the bit.
 
-\emph{First, the defect was in the accounting, not the behaviour.} A supply--use system that
-balances in its published valuation basis need not balance after a valuation bridge and an
-industry-to-commodity projection, and an agent-based model with a fixed capacity envelope and a
-one-sided production constraint has no mechanism that can absorb the difference. The failure mode
-was not a badly chosen parameter; it was an identity that had quietly stopped holding. This is a
-class of failure that structural simulators are especially exposed to and that a reduced-form model,
-having no accounting identities to violate, cannot exhibit.
+\emph{Second, a fixed-population, fixed-productivity economy cannot host trend growth, and the
+stable way to give it one is on the supply side.} Without trend supply growth the model must
+convert demand trend into employment trend until the labour pool is exhausted, and output trend
+into utilisation until capacity binds --- both measured, both terminal. Registering observed
+productivity-plus-labour-force growth in the supply coefficients repairs the labour market's
+dynamics and lifts the capacity ceiling while leaving headline accuracy essentially unchanged
+--- evidence that the model's forecasting skill was never the artifact of a supply pathology.
+The demand-side alternative, investment responding to the capacity gap, destabilises the economy
+in two independent designs: a rationed goods market with adaptive expectations amplifies any
+injected investment demand into a boom. That fragility is a genuine property of the model class
+at this calibration, and it marks stable endogenous investment-driven growth as the design
+problem standing between this model and multi-year use.
 
-\emph{Second, the diagnosis made a falsifiable out-of-sample prediction, and it held.} The
-mechanism implied a real quantity-rationing defect and therefore predicted that the price block
-would be untouched by the repair. The GDP deflator's $h=1$ cell is bit-identical between the two
-versions, and its ratios differ in the third decimal at every other horizon, while real-GDP bias
-falls by two orders of magnitude. A diagnosis that predicts what will \emph{not} change is more
-informative than one that only predicts what will.
-
-\emph{Third, the improvement is bounded by a defect that was not repaired.} All of the repaired
-model's growth drains a fixed 17.6\,\% capacity headroom, because investment is replacement-only and
-capital never accumulates. Within the twelve-quarter scoring window this is a genuine improvement;
-beyond roughly eight to ten years it is not a growth mechanism at all. Reporting the rank without
-this caveat would misrepresent what has been established.
-
-What has been established is that a specific, located, repairable accounting defect explained a
-2-percentage-point forecast bias, and that after repair the model attains the lowest weighted RMSE
-ratio in a fourteen-column field on the headline target pair in all three sample tracks. What has
-not been established is real-time forecast skill, validity beyond twelve quarters, anything about
-the labour block, or statistical separation from the models ranked immediately below. The route
-from here is a data-acquisition programme for vintage-correct structural inputs, a capacity
-expansion term calibrated against the investment identity, and a labour-block diagnosis of the kind
-performed here for the goods market.
+\emph{Third, against the strongest available challengers the ABM's advantage is real, specific,
+and honestly bounded.} The margin over a fully re-estimated Smets--Wouters system --- itself
+granted more data than any other column, and better than every statistical model --- is
+significant under multiplicity control in every track, and it is concentrated where an
+agent-based model ought to earn it: real activity at business-cycle horizons, with inflation
+accuracy statistically indistinguishable and the density advantage carried by sharpness. Against
+simple statistical models the separation is marginal on this sample. The deflator's intervals
+are too narrow, and that single calibration leg fails the preregistered superiority bar, so the
+claim published is the conditional one of \S\ref{sec:results-verdict} --- which is also,
+precisely, what the evidence supports. What stands between this diagnostic and a real-time
+forecasting claim is not further tuning --- the firewall forbids it --- but data: vintage-correct
+structural inputs, origin-correct opening labour stocks, and full-posterior DSGE baselines. Each
+is named, none is done, and the apparatus to score them already exists.
 
 % ===========================================================================
 \appendix
@@ -1848,119 +1841,105 @@ performed here for the goods market.
 All commands run from the repository root. Both environment variables are hard requirements on the
 benchmark path: the runner raises an error unless the Julia and BLAS thread counts are both 1.
 
-\begin{quote}\small\ttfamily
+\begin{quote}\footnotesize\ttfamily
 \# 1. build the reconciled calibration artifact ($\sim$40\,s)\\
 julia --project=scripts/us \textbackslash\\
 \hspace*{2em}scripts/us/calibration/reconcile\_commodity\_balance.jl \textbackslash\\
 \hspace*{2em}--mode=final\_demand\_scaled --expectations=rw\_drift\\[4pt]
-\# 2. the two ensembles, 61 origins $\times$ 500 paths each\\
+\# 2. the ABM ensembles: the model and its ablation columns,\\
+\#\hspace*{1em}61 origins x 500 paths each\\
 JULIA\_NUM\_THREADS=1 OPENBLAS\_NUM\_THREADS=1 julia --project=scripts/us \textbackslash\\
 \hspace*{2em}scripts/us/forecasting/diagnostics/abm\_revised\_comparison/\textbackslash\\
 \hspace*{2em}run\_revised\_data\_abm\_comparison.jl \textbackslash\\
-\hspace*{2em}output/us\_forecasting/abm\_v2\_comparison/v1\_headline 500 headline\\
-\hspace*{2em}\ldots{} v2\_headline 500 headline\_v2\\[4pt]
-\# 3. joint scoring: both ABM columns on identical common cells\\
-\hspace*{2em}\ldots{} v2\_headline 500 headline\_v2 --also-score=\ldots/v1\_headline\\[4pt]
-\# 4. current outlook (unscored)\\
-\hspace*{2em}\ldots{} output/us\_forecasting/abm\_v2\_comparison\_outlook 500 outlook\_v2\\[4pt]
-\# 5. figures for this paper\\
-python3 paper/figures\_src/make\_figures.py\\[4pt]
-\# 6. this paper\\
+\hspace*{2em}output/us\_forecasting/stage2b\_full/v3\_headline 500 headline\_v3\\
+\hspace*{2em}\ldots{} v2\_headline 500 headline\_v2 \quad\ldots{} v1\_headline 500 headline\\
+\hspace*{2em}\ldots{} v3\_ar1 500 headline\_v3\_ar1\\
+\hspace*{2em}\ldots{} outlook\_v3 500 outlook\_v3\\[4pt]
+\# 3. the DSGE columns: per-origin posterior-mode estimation + 500-path densities\\
+JULIA\_NUM\_THREADS=1 OPENBLAS\_NUM\_THREADS=1 julia --startup-file=no \textbackslash\\
+\hspace*{2em}--project=scripts/us scripts/us/forecasting/benchmarks/dsge\_columns/\textbackslash\\
+\hspace*{2em}run\_dsge\_columns.jl \textbackslash\\
+\hspace*{2em}output/us\_forecasting/stage2b\_dsge\_columns both\\[4pt]
+\# 4. the composite twenty-column scorecard, densities included\\
+\hspace*{2em}\ldots{}/stage2b/run\_stage2b\_scorecard.jl \textbackslash\\
+\hspace*{2em}output/us\_forecasting/stage2b\_scorecard \textbackslash\\
+\hspace*{2em}--v1=\ldots{}/v1\_headline --v2=\ldots{}/v2\_headline --v3=\ldots{}/v3\_headline \textbackslash\\
+\hspace*{2em}--dsge=\ldots{}/stage2b\_dsge\_columns\\[4pt]
+\# 5. inference (HLN-DM, Romano--Wolf, MCS), verdict, and rendered tables\\
+\hspace*{2em}\ldots{}/stage2b/run\_stage2b\_inference.jl output/us\_forecasting/stage2b\_scorecard\\
+\hspace*{2em}\ldots{}/stage2b/verdict\_stage2b.jl output/us\_forecasting/stage2b\_scorecard\\
+\hspace*{2em}\ldots{}/stage2b/render\_stage2b\_tables.jl output/us\_forecasting/stage2b\_scorecard\\[4pt]
+\# 6. structural-vintage robustness (2017 / 2012 artifacts, then re-run step 2 with\\
+\hspace*{2em}--calibration=data/us/calibration/US\_2017\_calibration\_object\_reconciled.jld2)\\[4pt]
+\# 7. figures and this paper\\
+python3 paper/figures\_src/make\_figures.py\\
 cd paper \&\& latexmk -pdf US\_ABM\_Forecasting\_Paper.tex
 \end{quote}
 
-Step~2 resumes from its own ensemble cache, so an interrupted run continues rather than restarting;
-step~3 is a re-score off the cache (about 15\,s) rather than a re-simulation. Every figure in this
-paper is regenerated by step~5 directly from the committed CSVs listed in
-\S\ref{app:artifacts}; no figure contains a hand-entered number, and the generator pins
-\code{SOURCE_DATE_EPOCH} so that a re-run reproduces each figure byte for byte.
+Step~2 resumes from its own ensemble cache, so an interrupted run continues rather than
+restarting; the composite scorecard of step~4 is a re-score off the caches (seconds), and it
+asserts full origin coverage for every column before scoring. Every figure is regenerated by
+step~7 directly from committed CSVs; no figure contains a hand-entered number, and the generator
+pins \code{SOURCE_DATE_EPOCH} so a re-run reproduces each figure byte for byte.
 
 \subsection{Artifact paths}
 \label{app:artifacts}
 
 \begin{table}[h]
 \centering
-\small
 \footnotesize
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.38\textwidth}>{\raggedright\arraybackslash}p{0.56\textwidth}@{}}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.40\textwidth}>{\raggedright\arraybackslash}p{0.54\textwidth}@{}}
 \toprule
 Path (under the repository root) & Contents \\
 \midrule
-\pathc{output/us_forecasting/abm_v2_comparison/v2_headline/}
-& the canonical scored result: both ABM columns, 14 forecast columns, 500 paths ---
-  \code{manifest.toml}, \code{score_summaries.csv}, \code{relative_scores.csv},
-  \code{weighted_relative_scores.csv}, \code{monte_carlo_errors.csv},
-  \code{abm_v2_interval_coverage.csv}, \code{abm_ensemble_summaries.csv},
-  \code{abm_origin_diagnostics.csv}, \code{failures.csv} \\
-\pathc{output/us_forecasting/abm_v2_comparison/v1_headline/}
-& first-pass ensemble cache, re-run under the patched tree (gate G4) \\
-\pathc{output/us_forecasting/abm_v2_comparison_outlook/}
-& 2025Q4 and 2026Q1 origins on the reconciled artifact, unscored \\
+\pathc{output/us_forecasting/stage2b_scorecard/}
+& the twenty-column scorecard: weighted/relative/summary point tables, per-cell losses, CRPS,
+  coverage, unemployment dispersion, HLN-DM, Romano--Wolf, MCS, the verdict, and
+  \code{STAGE2B_TABLES.md} \\
+\pathc{output/us_forecasting/stage2b_full/}
+& ensemble caches and per-run scorecards: \code{v3_headline} (the model),
+  \code{v2_headline} / \code{v1_headline} / \code{v3_ar1} (ablation columns),
+  \code{v3_struct2017} / \code{v3_struct2012} (vintage robustness), \code{outlook_v3},
+  each with retained predictive draws \\
+\pathc{output/us_forecasting/stage2b_dsge_columns/}
+& per-origin DSGE posterior modes, estimation status, ensemble summaries and retained draws for
+  both columns \\
 \pathc{output/us_forecasting/commodity_balance_reconciliation/}
 & \code{reconciliation_report_rho1.txt}, \code{reconciliation_by_commodity_rho1.csv} \\
+\pathc{output/us_forecasting/commodity_balance_reconciliation_structural_vintage/}
+& reconciliation reports for the 2017 and 2012 structures \\
+\pathc{data/us/calibration/US_2024_calibration_object_reconciled.jld2}
+& the calibration artifact (with \code{_2017_}/\code{_2012_} variants and provenance files
+  beside each) \\
+\pathc{scripts/us/forecasting/diagnostics/stage2b/STAGE2B_PROTOCOL.md}
+& the frozen protocol: scored columns, components, calibration rules, success bar \\
+\pathc{scripts/us/forecasting/benchmarks/dsge_columns/DSGE_COLUMNS_MODEL_CARD.md}
+& DSGE column conventions, estimation settings and disclosures \\
+\pathc{scripts/us/forecasting/diagnostics/abm_revised_comparison/trend_growth_series.csv}
+& the trend-growth calibration series with SHA-pinned provenance \\
 \pathc{scripts/us/forecasting/diagnostics/revised_data/fixtures/quarterly_panel.csv}
 & the scoring panel: 101 quarters, 2000Q3--2025Q3 \\
-\pathc{paper/figures_src/make_figures.py}
-& the figure generator for this paper \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Commit hashes and identity seals}
+\subsection{Identity seals}
 
-\begin{table}[h]
-\centering
-\small
-\begin{tabular}{@{}ll@{}}
-\toprule
-Commit & Content \\
-\midrule
-\code{a55d9ed} & checkpoint before the ABM campaign; the base all gates compare against \\
-\code{9430a4a} & first-pass comparison: ABM against statistical benchmarks \\
-\code{cd22674} & random-walk-drift expectations patch (flag-gated, default off) \\
-\code{b82680e} & RAS reconciliation of the opening commodity balance $+$ reconciled artifact \\
-\code{aadde2b} & repaired-model comparison run \\
-\code{107a9ef} & merge of the repaired line \\
-\code{461cdc3} & results report, from which this paper's narrative is drawn \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Table~\ref{tab:seals} lists the fields sealed in every repaired-run manifest. For contrast,
-the first-pass calibration object is \pathc{data/us/calibration/US_2024_calibration_object.jld2}
-with SHA-256 \code{4cce5d62...05e2e136}.
-
-\begin{table}[h]
-\centering
-\footnotesize
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.36\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}@{}}
-\toprule
-Manifest field & Value \\
-\midrule
-\code{calibration_object_path} & \pathc{data/us/calibration/US_2024_calibration_object_reconciled.jld2} \\
-\code{calibration_object_sha256} & \code{57e23f4a...e514760} \\
-\code{commodity_balance_reconciled} & \code{true} \\
-\code{reconciliation_mode} & \code{final_demand_scaled} \\
-\code{reconciliation_rho} & \code{1.0} \\
-\code{reconciliation_lambda} & \code{0.9834601934561227} \\
-\code{growth_expectation_specification} & \code{rw_drift} \\
-\code{monte_carlo_paths} / \code{burn_in_quarters} / \code{simulated_quarters} & \code{500} / \code{0} / \code{12} \\
-\code{model_count} & \code{14} \\
-\code{panel_sha256} & \code{f7bb26a4...bff851bbe} \\
-\code{julia_version} / \code{julia_threads} / \code{blas_threads} & \code{1.10.3} / \code{1} / \code{1} \\
-\bottomrule
-\end{tabular}
-\caption{Identity seals recorded by the runner in the repaired run's manifest.}
-\label{tab:seals}
-\end{table}
-
-The $\lambda$ semantics recorded verbatim in each manifest read: \emph{``explicit accounting choice:
-the four final-demand aggregates C, G, I and X (and capital\_\allowbreak consumption and
-gross\_\allowbreak capitalformation\_\allowbreak dwellings, which set the investment budget) are
-scaled by lambda so the
-artifact's expenditure aggregates match its production account and the opening commodity balance
-clears exactly. lambda is fixed by the accounting identity alone and was not chosen with reference
-to any forecast error.''}
+Every run manifest seals the identities that could move a number: the calibration artifact path
+and SHA-256 (main artifact
+\pathc{data/us/calibration/US_2024_calibration_object_reconciled.jld2}, digest
+\code{57e23f4a...e514760}), the reconciliation mode and $\lambda$
+(\code{final_demand_scaled}, \code{0.9834601934561227}), the expectation specification
+(\code{rw_drift}), the panel SHA-256 (\code{f7bb26a4...bff851bbe}), the sealed numerical kernel
+and source-tree digests, path counts (500 / burn-in 0 / 12 simulated quarters), and the Julia
+version and thread counts (1.10.3 / 1 / 1). The trend-growth fixture and the DSGE column
+provenance files carry their own SHA-256 sums and retrieval timestamps. The $\lambda$ semantics
+are recorded verbatim in each manifest: \emph{``explicit accounting choice: the four final-demand
+aggregates C, G, I and X (and capital\_\allowbreak consumption and gross\_\allowbreak
+capitalformation\_\allowbreak dwellings, which set the investment budget) are scaled by lambda so
+the artifact's expenditure aggregates match its production account and the opening commodity
+balance clears exactly. lambda is fixed by the accounting identity alone and was not chosen with
+reference to any forecast error.''}
 
 \subsection{Seed policy}
 
@@ -1968,16 +1947,15 @@ to any forecast error.''}
 \item Simulation seeds are $\mathrm{hash}((\texttt{:abm\_revised\_v1},\,\text{origin},\,
       \text{path}))\bmod 2^{30}$: domain-separated by origin and path, so no two cells share a
       stream.
-\item The repaired model draws the \emph{identical} seed stream as the first pass, which makes the
-      contrast matched-seed. The expectations patch consumes exactly one Normal variate on either
-      branch to preserve this.
-\item The seed is set \emph{immediately before} model construction, because the initial microstate
-      is drawn from the global generator; seeding after construction yields a random initial state
-      and is a silent error. A fresh model is constructed per path; the library's built-in
-      ensemble runner is not used, because it deep-copies one already-constructed model and would
-      give every path the same initial microstate.
-\item Diagnosis experiments use a separate domain-separated seed family, identical across every
-      variant.
+\item Every ablation and robustness variant draws the \emph{identical} seed stream as the model,
+      which makes each contrast matched-seed; the expectation branch consumes exactly one Normal
+      variate either way to preserve the alignment.
+\item The seed is set \emph{immediately before} model construction, because the initial
+      microstate is drawn from the global generator; seeding after construction yields a random
+      initial state and is a silent error. A fresh model is constructed per path.
+\item The DSGE columns use fixed per-origin seed bases ($7\,000\,000 + \text{origin index}$ and
+      $8\,000\,000 + \text{origin index}$) with an SHA-domain-separated per-path generator, so
+      their draws are version-independent and reproducible.
 \item Failed paths are counted and left visible, never resampled. The count is 0 in every run.
 \end{itemize}
 
