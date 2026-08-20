@@ -184,3 +184,18 @@ data/us/db/
 # case-insensitive filesystems; these are run seals, not Pkg manifests.
 !output/us_forecasting/abm_v2_comparison/**/manifest.toml
 !output/us_forecasting/abm_v2_comparison_outlook/manifest.toml
+
+# Stage-2b (2026-08-17): scored evidence, calibration fixtures and the
+# DSGE-column outputs are intentionally versioned. Raw predictive-draw
+# stores (*.jld2 in the run directories — regenerable bit-identically under
+# the sealed seed contract) and pilot smoke runs stay local.
+!scripts/us/forecasting/diagnostics/abm_revised_comparison/trend_growth_series.csv
+!scripts/us/forecasting/benchmarks/dsge_columns/sw07_panel.csv
+!data/us/stage2b_external/raw/*.csv
+output/us_forecasting/stage2b_pilot/
+!output/us_forecasting/stage2b_full/**/*.csv
+!output/us_forecasting/stage2b_dsge_columns/**/*.csv
+!output/us_forecasting/stage2b_scorecard/*.csv
+!output/us_forecasting/stage2b_scorecard_struct2017/*.csv
+!output/us_forecasting/stage2b_scorecard_struct2012/*.csv
+!output/us_forecasting/commodity_balance_reconciliation_structural_vintage/**/*.csv
