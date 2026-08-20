@@ -195,6 +195,51 @@ const OUTLOOK_V2_VARIANT = ABMVariant(
     0,
     500,
 )
+# v3 = v2 calibration + the balanced-growth repair (trend productivity/labour
+# force growth and accelerator investment; sealed policy in the kernel).
+const HEADLINE_V3_VARIANT = ABMVariant(
+    "headline_v3",
+    "beforeit_abm_us_v3_mean",
+    "beforeit_abm_us_v3_median",
+    0,
+    500,
+)
+const OUTLOOK_V3_VARIANT = ABMVariant(
+    "outlook_v3",
+    "beforeit_abm_us_v3_mean",
+    "beforeit_abm_us_v3_median",
+    0,
+    500,
+)
+# 2b-6 ablation variants: mechanisms toggled per the kernel's sealed policy.
+const HEADLINE_V3_AR1_VARIANT = ABMVariant(
+    "headline_v3_ar1",
+    "beforeit_abm_us_v3_ar1_mean",
+    "beforeit_abm_us_v3_ar1_median",
+    0,
+    500,
+)
+const HEADLINE_V3_GROWTH_ONLY_VARIANT = ABMVariant(
+    "headline_v3_growth_only",
+    "beforeit_abm_us_v3_growth_only_mean",
+    "beforeit_abm_us_v3_growth_only_median",
+    0,
+    500,
+)
+const HEADLINE_V3_ACCEL_ONLY_VARIANT = ABMVariant(
+    "headline_v3_accel_only",
+    "beforeit_abm_us_v3_accel_only_mean",
+    "beforeit_abm_us_v3_accel_only_median",
+    0,
+    500,
+)
+const HEADLINE_V3_DEEPENING_ONLY_VARIANT = ABMVariant(
+    "headline_v3_deepening_only",
+    "beforeit_abm_us_v3_deepening_only_mean",
+    "beforeit_abm_us_v3_deepening_only_median",
+    0,
+    500,
+)
 
 # The numerical forecast kernel is a separately sealed file: everything whose
 # change can move a forecast number lives there, and its digest is compared on
@@ -1219,6 +1264,20 @@ function simulate_abm_ensembles(
         origin_summaries = generated.summaries
         diagnostic = generated.diagnostic
         append!(path_failures, generated.path_failures)
+
+        # Raw per-path target values, persisted for density scoring (CRPS).
+        # Stored beside the summary cache; an origin's group is rewritten
+        # whole, so an interrupted write cannot leave a partial origin.
+        if !isempty(generated.draws)
+            draws_path = joinpath(dirname(cache_path), "abm_predictive_draws.jld2")
+            jldopen(draws_path, "a+") do file
+                origin_group = "draws/$origin_index"
+                haskey(file, origin_group) && Base.delete!(file, origin_group)
+                for ((target_id, horizon), values) in generated.draws
+                    file["$origin_group/$target_id/$horizon"] = values
+                end
+            end
+        end
 
         append_struct_csv(cache_path, origin_summaries, EnsembleSummary)
         append_struct_csv(diagnostics_path, [diagnostic], ABMOriginDiagnostic)

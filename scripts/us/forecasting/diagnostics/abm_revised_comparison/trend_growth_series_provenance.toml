@@ -1,0 +1,13 @@
+schema = "beforeit-us-trend-growth-series.v1"
+file = "trend_growth_series.csv"
+sha256 = "6a048388ea7d382d97237399957ab418307099a1c1b86b292eeef88e462df223"
+rows = 143
+first_period = "1990Q1"
+last_period = "2025Q3"
+raw_retrieval_dir = "data/us/stage2b_external/raw"
+raw_retrieved_at_utc = "2026-08-17T17:25:35Z"
+estimation_rule = "trailing_40_quarter_mean_through_origin"
+series = ["dlnprod = 100*dln(GDPC1/CE16OV_q)", "dlnlf = 100*dln(CLF16OV_q)"]
+raw_sha256_GDPC1 = "f7cfe97b773eef3bd354aa722fd632bcae10b30f43e5aefcc3de89b5e251c346"
+raw_sha256_CE16OV = "e91a308ffc5b3e045a0d3ddd36de3d9b68da985d7cd4b886cd79b4706a4f0c3f"
+raw_sha256_CLF16OV = "036819279ac24a233341117dce2ef981601e6d80e942c1676eb188c7f784121f"

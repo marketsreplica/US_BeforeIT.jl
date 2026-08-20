@@ -58,6 +58,12 @@ function select_variant(name)
     name == "outlook" && return ABM.OUTLOOK_VARIANT
     name == "headline_v2" && return ABM.HEADLINE_V2_VARIANT
     name == "outlook_v2" && return ABM.OUTLOOK_V2_VARIANT
+    name == "headline_v3" && return ABM.HEADLINE_V3_VARIANT
+    name == "outlook_v3" && return ABM.OUTLOOK_V3_VARIANT
+    name == "headline_v3_ar1" && return ABM.HEADLINE_V3_AR1_VARIANT
+    name == "headline_v3_growth_only" && return ABM.HEADLINE_V3_GROWTH_ONLY_VARIANT
+    name == "headline_v3_accel_only" && return ABM.HEADLINE_V3_ACCEL_ONLY_VARIANT
+    name == "headline_v3_deepening_only" && return ABM.HEADLINE_V3_DEEPENING_ONLY_VARIANT
     # burninN builds the model N quarters before the origin and steps N times,
     # so the origin row is row N+1. A one-quarter burn-in only moves the opening
     # discontinuity from h=2 to h=1; longer burn-ins test whether it decays.
@@ -421,8 +427,11 @@ function main(raw_args)
     paths = length(args) >= 2 ? parse(Int, args[2]) : variant.default_paths
     max_origins = length(args) >= 4 ? parse(Int, args[4]) : typemax(Int)
 
+    # v3 variants inherit the v2 reconciled calibration artifact: the repair is
+    # the kernel's sealed balanced-growth parameter policy, not a new artifact.
     default_calibration =
-        endswith(variant.name, "_v2") ? ABM.RECONCILED_CALIBRATION_OBJECT_PATH :
+        endswith(variant.name, "_v2") || occursin("_v3", variant.name) ?
+        ABM.RECONCILED_CALIBRATION_OBJECT_PATH :
         ABM.CALIBRATION_OBJECT_PATH
     calibration_path = abspath(cli_option("calibration", default_calibration))
     isfile(calibration_path) ||
